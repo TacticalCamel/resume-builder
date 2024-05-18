@@ -20,7 +20,7 @@
 </script>
 
 <template>
-    <main class="h-screen w-screen overflow-x-hidden" :class="{'dark-mode': isDarkMode}">
+    <main class="h-screen w-screen overflow-x-hidden" :class="isDarkMode ? 'theme-dark' : 'theme-light'">
         <header class="py-10 px-5 mobile:px-10">
             <header-section :personal-information="model.personal"/>
         </header>
@@ -37,13 +37,21 @@
 
 <style scoped>
     main {
-        background-color: var(--primary-light);
-        color: var(--primary-dark);
+        background-color: var(--primary-bg);
+        color: var(--primary-text);
     }
 
-    /*noinspection CssUnusedSymbol*/
-    main.dark-mode {
-        background-color: var(--primary-dark);
-        color: var(--primary-light);
+    main::-webkit-scrollbar {
+        width: 14px;
+    }
+
+    main::-webkit-scrollbar-thumb {
+        background-color: var(--primary-text);
+        border-radius: 9999px;
+        border: 4px solid var(--primary-bg);
+    }
+
+    main::-webkit-scrollbar-track {
+        background-color: var(--primary-bg);
     }
 </style>
