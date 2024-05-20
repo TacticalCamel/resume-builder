@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type Project from "@/data/Project";
+    import type Project from "@/models/Project";
     import IconLink from "@/components/icons/IconLink.vue";
 
     defineProps({

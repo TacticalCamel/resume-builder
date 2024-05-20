@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type Language from "@/data/Language";
+    import type Language from "@/models/Language";
 
     defineProps({
         languages: {type: Array<Language>, required: true}

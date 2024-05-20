@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import type {SkillCategory} from "@/data/Skills";
-    import RatingBar from "@/components/RatingBar.vue";
+    import type {SkillCategory} from "@/models/Skills";
+    import RatingBar from "@/components/shared/RatingBar.vue";
 
     defineProps({
         skills: {type: Array<SkillCategory>, required: true}
