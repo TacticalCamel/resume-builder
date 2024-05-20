@@ -4,7 +4,7 @@ import type Education from "@/models/Education";
 import type Language from "@/models/Language";
 import type Project from "@/models/Project";
 
-export default interface Model {
+export default interface Template {
     personal: PersonalInfo,
     educations: Education[],
     skillCategories: SkillCategory[],

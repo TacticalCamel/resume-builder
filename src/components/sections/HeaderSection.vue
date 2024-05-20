@@ -9,7 +9,7 @@
 
     defineProps({
         personalInformation: {type: Object as PropType<PersonalInfo>, required: true},
-        profilePicture: {type: String, required: true}
+        profilePicture: {type: Object as PropType<string | null>, required: true}
     });
 </script>
 
@@ -17,7 +17,7 @@
     <div class="grid gap-12 max-w-[960px] mx-auto">
         <section class="text-nowrap flex gap-x-6 gap-y-12 justify-center items-center flex-col md:flex-row">
             <div class="flex items-center justify-center gap-6">
-                <img :src="profilePicture" alt="profile picture" class="size-32 rounded-full bg-red-300 select-none shadow shadow-black">
+                <img :src="profilePicture ?? ''" alt="profile picture" class="size-32 rounded-full bg-red-300 select-none shadow shadow-black">
                 <div class="flex flex-col justify-center me-4">
                     <div class="uppercase font-bold text-2xl">{{ personalInformation.name }}</div>
                     <div class="uppercase">{{ personalInformation.profession }}</div>

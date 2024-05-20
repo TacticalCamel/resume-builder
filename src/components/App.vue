@@ -7,27 +7,29 @@
     import Settings from "@/components/shared/Settings.vue";
 
     import {ref} from "vue";
-    import type Model from "@/models/Model";
+    import type PageModel from "@/models/PageModel";
 
-    const isDarkTheme = ref<boolean>(true);
-    const image = ref<string>('');
-    const model = ref<Model | null>(null);
+    const model = ref<PageModel>({
+        profilePicture: null,
+        template: null,
+        isDarkTheme: true,
+    });
 </script>
 
 <template>
-    <main class="h-screen w-screen overflow-x-hidden" :class="isDarkTheme ? 'theme-dark' : 'theme-light'">
-        <settings v-model:is-dark-theme="isDarkTheme" v-model:image="image" v-model:data="model"/>
+    <main class="h-screen w-screen overflow-x-hidden" :class="model.isDarkTheme ? 'theme-dark' : 'theme-light'">
+        <settings v-model="model"/>
 
-        <div v-if="model">
+        <div v-if="model.template">
             <header class="py-10 px-5 mobile:px-10">
-                <header-section :personal-information="model?.personal" :profile-picture="image"/>
+                <header-section :personal-information="model.template.personal" :profile-picture="model.profilePicture"/>
             </header>
             <div class="py-10 px-5 mobile:px-10">
                 <div class="grid gap-12 max-w-[720px] mx-auto">
-                    <education-section :education="model.educations"/>
-                    <skill-section :skills="model.skillCategories"/>
-                    <language-section :languages="model.languages"/>
-                    <project-section :projects="model.projects" :disclaimer="model.projectsDisclaimer"/>
+                    <education-section :education="model.template.educations"/>
+                    <skill-section :skills="model.template.skillCategories"/>
+                    <language-section :languages="model.template.languages"/>
+                    <project-section :projects="model.template.projects" :disclaimer="model.template.projectsDisclaimer"/>
                 </div>
             </div>
         </div>

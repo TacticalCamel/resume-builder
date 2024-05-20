@@ -15,9 +15,19 @@
             type: String,
             default: '*/*'
         },
-        readSrc: {
+        readDataUrl: {
             type: Boolean,
             default: false
+        }
+    });
+
+    onMounted(() => {
+        // get the contents of the file from local storage
+        const content: string | null = localStorage.getItem(localStorageKey);
+
+        // if the file is found, emit the success event
+        if(content) {
+            emits('onSuccess', content);
         }
     });
 
@@ -47,16 +57,7 @@
         localStorage.setItem(localStorageKey, content);
     }
 
-    onMounted(() => {
-        // get the contents of the file from local storage
-        const content: string | null = localStorage.getItem(localStorageKey);
-
-        // if the file is found, emit the success event
-        if(content) {
-            emits('onSuccess', content);
-        }
-    });
-
+    // handle a file upload event
     function upload(event: Event) {
         // get the target element
         const target: HTMLInputElement = event.target as HTMLInputElement;
@@ -71,7 +72,7 @@
         const file: File = target.files[0];
 
         // read as source
-        if(props.readSrc){
+        if(props.readDataUrl){
             reader.readAsDataURL(file);
         }
 

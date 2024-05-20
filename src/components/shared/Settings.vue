@@ -1,26 +1,13 @@
 <script setup lang="ts">
     import {onMounted, ref} from "vue";
     import type {PropType} from "vue";
-    import type Model from "@/models/Model";
     import FileUpload from "@/components/shared/FileUpload.vue";
+    import type PageModel from "@/models/PageModel";
 
-    const isDarkTheme = defineModel('isDarkTheme', {
-        type: Boolean,
+    const model = defineModel({
+        type: Object as PropType<PageModel>,
         required: true
     });
-
-    const image = defineModel('image', {
-        type: String,
-        required: true
-    });
-    
-    const data = defineModel('data', {
-        type: Object as PropType<Model>,
-        required: true
-    });
-
-    // whether the settings modal is open
-    const isOpen = ref(false);
 
     onMounted(() => {
         // listen for the "t" key to toggle the modal
@@ -31,12 +18,17 @@
         });
     });
 
-    function setImage(contents: string){
-        image.value = contents;
+    // whether the settings modal is open
+    const isOpen = ref(false);
+
+    // set the profile picture
+    function setProfilePicture(contents: string){
+        model.value.profilePicture = contents;
     }
 
-    function setData(contents: string){
-        data.value = JSON.parse(contents);
+    // set the template
+    function setTemplate(contents: string){
+        model.value.template = JSON.parse(contents);
     }
 </script>
 
@@ -46,20 +38,20 @@
             <div class="flex items-center mb-5 pb-3 border-b border-gray-600 text-3xl">Settings</div>
 
             <div class="grid grid-cols-2 gap-6">
-                <div>CV image</div>
-                <FileUpload @onSuccess="setImage" id="cv-image" accept="image/*" read-src>
+                <div>CV picture</div>
+                <FileUpload @onSuccess="setProfilePicture" id="cv-image" accept="image/*" read-data-url>
                     Upload
                 </FileUpload>
 
-                <div>CV data</div>
-                <FileUpload @onSuccess="setData" id="cv-data" accept=".json">
+                <div>CV template</div>
+                <FileUpload @onSuccess="setTemplate" id="cv-data" accept=".json">
                     Upload
                 </FileUpload>
 
                 <div>Dark mode</div>
                 <div class="px-2">
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" class="sr-only peer" v-model="isDarkTheme">
+                        <input type="checkbox" class="sr-only peer" v-model="model.isDarkTheme">
                         <span
                             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-500"></span>
                     </label>
@@ -68,7 +60,3 @@
         </div>
     </div>
 </template>
-
-<style scoped>
-
-</style>
