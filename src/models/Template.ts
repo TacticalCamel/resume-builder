@@ -1,14 +1,13 @@
 import type PersonalInfo from "@/models/PersonalInfo";
-import type {SkillCategory} from "@/models/Skills";
-import type Education from "@/models/Education";
-import type Language from "@/models/Language";
-import type Project from "@/models/Project";
+import type {SkillSection} from "@/models/sections/Skill";
+import type {EducationSection} from "@/models/sections/Education";
+import type {LanguageSection} from "@/models/sections/Language";
+import type {ProjectSection} from "@/models/sections/Project";
 
 export default interface Template {
     personal: PersonalInfo,
-    educations: Education[],
-    skillCategories: SkillCategory[],
-    languages: Language[],
-    projects: Project[],
-    projectsDisclaimer: string
+    education: EducationSection,
+    skills: SkillSection,
+    languages: LanguageSection,
+    projects: ProjectSection
 }

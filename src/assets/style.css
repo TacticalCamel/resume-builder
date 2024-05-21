@@ -4,9 +4,12 @@
 
 /* colors that appear throughout the page */
 :root {
-    --gray-dark: #181920;
-    --neutral-dark: #171717;
-    --neutral-light: #f2f2f2;
+    --primary-light: #f2f2f2;
+    --primary-dark: #181920;
+
+    --accent-lighter: #818cf8;
+    --accent: #6366f1;
+    --accent-darker: #4f46e5;
 
     --rating-bar-0: #4b5563;
     --rating-bar-1: #ef4444;
@@ -15,25 +18,23 @@
     --rating-bar-4: #22c55e;
     --rating-bar-5: #0ea5e9;
 
-    --accent-400: #818cf8;
-    --accent-500: #6366f1;
-    --accent-600: #4f46e5;
+    --neutral-dark: #171717;
 }
 
 /* colors used for the light theme */
 .theme-light {
-    --primary-bg: var(--neutral-light);
-    --accent-bg: var(--accent-600);
+    --primary-bg: var(--primary-light);
+    --accent-bg: var(--accent-darker);
 
-    --primary-text: var(--gray-dark);
-    --accent-text: var(--accent-600);
+    --primary-text: var(--primary-dark);
+    --accent-text: var(--accent-darker);
 }
 
 /* colors used for the dark theme */
 .theme-dark {
-    --primary-bg: var(--gray-dark);
-    --accent-bg: var(--accent-500);
+    --primary-bg: var(--primary-dark);
+    --accent-bg: var(--accent);
 
-    --primary-text: var(--neutral-light);
-    --accent-text: var(--accent-400);
+    --primary-text: var(--primary-light);
+    --accent-text: var(--accent-lighter);
 }

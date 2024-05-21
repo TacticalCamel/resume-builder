@@ -85,7 +85,7 @@
 
 <template>
     <div>
-        <label :for="id" class="block rounded font-semibold text-violet-500 transition-colors hover:bg-violet-500 hover:bg-opacity-20 text-nowrap py-1 px-2 border border-violet-500 border-opacity-50 font-mono">
+        <label :for="id" class="block rounded font-semibold text-violet-500 hover:bg-violet-500 hover:bg-opacity-20 text-nowrap py-1 px-2 border border-violet-500 border-opacity-50 font-mono">
             <span class="block text-center">
                 <slot/>
             </span>

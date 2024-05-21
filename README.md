@@ -13,7 +13,8 @@
  - Responsive design for both desktop and mobile devices
 
 ## To do
-- Customizable colors
+- Save customized colors
 - Template validation
+- Template editor
 - Example template
 - Work experience section

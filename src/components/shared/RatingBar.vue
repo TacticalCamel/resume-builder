@@ -19,7 +19,7 @@
 </script>
 
 <template>
-    <div class="flex items-center bg-darker rounded-sm select-none shadow-sm shadow-black">
+    <div class="flex items-center rounded-sm select-none shadow-sm shadow-black bg-[--neutral-dark]">
         <span v-for="i in barCount" :key="i" class="rating-bar" :class="`rating-bar-${getColor(i)}`">
             &nbsp;
         </span>
@@ -61,9 +61,5 @@
 
     .rating-bar-5{
         background-color: var(--rating-bar-5);
-    }
-
-    .bg-darker{
-        background-color: var(--neutral-dark);
     }
 </style>
