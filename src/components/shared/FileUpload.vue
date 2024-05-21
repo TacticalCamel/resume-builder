@@ -1,11 +1,4 @@
 <script setup lang="ts">
-    import {onMounted} from "vue";
-
-    const emits = defineEmits({
-        onSuccess: (content: string) => content,
-        onError: (message: string) => message,
-    });
-
     const props = defineProps({
         id: {
             type: String,
@@ -21,18 +14,9 @@
         }
     });
 
-    onMounted(() => {
-        // get the contents of the file from local storage
-        const content: string | null = localStorage.getItem(localStorageKey);
-
-        // if the file is found, emit the success event
-        if(content) {
-            emits('onSuccess', content);
-        }
+    const emits = defineEmits({
+        onUpload: (content: string) => content
     });
-
-    // the key to use for storing the file in local storage
-    const localStorageKey: string = `file-cache-${props.id ?? 'default'}`;
 
     // create a file reader
     const reader = new FileReader();
@@ -44,17 +28,11 @@
 
         // if no contents are found, return
         if (!contentBuffer) {
-            emits('onError', 'File is empty');
             return;
         }
 
-        const content: string = contentBuffer as string;
-
         // success
-        emits('onSuccess', content);
-
-        // save the result to local storage
-        localStorage.setItem(localStorageKey, content);
+        emits('onUpload', contentBuffer as string);
     }
 
     // handle a file upload event
@@ -64,7 +42,6 @@
 
         // if no file is selected, return
         if (!target.files || !target.files[0]) {
-            emits('onError', 'No file is selected');
             return;
         }
 

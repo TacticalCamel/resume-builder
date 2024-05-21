@@ -4,15 +4,16 @@
     import SkillSection from "./sections/SkillSection.vue";
     import LanguageSection from "./sections/LanguageSection.vue";
     import ProjectSection from "@/components/sections/ProjectSection.vue";
-    import Settings from "@/components/shared/Settings.vue";
+    import Settings from "@/components/settings/Settings.vue";
 
-    import {ref} from "vue";
     import type PageModel from "@/models/PageModel";
+    import {ref} from "vue";
 
     const model = ref<PageModel>({
+        isDarkTheme: false,
         profilePicture: null,
         template: null,
-        isDarkTheme: true,
+        colors: new Map<string, string>()
     });
 </script>
 
@@ -34,7 +35,7 @@
             </div>
         </div>
         <div v-else>
-            <div class="h-screen flex justify-center items-center flex-col text-3xl text-red-500">
+            <div class="h-screen flex justify-center items-center flex-col text-3xl text-red-500 font-mono">
                 <div class="mb-6">No data found</div>
                 <div class="mb-6">Press 't' to open settings</div>
             </div>

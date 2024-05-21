@@ -9,11 +9,11 @@
  - Print or save to PDF with `Ctrl + P`
 
 ## Features
- - Switch between light and dark modes
+ - Light and dark mode
+ - Fully customizable colors
  - Responsive design for both desktop and mobile devices
 
 ## To do
-- Save customized colors
 - Template validation
 - Template editor
 - Example template
