@@ -5,9 +5,9 @@ import type {LanguageSection} from "@/models/sections/Language";
 import type {ProjectSection} from "@/models/sections/Project";
 
 export default interface Template {
-    personal: PersonalInfo,
-    education: EducationSection,
-    skills: SkillSection,
-    languages: LanguageSection,
-    projects: ProjectSection
+    personal: PersonalInfo | null,
+    education: EducationSection | null,
+    skills: SkillSection | null,
+    languages: LanguageSection | null,
+    projects: ProjectSection | null
 }

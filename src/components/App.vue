@@ -7,14 +7,33 @@
     import Settings from "@/components/settings/Settings.vue";
 
     import type PageModel from "@/models/PageModel";
-    import {ref} from "vue";
+    import {ref, provide} from "vue";
 
+    // define a model containing all the information on the page
     const model = ref<PageModel>({
         isDarkTheme: false,
+        isEditMode: false,
         profilePicture: null,
-        template: null,
+        template: {
+            personal: {
+                name: "",
+                profession: "",
+                email: "",
+                phone: "",
+                github: "",
+                location: "",
+                description: ""
+            },
+            education: null,
+            skills: null,
+            languages: null,
+            projects: null
+        },
         colors: new Map<string, string>()
     });
+
+    // provide the model to all child components
+    provide('model', model);
 </script>
 
 <template>
@@ -23,22 +42,20 @@
 
         <div v-if="model.template">
             <header class="py-10 px-5 mobile:px-10">
-                <header-section :model="model.template.personal" :profile-picture="model.profilePicture"/>
+                <header-section v-model:model="model.template.personal" v-model:profile-picture="model.profilePicture"/>
             </header>
             <div class="py-10 px-5 mobile:px-10">
                 <div class="grid gap-12 max-w-[720px] mx-auto">
-                    <education-section :model="model.template.education"/>
-                    <skill-section :model="model.template.skills"/>
-                    <language-section :model="model.template.languages"/>
-                    <project-section :model="model.template.projects"/>
+                    <education-section v-if="model.template.education" :model="model.template.education"/>
+                    <skill-section v-if="model.template.skills" :model="model.template.skills"/>
+                    <language-section v-if="model.template.languages" :model="model.template.languages"/>
+                    <project-section v-if="model.template.projects" :model="model.template.projects"/>
                 </div>
             </div>
         </div>
-        <div v-else>
-            <div class="h-screen flex justify-center items-center flex-col text-3xl text-red-500 font-mono">
-                <div class="mb-6">No data found</div>
-                <div class="mb-6">Press 't' to open settings</div>
-            </div>
+        <div v-else class="h-screen flex justify-center items-center flex-col text-3xl text-red-500 font-mono">
+            <div class="mb-6">No data found</div>
+            <div>Press 'alt + t' to open settings</div>
         </div>
     </main>
 </template>
@@ -61,5 +78,9 @@
 
     main::-webkit-scrollbar-track {
         background-color: var(--primary-bg);
+    }
+
+    .edit-mode input {
+        background-color: var(--primary-text);
     }
 </style>

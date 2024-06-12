@@ -49,7 +49,7 @@
         const file: File = target.files[0];
 
         // read as source
-        if(props.readDataUrl){
+        if (props.readDataUrl) {
             reader.readAsDataURL(file);
         }
 
@@ -61,12 +61,10 @@
 </script>
 
 <template>
-    <div>
-        <label :for="id" class="block rounded font-semibold text-violet-500 hover:bg-violet-500 hover:bg-opacity-20 text-nowrap py-1 px-2 border border-violet-500 border-opacity-50 font-mono">
-            <span class="block text-center">
-                <slot/>
-            </span>
-        </label>
+    <label :for="id">
+        <span class="block text-center">
+            <slot/>
+        </span>
         <input :id="id" type="file" @change="upload($event)" class="hidden" :accept="accept"/>
-    </div>
+    </label>
 </template>

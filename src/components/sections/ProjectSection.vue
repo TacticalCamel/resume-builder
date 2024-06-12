@@ -14,11 +14,11 @@
         <div class="my-2 grid gap-6">
             <div v-for="project in model.projects" :key="project.description" class="flex">
                 <div class="me-0.5">
-                    <IconLink class="size-5 mt-0.5"/>
+                    <icon-link class="size-5 mt-0.5"/>
                 </div>
                 <div>
                     <div class="flex items-center flex-wrap">
-                        <a :href="project.url" target="_blank" class="url-hover flex items-center underline me-2 mb-0.5">
+                        <a :href="project.url" target="_blank" class="url-hover hover:transition-colors flex items-center underline me-2 mb-0.5">
                             <span class="text-nowrap">{{ project.url.replace(/^(https\:\/\/)/, "") }}</span>
                         </a>
                         <div class="grid grid-flow-col gap-2 auto-cols-min mb-0.5">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import {onMounted, type PropType, ref} from "vue";
+    import {onMounted, type PropType} from "vue";
     import type PageModel from "@/models/PageModel";
     import ThemeSettings from "@/components/settings/ThemeSettings.vue";
     import TemplateSettings from "@/components/settings/TemplateSettings.vue";
@@ -10,30 +10,40 @@
         required: true
     });
 
-    // whether the settings modal is open
-    const isOpen = ref(false);
-
-    // listen for the "t" key to toggle the modal
     onMounted(() => {
         window.addEventListener('keydown', (event) => {
-            if (event.key === 't') {
-                isOpen.value = !isOpen.value;
+            // toggle the settings modal with alt + t
+            if (event.altKey && event.key === 't') {
+                model.value.isEditMode = !model.value.isEditMode;
             }
         });
     });
 </script>
 
 <template>
-    <div class="w-screen h-screen bg-black bg-opacity-65 flex justify-center items-center absolute z-10 select-none" :class="{hidden: !isOpen}">
-        <div class="w-full mobile:w-auto m-4 mobile:m-0 p-8 rounded-2xl grid gap-12 bg-[--primary-bg]">
-            <div>
-                <div class="mb-5 pb-3 border-b border-gray-500 text-2xl">Theme settings</div>
-                <ThemeSettings v-model:dark-theme="model.isDarkTheme" v-model:colors="model.colors"/>
-            </div>
-            <div>
-                <div class="mb-5 pb-3 border-b border-gray-500 text-2xl">Template settings</div>
-                <TemplateSettings v-model:template="model.template" v-model:profile-picture="model.profilePicture"/>
+    <transition name="appear">
+        <div class="h-full absolute z-10 flex justify-center items-center select-none bg-[--primary-bg] me-[14px] border-e border-gray-500" v-show="model.isEditMode">
+            <div class="m-4 mobile:m-0 px-12 grid gap-12">
+                <div>
+                    <div class="mb-5 pb-3 border-b border-gray-500 text-2xl">Theme settings</div>
+                    <theme-settings v-model:dark-theme="model.isDarkTheme" v-model:colors="model.colors"/>
+                </div>
+                <div>
+                    <div class="mb-5 pb-3 border-b border-gray-500 text-2xl">Template settings</div>
+                    <template-settings v-model:template="model.template" v-model:profile-picture="model.profilePicture"/>
+                </div>
             </div>
         </div>
-    </div>
+    </transition>
 </template>
+
+<!--suppress CssUnusedSymbol -->
+<style scoped>
+    .appear-enter-active, .appear-leave-active {
+        transition: transform 0.1s ease-in-out;
+    }
+
+    .appear-enter-from, .appear-leave-to {
+        transform: translate(-100%, 0);
+    }
+</style>

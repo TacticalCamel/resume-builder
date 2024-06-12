@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import {onMounted, watch} from "vue";
+    import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
 
     // model for the dark theme setting
     const darkTheme = defineModel('darkTheme', {
@@ -150,15 +151,12 @@
     <div class="grid grid-cols-2 gap-6">
         <div>Dark theme</div>
         <div class="px-2">
-            <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" class="sr-only peer" v-model="darkTheme">
-                <span class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-500"></span>
-            </label>
+            <toggle-switch v-model="darkTheme"/>
         </div>
 
         <div>Theme colors</div>
         <div>
-            <button class="border rounded px-2 border-red-500 text-red-500 hover:bg-red-500 hover:bg-opacity-20" @click="resetAllColors">Reset all colors</button>
+            <button class="border rounded px-2 border-red-500 text-red-500 hover:bg-red-500 hover:bg-opacity-20 hover:transition-colors" @click="resetAllColors">Reset all colors</button>
         </div>
 
         <div class="col-span-2 text-sm font-mono">
@@ -168,7 +166,7 @@
                     <input type="color" :value="value" @change="(e) => setColor(key, e)" class="bg-transparent">
                     <div class="ms-1">
                         <span>{{ value }}</span>
-                        <button v-if="value !== defaultColors.get(key)" class="text-red-500 ms-3 hover:bg-red-500 hover:bg-opacity-20 rounded px-1" @click="() => resetColor(key)">Reset</button>
+                        <button v-if="value !== defaultColors.get(key)" class="text-red-500 ms-3 hover:bg-red-500 hover:bg-opacity-20 rounded px-1 hover:transition-colors" @click="() => resetColor(key)">Reset</button>
                     </div>
                 </div>
             </div>
