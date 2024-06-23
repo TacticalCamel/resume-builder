@@ -1,20 +1,24 @@
 # CV template
 
-#### Simple and customizable web template for CVs. Made with [Vue.js](https://vuejs.org/) and [Tailwind CSS](https://tailwindcss.com/).
+#### A simple web application for creating highly customizable CVs. Built with [Vue.js](https://vuejs.org/) and [Tailwind CSS](https://tailwindcss.com/).
+
+<h3 align="center">
+    
+[![Live website](https://img.shields.io/badge/Live_website-2dc02d)](https://cv-template-9f6e4.firebaseapp.com/)
+
+</h3>
 
 ## Usage
- - Start the development server with `npm run dev`
- - Open or close the settings panel with `t`
- - Upload a photo and a template file in json format
+ - Show or hide controls with `Alt + C`
+ - Enable edit mode to modify the template
  - Print or save to PDF with `Ctrl + P`
 
 ## Features
- - Light and dark mode
+ - No server-side data storage, all persistent data is stored in the browser
+ - Light and dark themes
  - Fully customizable colors
- - Responsive design for both desktop and mobile devices
+ - Responsive layout for both desktop and mobile devices
 
 ## To do
-- Template validation
 - Template editor
-- Example template
 - Work experience section

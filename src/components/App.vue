@@ -7,32 +7,37 @@
     import Settings from "@/components/settings/Settings.vue";
 
     import type PageModel from "@/models/PageModel";
-    import {ref, provide} from "vue";
+    import {createExampleTemplate} from "@/models/Template";
+    import {onMounted, provide, ref} from "vue";
 
     // define a model containing all the information on the page
     const model = ref<PageModel>({
+        isSettingsOpen: false,
         isDarkTheme: false,
+        colors: new Map<string, string>(),
         isEditMode: false,
-        profilePicture: null,
-        template: {
-            personal: {
-                name: "",
-                profession: "",
-                email: "",
-                phone: "",
-                github: "",
-                location: "",
-                description: ""
-            },
-            education: null,
-            skills: null,
-            languages: null,
-            projects: null
-        },
-        colors: new Map<string, string>()
+        template: null,
     });
 
-    // provide the model to all child components
+    // create an example template
+    function createExample() {
+        model.value.template = createExampleTemplate();
+    }
+
+    // toggle settings
+    function toggleSettings(){
+        model.value.isSettingsOpen = !model.value.isSettingsOpen;
+    }
+
+    onMounted(() => {
+        // toggle settings on 'Alt + C'
+        window.addEventListener('keydown', (e) => {
+            if (e.altKey && e.key === 'c') {
+                toggleSettings();
+            }
+        });
+    });
+
     provide('model', model);
 </script>
 
@@ -42,20 +47,26 @@
 
         <div v-if="model.template">
             <header class="py-10 px-5 mobile:px-10">
-                <header-section v-model:model="model.template.personal" v-model:profile-picture="model.profilePicture"/>
+                <header-section :is-edit-mode="model.isEditMode" v-model="model.template.personal"/>
             </header>
             <div class="py-10 px-5 mobile:px-10">
                 <div class="grid gap-12 max-w-[720px] mx-auto">
-                    <education-section v-if="model.template.education" :model="model.template.education"/>
-                    <skill-section v-if="model.template.skills" :model="model.template.skills"/>
-                    <language-section v-if="model.template.languages" :model="model.template.languages"/>
-                    <project-section v-if="model.template.projects" :model="model.template.projects"/>
+                    <education-section :model="model.template.education"/>
+                    <skill-section :model="model.template.skills"/>
+                    <language-section :model="model.template.languages"/>
+                    <project-section :model="model.template.projects"/>
                 </div>
             </div>
         </div>
-        <div v-else class="h-screen flex justify-center items-center flex-col text-3xl text-red-500 font-mono">
-            <div class="mb-6">No data found</div>
-            <div>Press 'alt + t' to open settings</div>
+        <div v-else class="h-screen text-2xl flex justify-center items-center font-mono">
+            <div class="grid gap-6 text-center select-none">
+                <button @click="createExample" class="rounded font-semibold text-green-500 hover:bg-green-500 hover:bg-opacity-20 text-nowrap px-4 py-1 border border-green-500 border-opacity-50 font-mono hover:transition-colors text-center">
+                    Create an example template
+                </button>
+                <button @click="toggleSettings" class="rounded font-semibold text-amber-500 hover:bg-amber-500 hover:bg-opacity-20 text-nowrap px-4 py-1 border border-amber-500 border-opacity-50 font-mono hover:transition-colors text-center">
+                    Press 'Alt + C' to toggle settings
+                </button>
+            </div>
         </div>
     </main>
 </template>
@@ -78,9 +89,5 @@
 
     main::-webkit-scrollbar-track {
         background-color: var(--primary-bg);
-    }
-
-    .edit-mode input {
-        background-color: var(--primary-text);
     }
 </style>

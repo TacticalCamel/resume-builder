@@ -1,4 +1,5 @@
 export default interface PersonalInfo {
+    picture: string | null,
     name: string,
     profession: string,
     phone: string,
