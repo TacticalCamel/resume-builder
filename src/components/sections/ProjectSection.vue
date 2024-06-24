@@ -9,7 +9,7 @@
 
 <template>
     <div>
-        <div class="uppercase text-2xl">{{ model.title ?? 'Projects' }}</div>
+        <div class="uppercase text-2xl">{{ model.title }}</div>
         <div v-if="model.disclaimer" class="italic opacity-60 font-light mb-4 text-sm">{{ model.disclaimer }}</div>
         <div class="my-2 grid gap-6">
             <div v-for="project in model.projects" :key="project.description" class="flex">

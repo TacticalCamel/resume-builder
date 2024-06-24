@@ -25,19 +25,19 @@ export function createExampleTemplate(): Template {
             github: 'https://github.com/example',
         },
         education: {
-            title: null,
+            title: 'Education',
             educations: [],
         },
         skills: {
-            title: null,
+            title: 'Skills',
             categories: [],
         },
         languages: {
-            title: null,
+            title: 'Languages',
             languages: [],
         },
         projects: {
-            title: null,
+            title: 'Projects',
             projects: [],
             disclaimer: null
         }

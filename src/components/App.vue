@@ -15,9 +15,10 @@
         isSettingsOpen: false,
         isDarkTheme: false,
         colors: new Map<string, string>(),
-        isEditMode: false,
         template: null,
     });
+
+    const isEditMode = ref<boolean>(true);
 
     // create an example template
     function createExample() {
@@ -38,20 +39,20 @@
         });
     });
 
-    provide('model', model);
+    provide('isEditMode', isEditMode);
 </script>
 
 <template>
     <main class="h-screen w-screen overflow-x-hidden transition-colors" :class="model.isDarkTheme ? 'theme-dark' : 'theme-light'">
-        <settings v-model="model"/>
+        <settings v-model:model="model" v-model:is-edit-mode="isEditMode"/>
 
         <div v-if="model.template">
-            <header class="py-10 px-5 mobile:px-10">
-                <header-section :is-edit-mode="model.isEditMode" v-model="model.template.personal"/>
+            <header class="py-10 px-3 mobile:px-5 md:px-10">
+                <header-section v-model="model.template.personal"/>
             </header>
-            <div class="py-10 px-5 mobile:px-10">
+            <div class="py-10 px-3 mobile:px-5 md:px-10">
                 <div class="grid gap-12 max-w-[720px] mx-auto">
-                    <education-section :model="model.template.education"/>
+                    <education-section v-model="model.template.education"/>
                     <skill-section :model="model.template.skills"/>
                     <language-section :model="model.template.languages"/>
                     <project-section :model="model.template.projects"/>

@@ -8,7 +8,7 @@
 
 <template>
     <div>
-        <div class="uppercase text-2xl">{{ model.title ?? 'Languages' }}</div>
+        <div class="uppercase text-2xl">{{ model.title }}</div>
         <table class="m-2 me-0">
             <tbody>
                 <tr v-for="language in model.languages" :key="language.name">

@@ -4,7 +4,7 @@
 
 <h3 align="center">
     
-[![Live website](https://img.shields.io/badge/Live_website-2dc02d)](https://cv-template-9f6e4.firebaseapp.com/)
+[![](https://img.shields.io/badge/Firebase_website-2dc02d)](https://cv-template-9f6e4.firebaseapp.com)
 
 </h3>
 

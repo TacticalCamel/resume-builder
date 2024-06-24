@@ -161,7 +161,7 @@
 
         <div class="col-span-2 text-sm font-mono">
             <div v-for="[key, value] in colors" :key="key" class="grid grid-cols-2 gap-6">
-                <div>{{ key }}</div>
+                <div>{{ key.substring(2) }}</div>
                 <div class="flex items-center">
                     <input type="color" :value="value" @change="(e) => setColor(key, e)" class="bg-transparent">
                     <div class="ms-1">
