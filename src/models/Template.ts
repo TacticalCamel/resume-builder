@@ -39,7 +39,7 @@ export function createExampleTemplate(): Template {
         projects: {
             title: 'Projects',
             projects: [],
-            disclaimer: null
+            disclaimer: 'Disclaimer'
         }
     }
 }

@@ -23,7 +23,7 @@
 
 <template>
     <div class="relative" :class="{'editable': editable}">
-        <div class="text-overlay size-full absolute pointer-events-none start-0 top-0 hidden">{{ model.length ? undefined : placeholder }}</div>
+        <div class="text-overlay size-full absolute pointer-events-none start-0 top-0 hidden text-center">{{ model.length ? undefined : placeholder }}</div>
         <div class="text-input" :contenteditable="editable" @focusout="saveModelChanges">{{ model }}</div>
     </div>
 </template>
@@ -31,9 +31,12 @@
 <style scoped>
     .editable .text-input {
         border-radius: 0.25rem;
-        min-width: 2em;
         position: relative;
         z-index: 1;
+    }
+
+    .editable .text-input:empty{
+        min-width: 3ch;
     }
 
     .editable .text-input:focus {

@@ -1,6 +1,6 @@
 export interface ProjectSection {
-    title: string | null,
-    disclaimer: string | null,
+    title: string,
+    disclaimer: string,
     projects: Project[]
 }
 

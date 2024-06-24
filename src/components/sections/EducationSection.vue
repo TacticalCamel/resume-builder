@@ -2,9 +2,8 @@
     import type {EducationSection} from "@/models/sections/Education";
     import {inject, type PropType} from "vue";
     import EditText from "@/components/shared/EditText.vue";
-    import IconWarning from "@/components/icons/IconWarning.vue";
-    import IconListAdd from "@/components/icons/IconAdd.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";
+    import SectionTitle from "@/components/shared/SectionTitle.vue";
 
     const editable = inject<boolean>('isEditMode', false);
 
@@ -29,22 +28,11 @@
 
 <template>
     <div v-if="editable || model.educations.length">
-        <div class="flex md:items-center flex-col md:flex-row">
-            <div class="flex outline-transparent items-center me-4">
-                <edit-text v-model="model.title" class="uppercase text-2xl"/>
-                <button v-if="editable" @click="addEducation" class="ms-8 me-4 text-green-500 bg-opacity-20 bg-green-500 px-4 py-0.5 rounded hover:bg-opacity-0 add">
-                    <icon-list-add class="size-5"/>
-                </button>
-            </div>
-            <div v-if="editable" class="flex items-center text-amber-500 mt-4 md:mt-0">
-                <icon-warning v-if="!model.educations.length" class="size-6 me-2"/>
-                <span v-if="!model.educations.length">Empty section will not be displayed</span>
-            </div>
-        </div>
+        <section-title v-model="model.title" :display-warning="!model.educations.length" @on-add="addEducation"/>
 
         <table class="m-2 me-0">
             <tbody>
-                <tr v-for="(edu, index) in model.educations" :key="edu.school">
+                <tr v-for="(edu, index) in model.educations" :key="edu.school" class="delete-glow">
                     <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
                         <div class="flex">
                             <edit-text v-model="edu.start"/>
@@ -66,24 +54,3 @@
         </table>
     </div>
 </template>
-
-<style scoped>
-    tr{
-        outline: 0 solid transparent;
-    }
-
-    tr:has(.delete:hover){
-        outline: 1px solid rgb(239, 68, 68);
-        border-radius: 0.25em;
-        background-color: rgba(239, 68, 68, 0.2);
-        transition: color, background-color, outline-color 150ms;
-    }
-
-    div:has(> .add:hover){
-        outline: 1px solid rgb(34, 197, 94);
-        border-radius: 0.25em;
-        background-color: rgba(34, 197, 94, 0.2);
-        transition: color, background-color, outline-color 150ms;
-        align-items: stretch;
-    }
-</style>

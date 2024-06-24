@@ -53,9 +53,9 @@
             <div class="py-10 px-3 mobile:px-5 md:px-10">
                 <div class="grid gap-12 max-w-[720px] mx-auto">
                     <education-section v-model="model.template.education"/>
-                    <skill-section :model="model.template.skills"/>
-                    <language-section :model="model.template.languages"/>
-                    <project-section :model="model.template.projects"/>
+                    <skill-section v-model="model.template.skills"/>
+                    <language-section v-model="model.template.languages"/>
+                    <project-section v-model="model.template.projects"/>
                 </div>
             </div>
         </div>

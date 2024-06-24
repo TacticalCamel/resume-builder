@@ -1,5 +1,5 @@
 export interface EducationSection {
-    title: string | null,
+    title: string,
     educations: Education[]
 }
 

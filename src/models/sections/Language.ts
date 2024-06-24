@@ -1,5 +1,5 @@
 export interface LanguageSection{
-    title: string | null,
+    title: string,
     languages: Language[]
 }
 

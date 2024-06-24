@@ -22,3 +22,5 @@
 ## To do
 - Template editor
 - Work experience section
+- Drag and drop sections and lists
+- Customizable contact information

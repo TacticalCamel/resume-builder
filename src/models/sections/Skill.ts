@@ -1,5 +1,5 @@
 export interface SkillSection{
-    title: string | null,
+    title: string,
     categories: SkillCategory[]
 }
 
