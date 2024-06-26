@@ -6,3 +6,12 @@ export default interface PageModel {
     colors: Map<string, string>
     template: Template | null
 }
+
+export function createPageModel(): PageModel {
+    return {
+        isSettingsOpen: false,
+        isDarkTheme: false,
+        colors: new Map<string, string>(),
+        template: null,
+    }
+}

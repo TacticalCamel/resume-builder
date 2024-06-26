@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type {LanguageSection} from "@/models/sections/Language";
+    import type {LanguageSection} from "@/models/Language";
     import SectionTitle from "@/components/shared/SectionTitle.vue";
     import {inject, type PropType} from "vue";
     import EditText from "@/components/shared/EditText.vue";
@@ -22,7 +22,7 @@
 </script>
 
 <template>
-    <div>
+    <div v-if="editable || model.languages.length">
         <section-title v-model="model.title" :display-warning="!model.languages.length" @on-add="addLanguage"/>
         <table class="m-2 me-0">
             <tbody>

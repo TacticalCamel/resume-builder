@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import IconLink from "@/components/icons/IconLink.vue";
-    import type {Project, ProjectSection} from "@/models/sections/Project";
+    import type {Project, ProjectSection} from "@/models/Project";
     import SectionTitle from "@/components/shared/SectionTitle.vue";
     import {inject, type PropType} from "vue";
     import EditText from "@/components/shared/EditText.vue";
@@ -36,13 +36,13 @@
 </script>
 
 <template>
-    <div>
+    <div v-if="editable || model.projects.length">
         <!-- title -->
         <section-title v-model="model.title" :display-warning="!model.projects.length" @on-add="addProject"/>
 
         <!-- disclaimer -->
-        <div class="italic opacity-60 font-light mb-4 text-sm flex">
-            <edit-text v-model="model.disclaimer" v-if="editable || model.disclaimer.length"/>
+        <div class="italic opacity-60 font-light mb-4 text-sm flex" v-if="model.projects.length && (model.disclaimer.length || editable)">
+            <edit-text v-model="model.disclaimer"/>
         </div>
 
         <!-- projects -->

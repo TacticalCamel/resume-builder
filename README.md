@@ -11,15 +11,18 @@
 ## Usage
  - Show or hide controls with `Alt + C`
  - Enable edit mode to modify the template
+ - Hover over an element to see available actions
+ - Click on any text to change it
  - Print or save to PDF with `Ctrl + P`
 
 ## Features
  - No server-side data storage, all persistent data is stored in the browser
- - Light and dark themes
- - Fully customizable colors
+ - Light and dark themes, fully customizable colors
  - Responsive layout for both desktop and mobile devices
 
 ## To do
 - Work experience section
-- Drag and drop sections and lists
+- Drag and drop lists
 - Customizable contact information
+- Multi-page printing
+- Start page design

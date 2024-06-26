@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type {EducationSection} from "@/models/sections/Education";
+    import type {EducationSection} from "@/models/Education";
     import {inject, type PropType} from "vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";

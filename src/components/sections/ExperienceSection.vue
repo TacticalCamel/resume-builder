@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import {inject, type PropType} from "vue";
-    import type {ExperienceSection} from "@/models/sections/Experience";
+    import type {ExperienceSection} from "@/models/Experience";
     import SectionTitle from "@/components/shared/SectionTitle.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";

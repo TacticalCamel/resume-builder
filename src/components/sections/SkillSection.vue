@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type {Skill, SkillCategory, SkillSection} from "@/models/sections/Skill";
+    import type {Skill, SkillCategory, SkillSection} from "@/models/Skill";
     import RatingBar from "@/components/shared/RatingBar.vue";
     import SectionTitle from "@/components/shared/SectionTitle.vue";
     import {inject, type PropType} from "vue";
@@ -48,10 +48,10 @@
 </script>
 
 <template>
-    <div class="text-nowrap">
+    <div v-if="editable || model.categories.length">
         <section-title v-model="model.title" :display-warning="!model.categories.length" @on-add="addCategory"/>
 
-        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 me-0">
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 me-0 text-nowrap">
             <section v-for="(category, index) in model.categories" :key="category.name" class="flex flex-col size-min delete-category-glow">
                 <div class="flex items-center category-title outline-transparent">
                     <div class="add-glow flex items-center">

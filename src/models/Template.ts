@@ -1,9 +1,10 @@
 import type PersonalInfo from "@/models/PersonalInfo";
-import type {SkillSection} from "@/models/sections/Skill";
-import type {EducationSection} from "@/models/sections/Education";
-import type {LanguageSection} from "@/models/sections/Language";
-import type {ProjectSection} from "@/models/sections/Project";
-import type {ExperienceSection} from "@/models/sections/Experience";
+import type {SkillSection} from "@/models/Skill";
+import type {EducationSection} from "@/models/Education";
+import type {LanguageSection} from "@/models/Language";
+import type {ProjectSection} from "@/models/Project";
+import type {ExperienceSection} from "@/models/Experience";
+import type {SectionKey} from "@/models/Section";
 
 export default interface Template {
     personal: PersonalInfo
@@ -12,6 +13,7 @@ export default interface Template {
     skills: SkillSection
     languages: LanguageSection
     projects: ProjectSection
+    sections: SectionKey[]
 }
 
 export function createExampleTemplate(): Template {
@@ -23,7 +25,7 @@ export function createExampleTemplate(): Template {
             email: 'firstname.lastname@gmail.com',
             phone: '+1234567890',
             location: 'City, Country',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            description: 'The Industrial Revolution and its consequences have been a disaster for the human race. They have greatly increased the life-expectancy of those of us who live in “advanced” countries, but they have destabilized society, have made life unfulfilling, have subjected human beings to indignities, have led to widespread psychological suffering.',
             github: 'https://github.com/example',
         },
         education: {
@@ -46,6 +48,13 @@ export function createExampleTemplate(): Template {
             title: 'Projects',
             projects: [],
             disclaimer: 'Disclaimer'
-        }
+        },
+        sections: [
+            'education',
+            'experience',
+            'skills',
+            'languages',
+            'projects'
+        ]
     }
 }
