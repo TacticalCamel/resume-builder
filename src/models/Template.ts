@@ -3,12 +3,14 @@ import type {SkillSection} from "@/models/sections/Skill";
 import type {EducationSection} from "@/models/sections/Education";
 import type {LanguageSection} from "@/models/sections/Language";
 import type {ProjectSection} from "@/models/sections/Project";
+import type {ExperienceSection} from "@/models/sections/Experience";
 
 export default interface Template {
-    personal: PersonalInfo,
-    education: EducationSection,
-    skills: SkillSection,
-    languages: LanguageSection,
+    personal: PersonalInfo
+    education: EducationSection
+    experience: ExperienceSection
+    skills: SkillSection
+    languages: LanguageSection
     projects: ProjectSection
 }
 
@@ -27,6 +29,10 @@ export function createExampleTemplate(): Template {
         education: {
             title: 'Education',
             educations: [],
+        },
+        experience: {
+            title: 'Experience',
+            experiences: [],
         },
         skills: {
             title: 'Skills',

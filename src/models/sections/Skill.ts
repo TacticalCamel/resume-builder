@@ -1,14 +1,14 @@
 export interface SkillSection{
-    title: string,
+    title: string
     categories: SkillCategory[]
 }
 
 export interface SkillCategory{
-    name: string,
+    name: string
     skills: Skill[]
 }
 
 export interface Skill {
-    name: string,
+    name: string
     level: number
 }

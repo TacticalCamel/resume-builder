@@ -1,11 +1,11 @@
 export interface EducationSection {
-    title: string,
+    title: string
     educations: Education[]
 }
 
 export interface Education {
-    school: string,
-    major: string,
-    start: string,
+    school: string
+    major: string
+    start: string
     finish: string
 }

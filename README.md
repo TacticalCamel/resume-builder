@@ -20,7 +20,6 @@
  - Responsive layout for both desktop and mobile devices
 
 ## To do
-- Template editor
 - Work experience section
 - Drag and drop sections and lists
 - Customizable contact information

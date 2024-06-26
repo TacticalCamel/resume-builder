@@ -1,9 +1,9 @@
 export interface LanguageSection{
-    title: string,
+    title: string
     languages: Language[]
 }
 
 export interface Language{
-    name: string,
+    name: string
     level: string
 }

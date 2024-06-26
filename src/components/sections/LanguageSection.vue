@@ -33,8 +33,8 @@
                     <td class="font-light p-0">
                         <edit-text v-model="language.level"/>
                     </td>
-                    <td v-if="editable" class="p-0 ps-8 h-0">
-                        <button @click="deleteLanguage(index)" class="bg-opacity-20 bg-red-500 text-red-500 px-4 py-0.5 rounded delete hover:bg-opacity-0">
+                    <td v-if="editable" class="p-0 ps-8 edit-controls">
+                        <button @click="deleteLanguage(index)" class="bg-opacity-20 bg-red-500 text-red-500 px-4 py-0.5 rounded delete hover:bg-opacity-0 block">
                             <icon-delete class="size-5"/>
                         </button>
                     </td>
@@ -48,5 +48,17 @@
     table{
         border-collapse: separate;
         border-spacing: 0 2px;
+    }
+
+    tr .edit-controls {
+        display: none;
+    }
+
+    tr:hover .edit-controls {
+        display: table-cell;
+    }
+
+    tr:has(.editable:focus-within) .edit-controls {
+        display: none;
     }
 </style>

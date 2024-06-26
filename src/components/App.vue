@@ -9,6 +9,7 @@
     import type PageModel from "@/models/PageModel";
     import {createExampleTemplate} from "@/models/Template";
     import {onMounted, provide, ref} from "vue";
+    import ExperienceSection from "@/components/sections/ExperienceSection.vue";
 
     // define a model containing all the information on the page
     const model = ref<PageModel>({
@@ -53,6 +54,7 @@
             <div class="py-10 px-3 mobile:px-5 md:px-10">
                 <div class="grid gap-12 max-w-[720px] mx-auto">
                     <education-section v-model="model.template.education"/>
+                    <experience-section v-model="model.template.experience"/>
                     <skill-section v-model="model.template.skills"/>
                     <language-section v-model="model.template.languages"/>
                     <project-section v-model="model.template.projects"/>

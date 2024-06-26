@@ -3,7 +3,7 @@
     import type PageModel from "@/models/PageModel";
     import ThemeSettings from "@/components/settings/ThemeSettings.vue";
     import TemplateSettings from "@/components/settings/TemplateSettings.vue";
-    import IconClose from "@/components/icons/IconArrowLeft.vue";
+    import IconDoubleArrowLeft from "@/components/icons/IconDoubleArrowLeft.vue";
 
     // the page model containing all setting
     const model = defineModel('model', {
@@ -37,7 +37,7 @@
             </div>
 
             <button @click="closeSettings" class="absolute top-0 end-0 rounded-full p-2 m-2 hover:text-red-500 hover:bg-opacity-20 hover:bg-red-500 transition-colors">
-                <icon-close class="size-8"/>
+                <icon-double-arrow-left class="size-8"/>
             </button>
         </div>
     </transition>
