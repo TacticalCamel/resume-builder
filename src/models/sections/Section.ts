@@ -1,5 +1,10 @@
 import type {Component} from "vue";
 
+export default interface Section<T>{
+    title: string
+    elements: T[]
+}
+
 export interface SectionMap{
     education: Component
     experience: Component

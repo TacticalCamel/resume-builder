@@ -39,6 +39,20 @@
     --accent-text: var(--accent-lighter);
 }
 
+.ghost {
+    border: 2px dashed rgb(14, 165, 233);
+    background-color: rgba(14, 165, 233, 0.05);
+    border-radius: 0.5rem;
+}
+
+.ghost > * {
+    visibility: hidden;
+}
+
+.dragging > * {
+    transform: rotate(5deg);
+}
+
 .delete-glow {
     outline: 0 solid transparent;
 }

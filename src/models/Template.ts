@@ -1,13 +1,13 @@
-import type PersonalInfo from "@/models/PersonalInfo";
-import type {SkillSection} from "@/models/Skill";
-import type {EducationSection} from "@/models/Education";
-import type {LanguageSection} from "@/models/Language";
-import type {ProjectSection} from "@/models/Project";
-import type {ExperienceSection} from "@/models/Experience";
-import type {SectionKey} from "@/models/Section";
+import type {SectionKey} from "@/models/sections/Section";
+import type HeaderSection from "@/models/sections/HeaderSection";
+import type EducationSection from "@/models/sections/EducationSection";
+import type ExperienceSection from "@/models/sections/ExperienceSection";
+import type SkillSection from "@/models/sections/SkillSection";
+import type LanguageSection from "@/models/sections/LanguageSection";
+import type ProjectSection from "@/models/sections/ProjectSection";
 
 export default interface Template {
-    personal: PersonalInfo
+    header: HeaderSection
     education: EducationSection
     experience: ExperienceSection
     skills: SkillSection
@@ -18,7 +18,7 @@ export default interface Template {
 
 export function createExampleTemplate(): Template {
     return {
-        personal: {
+        header: {
             picture: null,
             name: 'Firstname Lastname',
             profession: 'Profession',
@@ -30,23 +30,23 @@ export function createExampleTemplate(): Template {
         },
         education: {
             title: 'Education',
-            educations: [],
+            elements: [],
         },
         experience: {
             title: 'Experience',
-            experiences: [],
+            elements: [],
         },
         skills: {
             title: 'Skills',
-            categories: [],
+            elements: [],
         },
         languages: {
             title: 'Languages',
-            languages: [],
+            elements: [],
         },
         projects: {
             title: 'Projects',
-            projects: [],
+            elements: [],
             disclaimer: 'Disclaimer'
         },
         sections: [

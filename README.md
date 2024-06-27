@@ -2,6 +2,7 @@
 
 #### A simple web application for creating highly customizable CVs. Built with [Vue.js](https://vuejs.org/) and [Tailwind CSS](https://tailwindcss.com/).
 
+<!--suppress HtmlDeprecatedAttribute -->
 <h3 align="center">
     
 [![](https://img.shields.io/badge/Firebase_website-2dc02d)](https://cv-template-9f6e4.firebaseapp.com)
@@ -22,7 +23,7 @@
 
 ## To do
 - Work experience section
-- Drag and drop lists
 - Customizable contact information
 - Multi-page printing
 - Start page design
+- Style export

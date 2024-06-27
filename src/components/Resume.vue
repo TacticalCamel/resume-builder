@@ -8,7 +8,7 @@
     import ProjectSection from "@/components/sections/ProjectSection.vue";
     import type Template from "@/models/Template";
     import {inject, type PropType} from "vue";
-    import type {SectionMap, SectionKey} from "@/models/Section";
+    import type {SectionMap, SectionKey} from "@/models/sections/Section";
 
     const editable = inject<boolean>('isEditMode', false);
 
@@ -29,42 +29,48 @@
 
 <template>
     <div class="py-10 px-3 mobile:px-5 md:px-10">
-        <header-section v-model="template.personal"/>
-    </div>
-    <div class="py-10 px-3 mobile:px-5 md:px-10">
         <transition-group>
             <draggable
                 v-model="template.sections"
                 item-key="id"
-                class="grid gap-12 max-w-[960px] mx-auto"
+                key="draggable"
+                class="grid max-w-[960px] mx-auto"
                 :disabled="!editable"
                 drag-class="dragging"
                 ghost-class="ghost"
                 animation="200"
             >
+                <template #header>
+                    <header>
+                        <header-section v-model="template.header"/>
+                    </header>
+                </template>
                 <template #item="{element}">
-                    <div>
+                    <section>
                         <component :is="components[element as SectionKey]" v-model="template[element as SectionKey]" :id="`section-${element}`" class="max-w-[720px] mx-auto"/>
-                    </div>
+                    </section>
                 </template>
             </draggable>
         </transition-group>
     </div>
 </template>
 
-<!--suppress CssUnusedSymbol -->
 <style scoped>
-    .ghost {
-        border: 2px dashed rgb(14, 165, 233);
-        background-color: rgba(14, 165, 233, 0.05);
+    section:not(:last-child){
+        padding-bottom: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    section:not(:first-child){
+        padding-top: 1.25rem;
+    }
+
+    header{
+        padding-bottom: 4.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    section{
         border-radius: 0.5rem;
-    }
-
-    .ghost > * {
-        visibility: hidden;
-    }
-
-    .dragging > * {
-        transform: rotate(5deg);
     }
 </style>

@@ -1,18 +1,18 @@
 <script setup lang="ts">
+    import {inject, type PropType} from "vue";
     import IconPhone from "@/components/icons/IconPhone.vue";
     import IconEmail from "@/components/icons/IconEmail.vue";
     import IconGithub from "@/components/icons/IconGithub.vue";
     import IconLocation from "@/components/icons/IconLocation.vue";
-    import type PersonalInfo from "@/models/PersonalInfo";
-    import {inject, type PropType} from "vue";
-    import FileUpload from "@/components/shared/FileUpload.vue";
-    import IconProfile from "@/components/icons/IconProfile.vue";
-    import EditText from "@/components/shared/EditText.vue";
     import IconClose from "@/components/icons/IconClose.vue";
     import IconUpload from "@/components/icons/IconUpload.vue";
+    import IconProfile from "@/components/icons/IconProfile.vue";
+    import type HeaderSection from "@/models/sections/HeaderSection";
+    import FileUpload from "@/components/shared/FileUpload.vue";
+    import EditText from "@/components/shared/EditText.vue";
 
     const model = defineModel({
-        type: Object as PropType<PersonalInfo>,
+        type: Object as PropType<HeaderSection>,
         required: true
     });
 
@@ -31,7 +31,7 @@
 
 <template>
     <div class="grid gap-12 max-w-[960px] mx-auto">
-        <section class="text-nowrap flex gap-x-6 gap-y-12 justify-center items-center flex-col md:flex-row">
+        <div class="text-nowrap flex gap-x-6 gap-y-12 justify-center items-center flex-col md:flex-row">
             <div class="flex items-center justify-center gap-3 mobile:gap-6">
                 <div class="size-24 mobile:size-32 rounded-full select-none shadow shadow-black relative overflow-clip">
                     <img v-if="model.picture" :src="model.picture" alt="profile picture" class="absolute size-full rounded-full">
@@ -71,10 +71,10 @@
                     <edit-text v-model="model.location" class="ms-2"/>
                 </div>
             </div>
-        </section>
-        <section v-if="model" class="text-justify mx-auto max-w-[720px]">
+        </div>
+        <div v-if="model" class="text-justify mx-auto max-w-[720px]">
             <edit-text v-model="model.description"/>
-        </section>
+        </div>
     </div>
 </template>
 

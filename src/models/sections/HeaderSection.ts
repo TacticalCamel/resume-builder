@@ -1,4 +1,4 @@
-export default interface PersonalInfo {
+export default interface HeaderSection {
     picture: string | null
     name: string
     profession: string
