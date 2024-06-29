@@ -1,14 +1,16 @@
 <script setup lang="ts">
     import {inject, type PropType} from "vue";
+    import draggable from "vuedraggable";
+    import type Skill from "@/models/elements/Skill";
+    import type SkillSection from "@/models/sections/SkillSection";
+    import type SkillCategory from "@/models/elements/SkillCategory";
+    import type SettingsModel from "@/models/SettingsModel";
     import RatingBar from "@/components/shared/RatingBar.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconAdd from "@/components/icons/IconAdd.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";
     import IconArrowDown from "@/components/icons/IconArrowDown.vue";
     import IconArrowUp from "@/components/icons/IconArrowUp.vue";
-    import type Skill from "@/models/elements/Skill";
-    import type SkillSection from "@/models/sections/SkillSection";
-    import type SkillCategory from "@/models/elements/SkillCategory";
     import ResumeSection from "@/components/sections/ResumeSection.vue";
 
     const model = defineModel({
@@ -16,7 +18,7 @@
         required: true
     });
 
-    const editable = inject<boolean>('isEditMode', false);
+    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
     function addCategory() {
         model.value.elements.push({
@@ -51,14 +53,14 @@
 
 <template>
     <resume-section v-model="model" :display="'grid'" :columns="2" @on-add="addCategory" :enable-delete="false">
-        <template #item="{element, index}: {element: SkillCategory, index: number}">
+        <template #item="{element: category, index}: {element: SkillCategory, index: number}">
             <div class="flex items-center category-title outline-transparent">
                 <div class="add-glow flex items-center">
-                    <edit-text v-model="element.title" class="text-lg pb-0.5"/>
+                    <edit-text v-model="category.title" class="text-lg pb-0.5"/>
                 </div>
 
-                <div v-if="editable" class="ms-auto ps-8 flex gap-x-1">
-                    <button @click="addSkill(element)" class="bg-opacity-20 bg-green-500 text-green-500 py-0.5 px-2 rounded add hover:bg-opacity-0">
+                <div v-if="settings.editable" class="ms-auto ps-8 flex gap-x-1">
+                    <button @click="addSkill(category)" class="bg-opacity-20 bg-green-500 text-green-500 py-0.5 px-2 rounded add hover:bg-opacity-0">
                         <icon-add class="size-5"/>
                     </button>
                     <button @click="deleteCategory(index)" class="bg-opacity-20 bg-red-500 text-red-500 py-0.5 px-2 rounded hover:bg-opacity-0 delete">
@@ -67,24 +69,39 @@
                 </div>
             </div>
 
-            <div v-for="(skill, index) in element.elements" :key="skill.name" class="flex py-0.5 items-center skill-row">
-                <div class="ps-0.5 pe-3">
-                    <rating-bar :value="skill.level"/>
-                </div>
-                <edit-text v-model="skill.name" class="font-light"/>
+            <transition-group>
+                <draggable
+                    v-model="category.elements"
+                    item-key="id"
+                    key="draggable"
+                    :disabled="!settings.editable"
+                    drag-class="dragging"
+                    ghost-class="ghost"
+                    animation="200"
+                >
+                    <template #item="{element: skill, index}: {element: Skill, index: number}">
+                        <div class="flex py-0.5 items-center skill-row">
+                            <div class="ps-0.5 pe-3">
+                                <rating-bar :value="skill.level"/>
+                            </div>
+                            <edit-text v-model="skill.name" class="font-light"/>
 
-                <div v-if="editable" class="ms-auto flex opacity-0 ps-3 gap-x-0.5 skill-row-edit-controls">
-                    <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-red-300 text-red-300 py-0.5 px-1 rounded transition-all">
-                        <icon-arrow-down class="size-4"/>
-                    </button>
-                    <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-green-300 text-green-300 py-0.5 px-1 rounded transition-all">
-                        <icon-arrow-up class="size-4"/>
-                    </button>
-                    <button @click="deleteSkill(element, index)" class="bg-opacity-20 hover:bg-opacity-0 bg-red-500 text-red-500 py-0.5 px-1 rounded delete-item">
-                        <icon-delete class="size-5"/>
-                    </button>
-                </div>
-            </div>
+                            <div v-if="settings.editable" class="ms-auto flex opacity-0 ps-3 gap-x-0.5 skill-row-edit-controls">
+                                <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-red-300 text-red-300 py-0.5 px-1 rounded transition-all">
+                                    <icon-arrow-down class="size-4"/>
+                                </button>
+                                <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-green-300 text-green-300 py-0.5 px-1 rounded transition-all">
+                                    <icon-arrow-up class="size-4"/>
+                                </button>
+                                <button @click="deleteSkill(category, index)" class="bg-opacity-20 hover:bg-opacity-0 bg-red-500 text-red-500 py-0.5 px-1 rounded delete-item">
+                                    <icon-delete class="size-5"/>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </draggable>
+            </transition-group>
+
         </template>
     </resume-section>
 </template>

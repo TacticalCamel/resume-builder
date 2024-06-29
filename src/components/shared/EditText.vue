@@ -1,7 +1,8 @@
 <script setup lang="ts">
     import {inject} from "vue";
+    import type SettingsModel from "@/models/SettingsModel";
 
-    const editable = inject('isEditMode', false);
+    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
     const model = defineModel({
         type: String,
@@ -22,9 +23,9 @@
 </script>
 
 <template>
-    <div class="relative" :class="{'editable': editable}">
+    <div class="relative" :class="{'editable': settings.editable}">
         <div class="text-overlay size-full absolute pointer-events-none start-0 top-0 hidden text-center">{{ model.length ? undefined : placeholder }}</div>
-        <div class="text-input" :contenteditable="editable" @focusout="saveModelChanges">{{ model }}</div>
+        <div class="text-input" :contenteditable="settings.editable" @focusout="saveModelChanges">{{ model }}</div>
     </div>
 </template>
 

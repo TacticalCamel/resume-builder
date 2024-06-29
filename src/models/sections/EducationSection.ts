@@ -1,4 +1,4 @@
-import type Section from "@/models/sections/Section";
+import type Section from "@/models/Section";
 import type Education from "@/models/elements/Education";
 
 export default interface EducationSection extends Section<Education> {

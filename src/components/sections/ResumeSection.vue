@@ -1,9 +1,10 @@
 <script setup lang="ts" generic="T">
     import Draggable from "vuedraggable";
+    import {inject, type PropType} from "vue";
+    import type Section from "@/models/Section";
+    import type SettingsModel from "@/models/SettingsModel";
     import SectionTitle from "@/components/shared/SectionTitle.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";
-    import {inject, type PropType} from "vue";
-    import type Section from "@/models/sections/Section";
 
     defineEmits<{
         onAdd: []
@@ -16,7 +17,7 @@
             default: true
         },
         display: {
-            type: Object as PropType<'table' | 'grid'>,
+            type: String as PropType<'table' | 'grid'>,
             required: false,
             default: 'table'
         },
@@ -27,12 +28,11 @@
         }
     });
 
-    const model = defineModel({
-        type: Object as PropType<Section<T>>,
+    const model = defineModel<Section<T>>({
         required: true
     });
 
-    const editable = inject<boolean>('isEditMode', false);
+    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
     function deleteElement(index: number) {
         model.value.elements.splice(index, 1);
@@ -40,7 +40,7 @@
 </script>
 
 <template>
-    <div v-if="editable || model.elements.length" :class="{'section-grid': display == 'grid'}">
+    <div v-if="settings.editable || model.elements.length" :class="{'section-grid': display == 'grid'}">
         <section-title v-model="model.title" :display-warning="!model.elements.length" @on-add="$emit('onAdd')"/>
 
         <slot name="header"/>
@@ -51,7 +51,7 @@
                     v-model="model.elements"
                     item-key="id"
                     key="draggable"
-                    :disabled="!editable"
+                    :disabled="!settings.editable"
                     drag-class="dragging"
                     ghost-class="ghost"
                     animation="200"
@@ -61,7 +61,7 @@
                     <template #item="{element, index}">
                         <tr class="relative delete-glow">
                             <slot name="item" :element="element" :index="index"/>
-                            <td v-if="editable && enableDelete" class="p-0 ps-8 h-0 edit-controls">
+                            <td v-if="settings.editable && enableDelete" class="p-0 ps-8 h-0 edit-controls">
                                 <button @click="deleteElement(index)" class="block bg-opacity-20 bg-red-500 text-red-500 px-4 py-0.5 rounded delete hover:h-full hover:bg-opacity-0">
                                     <icon-delete class="size-5"/>
                                 </button>

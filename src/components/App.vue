@@ -1,25 +1,30 @@
 <script setup lang="ts">
-    import Settings from "@/components/settings/Settings.vue";
+    import Settings from "@/components/Settings.vue";
     import Resume from "@/components/Resume.vue";
     import {provide, ref} from "vue";
-    import type PageModel from "@/models/PageModel";
-    import {createPageModel} from "@/models/PageModel";
     import StartPage from "@/components/StartPage.vue";
+    import type SettingsModel from "@/models/SettingsModel";
+    import type ResumeModel from "@/models/ResumeModel";
 
-    // define a model containing all the information on the page
-    const model = ref<PageModel>(createPageModel());
+    const settings = ref<SettingsModel>({
+        settingsOpen: false,
+        editable: true,
+        darkTheme: false,
+        monochrome: false,
+        colors: [],
+    });
 
-    const isEditMode = ref<boolean>(true);
+    const resume = ref<ResumeModel | null>(null);
 
-    provide('isEditMode', isEditMode);
+    provide('settings', settings);
 </script>
 
 <template>
-    <main class="h-screen w-screen overflow-x-hidden" :class="model.isDarkTheme ? 'theme-dark' : 'theme-light'">
-        <resume v-if="model.template" v-model="model.template"/>
-        <start-page v-else v-model="model"/>
+    <main class="h-screen w-screen overflow-x-hidden" :class="{'theme-dark': settings.darkTheme, 'theme-light': !settings.darkTheme}">
+        <resume v-if="resume" v-model="resume" :class="{'monochrome': settings.monochrome}"/>
+        <start-page v-else v-model:settings="settings" v-model:resume="resume"/>
 
-        <settings v-model:model="model" v-model:is-edit-mode="isEditMode"/>
+        <settings v-model:settings="settings" v-model:resume="resume"/>
     </main>
 </template>
 
@@ -41,5 +46,10 @@
 
     main::-webkit-scrollbar-track {
         background-color: var(--primary-bg);
+    }
+
+    .monochrome {
+        filter: grayscale(100%);
+        backdrop-filter: grayscale(100%);
     }
 </style>
