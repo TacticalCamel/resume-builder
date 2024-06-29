@@ -30,7 +30,7 @@
         },
         github: {
             icon: IconGithub,
-            link: (value: string) => value.replace(/^(https:\/\/)/, "")
+            link: (value: string) => value
         },
         location: {
             icon: IconLocation,
@@ -87,7 +87,7 @@
                         animation="200"
                     >
                         <template #item="{element: contact}: {element: ContactKey}">
-                            <a class="flex items-center py-1 hover:transition-colors" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable ? undefined : 'url-hover'">
+                            <a class="flex items-center py-1 hover:transition-colors" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable || !components[contact].link(model[contact]) ? undefined : 'url-hover'">
                                 <component :is="components[contact].icon" class="size-5"/>
                                 <edit-text class="ms-2" v-model="model[contact]"/>
                             </a>
@@ -105,6 +105,6 @@
 <!--suppress CssUnusedSymbol -->
 <style scoped>
     .url-hover:hover {
-        color: var(--accent-text);
+        color: rgb(var(--accent));
     }
 </style>

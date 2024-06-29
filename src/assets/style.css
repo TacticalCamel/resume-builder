@@ -2,41 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* colors that appear throughout the page */
-:root {
-    --primary-light: #f2f2f2;
-    --primary-dark: #181920;
+@layer base {
+    :root {
+        --primary: 242 242 242;
+        --background: 24 25 32;
+        --accent: 99 102 241;
 
-    --accent-lighter: #818cf8;
-    --accent: #6366f1;
-    --accent-darker: #4f46e5;
-
-    --rating-bar-0: #4b5563;
-    --rating-bar-1: #ef4444;
-    --rating-bar-2: #eab308;
-    --rating-bar-3: #a5c311;
-    --rating-bar-4: #22c55e;
-    --rating-bar-5: #0ea5e9;
-
-    --neutral-dark: #171717;
-}
-
-/* colors used for the light theme */
-.theme-light {
-    --primary-bg: var(--primary-light);
-    --accent-bg: var(--accent-darker);
-
-    --primary-text: var(--primary-dark);
-    --accent-text: var(--accent-darker);
-}
-
-/* colors used for the dark theme */
-.theme-dark {
-    --primary-bg: var(--primary-dark);
-    --accent-bg: var(--accent);
-
-    --primary-text: var(--primary-light);
-    --accent-text: var(--accent-lighter);
+        --rating-bar-0: 75 85 99;
+        --rating-bar-1: 239 68 68;
+        --rating-bar-2: 234 179 8;
+        --rating-bar-3: 165 195 17;
+        --rating-bar-4: 34 197 94;
+        --rating-bar-5: 14 165 233;
+    }
 }
 
 .ghost {

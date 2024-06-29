@@ -1,9 +1,9 @@
-import type Color from "@/models/Color";
+import type Theme from "@/models/themes/Theme";
 
 export default interface SettingsModel{
-    darkTheme: boolean
     settingsOpen: boolean
     editable: boolean
     monochrome: boolean
-    colors: Color[]
+    themes: Theme[]
+    currentTheme: string | undefined
 }

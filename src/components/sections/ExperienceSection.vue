@@ -25,16 +25,17 @@
 <template>
     <resume-section v-model="model" @on-add="addExperience">
         <template #item="{element: experience}: {element: Experience}">
-            <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
+            <td class="pe-8 mobile:pe-16 text-nowrap">
+                <edit-text v-model="experience.company"/>
+                <edit-text v-model="experience.position" class="text-primary text-opacity-60"/>
+            </td>
+            <td class="font-light">
+                <div>&nbsp;</div>
                 <div class="flex">
                     <edit-text v-model="experience.start"/>
                     <span class="mx-2">-</span>
                     <edit-text v-model="experience.finish"/>
                 </div>
-            </td>
-            <td class="font-light pb-4">
-                <edit-text v-model="experience.company"/>
-                <edit-text v-model="experience.position" class="opacity-60"/>
             </td>
         </template>
     </resume-section>

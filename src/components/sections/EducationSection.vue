@@ -32,7 +32,7 @@
             </td>
             <td class="font-light pb-4">
                 <edit-text v-model="education.school"/>
-                <edit-text v-model="education.major" class="opacity-60"/>
+                <edit-text v-model="education.major" class="text-primary text-opacity-60"/>
             </td>
         </template>
     </resume-section>

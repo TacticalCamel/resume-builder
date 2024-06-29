@@ -58,7 +58,7 @@
                     tag="tbody"
                     :class="`grid-cols-${columns}`"
                 >
-                    <template #item="{element, index}">
+                    <template #item="{element, index}: {element: T, index: number}">
                         <tr class="relative delete-glow">
                             <slot name="item" :element="element" :index="index"/>
                             <td v-if="settings.editable && enableDelete" class="p-0 ps-8 h-0 edit-controls">

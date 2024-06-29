@@ -58,7 +58,7 @@
         height: 100%;
         width: 100%;
         pointer-events: none;
-        background: var(--primary-text);
+        background: rgb(var(--primary));
         opacity: 0.33;
         border-radius: 0.25rem;
     }

@@ -8,6 +8,7 @@
     import IconAdd from "@/components/icons/IconAdd.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";
     import ResumeSection from "@/components/sections/ResumeSection.vue";
+    import Draggable from "vuedraggable";
 
     const model = defineModel({
         type: Object as PropType<ProjectSection>,
@@ -36,7 +37,7 @@
 <template>
     <resume-section v-model="model" @on-add="addProject">
         <template #header>
-            <div class="italic opacity-60 font-light mb-4 text-sm flex" v-if="model.elements.length && (model.disclaimer.length || settings.editable)">
+            <div class="italic text-opacity-60 text-primary font-light mb-4 text-sm flex" v-if="model.elements.length && (model.disclaimer.length || settings.editable)">
                 <edit-text v-model="model.disclaimer"/>
             </div>
         </template>
@@ -50,19 +51,36 @@
                         <a :href="settings.editable ? undefined : project.url" target="_blank" class="hover:transition-colors flex items-center me-2 mb-0.5 underline" :class="settings.editable ? undefined : 'url-hover'">
                             <edit-text v-model="project.url" class="text-nowrap"/>
                         </a>
-                        <div class="grid grid-flow-col gap-2 auto-cols-min mb-0.5">
-                            <div v-for="index in project.technologies.length" class="flex relative">
-                                <span class="px-1 technology-card rounded text-sm shadow-sm shadow-[#000000bb] transition-all text-nowrap">
-                                    <edit-text v-model="project.technologies[index - 1]"/>
-                                </span>
-                                <button v-if="settings.editable" @click="deleteTechnology(project, index - 1)" class="absolute -translate-y-full z-10 w-full rounded bg-red-500 bg-opacity-20 text-red-500 delete-technology hidden justify-center hover:bg-opacity-0">
-                                    <icon-delete class="size-5"/>
-                                </button>
-                            </div>
-                            <button v-if="settings.editable" @click="addTechnology(project)" class="px-1 rounded bg-green-500 bg-opacity-20 text-green-500 outline outline-transparent outline-1 hover:outline-green-500 transition-all add opacity-0">
-                                <icon-add class="size-5"/>
-                            </button>
-                        </div>
+
+                        <transition-group>
+                            <draggable
+                                v-model="project.technologies"
+                                item-key="id"
+                                key="draggable"
+                                :disabled="!settings.editable"
+                                drag-class="dragging"
+                                ghost-class="ghost"
+                                animation="200"
+                                class="grid grid-flow-col gap-2 auto-cols-min mb-0.5"
+                            >
+                                <template #item="{index}: {index: number}">
+                                    <div class="flex relative">
+                                        <span class="px-1 technology-card rounded bg-accent text-sm shadow-sm shadow-[#000000bb] transition-all text-nowrap">
+                                            <edit-text v-model="project.technologies[index]"/>
+                                        </span>
+                                        <button v-if="settings.editable" @click="deleteTechnology(project, index)" class="absolute -translate-y-full z-10 w-full rounded bg-red-500 bg-opacity-20 text-red-500 delete-technology hidden justify-center hover:bg-opacity-0">
+                                            <icon-delete class="size-5"/>
+                                        </button>
+                                    </div>
+                                </template>
+
+                                <template #footer>
+                                    <button v-if="settings.editable" @click="addTechnology(project)" class="px-1 rounded bg-green-500 bg-opacity-20 text-green-500 outline outline-transparent outline-1 hover:outline-green-500 transition-all add opacity-0">
+                                        <icon-add class="size-5"/>
+                                    </button>
+                                </template>
+                            </draggable>
+                        </transition-group>
                     </div>
                     <edit-text class="font-light" v-model="project.description"/>
                 </div>
@@ -74,8 +92,7 @@
 <!--suppress CssUnusedSymbol -->
 <style scoped>
     .technology-card {
-        background-color: var(--accent-bg);
-        color: var(--primary-light);
+        color: rgb(var(--primary));
     }
 
     div:has(> .technology-card):hover .delete-technology {
@@ -87,7 +104,7 @@
     }
 
     .url-hover:hover {
-        color: var(--accent-text);
+        color: rgb(var(--accent));
     }
 
     tr .edit-controls {
@@ -125,6 +142,6 @@
         background-color: transparent;
         box-shadow: none;
         z-index: 20;
-        color: var(--primary-text);
+        color: rgb(var(--primary));
     }
 </style>

@@ -19,7 +19,7 @@
 </script>
 
 <template>
-    <div class="flex items-center rounded-sm select-none shadow-sm shadow-black bg-[--neutral-dark]">
+    <div class="flex items-center rounded-sm select-none shadow-sm shadow-black bg-background">
         <span v-for="i in barCount" :key="i" class="rating-bar" :class="`rating-bar-${getColor(i)}`">
             &nbsp;
         </span>
@@ -40,26 +40,26 @@
     }
 
     .rating-bar-0{
-        background-color: var(--rating-bar-0);
+        background-color: rgb(var(--rating-bar-0));
     }
 
     .rating-bar-1{
-        background-color: var(--rating-bar-1);
+        background-color: rgb(var(--rating-bar-1));
     }
 
     .rating-bar-2{
-        background-color: var(--rating-bar-2);
+        background-color: rgb(var(--rating-bar-2));
     }
 
     .rating-bar-3{
-        background-color: var(--rating-bar-3);
+        background-color: rgb(var(--rating-bar-3));
     }
 
     .rating-bar-4{
-        background-color: var(--rating-bar-4);
+        background-color: rgb(var(--rating-bar-4));
     }
 
     .rating-bar-5{
-        background-color: var(--rating-bar-5);
+        background-color: rgb(var(--rating-bar-5));
     }
 </style>
