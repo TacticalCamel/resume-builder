@@ -1,4 +1,4 @@
-# CV template
+# CV editor
 
 #### A simple web application for creating highly customizable CVs. Built with [Vue.js](https://vuejs.org/) and [Tailwind CSS](https://tailwindcss.com/).
 
@@ -22,8 +22,8 @@
  - Responsive layout for both desktop and mobile devices
 
 ## To do
-- Work experience section
+- Finish work experience section
 - Customizable contact information
 - Multi-page printing
-- Start page design
-- Style export
+- Landing page design
+- Settings export

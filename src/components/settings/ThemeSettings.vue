@@ -1,8 +1,13 @@
 <script setup lang="ts">
-    import {computed} from "vue";
+    import {computed, ref, watch} from "vue";
+    import draggable from "vuedraggable";
     import type Color from "@/models/themes/Color";
     import type Theme from "@/models/themes/Theme";
     import type SettingsModel from "@/models/SettingsModel";
+    import IconDelete from "@/components/icons/IconDelete.vue";
+    import IconPlus from "@/components/icons/IconPlus.vue";
+    import EditText from "@/components/shared/EditText.vue";
+    import IconSwapVertical from "@/components/icons/IconSwapVertical.vue";
 
     const settings = defineModel<SettingsModel>('settings', {
         required: true
@@ -14,8 +19,21 @@
         colors: getRootCssRules()
     };
 
+    // whether the theme select dropdown is open
+    const themeSelectOpen = ref<boolean>(false);
+
     // computed property for the current theme
     const currentTheme = computed(() => settings.value.themes.find(theme => theme.name === settings.value.currentTheme));
+
+    // watch for changes in the current theme
+    watch(() => currentTheme.value, (theme) => {
+        if (theme) {
+            applyTheme(theme);
+        }
+        else {
+            applyTheme(defaultTheme);
+        }
+    });
 
     // get all CSS variables from the root selector
     function getRootCssRules(): Color[] {
@@ -77,8 +95,50 @@
         return results;
     }
 
+    // change the current theme
+    function setTheme(theme: string | undefined): void {
+        settings.value.currentTheme = theme;
+        themeSelectOpen.value = false;
+    }
+
+    // update a theme in CSS
+    function applyTheme(theme: Theme): void {
+        defaultTheme.colors.forEach(color => {
+            const themeColor: Color | undefined = theme.colors.find(c => c.name === color.name);
+
+            if (themeColor) {
+                applyColor(color.name, themeColor.value);
+            }
+            else {
+                applyColor(color.name, color.value);
+            }
+        });
+    }
+
+    // delete a theme
+    function deleteTheme(index: number): void {
+        if (settings.value.themes[index].name === settings.value.currentTheme) {
+            settings.value.currentTheme = undefined;
+        }
+
+        settings.value.themes.splice(index, 1);
+    }
+
+    // create a new theme
+    function createTheme(): void {
+        settings.value.themes.push({
+            name: `theme-${settings.value.themes.length + 1}`,
+            colors: []
+        });
+    }
+
+    // rename a theme
+    function renameTheme(name: string): void {
+        settings.value.currentTheme = name;
+    }
+
     // set the color of a CSS variable
-    function onColorChange(colorName: string, event: Event): void {
+    function setColor(colorName: string, event: Event): void {
         const theme: Theme | undefined = currentTheme.value;
 
         // if there is no current theme, return
@@ -107,44 +167,12 @@
         }
 
         // update the color in CSS
-        applyStyle(colorName, rgb);
+        applyColor(colorName, rgb);
     }
 
-    // change the current theme
-    function onThemeChange(event: Event): void {
-        const select = event.target as HTMLSelectElement;
-
-        const index = select.selectedIndex - 1;
-
-        if (index < 0) {
-            settings.value.currentTheme = undefined;
-            applyTheme(defaultTheme);
-        }
-        else {
-            const selectedTheme = settings.value.themes[index];
-
-            settings.value.currentTheme = selectedTheme.name;
-            applyTheme(selectedTheme);
-        }
-    }
-
-    // update a CSS variable
-    function applyStyle(key: string, value: string): void {
+    // update a color in CSS
+    function applyColor(key: string, value: string): void {
         document.documentElement.style.setProperty(key, value);
-    }
-
-    // update all the colors in the current theme
-    function applyTheme(theme: Theme): void {
-        defaultTheme.colors.forEach(color => {
-            const themeColor: Color | undefined = theme.colors.find(c => c.name === color.name);
-
-            if(themeColor) {
-                applyStyle(color.name, themeColor.value);
-            }
-            else{
-                applyStyle(color.name, color.value);
-            }
-        });
     }
 
     // reset a single color to its default value
@@ -164,12 +192,12 @@
 
         // if there is a default value, apply it
         if (defaultValue) {
-            applyStyle(colorName, defaultValue);
+            applyColor(colorName, defaultValue);
         }
     }
 
     // convert an RGB string to a hex string
-    function rgb2hex(rgb: string): string{
+    function rgb2hex(rgb: string): string {
         const rgbArr = rgb.split(' ');
         const r = parseInt(rgbArr[0]);
         const g = parseInt(rgbArr[1]);
@@ -179,7 +207,7 @@
     }
 
     // convert a hex string to an RGB string
-    function hex2rgb(hex: string): string{
+    function hex2rgb(hex: string): string {
         const r = parseInt(hex.substring(1, 3), 16);
         const g = parseInt(hex.substring(3, 5), 16);
         const b = parseInt(hex.substring(5, 7), 16);
@@ -189,31 +217,105 @@
 </script>
 
 <template>
-    <div class="flex flex-col gap-4">
-        <div class="pb-1 border-b border-gray-500 text-xl">Themes</div>
+    <div class="flex flex-col gap-4 min-w-80">
+        <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Themes</div>
 
-        <div class="flex">
+        <div class="flex gap-4 mb-4">
             <div>Current theme</div>
-            <select v-model="settings.currentTheme" class="ms-auto bg-background outline-0 ring-1 ring-accent rounded px-2" @change="onThemeChange">
-                <option :value="undefined">{{ defaultTheme.name }}</option>
-                <option v-for="theme in settings.themes" :key="theme.name" :value="theme.name">{{ theme.name }}</option>
-            </select>
+
+            <div class="ms-auto">
+                <edit-text v-if="currentTheme" v-model="currentTheme.name" @change="renameTheme"/>
+                <div v-else class="text-primary text-opacity-60 italic">{{ defaultTheme.name }}</div>
+            </div>
+
+            <button @click="themeSelectOpen = !themeSelectOpen" class="bg-primary bg-opacity-0 hover:bg-opacity-20 rounded px-2 py-0.5 transition-colors">
+                <icon-swap-vertical class="size-5"/>
+            </button>
         </div>
 
-        <table v-if="currentTheme">
-            <tr class="col-span-2 text-sm font-mono" v-for="color in defaultTheme.colors" :key="color.name">
-                <td class="pe-4">{{ color.name }}</td>
-                <td class="flex items-center">
-                    <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => onColorChange(color.name, e)" class="bg-transparent me-1">
-                    <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
+        <transition name="slide-down" mode="out-in">
+            <div v-if="themeSelectOpen">
+                <transition-group>
+                    <draggable
+                        v-model="settings.themes"
+                        item-key="id"
+                        key="draggable"
+                        drag-class="dragging"
+                        ghost-class="ghost"
+                        animation="200"
+                        tag="table"
+                        class="w-full"
+                    >
+                        <template #header>
+                            <tr>
+                                <td class="w-full pe-4">
+                                    <button @click="setTheme(undefined)" class="py-0.5 ps-2 grow text-left bg-opacity-0 hover:bg-opacity-20 bg-primary transition-colors rounded w-full me-4 text-primary text-opacity-60 italic">{{ defaultTheme.name }}</button>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </template>
+                        <template #item="{element: theme, index}: {element: Theme, index: number}">
+                            <tr class="delete-glow">
+                                <td class="w-full pe-4">
+                                    <button @click="setTheme(theme.name)" class="py-0.5 ps-2 grow text-left bg-opacity-0 hover:bg-opacity-20 bg-primary transition-colors rounded w-full me-4">{{ theme.name }}</button>
+                                </td>
+                                <td class="edit-controls">
+                                    <button @click="deleteTheme(index)" class="ms-auto py-0.5 delete text-red-500 bg-red-500 bg-opacity-20 hover:bg-opacity-0 rounded w-full flex justify-center">
+                                        <icon-delete class="size-5"/>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                        <template #footer>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button @click="createTheme" class="rounded px-4 py-0.5 grow flex justify-center text-green-500 bg-opacity-20 bg-green-500 hover:border-green-500 border border-transparent transition-colors">
+                                        <icon-plus class="size-5"/>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </draggable>
+                </transition-group>
+            </div>
+            <table v-else-if="currentTheme">
+                <tr class="col-span-2 text-sm font-mono" v-for="color in defaultTheme.colors" :key="color.name">
+                    <td class="pe-4">{{ color.name }}</td>
+                    <td class="flex items-center">
+                        <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent me-1">
+                        <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
 
-                    <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="text-red-500 ms-3 hover:bg-red-500 hover:bg-opacity-20 rounded px-1 hover:transition-colors" @click="() => resetColor(color.name)">Reset</button>
-                    <span v-else class="ms-3 px-1 italic opacity-60">Default</span>
-                </td>
-            </tr>
-        </table>
-        <div v-else class="italic col-span-2 opacity-60">
-            Select or create a theme to customize it.
-        </div>
+                        <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="text-red-500 ms-3 hover:bg-red-500 hover:bg-opacity-20 rounded px-1 hover:transition-colors" @click="() => resetColor(color.name)">Reset</button>
+                        <span v-else class="ms-3 px-1 italic opacity-60">Default</span>
+                    </td>
+                </tr>
+            </table>
+            <div v-else>
+                <div class="italic col-span-2 opacity-60">
+                    Create or select a theme to customize it.
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
+
+<!--suppress CssUnusedSymbol -->
+<style scoped>
+    .slide-down-enter-active, .slide-down-leave-active {
+        transition: all 150ms ease-in-out;
+    }
+
+    .slide-down-enter-from, .slide-down-leave-to {
+        opacity: 0;
+        transform: translate(0, -1rem);
+    }
+
+    tr .edit-controls {
+        display: none;
+    }
+
+    tr:hover .edit-controls {
+        display: table-cell;
+    }
+</style>

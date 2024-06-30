@@ -5,7 +5,7 @@
     import type SettingsModel from "@/models/SettingsModel";
     import EditText from "@/components/shared/EditText.vue";
     import IconLink from "@/components/icons/IconLink.vue";
-    import IconAdd from "@/components/icons/IconAdd.vue";
+    import IconPlus from "@/components/icons/IconPlus.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";
     import ResumeSection from "@/components/sections/ResumeSection.vue";
     import Draggable from "vuedraggable";
@@ -76,7 +76,7 @@
 
                                 <template #footer>
                                     <button v-if="settings.editable" @click="addTechnology(project)" class="px-1 rounded bg-green-500 bg-opacity-20 text-green-500 outline outline-transparent outline-1 hover:outline-green-500 transition-all add opacity-0">
-                                        <icon-add class="size-5"/>
+                                        <icon-plus class="size-5"/>
                                     </button>
                                 </template>
                             </draggable>
@@ -92,7 +92,7 @@
 <!--suppress CssUnusedSymbol -->
 <style scoped>
     .technology-card {
-        color: rgb(var(--primary));
+        color: rgb(var(--background));
     }
 
     div:has(> .technology-card):hover .delete-technology {

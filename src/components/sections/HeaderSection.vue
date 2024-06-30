@@ -3,16 +3,17 @@
     import draggable from "vuedraggable";
     import type HeaderSection from "@/models/sections/HeaderSection";
     import type SettingsModel from "@/models/SettingsModel";
-    import IconPhone from "@/components/icons/IconPhone.vue";
-    import IconEmail from "@/components/icons/IconEmail.vue";
-    import IconGithub from "@/components/icons/IconGithub.vue";
-    import IconLocation from "@/components/icons/IconLocation.vue";
+    import {type ContactMap, type ContactKey} from "@/models/Contact";
+    import IconPhone from "@/components/icons/contacts/IconPhone.vue";
+    import IconEmail from "@/components/icons/contacts/IconEmail.vue";
+    import IconGithub from "@/components/icons/contacts/IconGithub.vue";
+    import IconLocation from "@/components/icons/contacts/IconLocation.vue";
+    import IconLinkedIn from "@/components/icons/contacts/IconLinkedIn.vue";
     import IconClose from "@/components/icons/IconClose.vue";
     import IconUpload from "@/components/icons/IconUpload.vue";
     import IconProfile from "@/components/icons/IconProfile.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import EditText from "@/components/shared/EditText.vue";
-    import {type ContactMap, type ContactKey} from "@/models/Contact";
 
     const model = defineModel({
         type: Object as PropType<HeaderSection>,
@@ -35,6 +36,10 @@
         location: {
             icon: IconLocation,
             link: (_: string) => undefined
+        },
+        linkedin: {
+            icon: IconLinkedIn,
+            link: (value: string) => value
         }
     };
 

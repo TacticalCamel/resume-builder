@@ -8,4 +8,5 @@ export default interface HeaderSection {
     email: string
     github: string
     location: string
+    linkedin: string
 }

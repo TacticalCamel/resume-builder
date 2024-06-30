@@ -7,10 +7,10 @@
     import type SettingsModel from "@/models/SettingsModel";
     import RatingBar from "@/components/shared/RatingBar.vue";
     import EditText from "@/components/shared/EditText.vue";
-    import IconAdd from "@/components/icons/IconAdd.vue";
+    import IconPlus from "@/components/icons/IconPlus.vue";
     import IconDelete from "@/components/icons/IconDelete.vue";
-    import IconArrowDown from "@/components/icons/IconArrowDown.vue";
-    import IconArrowUp from "@/components/icons/IconArrowUp.vue";
+    import IconDecrease from "@/components/icons/IconDecrease.vue";
+    import IconIncrease from "@/components/icons/IconIncrease.vue";
     import ResumeSection from "@/components/sections/ResumeSection.vue";
 
     const model = defineModel({
@@ -61,7 +61,7 @@
 
                 <div v-if="settings.editable" class="ms-auto ps-8 flex gap-x-1">
                     <button @click="addSkill(category)" class="bg-opacity-20 bg-green-500 text-green-500 py-0.5 px-2 rounded add hover:bg-opacity-0">
-                        <icon-add class="size-5"/>
+                        <icon-plus class="size-5"/>
                     </button>
                     <button @click="deleteCategory(index)" class="bg-opacity-20 bg-red-500 text-red-500 py-0.5 px-2 rounded hover:bg-opacity-0 delete">
                         <icon-delete class="size-5"/>
@@ -88,10 +88,10 @@
 
                             <div v-if="settings.editable" class="ms-auto flex opacity-0 ps-3 gap-x-0.5 skill-row-edit-controls">
                                 <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-red-300 text-red-300 py-0.5 px-1 rounded transition-all">
-                                    <icon-arrow-down class="size-4"/>
+                                    <icon-decrease class="size-4"/>
                                 </button>
                                 <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-green-300 text-green-300 py-0.5 px-1 rounded transition-all">
-                                    <icon-arrow-up class="size-4"/>
+                                    <icon-increase class="size-4"/>
                                 </button>
                                 <button @click="deleteSkill(category, index)" class="bg-opacity-20 hover:bg-opacity-0 bg-red-500 text-red-500 py-0.5 px-1 rounded delete-item">
                                     <icon-delete class="size-5"/>

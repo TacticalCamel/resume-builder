@@ -2,7 +2,7 @@
     import {inject} from "vue";
     import type SettingsModel from "@/models/SettingsModel";
     import EditText from "@/components/shared/EditText.vue";
-    import IconListAdd from "@/components/icons/IconAdd.vue";
+    import IconListAdd from "@/components/icons/IconPlus.vue";
     import IconInfo from "@/components/icons/IconInfo.vue";
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);

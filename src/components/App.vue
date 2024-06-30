@@ -1,53 +1,13 @@
 <script setup lang="ts">
-    import Settings from "@/components/settings/Settings.vue";
-    import Resume from "@/components/Resume.vue";
     import {provide, ref} from "vue";
-    import LandingPage from "@/components/LandingPage.vue";
     import type SettingsModel from "@/models/SettingsModel";
     import type ResumeModel from "@/models/ResumeModel";
+    import {getDefaultSettings} from "@/models/SettingsModel";
+    import Settings from "@/components/settings/Settings.vue";
+    import Resume from "@/components/Resume.vue";
+    import LandingPage from "@/components/LandingPage.vue";
 
-    const settings = ref<SettingsModel>({
-        settingsOpen: false,
-        editable: true,
-        monochrome: false,
-        themes: [
-            {
-                name: 'Light',
-                colors: [
-                    {
-                        name: '--primary',
-                        value: '25 24 24'
-                    },
-                    {
-                        name: '--accent',
-                        value: '157 83 223'
-                    },
-                    {
-                        name: '--background',
-                        value: '245 245 245'
-                    }
-                ]
-            },
-            {
-                name: 'Dark',
-                colors: [
-                    {
-                        name: '--primary',
-                        value: '245 245 245'
-                    },
-                    {
-                        name: '--accent',
-                        value: '157 83 223'
-                    },
-                    {
-                        name: '--background',
-                        value: '25 24 24'
-                    }
-                ]
-            }
-        ],
-        currentTheme: undefined
-    });
+    const settings = ref<SettingsModel>(getDefaultSettings());
 
     const resume = ref<ResumeModel | null>(null);
 

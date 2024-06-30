@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import type SettingsModel from "@/models/SettingsModel";
     import type ResumeModel from "@/models/ResumeModel";
-    import {createExampleResume} from "@/models/ResumeModel";
+    import {getExampleResume} from "@/models/ResumeModel";
 
     const settings = defineModel<SettingsModel>('settings', {
         required: true
@@ -12,7 +12,7 @@
     });
 
     function createExample() {
-        resume.value = createExampleResume();
+        resume.value = getExampleResume();
     }
 
     // toggle settings

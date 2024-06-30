@@ -16,7 +16,7 @@ export default interface ResumeModel {
     sections: SectionKey[]
 }
 
-export function createExampleResume(): ResumeModel {
+export function getExampleResume(): ResumeModel {
     return {
         header: {
             picture: null,
@@ -26,13 +26,15 @@ export function createExampleResume(): ResumeModel {
                 'email',
                 'phone',
                 'github',
-                'location'
+                'location',
+                'linkedin'
             ],
             email: 'firstname.lastname@gmail.com',
             phone: '+1234567890',
             location: 'City, Country',
             description: 'The Industrial Revolution and its consequences have been a disaster for the human race. They have greatly increased the life-expectancy of those of us who live in “advanced” countries, but they have destabilized society, have made life unfulfilling, have subjected human beings to indignities, have led to widespread psychological suffering.',
             github: 'https://github.com/example',
+            linkedin: 'https://linkedin.com/in/example'
         },
         education: {
             title: 'Education',

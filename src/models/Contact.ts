@@ -10,6 +10,7 @@ export interface ContactMap{
     phone: Contact
     github: Contact
     location: Contact
+    linkedin: Contact
 }
 
 export type ContactKey = keyof ContactMap;

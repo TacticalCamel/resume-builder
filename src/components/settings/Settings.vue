@@ -2,6 +2,7 @@
     import {onMounted, watch} from "vue";
     import type SettingsModel from "@/models/SettingsModel";
     import type ResumeModel from "@/models/ResumeModel";
+    import {getDefaultSettings} from "@/models/SettingsModel";
     import IconDoubleArrowLeft from "@/components/icons/IconDoubleArrowLeft.vue";
     import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
@@ -90,6 +91,11 @@
     function resetTemplate() {
         resume.value = null;
     }
+
+    // reset settings
+    function resetSettings() {
+        settings.value = getDefaultSettings();
+    }
 </script>
 
 <template>
@@ -103,35 +109,36 @@
                 </button>
             </div>
 
-            <div class="grid gap-y-8 py-4 px-8">
+            <div class="grid gap-y-8 p-4">
                 <!-- themes -->
                 <theme-settings v-model:settings="settings"/>
 
-                <div>
-                    <div class="mb-4 pb-1 border-b border-gray-500 text-xl">Resume</div>
-                    <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-4 min-w-80 text-sm">
+                    <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Resume</div>
+
+                    <div class="flex justify-between w-full px-2">
                         <div>Editable</div>
-                        <div class="px-2">
-                            <toggle-switch v-model="settings.editable"/>
-                        </div>
+                        <toggle-switch v-model="settings.editable"/>
+                    </div>
 
+                    <div class="flex justify-between w-full px-2">
                         <div>Monochrome</div>
-                        <div class="px-2">
-                            <toggle-switch v-model="settings.monochrome"/>
-                        </div>
+                        <toggle-switch v-model="settings.monochrome"/>
+                    </div>
 
-                        <div>Actions</div>
-                        <div class="grid gap-3 text-sm">
-                            <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors">
-                                Import template
-                            </file-upload>
-                            <button @click="exportTemplate" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors text-center">
-                                Export template
-                            </button>
-                            <button @click="resetTemplate" class="rounded font-semibold text-red-500 hover:bg-red-500 hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-red-500 border-opacity-50 font-mono hover:transition-colors text-center">
-                                Reset template
-                            </button>
-                        </div>
+                    <div class="grid gap-x-4 gap-y-2 grid-cols-2">
+                        <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors">
+                            Import template
+                        </file-upload>
+                        <button @click="exportTemplate" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors text-center">
+                            Export template
+                        </button>
+                        <button @click="resetTemplate" class="rounded font-semibold text-red-500 hover:bg-red-500 hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-red-500 border-opacity-50 font-mono hover:transition-colors text-center">
+                            Reset template
+                        </button>
+                        <button @click="resetSettings" class="rounded font-semibold text-red-500 hover:bg-red-500 hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-red-500 border-opacity-50 font-mono hover:transition-colors text-center">
+                            Reset settings
+                        </button>
                     </div>
                 </div>
             </div>
