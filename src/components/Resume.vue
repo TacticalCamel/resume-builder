@@ -16,7 +16,7 @@
 </script>
 
 <template>
-    <div class="py-10 px-3 mobile:px-5 md:px-10">
+    <div class="resume-root py-10 px-3 mobile:px-5 md:px-10" :class="{'open': settings.settingsOpen}">
         <transition-group>
             <draggable
                 v-model="resume.sections"
@@ -57,5 +57,21 @@
 
     section:not(:first-child) > * {
         padding-top: 1.25rem;
+    }
+
+    .resume-root {
+        transition: margin-right 150ms;
+    }
+
+    @media only screen and (max-width: 1536px){
+        .resume-root.open {
+            margin-right: 23rem;
+        }
+    }
+
+    @media only screen and (max-width: 1088px){
+        .resume-root.open {
+            margin-right: 0;
+        }
     }
 </style>

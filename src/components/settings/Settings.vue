@@ -6,7 +6,6 @@
     import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import ThemeSettings from "@/components/settings/ThemeSettings.vue";
-    import IconClose from "@/components/icons/IconClose.vue";
     import LayoutSettings from "@/components/settings/LayoutSettings.vue";
 
     const settings = defineModel<SettingsModel>('settings', {
@@ -19,13 +18,6 @@
 
     // handle model loading from local storage
     onMounted(() => {
-        // toggle settings on 'Alt + C'
-        window.addEventListener('keydown', (e) => {
-            if (e.altKey && e.key === 'c') {
-                toggleSettings();
-            }
-        });
-
         // load the settings from local storage
         const settingsValue: string | null = localStorage.getItem('settings');
 
@@ -56,11 +48,6 @@
             localStorage.removeItem('resume');
         }
     }, {deep: true});
-
-    // toggle the settings panel
-    function toggleSettings() {
-        settings.value.settingsOpen = !settings.value.settingsOpen;
-    }
 
     // import a cv template from a JSON file
     function importTemplate(contents: string) {
@@ -101,20 +88,9 @@
 
 <template>
     <transition name="appear">
-        <div class="h-full fixed top-0 right-0 z-10 select-none bg-background sm:border-s sm:border-gray-500 sm:w-auto me-[14px]" v-show="settings.settingsOpen">
-            <!-- navigation -->
-            <div class="flex justify-items-end bg-primary bg-opacity-10 py-2 px-8 items-center">
-                <div class="text-2xl">Settings</div>
-                <button @click="toggleSettings" class="rounded-full ms-auto p-2 hover:text-error hover:bg-opacity-20 hover:bg-error transition-colors">
-                    <icon-close class="size-8"/>
-                </button>
-            </div>
-
+        <div class="fixed top-[4.5rem] right-3 z-10 select-none bg-background border border-accent rounded-lg no-print" v-show="settings.settingsOpen">
             <div class="grid gap-y-8 p-4">
-                <!-- resume -->
                 <div class="flex flex-col gap-4 min-w-80 text-sm">
-                    <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Resume</div>
-
                     <div class="flex justify-between w-full px-2">
                         <div>Editable</div>
                         <toggle-switch v-model="settings.editable"/>
@@ -125,15 +101,24 @@
                         <toggle-switch v-model="settings.monochrome"/>
                     </div>
 
-                    <div class="grid gap-x-4 gap-y-2 grid-cols-2">
+                    <div class="flex justify-between w-full px-2">
+                        <div>Print page</div>
+                        <div class="font-mono">
+                            <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">Ctrl</span>
+                            +
+                            <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">P</span>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-x-4 gap-y-2 grid-cols-2 px-2">
                         <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors">
                             Import template
                         </file-upload>
-                        <button @click="exportTemplate" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors text-center">
-                            Export template
-                        </button>
                         <button @click="resetTemplate" class="rounded font-semibold text-error hover:bg-error hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-error border-opacity-50 font-mono hover:transition-colors text-center">
                             Reset template
+                        </button>
+                        <button @click="exportTemplate" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors text-center">
+                            Export template
                         </button>
                         <button @click="resetSettings" class="rounded font-semibold text-error hover:bg-error hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-error border-opacity-50 font-mono hover:transition-colors text-center">
                             Reset settings

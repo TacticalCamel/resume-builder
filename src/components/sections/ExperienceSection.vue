@@ -27,7 +27,7 @@
                     <technology-list v-model="experience.stack" class="mt-2"/>
                 </div>
             </td>
-            <td class="text-justify">
+            <td class="text-justify align-text-top">
                 <edit-text v-model="experience.description"/>
             </td>
         </template>

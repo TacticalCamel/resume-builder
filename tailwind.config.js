@@ -19,6 +19,7 @@ export default {
                 accent: ({opacityValue}) => colorWithOpacity('--accent', opacityValue),
                 success: ({opacityValue}) => colorWithOpacity('--success', opacityValue),
                 info: ({opacityValue}) => colorWithOpacity('--info', opacityValue),
+                warning: ({opacityValue}) => colorWithOpacity('--warning', opacityValue),
                 error: ({opacityValue}) => colorWithOpacity('--error', opacityValue),
             }
         },

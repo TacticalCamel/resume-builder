@@ -15,36 +15,36 @@ export function getDefaultSettings(): SettingsModel {
         monochrome: false,
         themes: [
             {
-                name: 'Light',
+                name: 'Violet light',
                 colors: [
                     {
                         name: '--primary',
-                        value: '25 24 24'
-                    },
-                    {
-                        name: '--accent',
-                        value: '157 83 223'
+                        value: '0 0 0'
                     },
                     {
                         name: '--background',
-                        value: '245 245 245'
+                        value: '255 255 255'
+                    },
+                    {
+                        name: '--accent',
+                        value: '115 46 220'
                     }
                 ]
             },
             {
-                name: 'Dark',
+                name: 'Violet dark',
                 colors: [
                     {
                         name: '--primary',
-                        value: '245 245 245'
-                    },
-                    {
-                        name: '--accent',
-                        value: '157 83 223'
+                        value: '255 255 255'
                     },
                     {
                         name: '--background',
-                        value: '25 24 24'
+                        value: '27 27 27'
+                    },
+                    {
+                        name: '--accent',
+                        value: '150 98 228'
                     }
                 ]
             }

@@ -60,7 +60,7 @@
                     </template>
 
                     <template #footer v-if="settings.editable && !model.elements.length">
-                        <div class="flex items-center text-cyan-500 bg-cyan-500 bg-opacity-20 px-2 py-1 rounded mt-2">
+                        <div class="flex items-center text-info bg-info bg-opacity-20 px-2 py-1 rounded mt-2">
                             <icon-info class="size-6 me-2"/>
                             <span>Empty section will not be displayed</span>
                         </div>

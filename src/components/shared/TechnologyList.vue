@@ -15,7 +15,7 @@
 </script>
 
 <template>
-    <div class="technology-list">
+    <div>
         <transition-group>
             <draggable
                 v-model="model"
@@ -26,11 +26,11 @@
                 drag-class="dragging"
                 ghost-class="ghost"
                 animation="200"
-                class="flex flex-wrap gap-2 mb-0.5"
+                class="flex flex-wrap gap-2 mb-0.5 text-sm items-start"
             >
                 <template #item="{index}: {index: number}">
                     <div class="flex relative">
-                        <span class="px-1 technology-card rounded bg-accent text-sm shadow-sm shadow-[#000000bb] transition-all text-nowrap">
+                        <span class="px-1 rounded bg-accent text-background font-semibold shadow-sm shadow-[#000000bb] transition-all text-nowrap">
                             <edit-text v-model="model[index]"/>
                         </span>
                     </div>

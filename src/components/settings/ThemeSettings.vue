@@ -4,9 +4,10 @@
     import type Color from "@/models/themes/Color";
     import type Theme from "@/models/themes/Theme";
     import type SettingsModel from "@/models/SettingsModel";
-    import IconPlus from "@/components/icons/IconPlus.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconSwapVertical from "@/components/icons/IconSwapVertical.vue";
+    import ThemeCard from "@/components/shared/ThemeCard.vue";
+    import {checkGroupMatch} from "@/models/BuildingBlock";
 
     const settings = defineModel<SettingsModel>('settings', {
         required: true
@@ -114,14 +115,6 @@
         });
     }
 
-    // create a new theme
-    function createTheme(): void {
-        settings.value.themes.push({
-            name: `theme-${settings.value.themes.length + 1}`,
-            colors: []
-        });
-    }
-
     // rename a theme
     function renameTheme(name: string): void {
         settings.value.currentTheme = name;
@@ -210,7 +203,7 @@
     <div class="flex flex-col gap-4 min-w-80">
         <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Themes</div>
 
-        <div class="flex gap-4 mb-4">
+        <div class="flex gap-4 px-2">
             <div>Current theme</div>
 
             <div class="ms-auto">
@@ -233,32 +226,16 @@
                         drag-class="dragging"
                         ghost-class="ghost"
                         animation="200"
-                        tag="table"
-                        class="w-full"
+                        class="flex flex-col gap-1"
+                        :group="{name: 'theme', pull: true, put: checkGroupMatch}"
+                        :disabled="!settings.editable"
                     >
                         <template #header>
-                            <tr>
-                                <td class="w-full pe-4">
-                                    <button @click="setTheme(undefined)" class="py-0.5 ps-2 grow text-left bg-opacity-0 hover:bg-opacity-20 bg-primary transition-colors rounded w-full me-4 text-primary text-opacity-60 italic">{{ defaultTheme.name }}</button>
-                                </td>
-                                <td></td>
-                            </tr>
+                            <theme-card @click="setTheme(undefined)" :theme="defaultTheme" :default-theme="defaultTheme" class="text-primary text-opacity-60 italic"/>
                         </template>
-                        <template #item="{element: theme, index}: {element: Theme, index: number}">
-                            <tr class="delete-glow">
-                                <td class="w-full pe-4">
-                                    <button @click="setTheme(theme.name)" class="py-0.5 ps-2 grow text-left bg-opacity-0 hover:bg-opacity-20 bg-primary transition-colors rounded w-full me-4">{{ theme.name }}</button>
-                                </td>
-                            </tr>
-                        </template>
-                        <template #footer>
-                            <tr>
-                                <td>
-                                    <button @click="createTheme" class="rounded ms-2 px-4 py-0.5 grow flex justify-center text-success bg-opacity-20 bg-success hover:border-success border border-transparent transition-colors">
-                                        <icon-plus class="size-5"/>
-                                    </button>
-                                </td>
-                            </tr>
+
+                        <template #item="{element: theme}: {element: Theme}">
+                            <theme-card @click="setTheme(theme.name)" :theme="theme" :default-theme="defaultTheme"/>
                         </template>
                     </draggable>
                 </transition-group>

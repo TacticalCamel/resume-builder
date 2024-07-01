@@ -22,6 +22,5 @@
  - No server-side data storage, all persistent data is stored in the browser
 
 ## To do
-- Multi-page printing
-- Landing page design
-- Settings export
+- Landing page and navigation
+- Theme export

@@ -11,7 +11,7 @@
         v-model="sink"
         item-key="id"
         :group="{name: 'delete', pull: false, put: true}"
-        class="flex justify-center items-center border-2 border-dashed border-error rounded p-2 delete-area"
+        class="flex justify-center items-center border-2 border-dashed border-error rounded-lg p-2 h-20 delete-area"
         ghost-class="delete-item"
         @add="sink.pop()"
     >
@@ -21,7 +21,7 @@
         <template #header>
             <div class="delete-text flex items-center gap-2 text-error">
                 <icon-delete class="size-6"/>
-                <span>Drop items here to delete</span>
+                <span>Drag items here to delete</span>
             </div>
         </template>
     </draggable>

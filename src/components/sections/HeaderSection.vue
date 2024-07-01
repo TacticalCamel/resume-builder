@@ -3,13 +3,13 @@
     import draggable from "vuedraggable";
     import type HeaderSection from "@/models/sections/HeaderSection";
     import type SettingsModel from "@/models/SettingsModel";
+    import {checkGroupMatch} from "@/models/BuildingBlock";
     import {components, type ContactKey} from "@/models/Contact";
-    import IconClose from "@/components/icons/IconClose.vue";
     import IconUpload from "@/components/icons/IconUpload.vue";
     import IconProfile from "@/components/icons/IconProfile.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import EditText from "@/components/shared/EditText.vue";
-    import {checkGroupMatch} from "@/models/BuildingBlock";
+    import IconDelete from "@/components/icons/IconDelete.vue";
 
     const model = defineModel<HeaderSection>({
         required: true
@@ -42,7 +42,7 @@
                         </file-upload>
 
                         <button @click="removeProfilePicture" class="flex justify-center items-center from-[#ef444480] to-transparent bg-gradient-to-t basis-1/4 hover:basis-1/2 hover:from-[#ef4444d0] transition-all from-40%">
-                            <icon-close class="size-6"/>
+                            <icon-delete class="size-6"/>
                         </button>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 export default interface BuildingBlock {
     group: string
     name: string
-    clone: (original: BuildingBlock) => any
+    clone: () => any
 }
 
 export function checkGroupMatch(targetSortable: any, sourceSortable: any, element: HTMLElement) {
