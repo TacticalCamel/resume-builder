@@ -15,7 +15,7 @@
 </script>
 
 <template>
-    <main class="h-screen w-screen overflow-x-hidden bg-background text-primary">
+    <main class="relative h-screen w-screen overflow-x-hidden bg-background text-primary">
         <resume v-if="resume" v-model="resume" :class="{'monochrome': settings.monochrome}"/>
         <landing-page v-else v-model:settings="settings" v-model:resume="resume"/>
 

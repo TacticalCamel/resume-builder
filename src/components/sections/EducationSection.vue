@@ -1,12 +1,10 @@
 <script setup lang="ts">
-    import {type PropType} from "vue";
     import type EducationSection from "@/models/sections/EducationSection";
     import type Education from "@/models/elements/Education";
     import EditText from "@/components/shared/EditText.vue";
     import ResumeSection from "@/components/sections/ResumeSection.vue";
 
-    const model = defineModel({
-        type: Object as PropType<EducationSection>,
+    const model = defineModel<EducationSection>({
         required: true
     });
 

@@ -4,7 +4,6 @@
     import type Section from "@/models/Section";
     import type SettingsModel from "@/models/SettingsModel";
     import SectionTitle from "@/components/shared/SectionTitle.vue";
-    import IconDelete from "@/components/icons/IconDelete.vue";
 
     defineEmits<{
         onAdd: []
@@ -33,10 +32,6 @@
     });
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);
-
-    function deleteElement(index: number) {
-        model.value.elements.splice(index, 1);
-    }
 </script>
 
 <template>
@@ -61,11 +56,6 @@
                     <template #item="{element, index}: {element: T, index: number}">
                         <tr class="relative delete-glow">
                             <slot name="item" :element="element" :index="index"/>
-                            <td v-if="settings.editable && enableDelete" class="p-0 ps-8 h-0 edit-controls">
-                                <button @click="deleteElement(index)" class="block bg-opacity-20 bg-red-500 text-red-500 px-4 py-0.5 rounded delete hover:h-full hover:bg-opacity-0">
-                                    <icon-delete class="size-5"/>
-                                </button>
-                            </td>
                         </tr>
                     </template>
                 </draggable>

@@ -1,12 +1,10 @@
 <script setup lang="ts">
-    import {type PropType} from "vue";
     import type LanguageSection from "@/models/sections/LanguageSection";
     import type Language from "@/models/elements/Language";
     import EditText from "@/components/shared/EditText.vue";
     import ResumeSection from "@/components/sections/ResumeSection.vue";
 
-    const model = defineModel({
-        type: Object as PropType<LanguageSection>,
+    const model = defineModel<LanguageSection>({
         required: true
     });
 

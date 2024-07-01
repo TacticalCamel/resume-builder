@@ -61,8 +61,8 @@ export function getExampleResume(): ResumeModel {
                     position: 'Intern',
                     start: '2019',
                     finish: '2021',
-                    description: '',
-                    stack: []
+                    description: 'Description of the experience: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                    stack: ['Java', 'Spring Boot', 'React']
                 }
             ],
         },

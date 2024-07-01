@@ -22,8 +22,6 @@
  - Responsive layout for both desktop and mobile devices
 
 ## To do
-- Finish work experience section
-- Customizable contact information
 - Multi-page printing
 - Landing page design
 - Settings export

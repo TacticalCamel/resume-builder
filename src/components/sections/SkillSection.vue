@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import {inject, type PropType} from "vue";
+    import {inject} from "vue";
     import draggable from "vuedraggable";
     import type Skill from "@/models/elements/Skill";
     import type SkillSection from "@/models/sections/SkillSection";
@@ -8,13 +8,11 @@
     import RatingBar from "@/components/shared/RatingBar.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconPlus from "@/components/icons/IconPlus.vue";
-    import IconDelete from "@/components/icons/IconDelete.vue";
     import IconDecrease from "@/components/icons/IconDecrease.vue";
     import IconIncrease from "@/components/icons/IconIncrease.vue";
     import ResumeSection from "@/components/sections/ResumeSection.vue";
 
-    const model = defineModel({
-        type: Object as PropType<SkillSection>,
+    const model = defineModel<SkillSection>({
         required: true
     });
 
@@ -41,14 +39,6 @@
     function increaseSkillLevel(skill: Skill) {
         skill.level = Math.min(5, Math.max(0, skill.level + 1));
     }
-
-    function deleteSkill(category: SkillCategory, index: number) {
-        category.elements.splice(index, 1);
-    }
-
-    function deleteCategory(index: number) {
-        model.value.elements.splice(index, 1);
-    }
 </script>
 
 <template>
@@ -62,9 +52,6 @@
                 <div v-if="settings.editable" class="ms-auto ps-8 flex gap-x-1">
                     <button @click="addSkill(category)" class="bg-opacity-20 bg-green-500 text-green-500 py-0.5 px-2 rounded add hover:bg-opacity-0">
                         <icon-plus class="size-5"/>
-                    </button>
-                    <button @click="deleteCategory(index)" class="bg-opacity-20 bg-red-500 text-red-500 py-0.5 px-2 rounded hover:bg-opacity-0 delete">
-                        <icon-delete class="size-5"/>
                     </button>
                 </div>
             </div>
@@ -93,9 +80,6 @@
                                 <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-green-300 text-green-300 py-0.5 px-1 rounded transition-all">
                                     <icon-increase class="size-4"/>
                                 </button>
-                                <button @click="deleteSkill(category, index)" class="bg-opacity-20 hover:bg-opacity-0 bg-red-500 text-red-500 py-0.5 px-1 rounded delete-item">
-                                    <icon-delete class="size-5"/>
-                                </button>
                             </div>
                         </div>
                     </template>
@@ -106,18 +90,8 @@
     </resume-section>
 </template>
 
+<!--suppress CssUnusedSymbol -->
 <style scoped>
-    .skill-row {
-        outline: 0 solid transparent;
-    }
-
-    .skill-row:has(.delete-item:hover) {
-        outline: 1px solid rgb(239, 68, 68);
-        border-radius: 0.25em;
-        background-color: rgba(239, 68, 68, 0.2);
-        transition: color, background-color, outline-color 150ms;
-    }
-
     .category-title:has(.add:hover) {
         outline: 1px solid rgb(34, 197, 94);
         border-radius: 0.25em;
@@ -137,10 +111,6 @@
 
     .category-title:focus-within button {
         display: none;
-    }
-
-    .category-title:has(.add:hover) .delete, .category-title:has(.delete:hover) .add {
-        filter: saturate(0);
     }
 
     .skill-row:hover .skill-row-edit-controls {

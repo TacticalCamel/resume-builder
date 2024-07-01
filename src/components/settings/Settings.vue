@@ -3,10 +3,11 @@
     import type SettingsModel from "@/models/SettingsModel";
     import type ResumeModel from "@/models/ResumeModel";
     import {getDefaultSettings} from "@/models/SettingsModel";
-    import IconDoubleArrowLeft from "@/components/icons/IconDoubleArrowLeft.vue";
     import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import ThemeSettings from "@/components/settings/ThemeSettings.vue";
+    import IconClose from "@/components/icons/IconClose.vue";
+    import LayoutSettings from "@/components/settings/LayoutSettings.vue";
 
     const settings = defineModel<SettingsModel>('settings', {
         required: true
@@ -100,12 +101,12 @@
 
 <template>
     <transition name="appear">
-        <div class="h-full w-full absolute top-0 left-0 z-10 select-none bg-background sm:border-e sm:border-gray-500 sm:w-auto" v-show="settings.settingsOpen">
+        <div class="h-full fixed top-0 right-0 z-10 select-none bg-background sm:border-s sm:border-gray-500 sm:w-auto me-[14px]" v-show="settings.settingsOpen">
             <!-- navigation -->
             <div class="flex justify-items-end bg-primary bg-opacity-10 py-2 px-8 items-center">
                 <div class="text-2xl">Settings</div>
                 <button @click="toggleSettings" class="rounded-full ms-auto p-2 hover:text-red-500 hover:bg-opacity-20 hover:bg-red-500 transition-colors">
-                    <icon-double-arrow-left class="size-8"/>
+                    <icon-close class="size-8"/>
                 </button>
             </div>
 
@@ -113,6 +114,10 @@
                 <!-- themes -->
                 <theme-settings v-model:settings="settings"/>
 
+                <!-- layout -->
+                <layout-settings v-model:settings="settings"/>
+
+                <!-- resume -->
                 <div class="flex flex-col gap-4 min-w-80 text-sm">
                     <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Resume</div>
 
@@ -149,10 +154,13 @@
 <!--suppress CssUnusedSymbol -->
 <style scoped>
     .appear-enter-active, .appear-leave-active {
-        transition: transform 150ms ease-in-out;
+        transition-property: transform, opacity;
+        transition-duration: 150ms;
+        transition-timing-function: ease-in-out;
     }
 
     .appear-enter-from, .appear-leave-to {
-        transform: translate(-100%, 0);
+        transform: translate(1rem, 0);
+        opacity: 0;
     }
 </style>

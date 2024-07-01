@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import {inject, type PropType} from "vue";
+    import {inject} from "vue";
     import draggable from "vuedraggable";
     import type HeaderSection from "@/models/sections/HeaderSection";
     import type SettingsModel from "@/models/SettingsModel";
@@ -15,8 +15,7 @@
     import FileUpload from "@/components/shared/FileUpload.vue";
     import EditText from "@/components/shared/EditText.vue";
 
-    const model = defineModel({
-        type: Object as PropType<HeaderSection>,
+    const model = defineModel<HeaderSection>({
         required: true
     });
 
@@ -86,6 +85,7 @@
                         v-model="model.contacts"
                         item-key="id"
                         key="draggable"
+                        :group="{name: 'contact', pull: true, put: true}"
                         :disabled="!settings.editable"
                         drag-class="dragging"
                         ghost-class="ghost"
