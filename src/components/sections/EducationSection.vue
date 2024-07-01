@@ -2,24 +2,15 @@
     import type EducationSection from "@/models/sections/EducationSection";
     import type Education from "@/models/elements/Education";
     import EditText from "@/components/shared/EditText.vue";
-    import ResumeSection from "@/components/sections/ResumeSection.vue";
+    import ResumeSection from "@/components/shared/ResumeSection.vue";
 
     const model = defineModel<EducationSection>({
         required: true
     });
-
-    function addEducation() {
-        model.value.elements.push({
-            school: '',
-            major: '',
-            start: '',
-            finish: ''
-        });
-    }
 </script>
 
 <template>
-    <resume-section v-model="model" @on-add="addEducation">
+    <resume-section v-model="model" group="education">
         <template #item="{element: education}: {element: Education}">
             <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
                 <div class="flex">

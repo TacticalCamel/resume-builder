@@ -5,7 +5,7 @@
     import type SettingsModel from "@/models/SettingsModel";
     import EditText from "@/components/shared/EditText.vue";
     import IconLink from "@/components/icons/IconLink.vue";
-    import ResumeSection from "@/components/sections/ResumeSection.vue";
+    import ResumeSection from "@/components/shared/ResumeSection.vue";
     import TechnologyList from "@/components/shared/TechnologyList.vue";
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);
@@ -13,18 +13,10 @@
     const model = defineModel<ProjectSection>({
         required: true
     });
-
-    function addProject() {
-        model.value.elements.push({
-            url: '',
-            technologies: [],
-            description: ''
-        });
-    }
 </script>
 
 <template>
-    <resume-section v-model="model" @on-add="addProject">
+    <resume-section v-model="model" group="project">
         <template #header>
             <div class="italic text-opacity-60 text-primary font-light mb-4 text-sm flex" v-if="model.elements.length && (model.disclaimer.length || settings.editable)">
                 <edit-text v-model="model.disclaimer"/>

@@ -105,18 +105,12 @@
             <!-- navigation -->
             <div class="flex justify-items-end bg-primary bg-opacity-10 py-2 px-8 items-center">
                 <div class="text-2xl">Settings</div>
-                <button @click="toggleSettings" class="rounded-full ms-auto p-2 hover:text-red-500 hover:bg-opacity-20 hover:bg-red-500 transition-colors">
+                <button @click="toggleSettings" class="rounded-full ms-auto p-2 hover:text-error hover:bg-opacity-20 hover:bg-error transition-colors">
                     <icon-close class="size-8"/>
                 </button>
             </div>
 
             <div class="grid gap-y-8 p-4">
-                <!-- themes -->
-                <theme-settings v-model:settings="settings"/>
-
-                <!-- layout -->
-                <layout-settings v-model:settings="settings"/>
-
                 <!-- resume -->
                 <div class="flex flex-col gap-4 min-w-80 text-sm">
                     <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Resume</div>
@@ -138,14 +132,20 @@
                         <button @click="exportTemplate" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors text-center">
                             Export template
                         </button>
-                        <button @click="resetTemplate" class="rounded font-semibold text-red-500 hover:bg-red-500 hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-red-500 border-opacity-50 font-mono hover:transition-colors text-center">
+                        <button @click="resetTemplate" class="rounded font-semibold text-error hover:bg-error hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-error border-opacity-50 font-mono hover:transition-colors text-center">
                             Reset template
                         </button>
-                        <button @click="resetSettings" class="rounded font-semibold text-red-500 hover:bg-red-500 hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-red-500 border-opacity-50 font-mono hover:transition-colors text-center">
+                        <button @click="resetSettings" class="rounded font-semibold text-error hover:bg-error hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-error border-opacity-50 font-mono hover:transition-colors text-center">
                             Reset settings
                         </button>
                     </div>
                 </div>
+
+                <!-- themes -->
+                <theme-settings v-model:settings="settings"/>
+
+                <!-- layout -->
+                <layout-settings/>
             </div>
         </div>
     </transition>

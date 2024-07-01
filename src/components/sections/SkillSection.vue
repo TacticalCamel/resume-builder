@@ -7,30 +7,16 @@
     import type SettingsModel from "@/models/SettingsModel";
     import RatingBar from "@/components/shared/RatingBar.vue";
     import EditText from "@/components/shared/EditText.vue";
-    import IconPlus from "@/components/icons/IconPlus.vue";
     import IconDecrease from "@/components/icons/IconDecrease.vue";
     import IconIncrease from "@/components/icons/IconIncrease.vue";
-    import ResumeSection from "@/components/sections/ResumeSection.vue";
+    import ResumeSection from "@/components/shared/ResumeSection.vue";
+    import {checkGroupMatch} from "@/models/BuildingBlock";
 
     const model = defineModel<SkillSection>({
         required: true
     });
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);
-
-    function addCategory() {
-        model.value.elements.push({
-            title: '',
-            elements: []
-        });
-    }
-
-    function addSkill(category: SkillCategory) {
-        category.elements.push({
-            name: '',
-            level: 0
-        });
-    }
 
     function decreaseSkillLevel(skill: Skill) {
         skill.level = Math.min(5, Math.max(0, skill.level - 1));
@@ -42,18 +28,10 @@
 </script>
 
 <template>
-    <resume-section v-model="model" :display="'grid'" :columns="2" @on-add="addCategory" :enable-delete="false">
-        <template #item="{element: category, index}: {element: SkillCategory, index: number}">
-            <div class="flex items-center category-title outline-transparent">
-                <div class="add-glow flex items-center">
-                    <edit-text v-model="category.title" class="text-lg pb-0.5"/>
-                </div>
-
-                <div v-if="settings.editable" class="ms-auto ps-8 flex gap-x-1">
-                    <button @click="addSkill(category)" class="bg-opacity-20 bg-green-500 text-green-500 py-0.5 px-2 rounded add hover:bg-opacity-0">
-                        <icon-plus class="size-5"/>
-                    </button>
-                </div>
+    <resume-section v-model="model" group="skill-category" :display="'grid'" :columns="2">
+        <template #item="{element: category}: {element: SkillCategory}">
+            <div class="flex">
+                <edit-text v-model="category.title" class="text-lg pb-0.5"/>
             </div>
 
             <transition-group>
@@ -65,19 +43,19 @@
                     drag-class="dragging"
                     ghost-class="ghost"
                     animation="200"
+                    :group="{name: 'skill', pull: true, put: checkGroupMatch}"
                 >
-                    <template #item="{element: skill, index}: {element: Skill, index: number}">
+                    <template #item="{element: skill}: {element: Skill}">
                         <div class="flex py-0.5 items-center skill-row">
-                            <div class="ps-0.5 pe-3">
-                                <rating-bar :value="skill.level"/>
-                            </div>
-                            <edit-text v-model="skill.name" class="font-light"/>
+                            <rating-bar :value="skill.level" class="ps-0.5 pe-3"/>
 
-                            <div v-if="settings.editable" class="ms-auto flex opacity-0 ps-3 gap-x-0.5 skill-row-edit-controls">
-                                <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-red-300 text-red-300 py-0.5 px-1 rounded transition-all">
+                            <edit-text v-model="skill.name" class="font-light skill-text"/>
+
+                            <div v-if="settings.editable" class="ms-auto flex gap-1 skill-row-edit-controls">
+                                <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-error text-error py-0.5 px-1.5 rounded transition-all">
                                     <icon-decrease class="size-4"/>
                                 </button>
-                                <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-green-300 text-green-300 py-0.5 px-1 rounded transition-all">
+                                <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-success text-success py-0.5 px-1.5 rounded transition-all">
                                     <icon-increase class="size-4"/>
                                 </button>
                             </div>
@@ -92,34 +70,16 @@
 
 <!--suppress CssUnusedSymbol -->
 <style scoped>
-    .category-title:has(.add:hover) {
-        outline: 1px solid rgb(34, 197, 94);
-        border-radius: 0.25em;
-        background-color: rgba(34, 197, 94, 0.2);
-        transition: color, background-color, outline-color 150ms;
-        align-items: stretch;
-    }
-
-    .category-title button {
+    .skill-row .skill-row-edit-controls {
         opacity: 0;
-    }
-
-    .category-title:hover button {
-        opacity: 1;
         transition: opacity 150ms;
-    }
-
-    .category-title:focus-within button {
-        display: none;
     }
 
     .skill-row:hover .skill-row-edit-controls {
         opacity: 1;
-        transition: opacity 150ms;
     }
 
-    .skill-row:has(.editable:focus-within) .skill-row-edit-controls {
+    .skill-row:has(.skill-text:focus-within) .skill-row-edit-controls {
         opacity: 0;
-        display: none;
     }
 </style>

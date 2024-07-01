@@ -19,10 +19,12 @@
 </script>
 
 <template>
-    <div class="flex items-center rounded-sm select-none shadow-sm shadow-black bg-background">
-        <span v-for="i in barCount" :key="i" class="rating-bar" :class="`rating-bar-${getColor(i)}`">
-            &nbsp;
-        </span>
+    <div>
+        <div class="flex items-center rounded-sm select-none shadow-sm shadow-black bg-background">
+            <span v-for="i in barCount" :key="i" class="rating-bar" :class="`rating-bar-${getColor(i)}`">
+                &nbsp;
+            </span>
+        </div>
     </div>
 </template>
 

@@ -12,14 +12,14 @@
 ## Usage
  - Show or hide controls with `Alt + C`
  - Enable edit mode to modify the template
- - Hover over an element to see available actions
+ - Drag and drop elements to edit the layout
  - Click on any text to change it
  - Print or save to PDF with `Ctrl + P`
 
 ## Features
+ - Fully customizable layout with drag-and-drop elements
+ - Configurable colors with predefined themes
  - No server-side data storage, all persistent data is stored in the browser
- - Light and dark themes, fully customizable colors
- - Responsive layout for both desktop and mobile devices
 
 ## To do
 - Multi-page printing

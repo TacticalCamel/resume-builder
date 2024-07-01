@@ -3,44 +3,17 @@
     import draggable from "vuedraggable";
     import type HeaderSection from "@/models/sections/HeaderSection";
     import type SettingsModel from "@/models/SettingsModel";
-    import {type ContactMap, type ContactKey} from "@/models/Contact";
-    import IconPhone from "@/components/icons/contacts/IconPhone.vue";
-    import IconEmail from "@/components/icons/contacts/IconEmail.vue";
-    import IconGithub from "@/components/icons/contacts/IconGithub.vue";
-    import IconLocation from "@/components/icons/contacts/IconLocation.vue";
-    import IconLinkedIn from "@/components/icons/contacts/IconLinkedIn.vue";
+    import {components, type ContactKey} from "@/models/Contact";
     import IconClose from "@/components/icons/IconClose.vue";
     import IconUpload from "@/components/icons/IconUpload.vue";
     import IconProfile from "@/components/icons/IconProfile.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import EditText from "@/components/shared/EditText.vue";
+    import {checkGroupMatch} from "@/models/BuildingBlock";
 
     const model = defineModel<HeaderSection>({
         required: true
     });
-
-    const components: ContactMap = {
-        email: {
-            icon: IconEmail,
-            link: (value: string) => `mailto:${value}`
-        },
-        phone: {
-            icon: IconPhone,
-            link: (_: string) => undefined
-        },
-        github: {
-            icon: IconGithub,
-            link: (value: string) => value
-        },
-        location: {
-            icon: IconLocation,
-            link: (_: string) => undefined
-        },
-        linkedin: {
-            icon: IconLinkedIn,
-            link: (value: string) => value
-        }
-    };
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
@@ -85,14 +58,14 @@
                         v-model="model.contacts"
                         item-key="id"
                         key="draggable"
-                        :group="{name: 'contact', pull: true, put: true}"
+                        :group="{name: 'contact', pull: true, put: checkGroupMatch}"
                         :disabled="!settings.editable"
                         drag-class="dragging"
                         ghost-class="ghost"
                         animation="200"
                     >
                         <template #item="{element: contact}: {element: ContactKey}">
-                            <a class="flex items-center py-1 hover:transition-colors" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable || !components[contact].link(model[contact]) ? undefined : 'url-hover'">
+                            <a class="flex items-center py-1 hover:transition-colors" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable || !components[contact].link(model[contact]) ? undefined : 'hover:text-accent'">
                                 <component :is="components[contact].icon" class="size-5"/>
                                 <edit-text class="ms-2" v-model="model[contact]"/>
                             </a>
@@ -106,10 +79,3 @@
         </div>
     </div>
 </template>
-
-<!--suppress CssUnusedSymbol -->
-<style scoped>
-    .url-hover:hover {
-        color: rgb(var(--accent));
-    }
-</style>

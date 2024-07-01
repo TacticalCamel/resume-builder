@@ -2,25 +2,12 @@
     import {inject, type PropType} from "vue";
     import draggable from "vuedraggable";
     import HeaderSection from "@/components/sections/HeaderSection.vue";
-    import EducationSection from "@/components/sections/EducationSection.vue";
-    import ExperienceSection from "@/components/sections/ExperienceSection.vue";
-    import SkillSection from "@/components/sections/SkillSection.vue";
-    import LanguageSection from "@/components/sections/LanguageSection.vue";
-    import ProjectSection from "@/components/sections/ProjectSection.vue";
     import type ResumeModel from "@/models/ResumeModel";
-    import type {SectionMap, SectionKey} from "@/models/Section";
+    import {type SectionKey, components} from "@/models/Section";
     import type SettingsModel from "@/models/SettingsModel";
+    import {checkGroupMatch} from "@/models/BuildingBlock";
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);
-
-    // a map to find each component by name
-    const components: SectionMap = {
-        education: EducationSection,
-        experience: ExperienceSection,
-        skills: SkillSection,
-        languages: LanguageSection,
-        projects: ProjectSection
-    };
 
     const resume = defineModel({
         type: Object as PropType<ResumeModel>,
@@ -37,6 +24,7 @@
                 key="draggable"
                 class="grid max-w-[960px] mx-auto"
                 :disabled="!settings.editable"
+                :group="{name: 'section', pull: true, put: checkGroupMatch}"
                 drag-class="dragging"
                 ghost-class="ghost"
                 animation="200"

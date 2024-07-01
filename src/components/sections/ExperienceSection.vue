@@ -2,27 +2,16 @@
     import type ExperienceSection from "@/models/sections/ExperienceSection";
     import type Experience from "@/models/elements/Experience";
     import EditText from "@/components/shared/EditText.vue";
-    import ResumeSection from "@/components/sections/ResumeSection.vue";
+    import ResumeSection from "@/components/shared/ResumeSection.vue";
     import TechnologyList from "@/components/shared/TechnologyList.vue";
 
     const model = defineModel<ExperienceSection>({
         required: true
     });
-
-    function addExperience() {
-        model.value.elements.push({
-            company: '',
-            position: '',
-            start: '',
-            finish: '',
-            description: '',
-            stack: []
-        });
-    }
 </script>
 
 <template>
-    <resume-section v-model="model" @on-add="addExperience">
+    <resume-section v-model="model" group="experience">
         <template #item="{element: experience}: {element: Experience}">
             <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
                 <div class="flex">

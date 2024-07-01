@@ -1,19 +1,18 @@
 <script setup lang="ts" generic="T">
-    import Draggable from "vuedraggable";
     import {inject, type PropType} from "vue";
+    import draggable from "vuedraggable";
     import type Section from "@/models/Section";
     import type SettingsModel from "@/models/SettingsModel";
-    import SectionTitle from "@/components/shared/SectionTitle.vue";
+    import IconInfo from "@/components/icons/IconInfo.vue";
+    import EditText from "@/components/shared/EditText.vue";
+    import {checkGroupMatch} from "@/models/BuildingBlock";
 
-    defineEmits<{
-        onAdd: []
-    }>();
+    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
     defineProps({
-        enableDelete: {
-            type: Boolean,
-            required: false,
-            default: true
+        group: {
+            type: String,
+            required: true
         },
         display: {
             type: String as PropType<'table' | 'grid'>,
@@ -30,13 +29,13 @@
     const model = defineModel<Section<T>>({
         required: true
     });
-
-    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 </script>
 
 <template>
     <div v-if="settings.editable || model.elements.length" :class="{'section-grid': display == 'grid'}">
-        <section-title v-model="model.title" :display-warning="!model.elements.length" @on-add="$emit('onAdd')"/>
+        <div class="flex flex-col items-start">
+            <edit-text v-model="model.title" class="uppercase text-2xl"/>
+        </div>
 
         <slot name="header"/>
 
@@ -47,6 +46,7 @@
                     item-key="id"
                     key="draggable"
                     :disabled="!settings.editable"
+                    :group="{name: group, pull: true, put: checkGroupMatch}"
                     drag-class="dragging"
                     ghost-class="ghost"
                     animation="200"
@@ -57,6 +57,13 @@
                         <tr class="relative delete-glow">
                             <slot name="item" :element="element" :index="index"/>
                         </tr>
+                    </template>
+
+                    <template #footer v-if="settings.editable && !model.elements.length">
+                        <div class="flex items-center text-cyan-500 bg-cyan-500 bg-opacity-20 px-2 py-1 rounded mt-2">
+                            <icon-info class="size-6 me-2"/>
+                            <span>Empty section will not be displayed</span>
+                        </div>
                     </template>
                 </draggable>
             </transition-group>
@@ -78,11 +85,11 @@
         display: none;
     }
 
-    .section-grid table, .section-grid tr, .section-grid td{
+    .section-grid table, .section-grid tr, .section-grid td {
         display: block;
     }
 
-    .section-grid tbody{
+    .section-grid tbody {
         display: grid;
         gap: 1rem;
     }

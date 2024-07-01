@@ -4,7 +4,6 @@
     import type Color from "@/models/themes/Color";
     import type Theme from "@/models/themes/Theme";
     import type SettingsModel from "@/models/SettingsModel";
-    import IconDelete from "@/components/icons/IconDelete.vue";
     import IconPlus from "@/components/icons/IconPlus.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconSwapVertical from "@/components/icons/IconSwapVertical.vue";
@@ -113,15 +112,6 @@
                 applyColor(color.name, color.value);
             }
         });
-    }
-
-    // delete a theme
-    function deleteTheme(index: number): void {
-        if (settings.value.themes[index].name === settings.value.currentTheme) {
-            settings.value.currentTheme = undefined;
-        }
-
-        settings.value.themes.splice(index, 1);
     }
 
     // create a new theme
@@ -259,18 +249,12 @@
                                 <td class="w-full pe-4">
                                     <button @click="setTheme(theme.name)" class="py-0.5 ps-2 grow text-left bg-opacity-0 hover:bg-opacity-20 bg-primary transition-colors rounded w-full me-4">{{ theme.name }}</button>
                                 </td>
-                                <td class="edit-controls">
-                                    <button @click="deleteTheme(index)" class="ms-auto py-0.5 delete text-red-500 bg-red-500 bg-opacity-20 hover:bg-opacity-0 rounded w-full flex justify-center">
-                                        <icon-delete class="size-5"/>
-                                    </button>
-                                </td>
                             </tr>
                         </template>
                         <template #footer>
                             <tr>
-                                <td></td>
                                 <td>
-                                    <button @click="createTheme" class="rounded px-4 py-0.5 grow flex justify-center text-green-500 bg-opacity-20 bg-green-500 hover:border-green-500 border border-transparent transition-colors">
+                                    <button @click="createTheme" class="rounded ms-2 px-4 py-0.5 grow flex justify-center text-success bg-opacity-20 bg-success hover:border-success border border-transparent transition-colors">
                                         <icon-plus class="size-5"/>
                                     </button>
                                 </td>
@@ -286,7 +270,7 @@
                         <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent me-1">
                         <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
 
-                        <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="text-red-500 ms-3 hover:bg-red-500 hover:bg-opacity-20 rounded px-1 hover:transition-colors" @click="() => resetColor(color.name)">Reset</button>
+                        <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="text-error ms-3 hover:bg-error hover:bg-opacity-20 rounded px-1 hover:transition-colors" @click="() => resetColor(color.name)">Reset</button>
                         <span v-else class="ms-3 px-1 italic opacity-60">Default</span>
                     </td>
                 </tr>
@@ -309,13 +293,5 @@
     .slide-down-enter-from, .slide-down-leave-to {
         opacity: 0;
         transform: translate(0, -1rem);
-    }
-
-    tr .edit-controls {
-        display: none;
-    }
-
-    tr:hover .edit-controls {
-        display: table-cell;
     }
 </style>

@@ -17,6 +17,9 @@ export default {
                 primary: ({opacityValue}) => colorWithOpacity('--primary', opacityValue),
                 background: ({opacityValue}) => colorWithOpacity('--background', opacityValue),
                 accent: ({opacityValue}) => colorWithOpacity('--accent', opacityValue),
+                success: ({opacityValue}) => colorWithOpacity('--success', opacityValue),
+                info: ({opacityValue}) => colorWithOpacity('--info', opacityValue),
+                error: ({opacityValue}) => colorWithOpacity('--error', opacityValue),
             }
         },
         screens: {

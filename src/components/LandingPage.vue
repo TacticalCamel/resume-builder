@@ -47,7 +47,7 @@
 <template>
     <div class="h-screen text-2xl flex justify-center items-center font-mono relative overflow-clip">
         <div class="grid gap-6 text-center select-none">
-            <button @click="createExample" class="rounded font-semibold text-green-500 hover:bg-green-500 hover:bg-opacity-20 text-nowrap px-4 py-1 border border-green-500 border-opacity-50 font-mono hover:transition-colors text-center">
+            <button @click="createExample" class="rounded font-semibold text-success hover:bg-success hover:bg-opacity-20 text-nowrap px-4 py-1 border border-success border-opacity-50 font-mono hover:transition-colors text-center">
                 Create an example template
             </button>
             <button @click="toggleSettings" class="rounded font-semibold text-amber-500 hover:bg-amber-500 hover:bg-opacity-20 text-nowrap px-4 py-1 border border-amber-500 border-opacity-50 font-mono hover:transition-colors text-center">
