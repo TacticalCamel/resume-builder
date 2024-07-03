@@ -10,21 +10,23 @@
 </script>
 
 <template>
-    <resume-section v-model="model" group="education">
+    <resume-section
+        v-model="model"
+        group="education"
+        :gap-x="2"
+        :gap-y="1"
+        :sub-grid-columns="2"
+    >
         <template #item="{element: education}: {element: Education}">
-            <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
-                <div class="flex">
-                    <edit-text v-model="education.start" placeholder="Start date"/>
-                    <span class="mx-2">-</span>
-                    <edit-text v-model="education.finish" placeholder="Finish date"/>
-                </div>
-            </td>
-            <td class="font-light pb-4">
-                <div class="flex flex-col items-start">
-                    <edit-text v-model="education.school" placeholder="School name"/>
-                    <edit-text v-model="education.major" placeholder="Major" class="text-primary text-opacity-60"/>
-                </div>
-            </td>
+            <div class="flex items-start text-nowrap">
+                <edit-text v-model="education.start" placeholder="Start date"/>
+                <span class="mx-2">-</span>
+                <edit-text v-model="education.finish" placeholder="Finish date"/>
+            </div>
+            <div class="flex flex-col items-start font-light">
+                <edit-text v-model="education.school" placeholder="School name"/>
+                <edit-text v-model="education.major" placeholder="Major" class="text-primary text-opacity-60"/>
+            </div>
         </template>
     </resume-section>
 </template>

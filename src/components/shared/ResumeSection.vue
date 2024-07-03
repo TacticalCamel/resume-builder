@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T">
-    import {inject, type PropType} from "vue";
+    import {inject, reactive} from "vue";
     import draggable from "vuedraggable";
     import type Section from "@/models/Section";
     import type SettingsModel from "@/models/SettingsModel";
@@ -9,88 +9,62 @@
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
-    defineProps({
-        group: {
-            type: String,
-            required: true
-        },
-        display: {
-            type: String as PropType<'table' | 'grid'>,
-            required: false,
-            default: 'table'
-        },
-        columns: {
-            type: Number,
-            required: false,
-            default: 1
-        }
+    const props = defineProps({
+        group: {type: String, required: true},
+        gridColumns: {type: String, default: 'min-content'},
+        subGridColumns: {type: Number, default: 1},
+        gapX: {type: Number, default: 0},
+        gapY: {type: Number, default: 0}
     });
 
     const model = defineModel<Section<T>>({
         required: true
     });
+
+    const outerGridStyle = reactive({
+        'grid-template-columns': props.gridColumns,
+        'gap': `${props.gapY}rem ${props.gapX}rem`
+    });
+
+    const innerGridStyle = reactive({
+        'grid-column': `span ${props.subGridColumns} / span ${props.subGridColumns}`
+    })
 </script>
 
 <template>
-    <div v-if="settings.editable || model.elements.length" :class="{'section-grid': display == 'grid'}">
+    <div v-if="settings.editable || model.elements.length">
         <div class="flex flex-col items-start">
             <edit-text v-model="model.title" placeholder="Section title" class="uppercase text-2xl"/>
         </div>
 
         <slot name="header"/>
 
-        <table class="m-2 me-0">
-            <transition-group>
-                <draggable
-                    v-model="model.elements"
-                    item-key="id"
-                    key="draggable"
-                    :disabled="!settings.editable"
-                    :group="{name: group, pull: true, put: checkGroupMatch}"
-                    drag-class="dragging"
-                    ghost-class="ghost"
-                    animation="200"
-                    tag="tbody"
-                    :class="`grid-cols-${columns}`"
-                >
-                    <template #item="{element, index}: {element: T, index: number}">
-                        <tr class="relative delete-glow">
-                            <slot name="item" :element="element" :index="index"/>
-                        </tr>
-                    </template>
+        <transition-group>
+            <draggable
+                v-model="model.elements"
+                item-key="id"
+                key="draggable"
+                drag-class="dragging"
+                ghost-class="ghost"
+                animation="200"
+                class="grid p-2 pe-0"
+                :disabled="!settings.editable"
+                :group="{name: group, pull: true, put: checkGroupMatch}"
+                :style="outerGridStyle"
+            >
+                <template #item="{element, index}: {element: T, index: number}">
+                    <div class="grid grid-cols-subgrid" :style="innerGridStyle">
+                        <slot name="item" :element="element" :index="index"/>
+                    </div>
+                </template>
 
-                    <template #footer v-if="settings.editable && !model.elements.length">
-                        <div class="flex items-center text-info bg-info bg-opacity-20 px-2 py-1 rounded mt-2">
-                            <icon-info class="size-6 me-2"/>
-                            <span>Empty section will not be displayed</span>
-                        </div>
-                    </template>
-                </draggable>
-            </transition-group>
-        </table>
+                <template #footer v-if="settings.editable && !model.elements.length">
+                    <div class="flex items-center text-info bg-info bg-opacity-20 px-2 py-1 rounded text-nowrap">
+                        <icon-info class="size-6 me-2"/>
+                        <span>Empty section will not be displayed</span>
+                    </div>
+                </template>
+            </draggable>
+        </transition-group>
     </div>
 </template>
-
-<!--suppress CssUnusedSymbol -->
-<style scoped>
-    tr .edit-controls {
-        display: none;
-    }
-
-    tr:hover .edit-controls {
-        display: table-cell;
-    }
-
-    tr:has(.editable:focus-within) .edit-controls {
-        display: none;
-    }
-
-    .section-grid table, .section-grid tr, .section-grid td {
-        display: block;
-    }
-
-    .section-grid tbody {
-        display: grid;
-        gap: 1rem;
-    }
-</style>

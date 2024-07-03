@@ -11,25 +11,28 @@
 </script>
 
 <template>
-    <resume-section v-model="model" group="experience">
+    <resume-section
+        v-model="model"
+        group="experience"
+        :gap-x="2"
+        :gap-y="1"
+        grid-columns="min-content min-content 1fr"
+        :sub-grid-columns="3"
+    >
         <template #item="{element: experience}: {element: Experience}">
-            <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
-                <div class="flex">
-                    <edit-text v-model="experience.start" placeholder="Start date"/>
-                    <span class="mx-2">-</span>
-                    <edit-text v-model="experience.finish" placeholder="Finish date"/>
-                </div>
-            </td>
-            <td class="pe-6 mobile:pe-12 align-text-top text-nowrap">
-                <div class="flex flex-col items-start">
-                    <edit-text v-model="experience.company" placeholder="Company name"/>
-                    <edit-text v-model="experience.position" placeholder="Position" class="text-primary text-opacity-60"/>
-                    <technology-list v-model="experience.stack" class="mt-2"/>
-                </div>
-            </td>
-            <td class="text-justify align-text-top">
+            <div class="flex items-start text-nowrap">
+                <edit-text v-model="experience.start" placeholder="Start date"/>
+                <span class="mx-2">-</span>
+                <edit-text v-model="experience.finish" placeholder="Finish date"/>
+            </div>
+            <div class="flex flex-col items-start text-nowrap min-w-48">
+                <edit-text v-model="experience.company" placeholder="Company name"/>
+                <edit-text v-model="experience.position" placeholder="Position" class="text-primary text-opacity-60"/>
+                <technology-list v-model="experience.stack" class="mt-2"/>
+            </div>
+            <div class="text-justify">
                 <edit-text v-model="experience.description" placeholder="Description of your responsibilities and achievements"/>
-            </td>
+            </div>
         </template>
     </resume-section>
 </template>

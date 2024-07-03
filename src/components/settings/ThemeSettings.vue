@@ -245,18 +245,21 @@
                     </draggable>
                 </transition-group>
             </div>
-            <table v-else-if="currentTheme" class="mx-2">
-                <tr class="col-span-2 text-sm font-mono" v-for="color in defaultTheme.colors" :key="color.name">
-                    <td class="pe-4">{{ color.name.substring(2) }}</td>
-                    <td class="flex items-center">
-                        <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent me-1">
+            <div v-else-if="currentTheme" class="outer-grid grid mx-2 text-sm gap-x-2 font-mono">
+                <div v-for="color in defaultTheme.colors" :key="color.name" class="grid grid-cols-subgrid col-span-3">
+                    <div class="flex items-center text-nowrap">
+                        {{ color.name.substring(2) }}
+                    </div>
+                    <div class="flex items-center justify-center gap-1">
+                        <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent">
                         <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
-
-                        <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="text-error ms-3 hover:bg-error hover:bg-opacity-20 rounded px-1 hover:transition-colors" @click="() => resetColor(color.name)">Reset</button>
-                        <span v-else class="ms-3 px-1 italic opacity-70">Default</span>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                    <div class="flex items-center justify-end">
+                        <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="px-1 text-error hover:bg-error hover:bg-opacity-20 rounded hover:transition-colors font-semibold" @click="() => resetColor(color.name)">Reset</button>
+                        <span v-else class="px-1 opacity-50">Reset</span>
+                    </div>
+                </div>
+            </div>
             <div v-else>
                 <div class="italic col-span-2 opacity-70 px-2">
                     Create or select a theme to customize it.
@@ -275,5 +278,9 @@
     .slide-down-enter-from, .slide-down-leave-to {
         opacity: 0;
         transform: translate(0, -1rem);
+    }
+
+    .outer-grid {
+        grid-template-columns: min-content 1fr min-content;
     }
 </style>

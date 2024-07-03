@@ -16,28 +16,32 @@
 </script>
 
 <template>
-    <resume-section v-model="model" group="project">
+    <resume-section
+        v-model="model"
+        group="project"
+        grid-columns="1fr"
+        :gap-y="1.5"
+    >
         <template #header>
             <div class="italic text-opacity-60 text-primary font-light mb-4 text-sm flex" v-if="model.elements.length && (model.disclaimer.length || settings.editable)">
                 <edit-text v-model="model.disclaimer" placeholder="Disclaimer about the projects"/>
             </div>
         </template>
-        <template #item="{element: project}: {element: Project}">
-            <td class="flex delete-glow pb-6">
-                <div class="me-0.5">
-                    <icon-link class="size-5 mt-0.5"/>
-                </div>
-                <div class="flex flex-col items-start">
-                    <div class="flex items-center flex-wrap">
-                        <a :href="settings.editable ? undefined : project.url" target="_blank" class="hover:transition-colors flex items-center me-2 mb-0.5 underline text-nowrap" :class="settings.editable ? undefined : 'hover:text-accent'">
-                            <edit-text v-model="project.url" placeholder="Project URL"/>
-                        </a>
 
-                        <technology-list v-model="project.technologies"/>
-                    </div>
+        <template #item="{element: project}: {element: Project}">
+            <div>
+                <div class="flex items-center justify-start mb-1">
+                    <icon-link class="size-5 mb-0.5 me-1"/>
+                    <a :href="settings.editable ? undefined : project.url" target="_blank" class="hover:transition-colors flex items-center underline text-nowrap me-2" :class="settings.editable ? undefined : 'hover:text-accent'">
+                        <edit-text v-model="project.url" placeholder="Project URL"/>
+                    </a>
+                    <technology-list v-model="project.technologies"/>
+                </div>
+
+                <div class="flex">
                     <edit-text class="font-light" v-model="project.description" placeholder="Short description of the project"/>
                 </div>
-            </td>
+            </div>
         </template>
     </resume-section>
 </template>

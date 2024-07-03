@@ -30,8 +30,8 @@
 
 <template>
     <div class="grid gap-12 max-w-[960px] mx-auto">
-        <div class="text-nowrap flex gap-x-6 gap-y-12 justify-center items-center flex-col md:flex-row print:flex-row">
-            <div class="flex items-center justify-center gap-3 mobile:gap-6">
+        <div class="text-nowrap flex gap-6 justify-center items-center flex-col md:flex-row print:flex-row">
+            <div class="flex items-center justify-center gap-3 mobile:gap-6 print:gap-6">
                 <div class="size-24 mobile:size-32 rounded-full select-none shadow shadow-black relative overflow-clip">
                     <img v-if="model.picture" :src="model.picture" alt="profile picture" class="absolute size-full rounded-full">
                     <icon-profile v-else class="absolute size-full p-4"/>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="me-4 flex flex-col items-start">
+                <div class="flex flex-col items-start">
                     <edit-text v-model="model.name" placeholder="Firstname Lastname" class="uppercase text-xl mobile:text-2xl font-bold"/>
                     <edit-text v-model="model.profession" placeholder="Profession" class="uppercase text-sm mobile:text-base"/>
                 </div>
@@ -65,7 +65,7 @@
                         animation="200"
                     >
                         <template #item="{element: contact}: {element: ContactKey}">
-                            <a class="flex items-center py-1 hover:transition-colors gap-2" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable || !components[contact].link(model[contact]) ? undefined : 'hover:text-accent'">
+                            <a class="flex items-center p-1 hover:transition-colors gap-2" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable || !components[contact].link(model[contact]) ? undefined : 'hover:text-accent'">
                                 <component :is="components[contact].icon" class="size-5"/>
                                 <edit-text v-model="model[contact]" :placeholder="components[contact].placeholder"/>
                             </a>

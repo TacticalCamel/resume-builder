@@ -10,18 +10,20 @@
 </script>
 
 <template>
-    <resume-section v-model="model" group="language">
+    <resume-section
+        v-model="model"
+        group="language"
+        :gap-x="4"
+        :gap-y="0.125"
+        :sub-grid-columns="2"
+    >
         <template #item="{element: language}: {element: Language}">
-            <td class="pe-16">
-                <div class="flex">
-                    <edit-text v-model="language.name" placeholder="Language"/>
-                </div>
-            </td>
-            <td class="font-light">
-                <div class="flex">
-                    <edit-text v-model="language.level" placeholder="Level"/>
-                </div>
-            </td>
+            <div class="flex">
+                <edit-text v-model="language.name" placeholder="Language"/>
+            </div>
+            <div class="flex font-light">
+                <edit-text v-model="language.level" placeholder="Level"/>
+            </div>
         </template>
     </resume-section>
 </template>

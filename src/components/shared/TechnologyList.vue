@@ -26,7 +26,7 @@
                 drag-class="dragging"
                 ghost-class="ghost"
                 animation="200"
-                class="flex flex-wrap gap-2 mb-0.5 text-sm items-start"
+                class="flex flex-wrap gap-2 text-sm items-start"
             >
                 <template #item="{index}: {index: number}">
                     <div class="flex relative">

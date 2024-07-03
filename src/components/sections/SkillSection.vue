@@ -28,42 +28,49 @@
 </script>
 
 <template>
-    <resume-section v-model="model" group="skill-category" :display="'grid'" :columns="2">
+    <resume-section
+        v-model="model"
+        group="skill-category"
+        grid-columns="1fr 1fr"
+        :gap-x="2"
+        :gap-y="1"
+    >
         <template #item="{element: category}: {element: SkillCategory}">
-            <div class="flex">
-                <edit-text v-model="category.title" placeholder="Category name" class="text-lg pb-0.5"/>
-            </div>
+            <div>
+                <div class="flex">
+                    <edit-text v-model="category.title" placeholder="Category name" class="text-lg pb-0.5"/>
+                </div>
 
-            <transition-group>
-                <draggable
-                    v-model="category.elements"
-                    item-key="id"
-                    key="draggable"
-                    :disabled="!settings.editable"
-                    drag-class="dragging"
-                    ghost-class="ghost"
-                    animation="200"
-                    :group="{name: 'skill', pull: true, put: checkGroupMatch}"
-                >
-                    <template #item="{element: skill}: {element: Skill}">
-                        <div class="flex py-0.5 items-center skill-row">
-                            <rating-bar :value="skill.level" class="ps-0.5 pe-3"/>
+                <transition-group>
+                    <draggable
+                        v-model="category.elements"
+                        item-key="id"
+                        key="draggable"
+                        :disabled="!settings.editable"
+                        drag-class="dragging"
+                        ghost-class="ghost"
+                        animation="200"
+                        :group="{name: 'skill', pull: true, put: checkGroupMatch}"
+                    >
+                        <template #item="{element: skill}: {element: Skill}">
+                            <div class="flex py-0.5 text-nowrap items-center skill-row">
+                                <rating-bar :value="skill.level" class="ps-0.5 pe-3"/>
 
-                            <edit-text v-model="skill.name" class="font-light skill-text" placeholder="Skill name"/>
+                                <edit-text v-model="skill.name" class="font-light skill-text" placeholder="Skill name"/>
 
-                            <div v-if="settings.editable" class="ms-auto flex gap-1 skill-row-edit-controls">
-                                <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-error text-error py-0.5 px-1.5 rounded transition-all">
-                                    <icon-decrease class="size-4"/>
-                                </button>
-                                <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-success text-success py-0.5 px-1.5 rounded transition-all">
-                                    <icon-increase class="size-4"/>
-                                </button>
+                                <div v-if="settings.editable" class="ms-auto flex gap-1 skill-row-edit-controls">
+                                    <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-error text-error py-0.5 px-1.5 rounded transition-all">
+                                        <icon-decrease class="size-4"/>
+                                    </button>
+                                    <button @click="increaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-success text-success py-0.5 px-1.5 rounded transition-all">
+                                        <icon-increase class="size-4"/>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                </draggable>
-            </transition-group>
-
+                        </template>
+                    </draggable>
+                </transition-group>
+            </div>
         </template>
     </resume-section>
 </template>
