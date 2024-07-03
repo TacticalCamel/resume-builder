@@ -31,7 +31,7 @@
 <template>
     <div class="relative" :class="{'editable': settings.editable}">
         <div class="text-input" :contenteditable="settings.editable" @focusout="saveModelChanges">{{ model }}</div>
-        <div v-show="settings.editable" class="text-overlay pointer-events-none text-primary text-center text-opacity-60">{{ placeholder }}</div>
+        <div v-show="settings.editable" class="text-overlay pointer-events-none opacity-60">{{ placeholder }}</div>
     </div>
 </template>
 
@@ -69,13 +69,6 @@
         border-radius: 0.25rem;
         outline: transparent;
         transition: outline-color 150ms;
-    }
-
-    /*
-     Give the text input a minimum width when it is editable, in case the placeholder is not long enough.
-    */
-    .editable > .text-input{
-        min-width: 3ch;
     }
 
     /*

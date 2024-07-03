@@ -2,6 +2,7 @@
     import type ResumeModel from "@/models/ResumeModel";
     import {getExampleResume, getEmptyResume} from "@/models/ResumeModel";
     import type SettingsModel from "@/models/SettingsModel";
+    import IconChevronRight from "@/components/icons/IconChevronRight.vue";
 
     const resume = defineModel<ResumeModel | null>('resume', {
         required: true
@@ -37,8 +38,9 @@
                     Easily create the perfect resume for any job using our best-in-class resume builder platform.
                 </p>
                 <p class="flex gap-4 items-center">
-                    <button @click="getStarted" class="font-semibold text-background bg-primary hover:bg-opacity-60 px-6 py-2 rounded-full transition-colors">
-                        Get started
+                    <button @click="getStarted" class="font-semibold text-background bg-primary hover:bg-opacity-60 ps-6 pe-3 py-2 rounded-full flex items-center gap-1 transition-colors">
+                        <span>Get started</span>
+                        <icon-chevron-right class="size-6"/>
                     </button>
                     <span>
                         Create an example resume and see how it works

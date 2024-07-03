@@ -47,9 +47,9 @@
                     </div>
                 </div>
 
-                <div class="me-4 flex flex-col">
-                    <edit-text v-model="model.name" class="uppercase text-xl mobile:text-2xl font-bold"/>
-                    <edit-text v-model="model.profession" class="uppercase text-sm mobile:text-base"/>
+                <div class="me-4 flex flex-col items-start">
+                    <edit-text v-model="model.name" placeholder="Firstname Lastname" class="uppercase text-xl mobile:text-2xl font-bold"/>
+                    <edit-text v-model="model.profession" placeholder="Profession" class="uppercase text-sm mobile:text-base"/>
                 </div>
             </div>
             <div class="text-[0.9em] grid gap-0.5">
@@ -65,9 +65,9 @@
                         animation="200"
                     >
                         <template #item="{element: contact}: {element: ContactKey}">
-                            <a class="flex items-center py-1 hover:transition-colors" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable || !components[contact].link(model[contact]) ? undefined : 'hover:text-accent'">
+                            <a class="flex items-center py-1 hover:transition-colors gap-2" :href="settings.editable ? undefined : components[contact].link(model[contact])" :class="settings.editable || !components[contact].link(model[contact]) ? undefined : 'hover:text-accent'">
                                 <component :is="components[contact].icon" class="size-5"/>
-                                <edit-text class="ms-2" v-model="model[contact]"/>
+                                <edit-text v-model="model[contact]" :placeholder="components[contact].placeholder"/>
                             </a>
                         </template>
                     </draggable>
@@ -75,7 +75,7 @@
             </div>
         </div>
         <div v-if="model" class="text-justify mx-auto max-w-[720px]">
-            <edit-text v-model="model.description"/>
+            <edit-text v-model="model.description" placeholder="Medium length description that usually includes a short introduction, describes what is it can you offer for your future employer, and what are your career goals."/>
         </div>
     </div>
 </template>

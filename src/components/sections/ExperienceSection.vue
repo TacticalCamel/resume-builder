@@ -15,20 +15,20 @@
         <template #item="{element: experience}: {element: Experience}">
             <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
                 <div class="flex">
-                    <edit-text v-model="experience.start" placeholder="start"/>
+                    <edit-text v-model="experience.start" placeholder="Start date"/>
                     <span class="mx-2">-</span>
-                    <edit-text v-model="experience.finish" placeholder="finish"/>
+                    <edit-text v-model="experience.finish" placeholder="Finish date"/>
                 </div>
             </td>
             <td class="pe-6 mobile:pe-12 align-text-top text-nowrap">
                 <div class="flex flex-col items-start">
-                    <edit-text v-model="experience.company" placeholder="company"/>
-                    <edit-text v-model="experience.position" placeholder="position" class="text-primary text-opacity-60"/>
+                    <edit-text v-model="experience.company" placeholder="Company name"/>
+                    <edit-text v-model="experience.position" placeholder="Position" class="text-primary text-opacity-60"/>
                     <technology-list v-model="experience.stack" class="mt-2"/>
                 </div>
             </td>
             <td class="text-justify align-text-top">
-                <edit-text v-model="experience.description" placeholder="description"/>
+                <edit-text v-model="experience.description" placeholder="Description of your responsibilities and achievements"/>
             </td>
         </template>
     </resume-section>

@@ -13,10 +13,14 @@
     <resume-section v-model="model" group="language">
         <template #item="{element: language}: {element: Language}">
             <td class="pe-16">
-                <edit-text v-model="language.name" placeholder="name"/>
+                <div class="flex">
+                    <edit-text v-model="language.name" placeholder="Language"/>
+                </div>
             </td>
             <td class="font-light">
-                <edit-text v-model="language.level" placeholder="level"/>
+                <div class="flex">
+                    <edit-text v-model="language.level" placeholder="Level"/>
+                </div>
             </td>
         </template>
     </resume-section>

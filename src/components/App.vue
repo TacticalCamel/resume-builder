@@ -19,7 +19,7 @@
     <main class="relative min-h-full">
         <navigation v-model:settings="settings"/>
 
-        <transition mode="out-in">
+        <transition mode="out-in" appear>
             <resume v-if="resume" v-model="resume" :class="{'monochrome': settings.monochrome}"/>
             <landing-page v-else v-model:settings="settings" v-model:resume="resume"/>
         </transition>
@@ -30,11 +30,11 @@
 
 <style scoped>
     .v-enter-active, .v-leave-active {
-        transition: all 150ms;
+        transition: all 300ms ease-in-out;
     }
 
     .v-enter-from, .v-leave-to {
-        transform: translateX(-2rem);
+        transform: translateX(-1rem);
         opacity: 0;
     }
 </style>

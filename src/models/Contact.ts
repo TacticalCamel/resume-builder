@@ -7,7 +7,8 @@ import IconLinkedIn from "@/components/icons/contacts/IconLinkedIn.vue";
 
 export default interface Contact {
     icon: Component
-    link: (value: string) => string | undefined
+    link: (value: string) => string | undefined,
+    placeholder: string
 }
 
 export interface ContactMap{
@@ -23,22 +24,27 @@ export type ContactKey = keyof ContactMap;
 export const components: ContactMap = {
     email: {
         icon: IconEmail,
-        link: (value: string) => `mailto:${value}`
+        link: (value: string) => `mailto:${value}`,
+        placeholder: 'Email address'
     },
     phone: {
         icon: IconPhone,
-        link: (_: string) => undefined
+        link: (_: string) => undefined,
+        placeholder: 'Phone number'
     },
     github: {
         icon: IconGithub,
-        link: (value: string) => value
+        link: (value: string) => value,
+        placeholder: 'Github profile URL'
     },
     location: {
         icon: IconLocation,
-        link: (_: string) => undefined
+        link: (_: string) => undefined,
+        placeholder: 'Physical location'
     },
     linkedin: {
         icon: IconLinkedIn,
-        link: (value: string) => value
+        link: (value: string) => value,
+        placeholder: 'LinkedIn profile URL'
     }
 };

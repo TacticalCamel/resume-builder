@@ -34,7 +34,7 @@
 <template>
     <div v-if="settings.editable || model.elements.length" :class="{'section-grid': display == 'grid'}">
         <div class="flex flex-col items-start">
-            <edit-text v-model="model.title" class="uppercase text-2xl"/>
+            <edit-text v-model="model.title" placeholder="Section title" class="uppercase text-2xl"/>
         </div>
 
         <slot name="header"/>

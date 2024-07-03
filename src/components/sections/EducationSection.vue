@@ -14,15 +14,15 @@
         <template #item="{element: education}: {element: Education}">
             <td class="pe-8 mobile:pe-16 align-text-top text-nowrap">
                 <div class="flex">
-                    <edit-text v-model="education.start" placeholder="start"/>
+                    <edit-text v-model="education.start" placeholder="Start date"/>
                     <span class="mx-2">-</span>
-                    <edit-text v-model="education.finish" placeholder="finish"/>
+                    <edit-text v-model="education.finish" placeholder="Finish date"/>
                 </div>
             </td>
             <td class="font-light pb-4">
                 <div class="flex flex-col items-start">
-                    <edit-text v-model="education.school" placeholder="school"/>
-                    <edit-text v-model="education.major" placeholder="major" class="text-primary text-opacity-60"/>
+                    <edit-text v-model="education.school" placeholder="School name"/>
+                    <edit-text v-model="education.major" placeholder="Major" class="text-primary text-opacity-60"/>
                 </div>
             </td>
         </template>
