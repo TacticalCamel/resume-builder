@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import {inject, ref} from "vue";
+    import {inject} from "vue";
     import draggable from "vuedraggable";
     import type BuildingBlock from "@/models/BuildingBlock";
     import type Experience from "@/models/elements/Experience";
@@ -13,19 +13,25 @@
     import {components as sections} from "@/models/Section";
     import {components as contacts} from "@/models/Contact";
     import DeleteArea from "@/components/settings/DeleteArea.vue";
+    import IconLink from "@/components/icons/IconLink.vue";
+    import IconSegment from "@/components/icons/settings/IconSegment.vue";
+    import IconCube from "@/components/icons/settings/IconCube.vue";
+    import IconSettings from "@/components/icons/settings/IconSettings.vue";
 
     const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
-    const blocks = ref<BuildingBlock[]>([
+    const blocks: BuildingBlock[] = [
         ...Object.keys(sections).map(section => ({
             name: `${section} section`,
             group: 'section',
-            clone: (): string => section
+            clone: (): string => section,
+            icon: IconSegment
         })),
         ...Object.keys(contacts).map(contact => ({
             name: `${contact} contact`,
             group: 'contact',
-            clone: (): string => contact
+            clone: (): string => contact,
+            icon: IconLink
         })),
         {
             name: 'education',
@@ -37,7 +43,8 @@
                     start: '',
                     finish: ''
                 }
-            }
+            },
+            icon: IconCube
         },
         {
             name: 'experience',
@@ -51,7 +58,8 @@
                     description: '',
                     stack: []
                 }
-            }
+            },
+            icon: IconCube
         },
         {
             name: 'skill category',
@@ -61,7 +69,8 @@
                     title: '',
                     elements: []
                 }
-            }
+            },
+            icon: IconCube
         },
         {
             name: 'skill',
@@ -71,7 +80,8 @@
                     name: '',
                     level: 0
                 }
-            }
+            },
+            icon: IconCube
         },
         {
             name: 'language',
@@ -81,7 +91,8 @@
                     name: '',
                     level: ''
                 }
-            }
+            },
+            icon: IconCube
         },
         {
             name: 'project',
@@ -92,12 +103,14 @@
                     url: '',
                     technologies: []
                 }
-            }
+            },
+            icon: IconCube
         },
         {
             name: 'technology',
             group: 'technology',
-            clone: (): string => ''
+            clone: (): string => '',
+            icon: IconCube
         },
         {
             name: 'theme',
@@ -107,9 +120,10 @@
                     name: `theme`,
                     colors: []
                 }
-            }
+            },
+            icon: IconSettings
         }
-    ]);
+    ];
 </script>
 
 <template>
@@ -121,7 +135,7 @@
                 v-model="blocks"
                 item-key="id"
                 key="draggable"
-                class="w-80 rounded flex flex-wrap flex-row gap-2 px-2 items-start justify-start"
+                class="w-80 rounded flex flex-wrap flex-row gap-2 px-2 items-start justify-start text-sm"
                 drag-class="dragging"
                 ghost-class="ghost-invisible"
                 animation="200"
@@ -132,7 +146,12 @@
                 :class="{'editable': settings.editable}"
             >
                 <template #item="{element: block}: {element: BuildingBlock}">
-                    <span :data-group="block.group" class="px-2 first-letter:uppercase transition-colors border-2 border-background rounded-lg">{{ block.name }}</span>
+                    <div :data-group="block.group">
+                        <div class="building-block border-2 border-background rounded-lg transition-colors">
+                            <component :is="block.icon" class="size-4"/>
+                            <span class="first-letter:uppercase font-semibold">{{ block.name }}</span>
+                        </div>
+                    </div>
                 </template>
             </draggable>
         </transition-group>
@@ -147,11 +166,15 @@
         opacity: 0;
     }
 
-    span {
+    .building-block {
         background: linear-gradient(-60deg, rgb(var(--accent) / 0.6), rgb(var(--info) / 0.6));
+        display: flex;
+        align-items: center;
+        padding: 1px 0.375rem;
+        gap: 0.25rem;
     }
 
-    .editable span:hover {
+    .editable .building-block:hover {
         border-color: rgb(var(--primary ));
     }
 </style>

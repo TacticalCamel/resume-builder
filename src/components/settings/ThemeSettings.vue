@@ -5,7 +5,7 @@
     import type Theme from "@/models/themes/Theme";
     import type SettingsModel from "@/models/SettingsModel";
     import EditText from "@/components/shared/EditText.vue";
-    import IconSwapVertical from "@/components/icons/IconSwapVertical.vue";
+    import IconSwapVertical from "@/components/icons/settings/IconSwapVertical.vue";
     import ThemeCard from "@/components/shared/ThemeCard.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";
 
@@ -201,14 +201,19 @@
 
 <template>
     <div class="flex flex-col gap-4 min-w-80">
-        <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Themes</div>
+        <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Theming</div>
+
+        <div class="flex px-2">
+            <div>Current font</div>
+            <div class="ms-auto bg-accent rounded w-8 text-center bg-opacity-50">...</div>
+        </div>
 
         <div class="flex gap-4 px-2">
             <div>Current theme</div>
 
             <div class="ms-auto">
                 <edit-text v-if="currentTheme" v-model="currentTheme.name" @change="renameTheme"/>
-                <div v-else class="text-primary text-opacity-60 italic">{{ defaultTheme.name }}</div>
+                <div v-else class="text-primary text-opacity-70 italic">{{ defaultTheme.name }}</div>
             </div>
 
             <button @click="themeSelectOpen = !themeSelectOpen" class="bg-primary bg-opacity-0 hover:bg-opacity-20 rounded px-2 py-0.5 transition-colors">
@@ -231,7 +236,7 @@
                         :disabled="!settings.editable"
                     >
                         <template #header>
-                            <theme-card @click="setTheme(undefined)" :theme="defaultTheme" :default-theme="defaultTheme" class="text-primary text-opacity-60 italic"/>
+                            <theme-card @click="setTheme(undefined)" :theme="defaultTheme" :default-theme="defaultTheme" class="text-primary text-opacity-70 italic"/>
                         </template>
 
                         <template #item="{element: theme}: {element: Theme}">
@@ -240,20 +245,20 @@
                     </draggable>
                 </transition-group>
             </div>
-            <table v-else-if="currentTheme">
+            <table v-else-if="currentTheme" class="mx-2">
                 <tr class="col-span-2 text-sm font-mono" v-for="color in defaultTheme.colors" :key="color.name">
-                    <td class="pe-4">{{ color.name }}</td>
+                    <td class="pe-4">{{ color.name.substring(2) }}</td>
                     <td class="flex items-center">
                         <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent me-1">
                         <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
 
                         <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="text-error ms-3 hover:bg-error hover:bg-opacity-20 rounded px-1 hover:transition-colors" @click="() => resetColor(color.name)">Reset</button>
-                        <span v-else class="ms-3 px-1 italic opacity-60">Default</span>
+                        <span v-else class="ms-3 px-1 italic opacity-70">Default</span>
                     </td>
                 </tr>
             </table>
             <div v-else>
-                <div class="italic col-span-2 opacity-60">
+                <div class="italic col-span-2 opacity-70 px-2">
                     Create or select a theme to customize it.
                 </div>
             </div>

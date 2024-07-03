@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import {ref} from "vue";
     import draggable from "vuedraggable";
-    import IconDelete from "@/components/icons/IconDelete.vue";
+    import IconDelete from "@/components/icons/settings/IconDelete.vue";
 
     const sink = ref<any[]>([]);
 </script>
@@ -11,7 +11,7 @@
         v-model="sink"
         item-key="id"
         :group="{name: 'delete', pull: false, put: true}"
-        class="flex justify-center items-center border-2 border-dashed border-error rounded-lg p-2 h-20 delete-area"
+        class="flex justify-center items-center border-2 border-dashed border-error rounded-lg p-2 h-20 delete-area bg-error bg-opacity-10 transition-colors"
         ghost-class="delete-item"
         @add="sink.pop()"
     >
@@ -40,6 +40,6 @@
     }
 
     .delete-area:has(> .delete-item) {
-        @apply bg-error bg-opacity-20;
+        @apply bg-opacity-30;
     }
 </style>

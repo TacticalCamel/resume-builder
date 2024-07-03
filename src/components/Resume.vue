@@ -16,7 +16,7 @@
 </script>
 
 <template>
-    <div class="resume-root py-10 px-3 mobile:px-5 md:px-10" :class="{'open': settings.settingsOpen}">
+    <div class="resume-root py-10 px-3" :class="{'open': settings.settingsOpen}">
         <transition-group>
             <draggable
                 v-model="resume.sections"

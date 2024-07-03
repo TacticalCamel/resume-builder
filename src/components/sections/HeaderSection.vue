@@ -9,7 +9,7 @@
     import IconProfile from "@/components/icons/IconProfile.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import EditText from "@/components/shared/EditText.vue";
-    import IconDelete from "@/components/icons/IconDelete.vue";
+    import IconDelete from "@/components/icons/settings/IconDelete.vue";
 
     const model = defineModel<HeaderSection>({
         required: true
@@ -30,7 +30,7 @@
 
 <template>
     <div class="grid gap-12 max-w-[960px] mx-auto">
-        <div class="text-nowrap flex gap-x-6 gap-y-12 justify-center items-center flex-col md:flex-row">
+        <div class="text-nowrap flex gap-x-6 gap-y-12 justify-center items-center flex-col md:flex-row print:flex-row">
             <div class="flex items-center justify-center gap-3 mobile:gap-6">
                 <div class="size-24 mobile:size-32 rounded-full select-none shadow shadow-black relative overflow-clip">
                     <img v-if="model.picture" :src="model.picture" alt="profile picture" class="absolute size-full rounded-full">

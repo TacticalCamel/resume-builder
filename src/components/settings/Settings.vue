@@ -88,7 +88,7 @@
 
 <template>
     <transition name="appear">
-        <div class="fixed top-[4.5rem] right-3 z-10 select-none bg-background border border-accent rounded-lg no-print" v-show="settings.settingsOpen">
+        <div class="settings-modal fixed top-[4.5rem] right-3 z-10 select-none bg-background rounded-lg no-print" v-show="settings.settingsOpen">
             <div class="grid gap-y-8 p-4">
                 <div class="flex flex-col gap-4 min-w-80 text-sm">
                     <div class="flex justify-between w-full px-2">
@@ -111,16 +111,16 @@
                     </div>
 
                     <div class="grid gap-x-4 gap-y-2 grid-cols-2 px-2">
-                        <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors">
+                        <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
                             Import template
                         </file-upload>
-                        <button @click="resetTemplate" class="rounded font-semibold text-error hover:bg-error hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-error border-opacity-50 font-mono hover:transition-colors text-center">
+                        <button @click="resetTemplate" class="rounded font-semibold text-background bg-error px-2 py-0.5">
                             Reset template
                         </button>
-                        <button @click="exportTemplate" class="rounded font-semibold text-accent hover:bg-accent hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-accent border-opacity-50 font-mono hover:transition-colors text-center">
+                        <button @click="exportTemplate" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
                             Export template
                         </button>
-                        <button @click="resetSettings" class="rounded font-semibold text-error hover:bg-error hover:bg-opacity-20 text-nowrap px-2 py-0.5 border border-error border-opacity-50 font-mono hover:transition-colors text-center">
+                        <button @click="resetSettings" class="rounded font-semibold text-background bg-error px-2 py-0.5">
                             Reset settings
                         </button>
                     </div>
@@ -147,5 +147,21 @@
     .appear-enter-from, .appear-leave-to {
         transform: translate(1rem, 0);
         opacity: 0;
+    }
+
+    .settings-modal{
+        overflow-y: auto;
+        max-height: calc(100vh - 6rem);
+        outline: 2px solid rgb(var(--accent));
+    }
+
+    .settings-modal::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    .settings-modal::-webkit-scrollbar-thumb {
+        background-color: rgb(var(--primary));
+        border-radius: 9999px;
+        border: 4px solid rgb(var(--background));
     }
 </style>

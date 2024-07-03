@@ -1,7 +1,10 @@
+import type {Component} from "vue";
+
 export default interface BuildingBlock {
     group: string
     name: string
     clone: () => any
+    icon: Component
 }
 
 export function checkGroupMatch(targetSortable: any, sourceSortable: any, element: HTMLElement) {

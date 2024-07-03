@@ -4,9 +4,9 @@
 
 @layer base {
     :root {
-        --primary: 242 242 242;
-        --background: 24 25 32;
-        --accent: 99 102 241;
+        --primary: 10 37 64;
+        --background: 246 249 252;
+        --accent: 99 91 255;
         --success: 34 197 94;
         --info: 14 165 233;
         --warning: 245 158 11;
@@ -29,7 +29,8 @@ body {
     color: rgb(var(--primary));
     background-color: rgb(var(--background));
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
+    margin-left: 14px;
 }
 
 body::-webkit-scrollbar {
@@ -52,7 +53,7 @@ body::-webkit-scrollbar-track {
 }
 
 .ghost {
-    border: 2px dashed rgb(var(--info));
+    outline: 2px dashed rgb(var(--info));
     background-color: rgba(var(--info), 0.05);
     border-radius: 0.5rem;
 }

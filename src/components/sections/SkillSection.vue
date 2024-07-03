@@ -31,7 +31,7 @@
     <resume-section v-model="model" group="skill-category" :display="'grid'" :columns="2">
         <template #item="{element: category}: {element: SkillCategory}">
             <div class="flex">
-                <edit-text v-model="category.title" class="text-lg pb-0.5"/>
+                <edit-text v-model="category.title" placeholder="category" class="text-lg pb-0.5"/>
             </div>
 
             <transition-group>
@@ -49,7 +49,7 @@
                         <div class="flex py-0.5 items-center skill-row">
                             <rating-bar :value="skill.level" class="ps-0.5 pe-3"/>
 
-                            <edit-text v-model="skill.name" class="font-light skill-text"/>
+                            <edit-text v-model="skill.name" class="font-light skill-text" placeholder="skill"/>
 
                             <div v-if="settings.editable" class="ms-auto flex gap-1 skill-row-edit-controls">
                                 <button @click="decreaseSkillLevel(skill)" class="bg-opacity-0 hover:bg-opacity-20 bg-error text-error py-0.5 px-1.5 rounded transition-all">

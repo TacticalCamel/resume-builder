@@ -1,63 +1,59 @@
 <script setup lang="ts">
     import type ResumeModel from "@/models/ResumeModel";
-    import {getExampleResume} from "@/models/ResumeModel";
+    import {getExampleResume, getEmptyResume} from "@/models/ResumeModel";
+    import type SettingsModel from "@/models/SettingsModel";
 
     const resume = defineModel<ResumeModel | null>('resume', {
         required: true
     });
 
-    function createExample() {
+    const settings = defineModel<SettingsModel>('settings', {
+        required: true
+    });
+
+    function getStarted() {
+        // create example resume
         resume.value = getExampleResume();
+
+        // open settings panel
+        settings.value.settingsOpen = true;
+
+        // enable editing
+        settings.value.editable = true;
     }
 
-    const minSize = 3;
-    const maxSize = 8;
-    const spreadX = 100 + maxSize;
-    const spreadY = 100;
-    const minDuration = 20;
-    const maxDuration = 25;
-
-    function getRandomStyle() {
-        const top = -maxSize * 2.5 - spreadY * Math.random();
-        const left = -maxSize / 2 + spreadX * Math.random();
-        const size = minSize + (maxSize - minSize) * Math.random();
-        const duration = minDuration + (maxDuration - minDuration) * Math.random();
-
-        return {
-            top: `${top}%`,
-            left: `${left}%`,
-            width: `${size}vh`,
-            height: `${size}vh`,
-            animationDuration: `${duration}s`
-        };
+    function createEmpty() {
+        resume.value = getEmptyResume();
     }
 </script>
 
 <template>
-    <div class="h-screen text-2xl flex justify-center items-center font-mono relative overflow-clip">
-        <div class="grid gap-6 text-center select-none">
-            <button @click="createExample" class="rounded font-semibold text-success hover:bg-success hover:bg-opacity-20 text-nowrap px-4 py-1 border border-success border-opacity-50 font-mono hover:transition-colors text-center">
-                Create an example template
-            </button>
+    <div class="">
+        <div class="flex items-center justify-center gap-20 py-16">
+            <div class="flex flex-col gap-8 items-start">
+                <h1 class="text-7xl font-bold text-primary text-nowrap">Explain the value <br/> you provide</h1>
+                <p class="text-xl">
+                    Explain how you this value will be created, who is it for.
+                    Easily create the perfect resume for any job using our best-in-class resume builder platform.
+                </p>
+                <p class="flex gap-4 items-center">
+                    <button @click="getStarted" class="font-semibold text-background bg-primary hover:bg-opacity-60 px-6 py-2 rounded-full transition-colors">
+                        Get started
+                    </button>
+                    <span>
+                        Create an example resume and see how it works
+                    </span>
+                </p>
+            </div>
+            <div class="w-[48rem] h-[24rem] bg-accent flex items-center justify-center rounded-lg border-2 border-dashed border-primary">
+                <span class="text-2xl italic font-semibold">TODO: Visual</span>
+            </div>
         </div>
 
-        <div v-for="() in 0" class="rect" :style="getRandomStyle()"/>
+        <div class="p-8 max-w-[1280px] mx-auto bg-opacity-10 bg-primary rounded">
+            <div>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt tincidunt. Nullam
+            </div>
+        </div>
     </div>
 </template>
-
-<style scoped>
-    .rect {
-        position: absolute;
-        border: 0.5rem solid #7249e4;
-        border-radius: 10%;
-        animation-name: flow;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
-    }
-
-    @keyframes flow {
-        to {
-            top: 100%;
-        }
-    }
-</style>

@@ -1,6 +1,6 @@
-# CV editor
+# CV Builder
 
-#### A simple web application for creating highly customizable CVs. Built with [Vue.js](https://vuejs.org/) and [Tailwind CSS](https://tailwindcss.com/).
+#### A simple web application for creating highly customizable CVs.
 
 <!--suppress HtmlDeprecatedAttribute -->
 <h3 align="center">
@@ -9,18 +9,23 @@
 
 </h3>
 
-## Usage
- - Show or hide controls with `Alt + C`
- - Enable edit mode to modify the template
- - Drag and drop elements to edit the layout
- - Click on any text to change it
- - Print or save to PDF with `Ctrl + P`
+TODO: demo
 
 ## Features
  - Fully customizable layout with drag-and-drop elements
  - Configurable colors with predefined themes
  - No server-side data storage, all persistent data is stored in the browser
 
+## Usage
+ - Enable edit mode to modify the template
+ - Drag and drop elements to edit the layout
+ - Click on any text to change it
+ - Print or save to PDF with `Ctrl + P`
+
 ## To do
 - Landing page and navigation
 - Theme export
+- Font selection
+- More rating bar styles
+
+Built with [Vue.js](https://vuejs.org/) and [Tailwind CSS](https://tailwindcss.com/).

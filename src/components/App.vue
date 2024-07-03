@@ -19,9 +19,22 @@
     <main class="relative min-h-full">
         <navigation v-model:settings="settings"/>
 
-        <resume v-if="resume" v-model="resume" :class="{'monochrome': settings.monochrome}"/>
-        <landing-page v-else v-model:settings="settings" v-model:resume="resume"/>
+        <transition mode="out-in">
+            <resume v-if="resume" v-model="resume" :class="{'monochrome': settings.monochrome}"/>
+            <landing-page v-else v-model:settings="settings" v-model:resume="resume"/>
+        </transition>
 
         <settings v-model:settings="settings" v-model:resume="resume"/>
     </main>
 </template>
+
+<style scoped>
+    .v-enter-active, .v-leave-active {
+        transition: all 150ms;
+    }
+
+    .v-enter-from, .v-leave-to {
+        transform: translateX(-2rem);
+        opacity: 0;
+    }
+</style>

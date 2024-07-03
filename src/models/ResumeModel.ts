@@ -160,3 +160,42 @@ export function getExampleResume(): ResumeModel {
         ]
     }
 }
+
+export function getEmptyResume(): ResumeModel {
+    return {
+        header: {
+            picture: null,
+            name: '',
+            profession: '',
+            contacts: [],
+            email: '',
+            phone: '',
+            location: '',
+            description: '',
+            github: '',
+            linkedin: ''
+        },
+        education: {
+            title: 'Education',
+            elements: []
+        },
+        experience: {
+            title: 'Experience',
+            elements: []
+        },
+        skills: {
+            title: 'Skills',
+            elements: []
+        },
+        languages: {
+            title: 'Languages',
+            elements: []
+        },
+        projects: {
+            title: 'Projects',
+            elements: [],
+            disclaimer: ''
+        },
+        sections: []
+    }
+}
