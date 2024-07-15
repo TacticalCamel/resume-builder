@@ -1,46 +1,62 @@
 <script setup lang="ts">
-    import {inject, type PropType} from "vue";
     import draggable from "vuedraggable";
     import HeaderSection from "@/components/sections/HeaderSection.vue";
+    import { sectionComponents, type SectionMap } from "@/data/SectionMap";
+    import { checkGroupMatch } from "@/models/BuildingBlock";
+    import { settings } from "@/main";
     import type ResumeModel from "@/models/ResumeModel";
-    import {type SectionKey, components} from "@/models/Section";
-    import type SettingsModel from "@/models/SettingsModel";
-    import {checkGroupMatch} from "@/models/BuildingBlock";
+    import Settings from "@/components/settings/Settings.vue";
+    import { ref, watch } from "vue";
 
-    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
+    const resume = ref<ResumeModel | null>(null);
 
-    const resume = defineModel({
-        type: Object as PropType<ResumeModel>,
-        required: true
-    });
+    // load the resume from local storage
+    const resumeValue: string | null = localStorage.getItem('resume');
+
+    if (resumeValue != null) {
+        resume.value = JSON.parse(resumeValue);
+    }
+
+    watch(resume, (value) => {
+        if (value) {
+            localStorage.setItem('resume', JSON.stringify(value));
+        }
+        else {
+            localStorage.removeItem('resume');
+        }
+    }, {deep: true});
 </script>
 
 <template>
-    <div class="resume-root py-10 px-3" :class="{'open': settings.settingsOpen}">
-        <transition-group>
-            <draggable
-                v-model="resume.sections"
-                item-key="id"
-                key="draggable"
-                class="grid max-w-[960px] mx-auto"
-                :disabled="!settings.editable"
-                :group="{name: 'section', pull: true, put: checkGroupMatch}"
-                drag-class="dragging"
-                ghost-class="ghost"
-                animation="200"
-            >
-                <template #header>
-                    <header>
-                        <header-section v-model="resume.header"/>
-                    </header>
-                </template>
-                <template #item="{element: section}: {element: SectionKey}">
-                    <section class="rounded-lg">
-                        <component :is="components[section]" v-model="resume[section]" :id="`section-${section}`" class="max-w-[720px] mx-auto"/>
-                    </section>
-                </template>
-            </draggable>
-        </transition-group>
+    <div class="relative resume-root py-10 px-3" :class="{'open': settings.settingsOpen}">
+        <div :class="{'monochrome': settings.monochrome}">
+            <transition-group v-if="resume">
+                <draggable
+                    v-model="resume.sections"
+                    item-key="id"
+                    key="draggable"
+                    class="grid max-w-[960px] mx-auto"
+                    :disabled="!settings.editable"
+                    :group="{name: 'section', pull: true, put: checkGroupMatch}"
+                    drag-class="dragging"
+                    ghost-class="ghost"
+                    animation="200"
+                >
+                    <template #header>
+                        <header>
+                            <header-section v-model="resume.header"/>
+                        </header>
+                    </template>
+                    <template #item="{element: key}: {element: keyof SectionMap}">
+                        <section class="rounded-lg">
+                            <component :is="sectionComponents[key]" v-model="resume[key]" :id="`section-${key}`" class="max-w-[720px] mx-auto"/>
+                        </section>
+                    </template>
+                </draggable>
+            </transition-group>
+        </div>
+
+        <settings v-model:resume="resume"/>
     </div>
 </template>
 
@@ -63,13 +79,13 @@
         transition: margin-right 150ms;
     }
 
-    @media only screen and (max-width: 1536px){
+    @media only screen and (max-width: 1536px) {
         .resume-root.open {
             margin-right: 23rem;
         }
     }
 
-    @media only screen and (max-width: 1088px){
+    @media only screen and (max-width: 1088px) {
         .resume-root.open {
             margin-right: 0;
         }

@@ -1,8 +1,5 @@
 <script setup lang="ts">
-    import {inject} from "vue";
-    import type SettingsModel from "@/models/SettingsModel";
-
-    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
+    import {settings} from "@/main";
 
     const model = defineModel<string>({
         required: true
@@ -29,9 +26,13 @@
 </script>
 
 <template>
-    <div class="relative" :class="{'editable': settings.editable}">
-        <div class="text-input" :contenteditable="settings.editable" @focusout="saveModelChanges">{{ model }}</div>
-        <div v-show="settings.editable" class="text-overlay pointer-events-none opacity-60">{{ placeholder }}</div>
+    <div>
+        <div class="inline-block">
+            <div class="relative" :class="{'editable': settings.editable}">
+                <div class="text-input" :contenteditable="settings.editable" @focusout="saveModelChanges">{{ model }}</div>
+                <div v-show="settings.editable" class="text-overlay pointer-events-none opacity-60">{{ placeholder }}</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -49,7 +50,7 @@
     /*
      Highlight the editable text when hovered.
     */
-    .editable:hover{
+    .editable:hover {
         background-color: rgb(var(--primary) / 0.2);
     }
 

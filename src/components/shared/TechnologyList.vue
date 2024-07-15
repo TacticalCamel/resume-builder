@@ -1,12 +1,8 @@
 <script setup lang="ts">
-    import {inject} from "vue";
     import draggable from "vuedraggable";
-    import type SettingsModel from "@/models/SettingsModel";
     import EditText from "@/components/shared/EditText.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";
-
-    // get the current settings
-    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
+    import {settings} from "@/main";
 
     // except a list of strings as a model
     const model = defineModel<string[]>({

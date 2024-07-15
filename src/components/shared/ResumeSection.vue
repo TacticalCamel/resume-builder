@@ -1,13 +1,11 @@
 <script setup lang="ts" generic="T">
-    import {inject, reactive} from "vue";
+    import {reactive} from "vue";
     import draggable from "vuedraggable";
-    import type Section from "@/models/Section";
-    import type SettingsModel from "@/models/SettingsModel";
+    import type Section from "@/models/sections/Section";
     import IconInfo from "@/components/icons/IconInfo.vue";
     import EditText from "@/components/shared/EditText.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";
-
-    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
+    import {settings} from "@/main";
 
     const props = defineProps({
         group: {type: String, required: true},

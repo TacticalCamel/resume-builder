@@ -9,8 +9,8 @@
             required: true
         },
         defaultTheme: {
-            type: Object as PropType<Theme>,
-            required: true
+            type: Object as PropType<Theme | null>,
+            default: null
         }
     });
 
@@ -28,7 +28,7 @@
 </script>
 
 <template>
-    <div class="flex justify-between ps-2 pe-5 bg-opacity-0 hover:bg-opacity-10 bg-primary rounded items-center transition-colors">
+    <div class="flex justify-between pe-4 bg-opacity-0 hover:bg-opacity-10 bg-primary rounded items-center transition-colors">
         <div class="">
             {{ props.theme.name }}
         </div>

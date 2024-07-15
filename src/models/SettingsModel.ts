@@ -14,15 +14,7 @@ export function getDefaultSettings(): SettingsModel {
         settingsOpen: false,
         editable: false,
         monochrome: false,
-        themes: [
-            {
-                name: 'Default dark',
-                colors: [
-                    {name: '--primary', value: '246 249 252'},
-                    {name: '--background', value: '23 26 33'},
-                    {name: '--accent', value: '99 91 255'}
-                ]
-            },
+        themes: [/*
             {
                 name: 'Violet light',
                 colors: [
@@ -39,7 +31,7 @@ export function getDefaultSettings(): SettingsModel {
                     {name: '--accent', value: '150 98 228'}
                 ]
             }
-        ],
+        */],
         currentTheme: undefined,
         currentFont: undefined
     }

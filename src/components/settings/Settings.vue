@@ -1,53 +1,15 @@
 <script setup lang="ts">
-    import {onMounted, watch} from "vue";
-    import type SettingsModel from "@/models/SettingsModel";
     import type ResumeModel from "@/models/ResumeModel";
-    import {getDefaultSettings} from "@/models/SettingsModel";
-    import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
-    import FileUpload from "@/components/shared/FileUpload.vue";
+    import { getDefaultSettings } from "@/models/SettingsModel";
     import ThemeSettings from "@/components/settings/ThemeSettings.vue";
     import LayoutSettings from "@/components/settings/LayoutSettings.vue";
-
-    const settings = defineModel<SettingsModel>('settings', {
-        required: true
-    });
+    import { settings } from "@/main";
+    import FileUpload from "@/components/shared/FileUpload.vue";
+    import IconSettings from "@/components/icons/settings/IconSettings.vue";
 
     const resume = defineModel<ResumeModel | null>('resume', {
         required: true
     });
-
-    // handle model loading from local storage
-    onMounted(() => {
-        // load the settings from local storage
-        const settingsValue: string | null = localStorage.getItem('settings');
-
-        // if there are settings to load, apply them
-        if (settingsValue != null) {
-            settings.value = JSON.parse(settingsValue);
-        }
-
-        // load the resume from local storage
-        const resumeValue: string | null = localStorage.getItem('resume');
-
-        if (resumeValue != null) {
-            resume.value = JSON.parse(resumeValue);
-        }
-    });
-
-    // watch for changes in the settings model
-    watch(settings, (value) => {
-        localStorage.setItem('settings', JSON.stringify(value));
-    }, {deep: true});
-
-    // watch for changes in the resume model
-    watch(resume, (value) => {
-        if (value) {
-            localStorage.setItem('resume', JSON.stringify(value));
-        }
-        else {
-            localStorage.removeItem('resume');
-        }
-    }, {deep: true});
 
     // import a cv template from a JSON file
     function importTemplate(contents: string) {
@@ -82,58 +44,54 @@
 
     // reset settings
     function resetSettings() {
-        settings.value = getDefaultSettings();
+        Object.assign(settings, getDefaultSettings());
     }
 </script>
 
 <template>
-    <transition name="appear">
-        <div class="settings-modal fixed top-[4.5rem] right-3 z-10 select-none bg-background rounded-lg no-print" v-show="settings.settingsOpen">
-            <div class="grid gap-y-8 p-4">
-                <div class="flex flex-col gap-4 min-w-80 text-sm">
-                    <div class="flex justify-between w-full px-2">
-                        <div>Editable</div>
-                        <toggle-switch v-model="settings.editable"/>
-                    </div>
+    <div class="fixed top-2 right-3 select-none z-10 no-print flex flex-col justify-start items-end gap-6">
+        <button @click="settings.settingsOpen = !settings.settingsOpen" class="ms-auto p-2 hover:text-accent">
+            <icon-settings class="size-8 setting-icon" :class="{'open': settings.settingsOpen}"/>
+        </button>
 
-                    <div class="flex justify-between w-full px-2">
-                        <div>Monochrome</div>
-                        <toggle-switch v-model="settings.monochrome"/>
-                    </div>
+        <transition name="appear">
+            <div class="settings-modal bg-background rounded-lg" v-show="settings.settingsOpen">
+                <div class="grid gap-8 py-6">
+                    <div class="flex flex-col gap-4 px-2 min-w-80 text-sm">
+                        <div class="flex justify-between">
+                            <div>Print page</div>
+                            <div class="font-mono">
+                                <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">Ctrl</span>
+                                +
+                                <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">P</span>
+                            </div>
+                        </div>
 
-                    <div class="flex justify-between w-full px-2">
-                        <div>Print page</div>
-                        <div class="font-mono">
-                            <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">Ctrl</span>
-                            +
-                            <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">P</span>
+                        <div class="grid gap-x-4 gap-y-2 grid-cols-2 px-2">
+                            <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
+                                Import
+                            </file-upload>
+                            <button @click="resetTemplate" class="rounded font-semibold text-background bg-error px-2 py-0.5">
+                                Reset template
+                            </button>
+                            <button @click="exportTemplate" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
+                                Export
+                            </button>
+                            <button @click="resetSettings" class="rounded font-semibold text-background bg-error px-2 py-0.5">
+                                Reset settings
+                            </button>
                         </div>
                     </div>
 
-                    <div class="grid gap-x-4 gap-y-2 grid-cols-2 px-2">
-                        <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
-                            Import template
-                        </file-upload>
-                        <button @click="resetTemplate" class="rounded font-semibold text-background bg-error px-2 py-0.5">
-                            Reset template
-                        </button>
-                        <button @click="exportTemplate" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
-                            Export template
-                        </button>
-                        <button @click="resetSettings" class="rounded font-semibold text-background bg-error px-2 py-0.5">
-                            Reset settings
-                        </button>
-                    </div>
+                    <!-- themes -->
+                    <theme-settings v-model:settings="settings"/>
+
+                    <!-- layout -->
+                    <layout-settings v-model:resume="resume"/>
                 </div>
-
-                <!-- themes -->
-                <theme-settings v-model:settings="settings"/>
-
-                <!-- layout -->
-                <layout-settings/>
             </div>
-        </div>
-    </transition>
+        </transition>
+    </div>
 </template>
 
 <!--suppress CssUnusedSymbol -->
@@ -149,8 +107,10 @@
         opacity: 0;
     }
 
-    .settings-modal{
-        overflow-y: auto;
+    .settings-modal {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        padding-left: 12px;
         max-height: calc(100vh - 6rem);
         outline: 2px solid rgb(var(--accent));
     }
@@ -163,5 +123,13 @@
         background-color: rgb(var(--primary));
         border-radius: 9999px;
         border: 4px solid rgb(var(--background));
+    }
+
+    .setting-icon {
+        transition: color 150ms, transform 400ms;
+    }
+
+    .setting-icon.open {
+        transform: rotate(180deg);
     }
 </style>

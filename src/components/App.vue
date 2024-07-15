@@ -1,40 +1,41 @@
 <script setup lang="ts">
-    import {provide, ref} from "vue";
-    import type SettingsModel from "@/models/SettingsModel";
-    import type ResumeModel from "@/models/ResumeModel";
-    import {getDefaultSettings} from "@/models/SettingsModel";
-    import Settings from "@/components/settings/Settings.vue";
-    import Resume from "@/components/Resume.vue";
-    import LandingPage from "@/components/LandingPage.vue";
+    import { computed } from "vue";
+    import { currentPath } from "@/services/NavigationService";
     import Navigation from "@/components/Navigation.vue";
+    import Resume from "@/components/Resume.vue";
+    import Home from "@/components/Home.vue";
+    import NotFound from "@/components/NotFound.vue";
 
-    const settings = ref<SettingsModel>(getDefaultSettings());
+    // define the routes of the application
+    const routes = {
+        '/': Home,
+        '/editor': Resume,
+    };
 
-    const resume = ref<ResumeModel | null>(null);
-
-    provide('settings', settings);
+    // the currently active view
+    const currentView = computed(() => routes[currentPath.value as keyof typeof routes] || NotFound);
 </script>
 
 <template>
     <main class="relative min-h-full">
-        <navigation v-model:settings="settings"/>
+        <navigation/>
 
-        <transition mode="out-in" appear>
-            <resume v-if="resume" v-model="resume" :class="{'monochrome': settings.monochrome}"/>
-            <landing-page v-else v-model:settings="settings" v-model:resume="resume"/>
-        </transition>
-
-        <settings v-model:settings="settings" v-model:resume="resume"/>
+        <div class="">
+            <transition mode="out-in" appear>
+                <component :is="currentView"/>
+            </transition>
+        </div>
     </main>
 </template>
 
+<!--suppress CssUnusedSymbol -->
 <style scoped>
     .v-enter-active, .v-leave-active {
         transition: all 300ms ease-in-out;
     }
 
     .v-enter-from, .v-leave-to {
-        transform: translateX(-1rem);
+        margin-right: 1rem;
         opacity: 0;
     }
 </style>

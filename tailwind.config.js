@@ -1,7 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-function colorWithOpacity(color: string, opacity: string) {
-    return `rgba(var(${color}) / ${opacity})`
+function colorWithOpacity(color: string, opacity: string | undefined) {
+    return `rgba(var(${color}) / ${opacity ?? 1})`
 }
 
 // noinspection JSUnusedGlobalSymbols

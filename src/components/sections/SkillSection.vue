@@ -1,22 +1,19 @@
 <script setup lang="ts">
-    import {inject} from "vue";
     import draggable from "vuedraggable";
     import type Skill from "@/models/elements/Skill";
     import type SkillSection from "@/models/sections/SkillSection";
     import type SkillCategory from "@/models/elements/SkillCategory";
-    import type SettingsModel from "@/models/SettingsModel";
     import RatingBar from "@/components/shared/RatingBar.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconDecrease from "@/components/icons/IconDecrease.vue";
     import IconIncrease from "@/components/icons/IconIncrease.vue";
     import ResumeSection from "@/components/shared/ResumeSection.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";
+    import {settings} from "@/main";
 
     const model = defineModel<SkillSection>({
         required: true
     });
-
-    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
 
     function decreaseSkillLevel(skill: Skill) {
         skill.level = Math.min(5, Math.max(0, skill.level - 1));

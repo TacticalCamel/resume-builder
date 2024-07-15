@@ -1,27 +1,16 @@
 <script setup lang="ts">
-    import type SettingsModel from "@/models/SettingsModel";
-    import IconSettings from "@/components/icons/settings/IconSettings.vue";
-
-    const settings = defineModel<SettingsModel>('settings', {
-        required: true
-    });
+    import { navigateTo } from "@/services/NavigationService";
 </script>
 
 <template>
-    <div class="sticky top-0 flex items-center justify-start p-2 no-print z-10 bg-background border-b border-primary border-opacity-20 mx-2 select-none">
-        <div class="text-3xl uppercase font-semibold px-4">cv editor</div>
-        <button @click="settings.settingsOpen = !settings.settingsOpen" class="py-1 px-4 ms-auto rounded hover:text-accent">
-            <icon-settings class="size-8 setting-icon" :class="{'open': settings.settingsOpen}"/>
-        </button>
+    <div class="sticky top-0 no-print z-10">
+        <div class="max-w-[1280px] mx-auto px-4 pt-4 pb-3 flex items-center gap-12 border-b border-primary border-opacity-20 bg-background">
+            <div class="text-3xl font-bold">CV Editor</div>
+            <div class="flex items-center gap-2">
+                <button @click="navigateTo('/')" class="text-xl transition-colors bg-opacity-0 bg-accent hover:text-accent hover:bg-opacity-15 px-3 py-1 rounded">Home</button>
+                <button @click="navigateTo('/editor')" class="text-xl transition-colors bg-opacity-0 bg-accent hover:text-accent hover:bg-opacity-15 px-3 py-1 rounded">Editor</button>
+                <button @click="navigateTo('/templates')" class="text-xl transition-colors bg-opacity-0 bg-accent hover:text-accent hover:bg-opacity-15 px-3 py-1 rounded">Templates</button>
+            </div>
+        </div>
     </div>
 </template>
-
-<style scoped>
-    .setting-icon {
-        transition: color 150ms, transform 300ms;
-    }
-
-    .setting-icon.open{
-        transform: rotate(180deg);
-    }
-</style>

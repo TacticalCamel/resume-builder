@@ -1,14 +1,11 @@
 <script setup lang="ts">
-    import {inject} from "vue";
     import type ProjectSection from "@/models/sections/ProjectSection";
     import type Project from "@/models/elements/Project";
-    import type SettingsModel from "@/models/SettingsModel";
     import EditText from "@/components/shared/EditText.vue";
     import IconLink from "@/components/icons/IconLink.vue";
     import ResumeSection from "@/components/shared/ResumeSection.vue";
     import TechnologyList from "@/components/shared/TechnologyList.vue";
-
-    const settings = inject<SettingsModel>('settings', {} as SettingsModel);
+    import {settings} from "@/main";
 
     const model = defineModel<ProjectSection>({
         required: true

@@ -1,4 +1,4 @@
-import type {SectionKey} from "@/models/Section";
+import type {SectionKey} from "@/models/sections/Section";
 import type HeaderSection from "@/models/sections/HeaderSection";
 import type EducationSection from "@/models/sections/EducationSection";
 import type ExperienceSection from "@/models/sections/ExperienceSection";

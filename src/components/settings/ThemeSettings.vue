@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import {computed, ref, watch} from "vue";
+    import { computed, onMounted, ref, watch } from "vue";
     import draggable from "vuedraggable";
     import type Color from "@/models/themes/Color";
     import type Theme from "@/models/themes/Theme";
@@ -8,22 +8,48 @@
     import IconSwapVertical from "@/components/icons/settings/IconSwapVertical.vue";
     import ThemeCard from "@/components/shared/ThemeCard.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";
+    import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
+    import { createDefaultDarkTheme, createDefaultLightTheme } from "@/services/ThemeService";
 
     const settings = defineModel<SettingsModel>('settings', {
         required: true
     });
 
-    // create a default theme from CSS
-    const defaultTheme: Theme = {
-        name: "Default",
-        colors: getRootCssRules()
-    };
+    const defaultLightTheme: Theme = createDefaultLightTheme();
+    const defaultDarkTheme: Theme = createDefaultDarkTheme();
 
     // whether the theme select dropdown is open
     const themeSelectOpen = ref<boolean>(false);
 
     // computed property for the current theme
-    const currentTheme = computed(() => settings.value.themes.find(theme => theme.name === settings.value.currentTheme));
+    const currentTheme = computed(() => {
+        if(settings.value.currentTheme === defaultLightTheme.id){
+            return defaultLightTheme;
+        }
+
+        if(settings.value.currentTheme === defaultDarkTheme.id){
+            return defaultDarkTheme;
+        }
+
+        return settings.value.themes.find(theme => theme.id === settings.value.currentTheme);
+    });
+
+    const defaultFont: string = 'Arial';
+
+    const availableFonts = [
+        'Arial',
+        'Georgia',
+        'Lucida Sans Unicode',
+        'Palatino Linotype',
+        'Tahoma',
+        'Times New Roman',
+        'Trebuchet MS',
+        'Verdana'
+    ];
+
+    onMounted(() => {
+        applyTheme(currentTheme.value ?? defaultLightTheme);
+    });
 
     // watch for changes in the current theme
     watch(() => currentTheme.value, (theme) => {
@@ -31,79 +57,28 @@
             applyTheme(theme);
         }
         else {
-            applyTheme(defaultTheme);
+            applyTheme(defaultLightTheme);
         }
     });
 
-    // get all CSS variables from the root selector
-    function getRootCssRules(): Color[] {
-        // the name of the root selector
-        const rootSelector = ":root";
-
-        // the prefix of the root rules to consider
-        const rulePrefix = "--";
-
-        // create a map to store the results
-        const results: Color[] = [];
-
-        // iterate over all the style sheets
-        for (let i = 0; i < document.styleSheets.length; i++) {
-            // get the current style sheet
-            const sheet: CSSStyleSheet = document.styleSheets[i];
-
-            // skip external style sheets
-            if (sheet.href != null && !sheet.href.startsWith(window.location.origin)) {
-                continue;
-            }
-
-            for (let j = 0; j < sheet.cssRules.length; j++) {
-                // get the current rule
-                const rule: CSSRule = sheet.cssRules[j];
-
-                // skip non-style rules
-                if (!(rule instanceof CSSStyleRule)) {
-                    continue;
-                }
-
-                // skip rules that are not the root selector
-                if (rule.selectorText !== rootSelector) {
-                    continue;
-                }
-
-                // iterate over all the properties
-                for (let k = 0; k < rule.style.length; k++) {
-                    // get the current property name
-                    const name: string = rule.style[k];
-
-                    // skip properties that do not start with the prefix
-                    if (!name.startsWith(rulePrefix)) {
-                        continue;
-                    }
-
-                    // get the property value
-                    const value: string = rule.style.getPropertyValue(name);
-
-                    // store the property name and value
-                    results.push({
-                        name: name,
-                        value: value
-                    });
-                }
-            }
+    watch(() => settings.value.currentFont, (font) => {
+        if(font){
+            document.documentElement.style.setProperty('--font', font);
         }
-
-        return results;
-    }
+        else{
+            document.documentElement.style.setProperty('--font', defaultFont);
+        }
+    });
 
     // change the current theme
-    function setTheme(theme: string | undefined): void {
-        settings.value.currentTheme = theme;
+    function setTheme(theme: Theme): void {
+        settings.value.currentTheme = theme.id;
         themeSelectOpen.value = false;
     }
 
     // update a theme in CSS
     function applyTheme(theme: Theme): void {
-        defaultTheme.colors.forEach(color => {
+        defaultLightTheme.colors.forEach(color => {
             const themeColor: Color | undefined = theme.colors.find(c => c.name === color.name);
 
             if (themeColor) {
@@ -171,7 +146,7 @@
         theme.colors = theme.colors.filter(c => c.name !== colorName);
 
         // find the default value
-        const defaultValue: string | undefined = defaultTheme.colors.find(c => c.name === colorName)?.value;
+        const defaultValue: string | undefined = defaultLightTheme.colors.find(c => c.name === colorName)?.value;
 
         // if there is a default value, apply it
         if (defaultValue) {
@@ -201,19 +176,27 @@
 
 <template>
     <div class="flex flex-col gap-4 min-w-80">
-        <div class="pb-1 border-b border-primary border-opacity-40 text-xl">Theming</div>
+        <div class="pb-0.5 px-2 me-1 border-b border-primary border-opacity-50 text-xl">Theming</div>
 
-        <div class="flex px-2">
-            <div>Current font</div>
-            <div class="ms-auto bg-accent rounded w-8 text-center bg-opacity-50">...</div>
+        <div class="flex px-2 justify-between">
+            <div>Monochrome</div>
+            <toggle-switch v-model="settings.monochrome"/>
+        </div>
+
+        <div class="flex px-2 justify-between">
+            <div>Font</div>
+            <select v-model="settings.currentFont" class="bg-transparent outline outline-2 outline-accent rounded text-primary" :class="{'text-opacity-70 italic': settings.currentFont === defaultFont}">
+                <option class="bg-background text-primary text-opacity-70 italic">{{ defaultFont }} (Default)</option>
+                <option v-for="font in availableFonts" class="bg-background">{{ font }}</option>
+            </select>
         </div>
 
         <div class="flex gap-4 px-2">
-            <div>Current theme</div>
+            <div>Theme colors</div>
 
             <div class="ms-auto">
                 <edit-text v-if="currentTheme" v-model="currentTheme.name" @change="renameTheme"/>
-                <div v-else class="text-primary text-opacity-70 italic">{{ defaultTheme.name }}</div>
+                <div v-else class="text-primary text-opacity-70 italic">{{ defaultLightTheme.name }}</div>
             </div>
 
             <button @click="themeSelectOpen = !themeSelectOpen" class="bg-primary bg-opacity-0 hover:bg-opacity-20 rounded px-2 py-0.5 transition-colors">
@@ -221,51 +204,53 @@
             </button>
         </div>
 
-        <transition name="slide-down" mode="out-in">
-            <div v-if="themeSelectOpen">
-                <transition-group>
-                    <draggable
-                        v-model="settings.themes"
-                        item-key="id"
-                        key="draggable"
-                        drag-class="dragging"
-                        ghost-class="ghost"
-                        animation="200"
-                        class="flex flex-col gap-1"
-                        :group="{name: 'theme', pull: true, put: checkGroupMatch}"
-                        :disabled="!settings.editable"
-                    >
-                        <template #header>
-                            <theme-card @click="setTheme(undefined)" :theme="defaultTheme" :default-theme="defaultTheme" class="text-primary text-opacity-70 italic"/>
-                        </template>
+        <div class="px-2">
+            <transition name="slide-down" mode="out-in">
+                <div v-if="themeSelectOpen">
+                    <transition-group>
+                        <draggable
+                            v-model="settings.themes"
+                            item-key="id"
+                            key="draggable"
+                            drag-class="dragging"
+                            ghost-class="ghost"
+                            animation="200"
+                            class="flex flex-col gap-1"
+                            :group="{name: 'theme', pull: true, put: checkGroupMatch}"
+                        >
+                            <template #header>
+                                <theme-card @click="setTheme(defaultLightTheme)" :theme="defaultLightTheme" class="text-primary text-opacity-70 italic"/>
+                                <theme-card @click="setTheme(defaultDarkTheme)" :theme="defaultDarkTheme" class="text-primary text-opacity-70 italic"/>
+                            </template>
 
-                        <template #item="{element: theme}: {element: Theme}">
-                            <theme-card @click="setTheme(theme.name)" :theme="theme" :default-theme="defaultTheme"/>
-                        </template>
-                    </draggable>
-                </transition-group>
-            </div>
-            <div v-else-if="currentTheme" class="outer-grid grid mx-2 text-sm gap-x-2 font-mono">
-                <div v-for="color in defaultTheme.colors" :key="color.name" class="grid grid-cols-subgrid col-span-3">
-                    <div class="flex items-center text-nowrap">
-                        {{ color.name.substring(2) }}
-                    </div>
-                    <div class="flex items-center justify-center gap-1">
-                        <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent">
-                        <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
-                    </div>
-                    <div class="flex items-center justify-end">
-                        <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="px-1 text-error hover:bg-error hover:bg-opacity-20 rounded hover:transition-colors font-semibold" @click="() => resetColor(color.name)">Reset</button>
-                        <span v-else class="px-1 opacity-50">Reset</span>
+                            <template #item="{element: theme}: {element: Theme}">
+                                <theme-card @click="setTheme(theme)" :theme="theme" :default-theme="defaultLightTheme"/>
+                            </template>
+                        </draggable>
+                    </transition-group>
+                </div>
+                <div v-else-if="currentTheme" class="outer-grid grid text-sm gap-x-2 font-mono">
+                    <div v-for="color in defaultLightTheme.colors" :key="color.name" class="grid grid-cols-subgrid col-span-3">
+                        <div class="flex items-center text-nowrap">
+                            {{ color.name.substring(2) }}
+                        </div>
+                        <div class="flex items-center justify-center gap-1">
+                            <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent">
+                            <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="px-1 text-error hover:bg-error hover:bg-opacity-20 rounded hover:transition-colors font-semibold" @click="() => resetColor(color.name)">Reset</button>
+                            <span v-else class="px-1 opacity-50">Reset</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div v-else>
-                <div class="italic col-span-2 opacity-70 px-2">
-                    Create or select a theme to customize it.
+                <div v-else>
+                    <div class="italic opacity-70">
+                        Create or select a theme to customize it.
+                    </div>
                 </div>
-            </div>
-        </transition>
+            </transition>
+        </div>
     </div>
 </template>
 
