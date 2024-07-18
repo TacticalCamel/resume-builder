@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import {settings} from "@/main";
+    import { settings } from "@/main";
 
     const model = defineModel<string>({
         required: true
@@ -13,15 +13,8 @@
         }
     });
 
-    const emit = defineEmits<{
-        change: [value: string]
-    }>();
-
     function saveModelChanges(e: Event) {
-        const value = (e.target as HTMLElement).innerText;
-
-        model.value = value;
-        emit('change', value);
+        model.value = (e.target as HTMLElement).innerText;
     }
 </script>
 

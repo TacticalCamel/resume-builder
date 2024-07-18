@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import draggable from "vuedraggable";
-    import type BuildingBlock from "@/models/BuildingBlock";
-    import type Experience from "@/models/elements/Experience";
-    import type Education from "@/models/elements/Education";
-    import type SkillCategory from "@/models/elements/SkillCategory";
-    import type Skill from "@/models/elements/Skill";
-    import type Language from "@/models/elements/Language";
-    import type Project from "@/models/elements/Project";
+    import BuildingBlock from "@/models/BuildingBlock";
+    import Experience from "@/models/elements/Experience";
+    import Education from "@/models/elements/Education";
+    import SkillCategory from "@/models/elements/SkillCategory";
+    import Skill from "@/models/elements/Skill";
+    import Language from "@/models/elements/Language";
+    import Project from "@/models/elements/Project";
     import { sectionComponents } from "@/data/SectionMap";
     import { contacts } from "@/data/ContactMap";
     import DeleteArea from "@/components/settings/DeleteArea.vue";
@@ -16,7 +16,6 @@
     import IconSettings from "@/components/icons/settings/IconSettings.vue";
     import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
     import { settings } from "@/main";
-    import { createNewTheme } from "@/services/ThemeService";
 
     const blocks: BuildingBlock[] = [
         ...Object.keys(sectionComponents).map(section => ({
@@ -113,7 +112,13 @@
         {
             name: 'theme',
             group: 'theme',
-            clone: createNewTheme,
+            clone: (): object => {
+                return {
+                    id: crypto.randomUUID(),
+                    name: 'New theme',
+                    colors: []
+                }
+            },
             icon: IconSettings
         },
         {

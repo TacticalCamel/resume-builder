@@ -20,6 +20,13 @@
         --rating-bar-5: 14 165 233;
     }
 
+    @media (prefers-color-scheme: dark) {
+        :root{
+            --primary: 246 249 252;
+            --background: 23 26 33;
+        }
+    }
+
     html {
         --font: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }

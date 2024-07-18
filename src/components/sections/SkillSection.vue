@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import draggable from "vuedraggable";
-    import type Skill from "@/models/elements/Skill";
-    import type SkillSection from "@/models/sections/SkillSection";
-    import type SkillCategory from "@/models/elements/SkillCategory";
+    import Skill from "@/models/elements/Skill";
+    import SkillSection from "@/models/sections/SkillSection";
+    import SkillCategory from "@/models/elements/SkillCategory";
     import RatingBar from "@/components/shared/RatingBar.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconDecrease from "@/components/icons/IconDecrease.vue";

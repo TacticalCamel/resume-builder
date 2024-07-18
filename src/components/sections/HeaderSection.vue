@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import draggable from "vuedraggable";
-    import type HeaderSection from "@/models/sections/HeaderSection";
+    import HeaderSection from "@/models/sections/HeaderSection";
     import { checkGroupMatch } from "@/models/BuildingBlock";
     import { contacts, type ContactMap } from "@/data/ContactMap";
     import IconUpload from "@/components/icons/IconUpload.vue";

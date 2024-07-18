@@ -4,35 +4,32 @@
     import { sectionComponents, type SectionMap } from "@/data/SectionMap";
     import { checkGroupMatch } from "@/models/BuildingBlock";
     import { settings } from "@/main";
-    import type ResumeModel from "@/models/ResumeModel";
+    import ResumeModel, { getEmptyResume } from "@/models/ResumeModel";
     import Settings from "@/components/settings/Settings.vue";
-    import { ref, watch } from "vue";
+    import AutosaveService from "@/services/AutosaveService";
 
-    const resume = ref<ResumeModel | null>(null);
+    const resume = new AutosaveService<ResumeModel | null>('resume', createDefaultResume, {deep: true});
 
-    // load the resume from local storage
-    const resumeValue: string | null = localStorage.getItem('resume');
+    function createDefaultResume(): ResumeModel | null {
+        const params: URLSearchParams = new URLSearchParams(window.location.search);
 
-    if (resumeValue != null) {
-        resume.value = JSON.parse(resumeValue);
+        if(params.get('init')){
+            params.delete('init');
+            window.location.search = params.toString();
+
+            return getEmptyResume();
+        }
+
+        return null;
     }
-
-    watch(resume, (value) => {
-        if (value) {
-            localStorage.setItem('resume', JSON.stringify(value));
-        }
-        else {
-            localStorage.removeItem('resume');
-        }
-    }, {deep: true});
 </script>
 
 <template>
     <div class="relative resume-root py-10 px-3" :class="{'open': settings.settingsOpen}">
         <div :class="{'monochrome': settings.monochrome}">
-            <transition-group v-if="resume">
+            <transition-group v-if="resume.value">
                 <draggable
-                    v-model="resume.sections"
+                    v-model="resume.value.sections"
                     item-key="id"
                     key="draggable"
                     class="grid max-w-[960px] mx-auto"
@@ -44,19 +41,19 @@
                 >
                     <template #header>
                         <header>
-                            <header-section v-model="resume.header"/>
+                            <header-section v-model="resume.value.header"/>
                         </header>
                     </template>
                     <template #item="{element: key}: {element: keyof SectionMap}">
                         <section class="rounded-lg">
-                            <component :is="sectionComponents[key]" v-model="resume[key]" :id="`section-${key}`" class="max-w-[720px] mx-auto"/>
+                            <component :is="sectionComponents[key]" v-model="resume.value[key]" :id="`section-${key}`" class="max-w-[720px] mx-auto"/>
                         </section>
                     </template>
                 </draggable>
             </transition-group>
         </div>
 
-        <settings v-model:resume="resume"/>
+        <settings v-model:resume="resume.value"/>
     </div>
 </template>
 

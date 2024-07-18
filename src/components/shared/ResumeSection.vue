@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T">
     import {reactive} from "vue";
     import draggable from "vuedraggable";
-    import type Section from "@/models/sections/Section";
+    import Section from "@/models/sections/Section";
     import IconInfo from "@/components/icons/IconInfo.vue";
     import EditText from "@/components/shared/EditText.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";

@@ -1,4 +1,4 @@
-import type {Component} from "vue";
+import {Component} from "vue";
 
 export default interface Contact {
     icon: Component

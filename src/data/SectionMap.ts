@@ -1,4 +1,4 @@
-import type { Component } from "vue";
+import { Component } from "vue";
 import EducationSection from "@/components/sections/EducationSection.vue";
 import ExperienceSection from "@/components/sections/ExperienceSection.vue";
 import SkillSection from "@/components/sections/SkillSection.vue";

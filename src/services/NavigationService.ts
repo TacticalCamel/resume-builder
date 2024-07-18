@@ -1,10 +1,10 @@
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 
-// the currently active path
-export const currentPath = ref<string>(window.location.pathname);
+export default class NavigationService {
+    currentPath: Ref<string> = ref<string>(window.location.pathname);
 
-// navigate to a route
-export function navigateTo(path: string, data: any = {}): void {
-    currentPath.value = path;
-    window.history.pushState(data, '', path);
+    navigateTo(path: string): void {
+        window.history.pushState({}, '', path);
+        this.currentPath.value = window.location.pathname;
+    }
 }

@@ -3,7 +3,7 @@ import IconPhone from "@/components/icons/contacts/IconPhone.vue";
 import IconGithub from "@/components/icons/contacts/IconGithub.vue";
 import IconLocation from "@/components/icons/contacts/IconLocation.vue";
 import IconLinkedIn from "@/components/icons/contacts/IconLinkedIn.vue";
-import type Contact from "@/models/Contact";
+import Contact from "@/models/Contact";
 
 export interface ContactMap{
     email: Contact

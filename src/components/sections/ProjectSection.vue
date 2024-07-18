@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import type ProjectSection from "@/models/sections/ProjectSection";
-    import type Project from "@/models/elements/Project";
+    import ProjectSection from "@/models/sections/ProjectSection";
+    import Project from "@/models/elements/Project";
     import EditText from "@/components/shared/EditText.vue";
     import IconLink from "@/components/icons/IconLink.vue";
     import ResumeSection from "@/components/shared/ResumeSection.vue";

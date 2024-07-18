@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import type EducationSection from "@/models/sections/EducationSection";
-    import type Education from "@/models/elements/Education";
+    import EducationSection from "@/models/sections/EducationSection";
+    import Education from "@/models/elements/Education";
     import EditText from "@/components/shared/EditText.vue";
     import ResumeSection from "@/components/shared/ResumeSection.vue";
 

@@ -1,38 +1,16 @@
 <script setup lang="ts">
-    import { computed, onMounted, ref, watch } from "vue";
+    import { ref, watch } from "vue";
     import draggable from "vuedraggable";
-    import type Color from "@/models/themes/Color";
-    import type Theme from "@/models/themes/Theme";
-    import type SettingsModel from "@/models/SettingsModel";
+    import Theme from "@/models/themes/Theme";
     import EditText from "@/components/shared/EditText.vue";
     import IconSwapVertical from "@/components/icons/settings/IconSwapVertical.vue";
-    import ThemeCard from "@/components/shared/ThemeCard.vue";
-    import {checkGroupMatch} from "@/models/BuildingBlock";
+    import ThemeCard from "@/components/settings/ThemeCard.vue";
     import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
-    import { createDefaultDarkTheme, createDefaultLightTheme } from "@/services/ThemeService";
+    import { checkGroupMatch } from "@/models/BuildingBlock";
+    import { settings } from "@/main";
+    import { themeService } from "@/main";
 
-    const settings = defineModel<SettingsModel>('settings', {
-        required: true
-    });
-
-    const defaultLightTheme: Theme = createDefaultLightTheme();
-    const defaultDarkTheme: Theme = createDefaultDarkTheme();
-
-    // whether the theme select dropdown is open
     const themeSelectOpen = ref<boolean>(false);
-
-    // computed property for the current theme
-    const currentTheme = computed(() => {
-        if(settings.value.currentTheme === defaultLightTheme.id){
-            return defaultLightTheme;
-        }
-
-        if(settings.value.currentTheme === defaultDarkTheme.id){
-            return defaultDarkTheme;
-        }
-
-        return settings.value.themes.find(theme => theme.id === settings.value.currentTheme);
-    });
 
     const defaultFont: string = 'Arial';
 
@@ -47,111 +25,35 @@
         'Verdana'
     ];
 
-    onMounted(() => {
-        applyTheme(currentTheme.value ?? defaultLightTheme);
-    });
-
-    // watch for changes in the current theme
-    watch(() => currentTheme.value, (theme) => {
-        if (theme) {
-            applyTheme(theme);
-        }
-        else {
-            applyTheme(defaultLightTheme);
-        }
-    });
-
-    watch(() => settings.value.currentFont, (font) => {
-        if(font){
+    watch(() => settings.currentFont, (font) => {
+        if (font) {
             document.documentElement.style.setProperty('--font', font);
         }
-        else{
+        else {
             document.documentElement.style.setProperty('--font', defaultFont);
         }
     });
 
+    function toggleDropdown(): void {
+        themeSelectOpen.value = !themeSelectOpen.value;
+    }
+
     // change the current theme
     function setTheme(theme: Theme): void {
-        settings.value.currentTheme = theme.id;
+        themeService.setCurrentTheme(theme);
         themeSelectOpen.value = false;
-    }
-
-    // update a theme in CSS
-    function applyTheme(theme: Theme): void {
-        defaultLightTheme.colors.forEach(color => {
-            const themeColor: Color | undefined = theme.colors.find(c => c.name === color.name);
-
-            if (themeColor) {
-                applyColor(color.name, themeColor.value);
-            }
-            else {
-                applyColor(color.name, color.value);
-            }
-        });
-    }
-
-    // rename a theme
-    function renameTheme(name: string): void {
-        settings.value.currentTheme = name;
     }
 
     // set the color of a CSS variable
     function setColor(colorName: string, event: Event): void {
-        const theme: Theme | undefined = currentTheme.value;
-
-        // if there is no current theme, return
-        if (!theme) {
-            return;
-        }
-
         // get the input element
         const input = event.target as HTMLInputElement;
 
         // convert the color to an RGB string
         const rgb = hex2rgb(input.value);
 
-        // find the color in the theme
-        const color: Color | undefined = theme.colors.find(c => c.name === colorName);
-
-        // update the color in the theme
-        if (color) {
-            color.value = rgb;
-        }
-        else {
-            theme.colors.push({
-                name: colorName,
-                value: rgb
-            });
-        }
-
-        // update the color in CSS
-        applyColor(colorName, rgb);
-    }
-
-    // update a color in CSS
-    function applyColor(key: string, value: string): void {
-        document.documentElement.style.setProperty(key, value);
-    }
-
-    // reset a single color to its default value
-    function resetColor(colorName: string): void {
-        const theme: Theme | undefined = currentTheme.value;
-
-        // if there is no current theme, return
-        if (!theme) {
-            return;
-        }
-
-        // remove the color from the theme
-        theme.colors = theme.colors.filter(c => c.name !== colorName);
-
-        // find the default value
-        const defaultValue: string | undefined = defaultLightTheme.colors.find(c => c.name === colorName)?.value;
-
-        // if there is a default value, apply it
-        if (defaultValue) {
-            applyColor(colorName, defaultValue);
-        }
+        // apply the color
+        themeService.setColor(colorName, rgb);
     }
 
     // convert an RGB string to a hex string
@@ -175,14 +77,16 @@
 </script>
 
 <template>
-    <div class="flex flex-col gap-4 min-w-80">
+    <div class="flex flex-col gap-4 w-80">
         <div class="pb-0.5 px-2 me-1 border-b border-primary border-opacity-50 text-xl">Theming</div>
 
+        <!-- set monochrome mode -->
         <div class="flex px-2 justify-between">
             <div>Monochrome</div>
             <toggle-switch v-model="settings.monochrome"/>
         </div>
 
+        <!-- font selection -->
         <div class="flex px-2 justify-between">
             <div>Font</div>
             <select v-model="settings.currentFont" class="bg-transparent outline outline-2 outline-accent rounded text-primary" :class="{'text-opacity-70 italic': settings.currentFont === defaultFont}">
@@ -191,25 +95,28 @@
             </select>
         </div>
 
+        <!-- theme selection -->
         <div class="flex gap-4 px-2">
             <div>Theme colors</div>
 
             <div class="ms-auto">
-                <edit-text v-if="currentTheme" v-model="currentTheme.name" @change="renameTheme"/>
-                <div v-else class="text-primary text-opacity-70 italic">{{ defaultLightTheme.name }}</div>
+                <span v-if="themeService.isDefaultTheme" class="text-primary text-opacity-70 italic">{{ themeService.currentTheme.name }}</span>
+                <edit-text v-else v-if="themeService.currentTheme" v-model="themeService.currentTheme.name"/>
             </div>
 
-            <button @click="themeSelectOpen = !themeSelectOpen" class="bg-primary bg-opacity-0 hover:bg-opacity-20 rounded px-2 py-0.5 transition-colors">
+            <button @click="toggleDropdown" class="bg-primary bg-opacity-0 hover:bg-opacity-20 rounded px-2 py-0.5 transition-colors">
                 <icon-swap-vertical class="size-5"/>
             </button>
         </div>
 
+        <!-- theme dropdown -->
         <div class="px-2">
             <transition name="slide-down" mode="out-in">
+                <!-- theme list -->
                 <div v-if="themeSelectOpen">
                     <transition-group>
                         <draggable
-                            v-model="settings.themes"
+                            v-model="themeService.themes"
                             item-key="id"
                             key="draggable"
                             drag-class="dragging"
@@ -219,34 +126,37 @@
                             :group="{name: 'theme', pull: true, put: checkGroupMatch}"
                         >
                             <template #header>
-                                <theme-card @click="setTheme(defaultLightTheme)" :theme="defaultLightTheme" class="text-primary text-opacity-70 italic"/>
-                                <theme-card @click="setTheme(defaultDarkTheme)" :theme="defaultDarkTheme" class="text-primary text-opacity-70 italic"/>
+                                <theme-card v-for="theme in themeService.defaultThemes" @click="setTheme(theme)" :theme="theme" class="text-primary text-opacity-70 italic"/>
                             </template>
 
                             <template #item="{element: theme}: {element: Theme}">
-                                <theme-card @click="setTheme(theme)" :theme="theme" :default-theme="defaultLightTheme"/>
+                                <theme-card @click="setTheme(theme)" :theme="theme"/>
                             </template>
                         </draggable>
                     </transition-group>
                 </div>
-                <div v-else-if="currentTheme" class="outer-grid grid text-sm gap-x-2 font-mono">
-                    <div v-for="color in defaultLightTheme.colors" :key="color.name" class="grid grid-cols-subgrid col-span-3">
+
+                <!-- selected theme can not be edited -->
+                <div v-else-if="themeService.isDefaultTheme">
+                    <div class="italic opacity-70">
+                        Create or select a custom theme to change colors.
+                    </div>
+                </div>
+
+                <!-- color list -->
+                <div v-else class="outer-grid grid text-sm gap-x-2 font-mono">
+                    <div v-for="color in themeService.defaultThemes[0].colors" :key="color.name" class="grid grid-cols-subgrid col-span-3">
                         <div class="flex items-center text-nowrap">
                             {{ color.name.substring(2) }}
                         </div>
                         <div class="flex items-center justify-center gap-1">
-                            <input type="color" :value="rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value)" @change="(e) => setColor(color.name, e)" class="bg-transparent">
-                            <span>{{ rgb2hex(currentTheme.colors.find(c => c.name === color.name)?.value ?? color.value) }}</span>
+                            <input type="color" :value="rgb2hex(themeService.getColor(color))" @change="(e) => setColor(color.name, e)" class="bg-transparent">
+                            <span>{{ rgb2hex(themeService.getColor(color)) }}</span>
                         </div>
                         <div class="flex items-center justify-end">
-                            <button v-if="currentTheme.colors.find(c => c.name === color.name)?.value" class="px-1 text-error hover:bg-error hover:bg-opacity-20 rounded hover:transition-colors font-semibold" @click="() => resetColor(color.name)">Reset</button>
+                            <button v-if="themeService.isColorModified(color)" class="px-1 text-error hover:bg-error hover:bg-opacity-20 rounded hover:transition-colors font-semibold" @click="() => themeService.resetColor(color.name)">Reset</button>
                             <span v-else class="px-1 opacity-50">Reset</span>
                         </div>
-                    </div>
-                </div>
-                <div v-else>
-                    <div class="italic opacity-70">
-                        Create or select a theme to customize it.
                     </div>
                 </div>
             </transition>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type ResumeModel from "@/models/ResumeModel";
+    import ResumeModel from "@/models/ResumeModel";
     import { getDefaultSettings } from "@/models/SettingsModel";
     import ThemeSettings from "@/components/settings/ThemeSettings.vue";
     import LayoutSettings from "@/components/settings/LayoutSettings.vue";
@@ -84,7 +84,7 @@
                     </div>
 
                     <!-- themes -->
-                    <theme-settings v-model:settings="settings"/>
+                    <theme-settings/>
 
                     <!-- layout -->
                     <layout-settings v-model:resume="resume"/>

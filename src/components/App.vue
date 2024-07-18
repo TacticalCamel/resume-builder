@@ -1,10 +1,10 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { currentPath } from "@/services/NavigationService";
-    import Navigation from "@/components/Navigation.vue";
+    import { navigationService } from "@/main";
     import Resume from "@/components/Resume.vue";
     import Home from "@/components/Home.vue";
     import NotFound from "@/components/NotFound.vue";
+    import Navigation from "@/components/Navigation.vue";
 
     // define the routes of the application
     const routes = {
@@ -13,7 +13,7 @@
     };
 
     // the currently active view
-    const currentView = computed(() => routes[currentPath.value as keyof typeof routes] || NotFound);
+    const currentView = computed(() => routes[navigationService.currentPath.value as keyof typeof routes] || NotFound);
 </script>
 
 <template>
