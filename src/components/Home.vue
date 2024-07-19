@@ -10,7 +10,7 @@
         settings.editable = true;
 
         // navigate to the editor
-        navigationService.navigateTo('/editor?init=true');
+        navigationService.navigateTo('/editor', {init: true});
     }
 </script>
 

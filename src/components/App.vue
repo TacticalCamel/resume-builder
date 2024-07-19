@@ -1,15 +1,15 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import { navigationService } from "@/main";
-    import Resume from "@/components/Resume.vue";
     import Home from "@/components/Home.vue";
-    import NotFound from "@/components/NotFound.vue";
+    import Editor from "@/components/Editor.vue";
     import Navigation from "@/components/Navigation.vue";
+    import NotFound from "@/components/NotFound.vue";
 
     // define the routes of the application
     const routes = {
         '/': Home,
-        '/editor': Resume,
+        '/editor': Editor,
     };
 
     // the currently active view
@@ -22,7 +22,7 @@
 
         <div class="">
             <transition mode="out-in" appear>
-                <component :is="currentView"/>
+                <component :is="currentView" :route-parameters="navigationService.parameters.value"/>
             </transition>
         </div>
     </main>

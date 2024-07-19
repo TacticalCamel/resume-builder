@@ -21,14 +21,20 @@
     }
 
     @media (prefers-color-scheme: dark) {
-        :root{
-            --primary: 246 249 252;
-            --background: 23 26 33;
-        }
+        --primary: 246 249 252;
+        --background: 23 26 33;
     }
 
     html {
-        --font: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --font-size: 16px;
+        --font-weight: 400;
+        --line-height: 1.5;
+
+        font-family: var(--font-family), sans-serif;
+        font-size: var(--font-size);
+        font-weight: var(--font-weight);
+        line-height: var(--line-height);
     }
 }
 
@@ -37,7 +43,6 @@ html, body, #app {
 }
 
 body {
-    font-family: var(--font), sans-serif;
     color: rgb(var(--primary));
     background-color: rgb(var(--background));
     overflow-x: hidden;

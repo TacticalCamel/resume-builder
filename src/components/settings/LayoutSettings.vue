@@ -1,5 +1,9 @@
 <script setup lang="ts">
     import draggable from "vuedraggable";
+    import { sectionComponents } from "@/data/SectionMap";
+    import { contacts } from "@/data/ContactMap";
+    import { settings } from "@/main";
+    import { createDefaultDarkTheme, createDefaultLightTheme } from "@/services/ThemeService";
     import BuildingBlock from "@/models/BuildingBlock";
     import Experience from "@/models/elements/Experience";
     import Education from "@/models/elements/Education";
@@ -7,15 +11,13 @@
     import Skill from "@/models/elements/Skill";
     import Language from "@/models/elements/Language";
     import Project from "@/models/elements/Project";
-    import { sectionComponents } from "@/data/SectionMap";
-    import { contacts } from "@/data/ContactMap";
+    import Theme from "@/models/themes/Theme";
     import DeleteArea from "@/components/settings/DeleteArea.vue";
     import IconLink from "@/components/icons/IconLink.vue";
     import IconSegment from "@/components/icons/settings/IconSegment.vue";
     import IconCube from "@/components/icons/settings/IconCube.vue";
     import IconSettings from "@/components/icons/settings/IconSettings.vue";
-    import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
-    import { settings } from "@/main";
+    import IconDashboard from "@/components/icons/settings/IconDashboard.vue";
 
     const blocks: BuildingBlock[] = [
         ...Object.keys(sectionComponents).map(section => ({
@@ -110,22 +112,36 @@
             icon: IconCube
         },
         {
-            name: 'theme',
+            name: 'light theme',
             group: 'theme',
-            clone: (): object => {
-                return {
-                    id: crypto.randomUUID(),
-                    name: 'New theme',
-                    colors: []
-                }
+            clone: (): Theme => {
+                const theme: Theme = createDefaultLightTheme();
+
+                theme.id = crypto.randomUUID();
+                theme.name = 'New light theme';
+
+                return theme;
+            },
+            icon: IconSettings
+        },
+        {
+            name: 'dark theme',
+            group: 'theme',
+            clone: (): Theme => {
+                const theme: Theme = createDefaultDarkTheme();
+
+                theme.id = crypto.randomUUID();
+                theme.name = 'New dark theme';
+
+                return theme;
             },
             icon: IconSettings
         },
         {
             name: 'font',
             group: 'font',
-            clone: (): object => {
-                return {}
+            clone: (): string => {
+                return 'undefined';
             },
             icon: IconSettings
         },
@@ -133,12 +149,10 @@
 </script>
 
 <template>
-    <div class="flex flex-col gap-4 min-w-80">
-        <div class="pb-0.5 px-2 me-1 border-b border-primary border-opacity-50 text-xl">Layout</div>
-
-        <div class="flex px-2 justify-between">
-            <div>Editable</div>
-            <toggle-switch v-model="settings.editable"/>
+    <div class="flex flex-col gap-4">
+        <div class="flex gap-2 items-center">
+            <icon-dashboard class="size-6"/>
+            <span>Layout</span>
         </div>
 
         <transition-group>
@@ -146,7 +160,7 @@
                 v-model="blocks"
                 item-key="id"
                 key="draggable"
-                class="flex flex-wrap items-start justify-start flex-row w-80 mx-2 gap-2 p-2 text-sm border-2 border-dashed border-info bg-opacity-10 bg-info rounded-lg"
+                class="flex flex-wrap flex-row items-start justify-start gap-2 text-sm"
                 drag-class="dragging"
                 ghost-class="ghost-invisible"
                 animation="200"
@@ -160,14 +174,14 @@
                     <div :data-group="block.group">
                         <div class="building-block">
                             <component :is="block.icon" class="size-4"/>
-                            <span class="first-letter:uppercase font-semibold">{{ block.name }}</span>
+                            <span class="first-letter:uppercase">{{ block.name }}</span>
                         </div>
                     </div>
                 </template>
             </draggable>
         </transition-group>
 
-        <delete-area class="m-2 mb-0"/>
+        <delete-area/>
     </div>
 </template>
 
@@ -184,8 +198,9 @@
         display: flex;
         align-items: center;
         padding: 1px 0.375rem;
-        border-radius: 0.375rem;
+        border-radius: 0.25rem;
         gap: 0.125rem;
+        font-weight: 600;
     }
 
     .editable .building-block:hover {

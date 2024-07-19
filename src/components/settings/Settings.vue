@@ -6,6 +6,8 @@
     import { settings } from "@/main";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import IconSettings from "@/components/icons/settings/IconSettings.vue";
+    import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
+    import FontSettings from "@/components/settings/FontSettings.vue";
 
     const resume = defineModel<ResumeModel | null>('resume', {
         required: true
@@ -56,32 +58,37 @@
 
         <transition name="appear">
             <div class="settings-modal bg-background rounded-lg" v-show="settings.settingsOpen">
-                <div class="grid gap-8 py-6">
-                    <div class="flex flex-col gap-4 px-2 min-w-80 text-sm">
+                <div class="flex flex-col px-2 py-4 w-80">
+                    <!-- general -->
+                    <div class="text-sm flex flex-col gap-4">
                         <div class="flex justify-between">
-                            <div>Print page</div>
-                            <div class="font-mono">
-                                <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">Ctrl</span>
-                                +
-                                <span class="border border-b-2 rounded py-0.5 px-2 border-primary border-opacity-30">P</span>
-                            </div>
+                            <div>Monochrome</div>
+                            <toggle-switch v-model="settings.monochrome"/>
                         </div>
 
-                        <div class="grid gap-x-4 gap-y-2 grid-cols-2 px-2">
-                            <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
+                        <div class="flex justify-between">
+                            <div>Editable</div>
+                            <toggle-switch v-model="settings.editable"/>
+                        </div>
+
+                        <div class="grid gap-x-4 gap-y-2 grid-cols-2 text-sm font-semibold">
+                            <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="px-2 py-0.5 rounded border-2 border-accent bg-transparent hover:bg-accent transition-colors">
                                 Import
                             </file-upload>
-                            <button @click="resetTemplate" class="rounded font-semibold text-background bg-error px-2 py-0.5">
+                            <button @click="resetTemplate" class="px-2 py-0.5 rounded border-2 border-error bg-transparent hover:bg-error transition-colors">
                                 Reset template
                             </button>
-                            <button @click="exportTemplate" class="rounded font-semibold text-background bg-accent px-2 py-0.5">
+                            <button @click="exportTemplate" class="px-2 py-0.5 rounded border-2 border-accent bg-transparent hover:bg-accent transition-colors">
                                 Export
                             </button>
-                            <button @click="resetSettings" class="rounded font-semibold text-background bg-error px-2 py-0.5">
+                            <button @click="resetSettings" class="px-2 py-0.5 rounded border-2 border-error bg-transparent hover:bg-error transition-colors">
                                 Reset settings
                             </button>
                         </div>
                     </div>
+
+                    <!-- fonts -->
+                    <font-settings/>
 
                     <!-- themes -->
                     <theme-settings/>
@@ -131,5 +138,11 @@
 
     .setting-icon.open {
         transform: rotate(180deg);
+    }
+
+    .settings-modal > div > *:not(:last-child) {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgb(var(--primary));
     }
 </style>
