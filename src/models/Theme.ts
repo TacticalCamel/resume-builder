@@ -1,4 +1,4 @@
-import Color from "@/models/themes/Color";
+import Color from "@/models/Color";
 
 export default interface Theme {
     id: string

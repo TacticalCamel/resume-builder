@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { PropType, reactive } from "vue";
-    import Theme from '@/models/themes/Theme';
-    import Color from "@/models/themes/Color";
+    import Theme from '@/models/Theme';
+    import Color from "@/models/Color";
 
     const props = defineProps({
         theme: {
@@ -29,13 +29,12 @@
 
 <template>
     <div>
-        <div class="relative me-6 h-7 overflow-y-clip" :style="cardStyle">
-            <div class="theme-card-text w-full flex items-center gap-2 rounded border-primary border-2 px-2">
-                <span v-if="isDefault" class="text-sm font-thin font-mono">[DEFAULT]</span>
-                <span v-if="theme.name.length">{{ theme.name }}</span>
-                <span v-else class="italic opacity-70">Unnamed</span>
-            </div>
-            <div class="theme-card-accent w-2/5 -right-2 skew-x-[-24deg] border-primary border-2 border-s-0 pointer-events-none"/>
+        <div class="theme-card-text flex items-center justify-between gap-2 relative rounded border-2 px-2 text-sm py-px overflow-clip" :style="cardStyle">
+            <label v-if="theme.name.length">{{ theme.name }}</label>
+            <label v-else class="italic opacity-70">Unnamed</label>
+            <label v-if="isDefault" class="font-mono font-bold">[DEFAULT]</label>
+
+            <div class="theme-card-accent w-2/5 pointer-events-none"/>
         </div>
     </div>
 </template>
@@ -47,16 +46,14 @@
         --card-accent: none;
     }
 
-    .theme-card-text, .theme-card-accent {
-        position: absolute;
-        top: 0;
-        height: 100%;
-    }
-
     .theme-card-text {
         background-color: var(--card-background);
         color: var(--card-primary);
         transition: background-color 150ms ease-in-out;
+    }
+
+    .theme-card-text > label {
+        z-index: 1;
     }
 
     .theme-card-text:hover {
@@ -64,6 +61,10 @@
     }
 
     .theme-card-accent {
+        position: absolute;
+        top: 0;
+        right: -2px;
+        height: 100%;
         background: linear-gradient(90deg, transparent, var(--card-accent) 80%);
     }
 </style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import ResumeModel, { getEmptyResume } from "@/models/ResumeModel";
     import AutosaveService from "@/services/AutosaveService";
-    import Resume from "@/components/Resume.vue";
+    import Resume from "@/components/resume/Resume.vue";
     import Settings from "@/components/settings/Settings.vue";
     import { settings } from "@/main";
 

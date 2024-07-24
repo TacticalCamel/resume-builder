@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import draggable from "vuedraggable";
-    import { sectionComponents } from "@/data/SectionMap";
-    import { contacts } from "@/data/ContactMap";
+    import { sectionComponents } from "@/models/SectionMap";
+    import { contacts } from "@/models/ContactMap";
     import { settings } from "@/main";
     import { createDefaultDarkTheme, createDefaultLightTheme } from "@/services/ThemeService";
     import BuildingBlock from "@/models/BuildingBlock";
@@ -11,7 +11,7 @@
     import Skill from "@/models/elements/Skill";
     import Language from "@/models/elements/Language";
     import Project from "@/models/elements/Project";
-    import Theme from "@/models/themes/Theme";
+    import Theme from "@/models/Theme";
     import DeleteArea from "@/components/settings/DeleteArea.vue";
     import IconLink from "@/components/icons/IconLink.vue";
     import IconSegment from "@/components/icons/settings/IconSegment.vue";
@@ -61,23 +61,23 @@
             icon: IconCube
         },
         {
-            name: 'skill category',
-            group: 'skill-category',
-            clone: (): SkillCategory => {
-                return {
-                    title: '',
-                    elements: []
-                }
-            },
-            icon: IconCube
-        },
-        {
             name: 'skill',
             group: 'skill',
             clone: (): Skill => {
                 return {
                     name: '',
                     level: 0
+                }
+            },
+            icon: IconCube
+        },
+        {
+            name: 'skill category',
+            group: 'skill-category',
+            clone: (): SkillCategory => {
+                return {
+                    title: '',
+                    elements: []
                 }
             },
             icon: IconCube
@@ -112,6 +112,14 @@
             icon: IconCube
         },
         {
+            name: 'font',
+            group: 'font',
+            clone: (): string => {
+                return 'undefined';
+            },
+            icon: IconSettings
+        },
+        {
             name: 'light theme',
             group: 'theme',
             clone: (): Theme => {
@@ -134,14 +142,6 @@
                 theme.name = 'New dark theme';
 
                 return theme;
-            },
-            icon: IconSettings
-        },
-        {
-            name: 'font',
-            group: 'font',
-            clone: (): string => {
-                return 'undefined';
             },
             icon: IconSettings
         },
@@ -201,6 +201,7 @@
         border-radius: 0.25rem;
         gap: 0.125rem;
         font-weight: 600;
+        cursor: move;
     }
 
     .editable .building-block:hover {

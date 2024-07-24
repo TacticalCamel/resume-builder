@@ -37,14 +37,14 @@
         display: grid;
         grid-template-columns: 1fr;
         border-radius: 0.25rem;
-        transition: background-color 150ms;
+        transition: background-color 150ms ease-in-out;
     }
 
     /*
      Highlight the editable text when hovered.
     */
     .editable:hover {
-        background-color: rgb(var(--primary) / 0.2);
+        background-color: rgb(var(--primary) / 0.15);
     }
 
     /*

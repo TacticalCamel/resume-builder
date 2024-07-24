@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import draggable from "vuedraggable";
-    import HeaderSection from "@/components/sections/HeaderSection.vue";
-    import { sectionComponents, type SectionMap } from "@/data/SectionMap";
+    import HeaderSection from "@/components/resume/HeaderSection.vue";
+    import { sectionComponents, type SectionMap } from "@/models/SectionMap";
     import { checkGroupMatch } from "@/models/BuildingBlock";
     import { settings } from "@/main";
     import ResumeModel from "@/models/ResumeModel";
@@ -31,7 +31,7 @@
                     </header>
                 </template>
                 <template #item="{element: key}: {element: keyof SectionMap}">
-                    <section class="rounded-lg">
+                    <section class="rounded-lg" :class="{'moveable': settings.editable}">
                         <component :is="sectionComponents[key]" v-model="resume[key]" :id="`section-${key}`" class="max-w-[720px] mx-auto"/>
                     </section>
                 </template>

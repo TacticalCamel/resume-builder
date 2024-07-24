@@ -1,5 +1,5 @@
-import Theme from "@/models/themes/Theme";
-import Color from "@/models/themes/Color";
+import Theme from "@/models/Theme";
+import Color from "@/models/Color";
 import AutosaveService from "@/services/AutosaveService";
 
 export default class ThemeService {
@@ -47,7 +47,7 @@ export default class ThemeService {
     }
 
     // is the current theme one of the default themes
-    get isDefaultTheme(): boolean {
+    get defaultThemeSelected(): boolean {
         // get the current theme
         const theme: Theme = this.currentTheme;
 

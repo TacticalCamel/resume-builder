@@ -14,8 +14,10 @@
  - Print or save to PDF with `Ctrl + P`
 
 ## To do
-- Theme export
-- Font selection
+- Import/export menu
+  - download/upload content
+  - choose what to include (resume, profile picture, theme)
+  - validate imported content
 - More rating bar styles
 - Landing page
 

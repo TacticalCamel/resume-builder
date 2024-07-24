@@ -1,13 +1,45 @@
 <script setup lang="ts">
-    const model = defineModel({
-        type: Boolean,
-        required: true
-    })
+    const model = defineModel<boolean>();
+
+    defineProps({
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        checked: {
+            type: Boolean,
+            default: false
+        }
+    });
 </script>
 
 <template>
     <label class="inline-flex items-center cursor-pointer">
-        <input type="checkbox" class="sr-only peer" v-model="model">
-        <span class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 after:border-gray-300 dark:border-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></span>
+        <input v-if="disabled" type="checkbox" class="sr-only peer" :checked="checked" disabled/>
+        <input v-else type="checkbox" class="sr-only peer" v-model="model">
+
+        <span class="peer peer-checked:after:translate-x-full bg-primary peer-checked:bg-accent bg-opacity-30 peer-checked:bg-opacity-100 peer-disabled:bg-opacity-20 peer-disabled:peer-checked:bg-opacity-65"></span>
     </label>
 </template>
+
+<style scoped>
+    span {
+        position: relative;
+        height: 1lh;
+        width: calc(2lh - 0.25rem);
+        border-radius: 9999px;
+        transition: background-color 150ms ease-in-out;
+    }
+
+    span::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        height: calc(1lh - 0.25rem);
+        width: calc(1lh - 0.25rem);
+        border-radius: 9999px;
+        background-color: white;
+        transition: transform 150ms ease-in-out;
+    }
+</style>

@@ -2,7 +2,7 @@
     import draggable from "vuedraggable";
     import HeaderSection from "@/models/sections/HeaderSection";
     import { checkGroupMatch } from "@/models/BuildingBlock";
-    import { contacts, type ContactMap } from "@/data/ContactMap";
+    import { contacts, type ContactMap } from "@/models/ContactMap";
     import IconUpload from "@/components/icons/IconUpload.vue";
     import IconProfile from "@/components/icons/IconProfile.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
@@ -67,7 +67,7 @@
                     class="text-sm grid gap-1.5"
                 >
                     <template #item="{element: key}: {element: keyof ContactMap}">
-                        <div class="p-0.5 drag-item">
+                        <div class="p-0.5 drag-item" :class="{'moveable': settings.editable}">
                             <a class="flex items-center hover:transition-colors gap-2" :href="settings.editable ? undefined : contacts[key].createURL(model[key])" :class="settings.editable || !contacts[key].createURL(model[key]) ? undefined : 'hover:text-accent'">
                                 <component :is="contacts[key].icon" class="size-5"/>
                                 <edit-text v-model="model[key]" :placeholder="contacts[key].placeholder"/>

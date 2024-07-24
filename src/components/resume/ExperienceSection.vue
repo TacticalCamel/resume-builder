@@ -2,8 +2,8 @@
     import ExperienceSection from "@/models/sections/ExperienceSection";
     import Experience from "@/models/elements/Experience";
     import EditText from "@/components/shared/EditText.vue";
-    import ResumeSection from "@/components/shared/ResumeSection.vue";
-    import TechnologyList from "@/components/shared/TechnologyList.vue";
+    import ResumeSection from "@/components/resume/ResumeSection.vue";
+    import TechnologyList from "@/components/resume/TechnologyList.vue";
 
     const model = defineModel<ExperienceSection>({
         required: true

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-    import { ref, watch } from "vue";
+    import { ref } from "vue";
     import draggable from "vuedraggable";
     import { checkGroupMatch } from "@/models/BuildingBlock";
     import IconSwapVertical from "@/components/icons/settings/IconSwapVertical.vue";
-    import { settings } from "@/main";
+    import { fontService } from "@/main";
     import IconText from "@/components/icons/settings/IconText.vue";
+    import FontCard from "@/components/settings/FontCard.vue";
 
     const dropdownOpen = ref<boolean>(false);
 
@@ -12,25 +13,8 @@
         dropdownOpen.value = !dropdownOpen.value;
     }
 
-    const defaultFont: string = 'Arial';
-
-    const availableFonts = ref<string[]>([
-        'Arial',
-        'Georgia',
-        'Lucida Sans Unicode',
-        'Palatino Linotype',
-        'Tahoma',
-        'Times New Roman',
-        'Trebuchet MS',
-        'Verdana'
-    ]);
-
-    watch(() => settings.currentFont, (font) => {
-        document.documentElement.style.setProperty('--font-family', font ?? defaultFont);
-    });
-
-    function setFont(font: string): void {
-        settings.currentFont = font;
+    function setFont(font: string | undefined): void {
+        fontService.currentFont = font;
         dropdownOpen.value = false;
     }
 </script>
@@ -38,15 +22,15 @@
 <template>
     <div>
         <!-- font selection -->
-        <div class="flex gap-4 mb-2">
+        <div class="flex justify-between items-center gap-4 mb-2">
             <div class="flex gap-2 items-center">
                 <icon-text class="size-6"/>
                 <span>Font</span>
             </div>
 
-            <div class="ms-auto flex gap-2 rounded border-2 border-accent">
+            <div class="flex gap-2 rounded border-2 border-accent">
                 <div class="px-2 flex items-center text-sm">
-                    <span>{{ settings.currentFont }}</span>
+                    <span>{{ fontService.currentFont }}</span>
                 </div>
 
                 <button @click="toggleDropdown" class="hover:bg-accent px-2 py-0.5 transition-colors">
@@ -61,7 +45,7 @@
             <div v-if="dropdownOpen">
                 <transition-group>
                     <draggable
-                        v-model="availableFonts"
+                        v-model="fontService.availableFonts.value"
                         item-key="id"
                         key="draggable"
                         drag-class="dragging"
@@ -70,26 +54,27 @@
                         class="flex flex-col gap-1"
                         :group="{name: 'font', pull: true, put: checkGroupMatch}"
                     >
-                        <!--
                         <template #header>
-                            <div v-for="font in availableFonts">{{ font }}</div>
+                            <font-card :font="fontService.defaultFont" :is-default="true" @click="setFont(undefined)"/>
                         </template>
-                        -->
 
                         <template #item="{element: font}: {element: string}">
-                            <div>
-                                <div @click="setFont(font)" :style="{fontFamily: font}" class="bg-primary bg-opacity-0 hover:bg-opacity-20 transition-colors px-2 rounded">{{ font }}</div>
-                            </div>
+                            <font-card :font="font" @click="setFont(font)"/>
                         </template>
                     </draggable>
                 </transition-group>
             </div>
 
             <!-- font options -->
-            <div v-else>
-                <div class="italic text-primary text-opacity-70">
-                    Font options
-                </div>
+            <div v-else class="grid grid-cols-2 gap-1">
+                <label for="font-weight">Font weight</label>
+                <input type="number" step="100" value="400" min="100" max="900" id="font-weight" class="bg-transparent"/>
+
+                <label for="font-size">Font size</label>
+                <input type="number" step="0.5" value="16" min="1" max="72" id="font-size" class="bg-transparent"/>
+
+                <label for="line-height">Line height</label>
+                <input type="number" step="0.05" value="1.5" min="1" max="3" id="line-height" class="bg-transparent"/>
             </div>
         </transition>
     </div>

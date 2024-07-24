@@ -3,7 +3,7 @@
     import draggable from "vuedraggable";
     import { checkGroupMatch } from "@/models/BuildingBlock";
     import { themeService } from "@/main";
-    import Theme from "@/models/themes/Theme";
+    import Theme from "@/models/Theme";
     import EditText from "@/components/shared/EditText.vue";
     import IconSwapVertical from "@/components/icons/settings/IconSwapVertical.vue";
     import ThemeCard from "@/components/settings/ThemeCard.vue";
@@ -20,20 +20,24 @@
         themeService.currentTheme = theme;
         dropdownOpen.value = false;
     }
+
+    function onThemeDelete() {
+        themeService.applyTheme(themeService.currentTheme);
+    }
 </script>
 
 <template>
     <div>
         <!-- theme selection -->
-        <div class="flex gap-4 mb-2">
+        <div class="flex justify-between items-center gap-4 mb-2">
             <div class="flex gap-2 items-center">
                 <icon-palette class="size-6"/>
                 <span>Theme</span>
             </div>
 
-            <div class="ms-auto flex gap-2 rounded border-2 border-accent">
+            <div class="flex gap-2 rounded border-2 border-accent">
                 <div class="px-2 flex items-center text-sm">
-                    <span v-if="themeService.isDefaultTheme">{{ themeService.currentTheme.name }}</span>
+                    <span v-if="themeService.defaultThemeSelected">{{ themeService.currentTheme.name }}</span>
                     <edit-text v-else v-model="themeService.currentTheme.name" placeholder="Theme name"/>
                 </div>
 
@@ -57,6 +61,7 @@
                         animation="200"
                         class="flex flex-col gap-1.5"
                         :group="{name: 'theme', pull: true, put: checkGroupMatch}"
+                        @remove="onThemeDelete"
                     >
                         <template #header>
                             <theme-card v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme]" @click="setTheme(theme)" :theme="theme" :is-default="true"/>
@@ -70,7 +75,7 @@
             </div>
 
             <!-- selected theme can not be edited -->
-            <div v-else-if="themeService.isDefaultTheme">
+            <div v-else-if="themeService.defaultThemeSelected">
                 <div class="italic opacity-70 text-sm">
                     Create or select a custom theme to edit colors.
                 </div>
@@ -78,12 +83,12 @@
 
             <!-- color list -->
             <div v-else class="grid text-sm gap-1">
-                <div class="px-2 flex items-center my-1 gap-2">
+                <div class="flex items-center my-1">
                     <input type="checkbox" id="theme-inherit-checkbox" v-model="themeService.currentTheme.isDark" class="size-4 accent-accent"/>
-                    <label for="theme-inherit-checkbox">Inherit dark theme colors</label>
+                    <label for="theme-inherit-checkbox" class="select-none ps-2">Inherit dark colors</label>
                 </div>
 
-                <div v-for="(color, index) in themeService.currentTheme.colors" :key="color.name" class="ps-2 flex items-center gap-4">
+                <div v-for="(color, index) in themeService.currentTheme.colors" :key="color.name" class="flex items-center gap-4">
                     <div class="text-nowrap">
                         {{ color.name.substring(2) }}
                     </div>
@@ -93,6 +98,7 @@
                         @change="themeService.applyColor(color)"
                         class="ms-auto px-2 rounded border border-primary"
                     />
+
                     <div class="flex items-center">
                         <button v-if="themeService.isColorModified(color)" class="px-2 text-error hover:bg-error hover:bg-opacity-20 rounded hover:transition-colors font-semibold" @click="themeService.resetColor(color)">Reset</button>
                         <span v-else class="px-2 opacity-60">Reset</span>

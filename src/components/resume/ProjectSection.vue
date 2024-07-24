@@ -3,8 +3,8 @@
     import Project from "@/models/elements/Project";
     import EditText from "@/components/shared/EditText.vue";
     import IconLink from "@/components/icons/IconLink.vue";
-    import ResumeSection from "@/components/shared/ResumeSection.vue";
-    import TechnologyList from "@/components/shared/TechnologyList.vue";
+    import ResumeSection from "@/components/resume/ResumeSection.vue";
+    import TechnologyList from "@/components/resume/TechnologyList.vue";
     import {settings} from "@/main";
 
     const model = defineModel<ProjectSection>({

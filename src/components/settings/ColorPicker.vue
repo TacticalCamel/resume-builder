@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import Color from "@/models/themes/Color";
+    import Color from "@/models/Color";
 
     const color = defineModel<Color>({
         required: true

@@ -2,7 +2,7 @@
     import LanguageSection from "@/models/sections/LanguageSection";
     import Language from "@/models/elements/Language";
     import EditText from "@/components/shared/EditText.vue";
-    import ResumeSection from "@/components/shared/ResumeSection.vue";
+    import ResumeSection from "@/components/resume/ResumeSection.vue";
 
     const model = defineModel<LanguageSection>({
         required: true

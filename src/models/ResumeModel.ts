@@ -4,7 +4,7 @@ import ExperienceSection from "@/models/sections/ExperienceSection";
 import SkillSection from "@/models/sections/SkillSection";
 import LanguageSection from "@/models/sections/LanguageSection";
 import ProjectSection from "@/models/sections/ProjectSection";
-import { SectionMap } from "@/data/SectionMap";
+import { SectionMap } from "@/models/SectionMap";
 
 export default interface ResumeModel {
     header: HeaderSection

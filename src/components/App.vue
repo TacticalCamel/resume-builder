@@ -1,10 +1,10 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import { navigationService } from "@/main";
-    import Home from "@/components/Home.vue";
-    import Editor from "@/components/Editor.vue";
-    import Navigation from "@/components/Navigation.vue";
-    import NotFound from "@/components/NotFound.vue";
+    import Home from "@/components/routes/Home.vue";
+    import Editor from "@/components/routes/Editor.vue";
+    import Navigation from "@/components/routes/Navigation.vue";
+    import NotFound from "@/components/routes/NotFound.vue";
 
     // define the routes of the application
     const routes = {

@@ -1,11 +1,11 @@
 <script setup lang="ts" generic="T">
-    import {reactive} from "vue";
+    import { reactive } from "vue";
     import draggable from "vuedraggable";
     import Section from "@/models/sections/Section";
     import IconInfo from "@/components/icons/IconInfo.vue";
     import EditText from "@/components/shared/EditText.vue";
-    import {checkGroupMatch} from "@/models/BuildingBlock";
-    import {settings} from "@/main";
+    import { checkGroupMatch } from "@/models/BuildingBlock";
+    import { settings } from "@/main";
 
     const props = defineProps({
         group: {type: String, required: true},
@@ -51,15 +51,15 @@
                 :style="outerGridStyle"
             >
                 <template #item="{element, index}: {element: T, index: number}">
-                    <div class="grid grid-cols-subgrid" :style="innerGridStyle">
+                    <div class="grid grid-cols-subgrid" :class="{'moveable': settings.editable}" :style="innerGridStyle">
                         <slot name="item" :element="element" :index="index"/>
                     </div>
                 </template>
 
                 <template #footer v-if="settings.editable && !model.elements.length">
-                    <div class="flex items-center text-info bg-info bg-opacity-20 px-2 py-1 rounded text-nowrap">
-                        <icon-info class="size-6 me-2"/>
-                        <span>Empty section will not be displayed</span>
+                    <div class="h-16 w-[720px] rounded-lg border-2 border-info border-dashed flex items-center justify-center gap-2 text-info bg-info bg-opacity-10">
+                        <icon-info class="size-6"/>
+                        <span>Empty section will not be displayed - drag items here to add content</span>
                     </div>
                 </template>
             </draggable>
