@@ -7,7 +7,7 @@
     import IconProfile from "@/components/icons/IconProfile.vue";
     import FileUpload from "@/components/shared/FileUpload.vue";
     import EditText from "@/components/shared/EditText.vue";
-    import IconDelete from "@/components/icons/settings/IconDelete.vue";
+    import IconDelete from "@/components/icons/IconDelete.vue";
     import { settings } from "@/main";
 
     const model = defineModel<HeaderSection>({
@@ -68,7 +68,7 @@
                 >
                     <template #item="{element: key}: {element: keyof ContactMap}">
                         <div class="p-0.5 drag-item" :class="{'moveable': settings.editable}">
-                            <a class="flex items-center hover:transition-colors gap-2" :href="settings.editable ? undefined : contacts[key].createURL(model[key])" :class="settings.editable || !contacts[key].createURL(model[key]) ? undefined : 'hover:text-accent'">
+                            <a class="flex items-center hover:transition-colors gap-2" :href="settings.editable ? undefined : contacts[key].createURL(model[key])" :class="settings.editable || !contacts[key].createURL(model[key]) ? undefined : 'hover:text-primary'">
                                 <component :is="contacts[key].icon" class="size-5"/>
                                 <edit-text v-model="model[key]" :placeholder="contacts[key].placeholder"/>
                             </a>

@@ -1,15 +1,17 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import { navigationService } from "@/main";
-    import Home from "@/components/routes/Home.vue";
+    import Home from "@/components/home/Home.vue";
     import Editor from "@/components/routes/Editor.vue";
-    import Navigation from "@/components/routes/Navigation.vue";
+    import Templates from "@/components/routes/Templates.vue";
+    import Navigation from "@/components/navigation/Navigation.vue";
     import NotFound from "@/components/routes/NotFound.vue";
 
     // define the routes of the application
     const routes = {
         '/': Home,
         '/editor': Editor,
+        '/templates': Templates
     };
 
     // the currently active view
@@ -20,22 +22,19 @@
     <main class="relative min-h-full">
         <navigation/>
 
-        <div class="">
-            <transition mode="out-in" appear>
-                <component :is="currentView" :route-parameters="navigationService.parameters.value"/>
-            </transition>
-        </div>
+        <transition name="fade" mode="out-in">
+            <component :is="currentView" :route-parameters="navigationService.parameters.value"/>
+        </transition>
     </main>
 </template>
 
 <!--suppress CssUnusedSymbol -->
 <style scoped>
-    .v-enter-active, .v-leave-active {
-        transition: all 300ms ease-in-out;
+    .fade-enter-active, .fade-leave-active {
+        transition: all 200ms ease-out;
     }
 
-    .v-enter-from, .v-leave-to {
-        margin-right: 1rem;
+    .fade-enter-from, .fade-leave-to {
         opacity: 0;
     }
 </style>

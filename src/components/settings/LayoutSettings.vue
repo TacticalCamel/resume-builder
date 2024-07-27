@@ -14,10 +14,10 @@
     import Theme from "@/models/Theme";
     import DeleteArea from "@/components/settings/DeleteArea.vue";
     import IconLink from "@/components/icons/IconLink.vue";
-    import IconSegment from "@/components/icons/settings/IconSegment.vue";
-    import IconCube from "@/components/icons/settings/IconCube.vue";
-    import IconSettings from "@/components/icons/settings/IconSettings.vue";
-    import IconDashboard from "@/components/icons/settings/IconDashboard.vue";
+    import IconSegment from "@/components/icons/IconSegment.vue";
+    import IconCube from "@/components/icons/IconCube.vue";
+    import IconSettings from "@/components/icons/IconSettings.vue";
+    import IconDashboard from "@/components/icons/IconDashboard.vue";
 
     const blocks: BuildingBlock[] = [
         ...Object.keys(sectionComponents).map(section => ({
@@ -192,7 +192,7 @@
     }
 
     .building-block {
-        background: linear-gradient(-60deg, rgb(var(--accent) / 0.6), rgb(var(--info) / 0.6));
+        background: linear-gradient(-60deg, rgb(var(--primary) / 0.6), rgb(var(--info) / 0.6));
         transition: outline-color 150ms;
         outline: 2px solid transparent;
         display: flex;
@@ -205,6 +205,6 @@
     }
 
     .editable .building-block:hover {
-        outline-color: rgb(var(--primary));
+        outline-color: rgb(var(--foreground));
     }
 </style>

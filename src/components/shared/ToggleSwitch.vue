@@ -18,7 +18,7 @@
         <input v-if="disabled" type="checkbox" class="sr-only peer" :checked="checked" disabled/>
         <input v-else type="checkbox" class="sr-only peer" v-model="model">
 
-        <span class="peer peer-checked:after:translate-x-full bg-primary peer-checked:bg-accent bg-opacity-30 peer-checked:bg-opacity-100 peer-disabled:bg-opacity-20 peer-disabled:peer-checked:bg-opacity-65"></span>
+        <span class="peer peer-checked:after:translate-x-full bg-foreground peer-checked:bg-primary bg-opacity-30 peer-checked:bg-opacity-100 peer-disabled:bg-opacity-20 peer-disabled:peer-checked:bg-opacity-65"></span>
     </label>
 </template>
 

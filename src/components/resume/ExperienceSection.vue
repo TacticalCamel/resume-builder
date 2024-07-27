@@ -27,7 +27,7 @@
             </div>
             <div class="flex flex-col items-start text-nowrap min-w-48">
                 <edit-text v-model="experience.company" placeholder="Company name"/>
-                <edit-text v-model="experience.position" placeholder="Position" class="text-primary text-opacity-60"/>
+                <edit-text v-model="experience.position" placeholder="Position" class="text-foreground text-opacity-60"/>
                 <technology-list v-model="experience.stack" class="mt-2"/>
             </div>
             <div class="text-justify">

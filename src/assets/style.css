@@ -1,16 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
     :root {
-        --primary: 10 37 64;
+        --foreground: 26 27 30;
         --background: 246 249 252;
-        --accent: 99 91 255;
+
+        --primary: 232 51 100;
+        --secondary: 46 204 130;
+
         --success: 34 197 94;
-        --info: 14 165 233;
         --warning: 245 158 11;
         --error: 239 68 68;
+        --info: 59 130 246;
 
         --rating-bar-0: 75 85 99;
         --rating-bar-1: 239 68 68;
@@ -20,13 +25,8 @@
         --rating-bar-5: 14 165 233;
     }
 
-    @media (prefers-color-scheme: dark) {
-        --primary: 246 249 252;
-        --background: 23 26 33;
-    }
-
     html {
-        --font-family: "Segoe UI Symbol", "Noto Color Emoji";
+        --font-family: "Inter";
         --font-size: 16px;
         --font-weight: 400;
         --line-height: 1.5;
@@ -43,24 +43,26 @@ html, body, #app {
 }
 
 body {
-    color: rgb(var(--primary));
+    color: rgb(var(--foreground));
     background-color: rgb(var(--background));
-    overflow-x: hidden;
-    overflow-y: scroll;
-    margin-left: 14px;
 }
 
-body::-webkit-scrollbar {
+.scrollbar {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.scrollbar::-webkit-scrollbar {
     width: 14px;
 }
 
-body::-webkit-scrollbar-thumb {
-    background-color: rgb(var(--primary));
-    border-radius: 9999px;
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--foreground));
+    border-radius: 6px;
     border: 4px solid rgb(var(--background));
 }
 
-body::-webkit-scrollbar-track {
+.scrollbar::-webkit-scrollbar-track {
     background-color: rgb(var(--background));
 }
 
@@ -101,7 +103,7 @@ html:has(.monochrome) {
     height: 100%;
     z-index: -1;
     opacity: 0;
-    background-color: rgb(var(--primary) / 0.15);
+    background-color: rgb(var(--foreground) / 0.15);
     border-radius: 0.5rem;
     pointer-events: none;
     transition: opacity 100ms ease-in-out;

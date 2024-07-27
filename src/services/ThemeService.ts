@@ -11,9 +11,13 @@ export default class ThemeService {
     readonly defaultLightTheme: Theme;
     readonly defaultDarkTheme: Theme
 
+    // CSS selector for the element the styles are applied to
+    readonly selector: string;
+
     constructor() {
         this.themesStorage = new AutosaveService<Theme[]>('themes', () => [], {deep: true});
         this.currentThemeIdStorage = new AutosaveService<string>('current-theme', () => 'default-light');
+        this.selector = 'html';
         this.defaultLightTheme = createDefaultLightTheme();
         this.defaultDarkTheme = createDefaultDarkTheme();
 
@@ -89,15 +93,27 @@ export default class ThemeService {
         }
     }
 
-    // apply a color to the document
+    // apply a color
     applyColor(color: Color): void {
-        document.documentElement.style.setProperty(color.name, color.value);
+        const element: HTMLElement | null = document.querySelector(this.selector);
+
+        if(!element) {
+            return;
+        }
+
+        element.style.setProperty(color.name, color.value);
     }
 
-    // apply a theme to the document
+    // apply a theme
     applyTheme(theme: Theme): void {
+        const element: HTMLElement | null = document.querySelector(this.selector);
+
+        if(!element) {
+            return;
+        }
+
         theme.colors.forEach(color => {
-            this.applyColor(color);
+            element.style.setProperty(color.name, color.value);
         });
     }
 }
@@ -170,12 +186,14 @@ export function createDefaultLightTheme(): Theme {
 export function createDefaultDarkTheme(): Theme {
     const colors: Color[] = getCssVariables(':root');
 
-    const primaryColor: Color | undefined = colors.find(c => c.name === '--primary');
+    const foregroundColor: Color | undefined = colors.find(c => c.name === '--foreground');
     const backgroundColor: Color | undefined = colors.find(c => c.name === '--background');
 
-    if (primaryColor && backgroundColor) {
-        primaryColor.value = '246 249 252';
-        backgroundColor.value = '23 26 33';
+    if (foregroundColor && backgroundColor) {
+        const temp: string = foregroundColor.value;
+
+        foregroundColor.value = backgroundColor.value;
+        backgroundColor.value = temp;
     }
 
     return {

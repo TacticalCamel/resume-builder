@@ -1,9 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-function colorWithOpacity(color: string, opacity: string | undefined) {
-    return `rgba(var(${color}) / ${opacity ?? 1})`
-}
-
 // noinspection JSUnusedGlobalSymbols
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -14,13 +10,16 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: ({opacityValue}) => colorWithOpacity('--primary', opacityValue),
+                foreground: ({opacityValue}) => colorWithOpacity('--foreground', opacityValue),
                 background: ({opacityValue}) => colorWithOpacity('--background', opacityValue),
-                accent: ({opacityValue}) => colorWithOpacity('--accent', opacityValue),
+
+                primary: ({opacityValue}) => colorWithOpacity('--primary', opacityValue),
+                secondary: ({opacityValue}) => colorWithOpacity('--secondary', opacityValue),
+
                 success: ({opacityValue}) => colorWithOpacity('--success', opacityValue),
-                info: ({opacityValue}) => colorWithOpacity('--info', opacityValue),
                 warning: ({opacityValue}) => colorWithOpacity('--warning', opacityValue),
                 error: ({opacityValue}) => colorWithOpacity('--error', opacityValue),
+                info: ({opacityValue}) => colorWithOpacity('--info', opacityValue),
             }
         },
         screens: {
@@ -29,4 +28,8 @@ export default {
         }
     },
     plugins: []
+}
+
+function colorWithOpacity(color: string, opacity: string | undefined) {
+    return `rgba(var(${color}) / ${opacity ?? 1})`
 }

@@ -25,7 +25,7 @@
             </div>
             <div class="flex flex-col items-start font-light">
                 <edit-text v-model="education.school" placeholder="School name"/>
-                <edit-text v-model="education.major" placeholder="Major" class="text-primary text-opacity-60"/>
+                <edit-text v-model="education.major" placeholder="Major" class="text-foreground text-opacity-60"/>
             </div>
         </template>
     </resume-section>

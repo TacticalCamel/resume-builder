@@ -6,7 +6,7 @@
     import LayoutSettings from "@/components/settings/LayoutSettings.vue";
     import { settings } from "@/main";
     import FileUpload from "@/components/shared/FileUpload.vue";
-    import IconSettings from "@/components/icons/settings/IconSettings.vue";
+    import IconSettings from "@/components/icons/IconSettings.vue";
     import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
     import FontSettings from "@/components/settings/FontSettings.vue";
     import Checkbox from "@/components/shared/Checkbox.vue";
@@ -66,13 +66,13 @@
 </script>
 
 <template>
-    <div class="fixed top-2 right-3 z-10 no-print flex flex-col justify-start items-end gap-6">
-        <button @click="settings.settingsOpen = !settings.settingsOpen" class="ms-auto p-2 hover:text-accent">
+    <div class="fixed top-16 right-3 z-10 no-print flex flex-col justify-start items-end gap-6 pointer-events-none">
+        <button @click="settings.settingsOpen = !settings.settingsOpen" class="p-2 hover:text-primary pointer-events-auto">
             <icon-settings class="size-8 setting-icon" :class="{'open': settings.settingsOpen}"/>
         </button>
 
         <transition name="appear">
-            <div class="settings-modal bg-background rounded-lg" v-show="settings.settingsOpen">
+            <div class="settings-modal scrollbar bg-background rounded-lg pointer-events-auto" v-show="settings.settingsOpen">
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-2 items-center">
                         <icon-chevron-right class="size-6"/>
@@ -91,10 +91,10 @@
                             <div>size</div>
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="px-2 rounded border-2 border-accent bg-transparent hover:bg-accent transition-colors">
+                            <file-upload @on-upload="importTemplate" id="cv-data" accept=".json" class="px-2 rounded border-2 border-primary bg-transparent hover:bg-primary transition-colors">
                                 Import
                             </file-upload>
-                            <button @click="exportTemplate" class="px-2 rounded border-2 border-accent bg-transparent hover:bg-accent transition-colors">
+                            <button @click="exportTemplate" class="px-2 rounded border-2 border-primary bg-transparent hover:bg-primary transition-colors">
                                 Export
                             </button>
                             <button @click="resetTemplate" class="px-2 rounded border-2 border-error hover:bg-error transition-colors">
@@ -125,7 +125,7 @@
 
                     <div class="grid grid-cols-[1fr_auto] justify-between items-center text-sm gap-1.5">
                         <div>Import or export content</div>
-                        <button @click="openModal" class="px-2 rounded border-2 border-accent hover:bg-accent transition-colors">Import / Export</button>
+                        <button @click="openModal" class="px-2 rounded border-2 border-primary hover:bg-primary transition-colors">Import / Export</button>
 
                         <div>Reset settings</div>
                         <button @click="resetSettings" class="px-2 rounded border-2 border-error hover:bg-error transition-colors">Reset</button>
@@ -159,28 +159,16 @@
     }
 
     .settings-modal {
-        overflow-y: scroll;
-        overflow-x: hidden;
         padding: 1.25rem 0.5rem 1.25rem 1.25rem;
         width: 21.75rem;
         max-height: calc(100vh - 7rem);
-        outline: 2px solid rgb(var(--accent));
+        outline: 2px solid rgb(var(--primary));
     }
 
     .settings-modal > *:not(:last-child) {
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid rgb(var(--primary));
-    }
-
-    .settings-modal::-webkit-scrollbar {
-        width: 0.75rem;
-    }
-
-    .settings-modal::-webkit-scrollbar-thumb {
-        background-color: rgb(var(--primary));
-        border-radius: 9999px;
-        border: 0.25rem solid rgb(var(--background));
+        border-bottom: 1px solid rgb(var(--foreground));
     }
 
     .setting-icon {

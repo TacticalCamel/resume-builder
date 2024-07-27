@@ -1,6 +1,6 @@
-# CV Builder
+# Resume Builder
 
-#### A simple web application for creating highly customizable CVs.
+#### A simple web application for creating highly customizable resumes.
 
 ## Features
  - Fully customizable layout with drag-and-drop elements
@@ -14,11 +14,17 @@
  - Print or save to PDF with `Ctrl + P`
 
 ## To do
-- Import/export menu
-  - download/upload content
-  - choose what to include (resume, profile picture, theme)
-  - validate imported content
-- More rating bar styles
-- Landing page
+- Home page
+  - Background graphics
+  - Visual
+
+- Template editor
+  - Import/export menu
+    - download/upload content
+    - choose what to include (resume, profile picture, theme)
+    - validate imported content
+  - More rating bar styles
+
+- Example templates
 
 Built with [Vue.js](https://vuejs.org/) and [Tailwind CSS](https://tailwindcss.com/).

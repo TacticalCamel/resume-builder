@@ -26,7 +26,7 @@
             >
                 <template #item="{index}: {index: number}">
                     <div class="flex relative">
-                        <span class="px-1 rounded bg-accent text-background font-semibold shadow-sm shadow-[#000000bb] transition-all text-nowrap">
+                        <span class="px-1 rounded bg-primary font-semibold shadow-sm shadow-[#000000bb] transition-all text-nowrap">
                             <edit-text v-model="model[index]" placeholder="Technology"/>
                         </span>
                     </div>

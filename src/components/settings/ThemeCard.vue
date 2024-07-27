@@ -15,9 +15,9 @@
     });
 
     const cardStyle = reactive({
-        '--card-primary': getThemeColor('--primary'),
+        '--card-foreground': getThemeColor('--foreground'),
         '--card-background': getThemeColor('--background'),
-        '--card-accent': getThemeColor('--accent')
+        '--card-primary': getThemeColor('--primary')
     });
 
     function getThemeColor(key: string): string {
@@ -34,21 +34,21 @@
             <label v-else class="italic opacity-70">Unnamed</label>
             <label v-if="isDefault" class="font-mono font-bold">[DEFAULT]</label>
 
-            <div class="theme-card-accent w-2/5 pointer-events-none"/>
+            <div class="theme-card-primary w-2/5 pointer-events-none"/>
         </div>
     </div>
 </template>
 
 <style scoped>
     :root {
-        --card-primary: none;
+        --card-foreground: none;
         --card-background: none;
-        --card-accent: none;
+        --card-primary: none;
     }
 
     .theme-card-text {
         background-color: var(--card-background);
-        color: var(--card-primary);
+        color: var(--card-foreground);
         transition: background-color 150ms ease-in-out;
     }
 
@@ -57,14 +57,14 @@
     }
 
     .theme-card-text:hover {
-        background: var(--card-accent);
+        background: var(--card-primary);
     }
 
-    .theme-card-accent {
+    .theme-card-primary {
         position: absolute;
         top: 0;
         right: -2px;
         height: 100%;
-        background: linear-gradient(90deg, transparent, var(--card-accent) 80%);
+        background: linear-gradient(90deg, transparent, var(--card-primary) 80%);
     }
 </style>

@@ -1,8 +1,8 @@
-import IconEmail from "@/components/icons/contacts/IconEmail.vue";
-import IconPhone from "@/components/icons/contacts/IconPhone.vue";
-import IconGithub from "@/components/icons/contacts/IconGithub.vue";
-import IconLocation from "@/components/icons/contacts/IconLocation.vue";
-import IconLinkedIn from "@/components/icons/contacts/IconLinkedIn.vue";
+import IconEmail from "@/components/icons/IconEmail.vue";
+import IconPhone from "@/components/icons/IconPhone.vue";
+import IconGithub from "@/components/icons/IconGithub.vue";
+import IconLocation from "@/components/icons/IconLocation.vue";
+import IconLinkedIn from "@/components/icons/IconLinkedIn.vue";
 import Contact from "@/models/Contact";
 
 export interface ContactMap{

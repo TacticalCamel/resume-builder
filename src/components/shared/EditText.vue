@@ -44,7 +44,7 @@
      Highlight the editable text when hovered.
     */
     .editable:hover {
-        background-color: rgb(var(--primary) / 0.15);
+        background-color: rgb(var(--foreground) / 0.15);
     }
 
     /*

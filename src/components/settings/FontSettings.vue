@@ -2,9 +2,9 @@
     import { ref } from "vue";
     import draggable from "vuedraggable";
     import { checkGroupMatch } from "@/models/BuildingBlock";
-    import IconSwapVertical from "@/components/icons/settings/IconSwapVertical.vue";
+    import IconSwapVertical from "@/components/icons/IconSwapVertical.vue";
     import { fontService } from "@/main";
-    import IconText from "@/components/icons/settings/IconText.vue";
+    import IconText from "@/components/icons/IconText.vue";
     import FontCard from "@/components/settings/FontCard.vue";
 
     const dropdownOpen = ref<boolean>(false);
@@ -13,7 +13,7 @@
         dropdownOpen.value = !dropdownOpen.value;
     }
 
-    function setFont(font: string | undefined): void {
+    function setFont(font: string | null): void {
         fontService.currentFont = font;
         dropdownOpen.value = false;
     }
@@ -28,12 +28,12 @@
                 <span>Font</span>
             </div>
 
-            <div class="flex gap-2 rounded border-2 border-accent">
+            <div class="flex gap-2 rounded border-2 border-primary">
                 <div class="px-2 flex items-center text-sm">
                     <span>{{ fontService.currentFont }}</span>
                 </div>
 
-                <button @click="toggleDropdown" class="hover:bg-accent px-2 py-0.5 transition-colors">
+                <button @click="toggleDropdown" class="hover:bg-primary px-2 py-0.5 transition-colors">
                     <icon-swap-vertical class="size-5"/>
                 </button>
             </div>
@@ -55,7 +55,7 @@
                         :group="{name: 'font', pull: true, put: checkGroupMatch}"
                     >
                         <template #header>
-                            <font-card :font="fontService.defaultFont" :is-default="true" @click="setFont(undefined)"/>
+                            <font-card :font="fontService.defaultFont" :is-default="true" @click="setFont(null)"/>
                         </template>
 
                         <template #item="{element: font}: {element: string}">

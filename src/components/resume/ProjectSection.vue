@@ -20,7 +20,7 @@
         :gap-y="1.5"
     >
         <template #header>
-            <div class="italic text-opacity-60 text-primary font-light mb-4 text-sm flex" v-if="model.elements.length && (model.disclaimer.length || settings.editable)">
+            <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="model.elements.length && (model.disclaimer.length || settings.editable)">
                 <edit-text v-model="model.disclaimer" placeholder="Disclaimer about the projects"/>
             </div>
         </template>
@@ -29,7 +29,7 @@
             <div>
                 <div class="flex items-center justify-start mb-1">
                     <icon-link class="size-5 mb-0.5 me-1"/>
-                    <a :href="settings.editable ? undefined : project.url" target="_blank" class="hover:transition-colors flex items-center underline text-nowrap me-2" :class="settings.editable ? undefined : 'hover:text-accent'">
+                    <a :href="settings.editable ? undefined : project.url" target="_blank" class="hover:transition-colors flex items-center underline text-nowrap me-2" :class="settings.editable ? undefined : 'hover:text-primary'">
                         <edit-text v-model="project.url" placeholder="Project URL"/>
                     </a>
                     <technology-list v-model="project.technologies"/>
