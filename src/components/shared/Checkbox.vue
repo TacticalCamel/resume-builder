@@ -13,12 +13,8 @@
 </script>
 
 <template>
-    <div class="flex items-center gap-2">
-        <input type="checkbox" :id="`checkbox-${$.uid}`" v-model="model" class="accent-primary size-[1.125em]"/>
-        <label :for="`checkbox-${$.uid}`" class="select-none">{{ label }}</label>
-    </div>
+    <label class="select-none flex items-center gap-2">
+        <input type="checkbox" v-model="model" class="accent-primary size-[1.125em]"/>
+        <span>{{ label }}</span>
+    </label>
 </template>
-
-<style scoped>
-
-</style>

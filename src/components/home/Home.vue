@@ -9,6 +9,9 @@
         // enable editing
         settings.editable = true;
 
+        // switch to the first tab
+        settings.tabIndex = 0;
+
         // navigate to the editor
         navigationService.navigateTo('/editor', {init: true});
     }

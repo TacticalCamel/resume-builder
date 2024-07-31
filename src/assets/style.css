@@ -27,48 +27,37 @@
 
     html {
         --font-family: "Inter";
-        --font-size: 16px;
-        --font-weight: 400;
-        --line-height: 1.5;
 
         font-family: var(--font-family), sans-serif;
-        font-size: var(--font-size);
-        font-weight: var(--font-weight);
-        line-height: var(--line-height);
     }
 }
 
 html, body, #app {
-    height: 100%;
+    @apply h-full;
 }
 
 body {
-    color: rgb(var(--foreground));
-    background-color: rgb(var(--background));
+    @apply antialiased text-foreground bg-background;
 }
 
 .scrollbar::-webkit-scrollbar {
-    width: 14px;
+    @apply w-3.5;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgb(var(--foreground));
-    border-radius: 6px;
-    border: 4px solid rgb(var(--background));
+    @apply bg-foreground rounded-md border-solid border-4 border-background;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    background-color: rgb(var(--background));
+    @apply bg-background;
 }
 
 .ghost {
-    outline: 2px dashed rgb(var(--info));
-    background-color: rgba(var(--info), 0.05);
-    border-radius: 0.5rem;
+    @apply outline-2 outline-dashed outline-secondary bg-secondary/5 rounded-lg;
 }
 
 .ghost > * {
-    visibility: hidden;
+    @apply invisible;
 }
 
 .dragging > * {

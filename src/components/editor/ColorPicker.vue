@@ -52,13 +52,14 @@
 
 <template>
     <span class="color-picker" :class="{'dark-text': colorInfo.darkText}" :style="{background: colorInfo.hexColor}">
-         <input :id="color.name" type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute">
+         <label class="flex w-full">
+             <input type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute">
 
-         <label :for="color.name" class="flex w-full">
              <span class="flex flex-col gap-0.5">
                  <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
                  <span class="font-mono">{{ colorInfo.hexColor }}</span>
              </span>
+
              <span class="grow flex justify-end items-center">
                  <button @click="copyColor">
                     <icon-copy class="size-5"/>

@@ -15,7 +15,11 @@
     });
 
     // set the profile picture
-    function setProfilePicture(contents: string) {
+    function setProfilePicture(contents: string | ArrayBuffer) {
+        if(typeof contents !== 'string') {
+            return;
+        }
+
         model.value.picture = contents;
     }
 
@@ -36,7 +40,7 @@
                     <icon-profile v-else class="absolute size-full p-4"/>
 
                     <div v-if="settings.editable" class="absolute size-full flex flex-col justify-between opacity-0 hover:opacity-100 transition-opacity">
-                        <file-upload id="profile-picture-upload" accept="image/*" @on-upload="setProfilePicture" class="flex justify-center items-center from-success/50 to-transparent bg-gradient-to-b basis-1/4 hover:basis-1/2 transition-all from-40%" read-data-url>
+                        <file-upload accept="image/*" format="base64" @on-upload="setProfilePicture" class="flex justify-center items-center from-success/50 to-transparent bg-gradient-to-b basis-1/4 hover:basis-1/2 transition-all from-40%">
                             <icon-upload class="size-6"/>
                         </file-upload>
 

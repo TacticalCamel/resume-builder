@@ -29,7 +29,11 @@
     }
 
     // import a resume from a JSON file
-    function importResume(contents: string) {
+    function importResume(contents: string | ArrayBuffer) {
+        if (typeof contents !== 'string') {
+            return;
+        }
+
         resume.value = JSON.parse(contents);
     }
 
@@ -100,7 +104,7 @@
 
         <editor-tab-item>
             <div class="grid grid-cols-2 gap-4">
-                <file-upload @on-upload="importResume" id="cv-data" accept=".json" class="px-2 rounded border-2 border-primary bg-transparent hover:bg-primary transition-colors">
+                <file-upload @on-upload="importResume" accept=".json" format="text" class="px-2 rounded border-2 border-primary bg-transparent hover:bg-primary transition-colors">
                     Import
                 </file-upload>
                 <button @click="exportResume" class="px-2 rounded border-2 border-primary bg-transparent hover:bg-primary transition-colors">

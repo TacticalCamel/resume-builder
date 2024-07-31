@@ -40,10 +40,10 @@
     <div>
         <div class="theme-card" :class="{'active': isActive}">
             <div class="grow flex items-center justify-between gap-2 text-sm px-2 pb-2">
-                <label v-if="theme.name.length">{{ theme.name }}</label>
-                <label v-else class="italic opacity-70">Unnamed</label>
+                <span v-if="theme.name.length">{{ theme.name }}</span>
+                <span v-else class="italic opacity-70">Unnamed</span>
 
-                <label v-if="isDefault" class="font-mono font-bold">[DEFAULT]</label>
+                <span v-if="isDefault" class="font-mono font-bold">[DEFAULT]</span>
             </div>
 
             <div class="theme-colors">
@@ -58,7 +58,7 @@
 <style lang="postcss" scoped>
     .theme-card {
         @apply relative flex flex-col rounded border border-foreground/30 overflow-clip h-12;
-        @apply outline outline-2 outline-transparent -outline-offset-1;
+        @apply outline outline-2 outline-transparent -outline-offset-1 select-none;
 
         transition-property: background-color, outline-color;
         transition-duration: 300ms;

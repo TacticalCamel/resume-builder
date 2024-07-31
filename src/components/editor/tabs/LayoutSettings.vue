@@ -122,6 +122,7 @@
             ],
             icon: IconCube
         },
+        /*
         config: {
             blocks: [
                 {
@@ -158,6 +159,7 @@
             ],
             icon: IconSettings
         }
+        */
     };
 </script>
 

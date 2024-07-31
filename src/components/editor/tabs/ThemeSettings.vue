@@ -8,6 +8,8 @@
     import ToggleSwitch from "@/components/shared/ToggleSwitch.vue";
     import EditorTab from "@/components/editor/tabs/EditorTab.vue";
     import EditorTabItem from "@/components/editor/tabs/EditorTabItem.vue";
+    import { createDefaultDarkTheme } from "@/services/ThemeService";
+    import Checkbox from "@/components/shared/Checkbox.vue";
 
     function setTheme(theme: Theme): void {
         themeService.currentTheme = theme;
@@ -15,6 +17,15 @@
 
     function onThemeDelete() {
         themeService.applyTheme(themeService.currentTheme);
+    }
+
+    function createTheme() {
+        const theme = createDefaultDarkTheme();
+
+        theme.id = 'theme-' + themeService.themes.length;
+        theme.name = 'theme-' + themeService.themes.length;
+
+        themeService.themes.push(theme);
     }
 </script>
 
@@ -26,6 +37,11 @@
         </editor-tab-item>
 
         <editor-tab-item>
+            <div class="mb-1">TODO</div>
+            <div class="text-foreground/70 text-sm">Theme rename</div>
+        </editor-tab-item>
+
+        <editor-tab-item @click="createTheme">
             <div class="mb-1">TODO</div>
             <div class="text-foreground/70 text-sm">Theme creation and deletion</div>
         </editor-tab-item>
@@ -81,10 +97,11 @@
 
             <!-- color list -->
             <div v-else class="grid text-sm gap-1">
-                <div class="flex items-center my-1">
-                    <input type="checkbox" id="theme-inherit-checkbox" v-model="themeService.currentTheme.isDark" class="size-4 accent-primary"/>
-                    <label for="theme-inherit-checkbox" class="select-none ps-2">Inherit dark colors</label>
-                </div>
+                <checkbox
+                    v-model="themeService.currentTheme.isDark"
+                    label="Inherit dark colors"
+                    class="my-1"
+                />
 
                 <color-picker
                     v-for="(color, index) in themeService.currentTheme.colors" :key="color.name"
