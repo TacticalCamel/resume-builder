@@ -203,8 +203,7 @@
     .building-block {
         @apply flex items-center justify-center;
         @apply h-12 px-2 rounded border border-foreground/30;
-        @apply outline outline-2 outline-transparent -outline-offset-1;
-        @apply select-none cursor-move;
+        @apply outline outline-2 outline-transparent -outline-offset-1 cursor-move;
 
         transition: outline-color 150ms ease-in-out;
     }

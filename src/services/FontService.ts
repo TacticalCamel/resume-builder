@@ -1,23 +1,12 @@
-import { Ref, ref } from "vue";
 import AutosaveService from "@/services/AutosaveService";
+import FontData from "@/models/FontData";
 
 export default class FontService {
     private readonly font: AutosaveService<string | null>;
-    readonly availableFonts: Ref<string[]>;
     readonly defaultFont = 'Inter';
 
     constructor() {
         this.font = new AutosaveService<string | null>('currentFont', () => null);
-        this.availableFonts = ref<string[]>([
-            'Arial',
-            'Georgia',
-            'Lucida Sans Unicode',
-            'Palatino Linotype',
-            'Tahoma',
-            'Times New Roman',
-            'Trebuchet MS',
-            'Verdana'
-        ]);
     }
 
     get currentFont(): string {
@@ -30,6 +19,21 @@ export default class FontService {
     }
 
     applyFont(font: string | null): void {
-        document.documentElement.style.setProperty('--font-family', font ?? this.defaultFont);
+        const element: HTMLElement | null = document.getElementById('editor-content');
+
+        element?.style.setProperty('--font-family', font ?? this.defaultFont);
+    }
+
+    static async getInstalledFonts(): Promise<FontData[]> {
+        if (!('queryLocalFonts' in window) || typeof window.queryLocalFonts !== 'function') {
+            return [];
+        }
+
+        try {
+            return window.queryLocalFonts();
+        }
+        catch (err) {
+            return [];
+        }
     }
 }

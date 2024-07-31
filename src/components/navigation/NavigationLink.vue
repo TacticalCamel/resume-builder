@@ -1,10 +1,9 @@
 <script setup lang="ts">
-    import { computed, Component as ComponentType } from "vue";
+    import { computed } from "vue";
     import { navigationService } from "@/main";
 
     const props = defineProps<{
         route: string
-        icon: ComponentType
     }>();
 
     const active = computed(() => navigationService.currentPath.value === props.route);

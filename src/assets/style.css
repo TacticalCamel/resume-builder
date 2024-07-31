@@ -61,11 +61,6 @@ body {
     background-color: rgb(var(--background));
 }
 
-html:has(.monochrome) {
-    filter: grayscale(100%);
-    backdrop-filter: grayscale(100%);
-}
-
 .ghost {
     outline: 2px dashed rgb(var(--info));
     background-color: rgba(var(--info), 0.05);

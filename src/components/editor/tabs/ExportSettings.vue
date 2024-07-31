@@ -67,6 +67,21 @@
 
 <template>
     <editor-tab>
+        <editor-tab-item>
+            <div class="mb-1">TODO</div>
+            <div class="text-foreground/70 text-sm">Export and import difference parts of editor data</div>
+        </editor-tab-item>
+
+        <editor-tab-item>
+            <div class="mb-1">TODO</div>
+            <div class="text-foreground/70 text-sm">Drop file to import it</div>
+        </editor-tab-item>
+
+        <editor-tab-item>
+            <div class="mb-1">TODO</div>
+            <div class="text-foreground/70 text-sm">Validate imported data</div>
+        </editor-tab-item>
+
         <editor-tab-item title="included content">
             <div class="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2 text-sm">
                 <checkbox v-model="exportOptions.resume" label="Resume text"/>
@@ -84,24 +99,25 @@
         </editor-tab-item>
 
         <editor-tab-item>
-            <div class="flex gap-1.5">
+            <div class="grid grid-cols-2 gap-4">
                 <file-upload @on-upload="importResume" id="cv-data" accept=".json" class="px-2 rounded border-2 border-primary bg-transparent hover:bg-primary transition-colors">
                     Import
                 </file-upload>
                 <button @click="exportResume" class="px-2 rounded border-2 border-primary bg-transparent hover:bg-primary transition-colors">
                     Export
                 </button>
-                <button @click="resetResume" class="px-2 rounded border-2 border-error hover:bg-error transition-colors">
-                    Reset template
-                </button>
             </div>
         </editor-tab-item>
 
-        <!--
-        <div class="grid grid-cols-[1fr_auto] justify-between items-center text-sm gap-1.5">
-            <div>Reset settings</div>
-            <button @click="resetSettings" class="px-2 rounded border-2 border-error hover:bg-error transition-colors">Reset</button>
-        </div>
-        -->
+        <editor-tab-item>
+            <div class="grid grid-cols-2 gap-4">
+                <button @click="resetResume" class="px-2 rounded border-2 border-error hover:bg-error transition-colors">
+                    Reset template
+                </button>
+                <button @click="resetSettings" class="px-2 rounded border-2 border-error hover:bg-error transition-colors">
+                    Reset settings
+                </button>
+            </div>
+        </editor-tab-item>
     </editor-tab>
 </template>

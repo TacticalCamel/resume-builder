@@ -20,6 +20,16 @@
 
 <template>
     <editor-tab>
+        <editor-tab-item>
+            <div class="mb-1">TODO</div>
+            <div class="text-foreground/70 text-sm">More filters</div>
+        </editor-tab-item>
+
+        <editor-tab-item>
+            <div class="mb-1">TODO</div>
+            <div class="text-foreground/70 text-sm">Theme creation and deletion</div>
+        </editor-tab-item>
+
         <editor-tab-item title="filters">
             <div class="flex justify-between items-center text-sm pe-1 py-0.5">
                 <div>Grayscale</div>
@@ -36,16 +46,26 @@
                     drag-class="dragging"
                     ghost-class="ghost"
                     animation="200"
-                    class="flex flex-col gap-1.5"
+                    class="flex flex-col gap-3"
                     :group="{name: 'theme', pull: true, put: checkGroupMatch}"
                     @remove="onThemeDelete"
                 >
                     <template #header>
-                        <theme-card v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme]" @click="setTheme(theme)" :theme="theme" :is-default="true"/>
+                        <theme-card
+                            v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme]"
+                            @click="setTheme(theme)"
+                            :theme="theme"
+                            :is-default="true"
+                            :is-active="themeService.currentTheme.id === theme.id"
+                        />
                     </template>
 
                     <template #item="{element: theme}: {element: Theme}">
-                        <theme-card @click="setTheme(theme)" :theme="theme"/>
+                        <theme-card
+                            @click="setTheme(theme)"
+                            :theme="theme"
+                            :is-active="themeService.currentTheme.id === theme.id"
+                        />
                     </template>
                 </draggable>
             </transition-group>

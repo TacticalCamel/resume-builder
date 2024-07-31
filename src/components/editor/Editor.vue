@@ -31,13 +31,23 @@
         </div>
 
         <div class="relative grow">
-            <div class="absolute inset-0 scrollbar overflow-y-scroll">
+            <div class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip" id="editor-content" :class="{'monochrome': settings.monochrome}">
                 <resume
                     v-if="model.value"
                     v-model="model.value"
-                    :class="{'monochrome': settings.monochrome}"
                 />
             </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+    #editor-content {
+        font-family: var(--font-family), sans-serif !important;
+    }
+
+    #editor-content.monochrome {
+        filter: grayscale(100%);
+        backdrop-filter: grayscale(100%);
+    }
+</style>
