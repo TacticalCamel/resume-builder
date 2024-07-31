@@ -6,9 +6,6 @@
     import FeatureCard from "@/components/home/FeatureCard.vue";
 
     function getStarted() {
-        // open settings panel
-        settings.settingsOpen = true;
-
         // enable editing
         settings.editable = true;
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import Color from "@/models/Color";
+    import IconCopy from "@/components/icons/IconCopy.vue";
+    import IconClose from "@/components/icons/IconClose.vue";
 
     const color = defineModel<Color>({
         required: true
@@ -42,14 +44,21 @@
 </script>
 
 <template>
-    <span :style="{background: colorInfo.hexColor, color: colorInfo.contrastColor}">
+    <span class="inline-flex" :style="{background: colorInfo.hexColor, color: colorInfo.contrastColor}">
          <input :id="color.name" type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute">
-         <label :for="color.name" class="font-mono">{{ colorInfo.hexColor }}</label>
+         <label :for="color.name" class="flex w-full">
+             <span class="flex flex-col gap-0.5">
+                 <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
+                 <span class="font-mono">{{ colorInfo.hexColor }}</span>
+             </span>
+             <span class="grow flex justify-end items-center gap-4">
+                 <icon-copy class="size-6"/>
+                 <icon-close class="size-6"/>
+             </span>
+         </label>
     </span>
 </template>
 
-<style scoped>
-    span {
-        display: inline-flex;
-    }
+<style lang="postcss" scoped>
+
 </style>

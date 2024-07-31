@@ -29,7 +29,7 @@
 
 <template>
     <div>
-        <div class="theme-card-text flex items-center justify-between gap-2 relative rounded border-2 px-2 text-sm py-px overflow-clip" :style="cardStyle">
+        <div class="theme-card-text flex items-center justify-between gap-2 relative rounded px-2 text-sm py-px overflow-clip h-10" :style="cardStyle">
             <label v-if="theme.name.length">{{ theme.name }}</label>
             <label v-else class="italic opacity-70">Unnamed</label>
             <label v-if="isDefault" class="font-mono font-bold">[DEFAULT]</label>
@@ -49,7 +49,12 @@
     .theme-card-text {
         background-color: var(--card-background);
         color: var(--card-foreground);
-        transition: background-color 150ms ease-in-out;
+        border: rgb(var(--foreground) / 0.3) solid 1px;
+        outline: transparent solid 2px;
+        outline-offset: -1px;
+        transition-property: background-color, outline-color;
+        transition-duration: 150ms;
+        transition-timing-function: ease-in-out;
     }
 
     .theme-card-text > label {
@@ -58,6 +63,7 @@
 
     .theme-card-text:hover {
         background: var(--card-primary);
+        outline-color: rgb(var(--foreground));
     }
 
     .theme-card-primary {

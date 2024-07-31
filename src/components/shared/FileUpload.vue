@@ -61,10 +61,10 @@
 </script>
 
 <template>
-    <label :for="id">
-        <span class="block text-center">
+    <div>
+        <label :for="id" class="block text-center">
             <slot/>
-        </span>
+        </label>
         <input :id="id" type="file" @change="upload($event)" class="hidden" :accept="accept"/>
-    </label>
+    </div>
 </template>

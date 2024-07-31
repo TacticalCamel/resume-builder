@@ -2,7 +2,7 @@
     import EducationSection from "@/models/sections/EducationSection";
     import Education from "@/models/elements/Education";
     import EditText from "@/components/shared/EditText.vue";
-    import ResumeSection from "@/components/resume/ResumeSection.vue";
+    import ResumeSection from "@/components/editor/sections/ResumeSection.vue";
 
     const model = defineModel<EducationSection>({
         required: true

@@ -1,13 +1,13 @@
 export default interface SettingsModel {
-    settingsOpen: boolean
+    tabIndex: number
     editable: boolean
     monochrome: boolean
 }
 
 export function getDefaultSettings(): SettingsModel {
     return {
-        settingsOpen: false,
-        editable: false,
+        tabIndex: 0,
+        editable: true,
         monochrome: false
     }
 }

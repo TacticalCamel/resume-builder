@@ -8,8 +8,8 @@ import { SectionMap } from "@/models/SectionMap";
 
 export default interface ResumeModel {
     header: HeaderSection
-    education: EducationSection
-    experience: ExperienceSection
+    educations: EducationSection
+    experiences: ExperienceSection
     skills: SkillSection
     languages: LanguageSection
     projects: ProjectSection
@@ -36,7 +36,7 @@ export function getEmptyResume(): ResumeModel {
             github: "",
             linkedin: ""
         },
-        education: {
+        educations: {
             title: "Education",
             elements: [
                 {
@@ -47,7 +47,7 @@ export function getEmptyResume(): ResumeModel {
                 }
             ]
         },
-        experience: {
+        experiences: {
             title: "Experience",
             elements: [
                 {
@@ -136,8 +136,8 @@ export function getEmptyResume(): ResumeModel {
             disclaimer: ""
         },
         sections: [
-            "education",
-            "experience",
+            "educations",
+            "experiences",
             "skills",
             "languages",
             "projects"

@@ -8,7 +8,7 @@
 </script>
 
 <template>
-    <header class="sticky z-10 top-0 backdrop-blur border-b border-b-foreground/10">
+    <div class="sticky z-10 top-0 backdrop-blur border-b border-b-foreground/10 no-print">
         <div class="navigation mx-auto max-w-[1280px] px-4 flex items-center justify-between">
             <navigation-title>Resume Builder</navigation-title>
 
@@ -18,5 +18,5 @@
                 <navigation-link route="/templates" :icon="IconDashboard">Templates</navigation-link>
             </navigation-group>
         </div>
-    </header>
+    </div>
 </template>

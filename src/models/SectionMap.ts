@@ -1,21 +1,21 @@
 import { Component } from "vue";
-import EducationSection from "@/components/resume/EducationSection.vue";
-import ExperienceSection from "@/components/resume/ExperienceSection.vue";
-import SkillSection from "@/components/resume/SkillSection.vue";
-import LanguageSection from "@/components/resume/LanguageSection.vue";
-import ProjectSection from "@/components/resume/ProjectSection.vue";
+import EducationSection from "@/components/editor/sections/EducationSection.vue";
+import ExperienceSection from "@/components/editor/sections/ExperienceSection.vue";
+import SkillSection from "@/components/editor/sections/SkillSection.vue";
+import LanguageSection from "@/components/editor/sections/LanguageSection.vue";
+import ProjectSection from "@/components/editor/sections/ProjectSection.vue";
 
 export interface SectionMap {
-    education: Component
-    experience: Component
+    educations: Component
+    experiences: Component
     skills: Component
     languages: Component
     projects: Component
 }
 
 export const sectionComponents: SectionMap = {
-    education: EducationSection,
-    experience: ExperienceSection,
+    educations: EducationSection,
+    experiences: ExperienceSection,
     skills: SkillSection,
     languages: LanguageSection,
     projects: ProjectSection

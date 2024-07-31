@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import draggable from "vuedraggable";
-    import HeaderSection from "@/components/resume/HeaderSection.vue";
     import { sectionComponents, type SectionMap } from "@/models/SectionMap";
-    import { checkGroupMatch } from "@/models/BuildingBlock";
     import { settings } from "@/main";
+    import { checkGroupMatch } from "@/models/BuildingBlock";
+    import HeaderSection from "@/components/editor/sections/HeaderSection.vue";
     import ResumeModel from "@/models/ResumeModel";
 
     const resume = defineModel<ResumeModel>({

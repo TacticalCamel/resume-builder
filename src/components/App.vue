@@ -2,10 +2,10 @@
     import { computed } from "vue";
     import { navigationService } from "@/main";
     import Home from "@/components/home/Home.vue";
-    import Editor from "@/components/routes/Editor.vue";
-    import Templates from "@/components/routes/Templates.vue";
+    import Editor from "@/components/editor/Editor.vue";
+    import Templates from "@/components/Templates.vue";
     import Navigation from "@/components/navigation/Navigation.vue";
-    import NotFound from "@/components/routes/NotFound.vue";
+    import NotFound from "@/components/NotFound.vue";
 
     // define the routes of the application
     const routes = {
@@ -19,7 +19,7 @@
 </script>
 
 <template>
-    <main class="relative min-h-full">
+    <main class="relative min-h-full flex flex-col">
         <navigation/>
 
         <transition name="fade" mode="out-in">

@@ -3,11 +3,11 @@
     import Skill from "@/models/elements/Skill";
     import SkillSection from "@/models/sections/SkillSection";
     import SkillCategory from "@/models/elements/SkillCategory";
-    import RatingBar from "@/components/resume/RatingBar.vue";
+    import RatingBar from "@/components/editor/RatingBar.vue";
     import EditText from "@/components/shared/EditText.vue";
     import IconDecrease from "@/components/icons/IconDecrease.vue";
     import IconIncrease from "@/components/icons/IconIncrease.vue";
-    import ResumeSection from "@/components/resume/ResumeSection.vue";
+    import ResumeSection from "@/components/editor/sections/ResumeSection.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";
     import {settings} from "@/main";
 
@@ -50,8 +50,8 @@
                         :group="{name: 'skill', pull: true, put: checkGroupMatch}"
                     >
                         <template #item="{element: skill}: {element: Skill}">
-                            <div class="flex py-0.5 text-nowrap items-center skill-row" :class="{'moveable': settings.editable}">
-                                <rating-bar :value="skill.level" class="ps-0.5 pe-3"/>
+                            <div class="flex p-0.5 text-nowrap items-center skill-row" :class="{'moveable': settings.editable}">
+                                <rating-bar :value="skill.level" class="pe-3"/>
 
                                 <edit-text v-model="skill.name" class="font-light skill-text" placeholder="Skill name"/>
 

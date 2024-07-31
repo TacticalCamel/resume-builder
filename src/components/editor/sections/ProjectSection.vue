@@ -3,8 +3,8 @@
     import Project from "@/models/elements/Project";
     import EditText from "@/components/shared/EditText.vue";
     import IconLink from "@/components/icons/IconLink.vue";
-    import ResumeSection from "@/components/resume/ResumeSection.vue";
-    import TechnologyList from "@/components/resume/TechnologyList.vue";
+    import ResumeSection from "@/components/editor/sections/ResumeSection.vue";
+    import TechnologyList from "@/components/editor/TechnologyList.vue";
     import {settings} from "@/main";
 
     const model = defineModel<ProjectSection>({
@@ -28,7 +28,7 @@
         <template #item="{element: project}: {element: Project}">
             <div>
                 <div class="flex items-center justify-start mb-1">
-                    <icon-link class="size-5 mb-0.5 me-1"/>
+                    <icon-link class="size-5 me-1"/>
                     <a :href="settings.editable ? undefined : project.url" target="_blank" class="hover:transition-colors flex items-center underline text-nowrap me-2" :class="settings.editable ? undefined : 'hover:text-primary'">
                         <edit-text v-model="project.url" placeholder="Project URL"/>
                     </a>

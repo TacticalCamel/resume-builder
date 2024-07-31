@@ -1,10 +1,7 @@
-import {Component} from "vue";
-
 export default interface BuildingBlock {
     group: string
     name: string
     clone: () => any
-    icon: Component
 }
 
 /*
