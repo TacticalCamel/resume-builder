@@ -1,9 +1,9 @@
-export default interface Color{
+export default interface Color {
     name: string
     value: string
 }
 
-export function hasDarkContrastText(rgb: string): boolean{
+export function hasDarkContrastText(rgb: string): boolean {
     const rgbValues = rgb.split(' ');
     const r = parseInt(rgbValues[0]);
     const g = parseInt(rgbValues[1]);

@@ -1,9 +1,15 @@
+import { Component } from "vue";
 import IconEmail from "@/components/icons/IconEmail.vue";
 import IconPhone from "@/components/icons/IconPhone.vue";
 import IconGithub from "@/components/icons/IconGithub.vue";
 import IconLocation from "@/components/icons/IconLocation.vue";
 import IconLinkedIn from "@/components/icons/IconLinkedIn.vue";
-import Contact from "@/models/Contact";
+
+export interface Contact {
+    icon: Component
+    placeholder: string
+    createURL: (value: string) => string | undefined,
+}
 
 export interface ContactMap{
     email: Contact

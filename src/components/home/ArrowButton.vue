@@ -19,7 +19,7 @@
         transform: translateX(100px);
     }
 
-    .arrow-button .arrow-line {
+    .arrow-line {
         opacity: 0;
     }
 

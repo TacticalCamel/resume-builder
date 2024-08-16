@@ -20,7 +20,7 @@ watch(settings, (model: SettingsModel) => {
 // initialize singleton services
 export const navigationService: NavigationService = new NavigationService();
 export const themeService: ThemeService = new ThemeService();
-export const fontService: FontService = new FontService();
+export const fontService: FontService = new FontService('--font-family');
 
 // initialize the app
 createApp(App).mount('#app');

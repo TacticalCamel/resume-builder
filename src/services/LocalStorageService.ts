@@ -28,16 +28,12 @@ export default class LocalStorageService<T> {
         }
         catch (error) {
             console.error("Failed to load data from local storage:", error);
+
             return null;
         }
     }
 
     remove(): void {
-        try {
-            localStorage.removeItem(this.storageKey);
-        }
-        catch (error) {
-            console.error("Failed to remove data from local storage:", error);
-        }
+        localStorage.removeItem(this.storageKey);
     }
 }

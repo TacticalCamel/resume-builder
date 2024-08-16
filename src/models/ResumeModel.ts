@@ -1,18 +1,18 @@
-import HeaderSection from "@/models/sections/HeaderSection";
-import EducationSection from "@/models/sections/EducationSection";
-import ExperienceSection from "@/models/sections/ExperienceSection";
-import SkillSection from "@/models/sections/SkillSection";
-import LanguageSection from "@/models/sections/LanguageSection";
-import ProjectSection from "@/models/sections/ProjectSection";
 import { SectionMap } from "@/models/SectionMap";
+import { ProjectList } from "@/components/editor/resume/ProjectSection.vue";
+import { LanguageList } from "@/components/editor/resume/LanguageSection.vue";
+import { SkillList } from "@/components/editor/resume/SkillSection.vue";
+import { ExperienceList } from "@/components/editor/resume/ExperienceSection.vue";
+import { EducationList } from "@/components/editor/resume/EducationSection.vue";
+import { HeaderSectionModel } from "@/components/editor/resume/HeaderSection.vue";
 
 export default interface ResumeModel {
-    header: HeaderSection
-    educations: EducationSection
-    experiences: ExperienceSection
-    skills: SkillSection
-    languages: LanguageSection
-    projects: ProjectSection
+    header: HeaderSectionModel
+    educations: EducationList
+    experiences: ExperienceList
+    skills: SkillList
+    languages: LanguageList
+    projects: ProjectList
     sections: (keyof SectionMap)[]
 }
 

@@ -1,11 +1,11 @@
 import Theme from "@/models/Theme";
 import Color from "@/models/Color";
-import AutosaveService from "@/services/AutosaveService";
+import LocalStorageAutosaveService from "@/services/LocalStorageAutosaveService";
 
 export default class ThemeService {
     // only store a list of themes and the current theme id
-    private readonly themesStorage: AutosaveService<Theme[]>;
-    private readonly currentThemeIdStorage: AutosaveService<string>;
+    private readonly themesStorage: LocalStorageAutosaveService<Theme[]>;
+    private readonly currentThemeIdStorage: LocalStorageAutosaveService<string>;
 
     // create default themes from CSS
     readonly defaultLightTheme: Theme;
@@ -15,8 +15,8 @@ export default class ThemeService {
     readonly selector: string;
 
     constructor() {
-        this.themesStorage = new AutosaveService<Theme[]>('themes', () => [], {deep: true});
-        this.currentThemeIdStorage = new AutosaveService<string>('current-theme', () => 'default-light');
+        this.themesStorage = new LocalStorageAutosaveService<Theme[]>('themes', () => [], {deep: true});
+        this.currentThemeIdStorage = new LocalStorageAutosaveService<string>('current-theme', () => 'default-light');
         this.selector = 'html';
         this.defaultLightTheme = createDefaultLightTheme();
         this.defaultDarkTheme = createDefaultDarkTheme();
