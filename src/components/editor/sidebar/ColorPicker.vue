@@ -51,54 +51,41 @@
 </script>
 
 <template>
-    <span class="color-picker" :class="{'dark-text': colorInfo.darkText}" :style="{background: colorInfo.hexColor}">
-         <label class="flex w-full">
-             <input type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute">
+    <label class="color-picker inline-flex w-full" :class="{'dark-text': colorInfo.darkText}" :style="{background: colorInfo.hexColor}">
+        <input type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute" :disabled="themeService.defaultThemeSelected">
 
-             <span class="flex flex-col gap-0.5">
-                 <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
-                 <span class="font-mono">{{ colorInfo.hexColor }}</span>
-             </span>
+        <span class="flex flex-col gap-0.5">
+            <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
+            <button class="group font-mono inline-flex items-center gap-2" @click.prevent.stop="copyColor">
+                <span>{{ colorInfo.hexColor }}</span>
+                <icon-copy class="size-4 opacity-0 group-hover:opacity-100 transition-opacity"/>
+            </button>
+        </span>
 
-             <span class="grow flex justify-end items-center">
-                 <button @click="copyColor">
-                    <icon-copy class="size-5"/>
-                 </button>
-
-                 <button @click="themeService.resetColor(color)" :disabled="!themeService.isColorModified(color)">
-                    <icon-reset class="size-5 -scale-100 rotate-180"/>
-                 </button>
-             </span>
-         </label>
-    </span>
+        <button class="disabled:invisible transition-all px-4 py-2 ms-auto" @click="themeService.resetColor(color)" :disabled="!themeService.isColorModified(color)">
+            <icon-reset class="size-5 -scale-100 rotate-180"/>
+        </button>
+    </label>
 </template>
 
 <style lang="postcss" scoped>
     .color-picker {
-        @apply text-white inline-flex;
+        @apply text-white;
     }
 
     .color-picker.dark-text {
         @apply text-black;
     }
 
-    .color-picker button {
-        @apply transition-all opacity-0 rounded-lg px-4 py-2;
+    .color-picker:has(input:disabled) {
+        @apply cursor-not-allowed;
     }
 
-    .color-picker:hover button {
-        @apply opacity-100;
+    .color-picker > button:hover {
+        filter: drop-shadow(1px 1px 3px white);
     }
 
-    .color-picker button:hover {
-        @apply bg-white/20;
-    }
-
-    .color-picker.dark-text button:hover {
-        @apply bg-black/20;
-    }
-
-    .color-picker:hover button:disabled {
-        @apply bg-transparent opacity-50;
+    .color-picker.dark-text > button:hover {
+        filter: drop-shadow(1px 1px 3px black);
     }
 </style>

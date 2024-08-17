@@ -9,7 +9,7 @@
 
 <template>
     <div>
-        <div v-if="title || icon" class="flex items-center gap-1 mb-1.5">
+        <div v-if="title || icon" class="flex items-center gap-1 mb-2">
             <component v-if="icon" :is="icon" class="size-5"/>
             <span v-if="title" class="first-letter:uppercase font-medium">{{ title }}</span>
         </div>

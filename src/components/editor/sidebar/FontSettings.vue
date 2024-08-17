@@ -35,7 +35,7 @@
         const fontFace = new FontFace(fontName, fontFile);
 
         // error loading font face
-        if(fontFace.status !== 'loaded'){
+        if (fontFace.status !== 'loaded') {
             return;
         }
 
@@ -57,16 +57,6 @@
 
 <template>
     <editor-tab>
-        <editor-tab-item>
-            <div class="mb-1">TODO</div>
-            <div class="text-foreground/70 text-sm">Display current font on top</div>
-        </editor-tab-item>
-
-        <editor-tab-item>
-            <div class="mb-1">TODO</div>
-            <div class="text-foreground/70 text-sm">Persistent font loading</div>
-        </editor-tab-item>
-
         <editor-tab-item title="upload fonts">
             <input-file accept=".woff,.woff2,.ttf,.otf" format="binary" @on-upload="uploadFont" multiple>
                 <div class="flex gap-4 items-center justify-center rounded py-2 px-4 border border-dashed border-foreground/30 hover:bg-foreground/10 transition-colors text-foreground/70">

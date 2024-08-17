@@ -1,4 +1,5 @@
 <script setup lang="ts">
+    import { ref } from "vue";
     import draggable from "vuedraggable";
     import { checkGroupMatch } from "@/models/BuildingBlock";
     import { settings, themeService } from "@/main";
@@ -7,41 +8,135 @@
     import ColorPicker from "@/components/editor/sidebar/ColorPicker.vue";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
-    import { createDefaultDarkTheme } from "@/services/ThemeService";
     import InputRange from "@/components/shared/InputRange.vue";
-    import InputText from "@/components/shared/InputText.vue";
-    import InputCheckbox from "@/components/shared/InputCheckbox.vue";
+    import IconDelete from "@/components/icons/IconDelete.vue";
+    import IconSwapVert from "@/components/icons/IconSwapVert.vue";
+    import IconCheck from "@/components/icons/IconCheck.vue";
+    import IconClose from "@/components/icons/IconClose.vue";
+
+    const deleteConfirmOpen = ref<boolean>(false);
+    const themeSelectOpen = ref<boolean>(false);
+    const newTheme = ref<Theme | undefined>(undefined);
 
     function setTheme(theme: Theme): void {
         themeService.currentTheme = theme;
+        themeSelectOpen.value = false;
     }
 
-    function onThemeDelete() {
+    function createTheme(apply: boolean): void {
+        // check if there is a valid value
+        if(!newTheme.value) {
+            return;
+        }
+
+        // find the selected base theme
+        const baseTheme: Theme = themeService.getBaseTheme(newTheme.value.base) ?? themeService.defaultLightTheme;
+
+        // copy the colors of the base theme
+        newTheme.value.colors = baseTheme.colors.map(color => ({...color}));
+
+        // add the new theme to the list
+        themeService.themes.push(newTheme.value);
+
+        if (apply) {
+            // apply the new theme
+            themeService.currentTheme = newTheme.value;
+
+            // close theme select
+            themeSelectOpen.value = false;
+
+            // clear the new theme value
+            newTheme.value = undefined;
+        }
+        else {
+            // clear form
+            newTheme.value = {
+                id: crypto.randomUUID(),
+                name: '',
+                base: undefined,
+                colors: [],
+            };
+        }
+    }
+
+    function deleteCurrentTheme() {
+        const id = themeService.currentTheme.id;
+
+        const index = themeService.themes.findIndex(theme => theme.id === id);
+
+        if (index === -1) {
+            return;
+        }
+
+        // delete the theme
+        themeService.themes.splice(index, 1);
+
+        // close the confirm dialog
+        deleteConfirmOpen.value = false;
+
+        // erase this theme as a base theme from all other themes
+        themeService.themes.forEach(theme => {
+            if (theme.base === id) {
+                theme.base = undefined;
+            }
+        });
+
+        // apply the new theme
         themeService.applyTheme(themeService.currentTheme);
     }
 
-    function createTheme() {
-        const theme = createDefaultDarkTheme();
+    function openThemeSelect() {
+        themeSelectOpen.value = true;
 
-        theme.id = 'theme-' + themeService.themes.length;
-        theme.name = 'theme-' + themeService.themes.length;
+        if(newTheme.value) {
+            return;
+        }
 
-        themeService.themes.push(theme);
+        newTheme.value = {
+            id: crypto.randomUUID(),
+            name: '',
+            base: undefined,
+            colors: [],
+        };
     }
 </script>
 
 <template>
-    <editor-tab>
-        <editor-tab-item title="filters">
-            <div class="grid grid-cols-[auto_1fr] items-center gap-4 text-foreground/70 text-sm font-light">
-                <div>Grayscale</div>
-                <input-range :min="0" :max="100" :step="5" unit="%" v-model="settings.filters.grayscale"/>
+    <editor-tab v-if="themeSelectOpen">
+        <editor-tab-item>
+            <div class="flex justify-end">
+                <button @click="themeSelectOpen = false" class="px-2 py-1">
+                    <icon-close class="size-6"/>
+                </button>
+            </div>
+        </editor-tab-item>
 
-                <div>Contrast</div>
-                <input-range :min="50" :max="150" :step="5" unit="%" v-model="settings.filters.contrast"/>
+        <editor-tab-item v-if="newTheme" title="Create new theme">
+            <div class="grid gap-4 font-light text-sm">
+                <div class="grid grid-cols-2 items-center gap-2 text-nowrap font-light">
+                    <label>Name</label>
+                    <input
+                        type="text"
+                        v-model="newTheme.name"
+                        class="bg-transparent rounded outline outline-1 outline-foreground/30 py-0.5 px-2 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground"
+                    />
 
-                <div>Brightness</div>
-                <input-range :min="50" :max="150" :step="5" unit="%" v-model="settings.filters.brightness"/>
+                    <label>Default color values</label>
+                    <select v-model="newTheme.base" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
+                        <option :value="undefined">None</option>
+                        <option
+                            v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme, ...themeService.themes]"
+                            :value="theme.id"
+                        >
+                            {{ theme.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button @click="createTheme(false)" class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">Create</button>
+                    <button @click="createTheme(true)" class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">Create and apply</button>
+                </div>
             </div>
         </editor-tab-item>
 
@@ -56,7 +151,6 @@
                     animation="200"
                     class="flex flex-col gap-3"
                     :group="{name: 'theme', pull: true, put: checkGroupMatch}"
-                    @remove="onThemeDelete"
                 >
                     <template #header>
                         <theme-card
@@ -78,30 +172,85 @@
                 </draggable>
             </transition-group>
         </editor-tab-item>
+    </editor-tab>
 
-        <editor-tab-item title="current theme">
-            <!-- selected theme can not be edited -->
-            <div v-if="themeService.defaultThemeSelected">
-                <div class="italic opacity-70 text-sm">
-                    Select a custom theme to edit colors.
-                </div>
+    <editor-tab v-else>
+        <editor-tab-item title="filters">
+            <div class="grid grid-cols-[auto_1fr] items-center gap-x-8 gap-y-2 text-foreground/70 text-sm font-light">
+                <div>Grayscale</div>
+                <input-range :min="0" :max="100" :step="5" unit="%" v-model="settings.filters.grayscale"/>
+
+                <div>Contrast</div>
+                <input-range :min="50" :max="150" :step="5" unit="%" v-model="settings.filters.contrast"/>
+
+                <div>Brightness</div>
+                <input-range :min="50" :max="150" :step="5" unit="%" v-model="settings.filters.brightness"/>
             </div>
+        </editor-tab-item>
 
-            <!-- color list -->
-            <div v-else class="grid text-sm gap-1">
-                <div class="flex justify-between items-center gap-2 pe-2">
-                    <span>Theme name</span>
-                    <input-text v-model="themeService.currentTheme.name"/>
+        <editor-tab-item title="theme">
+            <div class="grid text-sm gap-4">
+                <!-- change or delete theme -->
+                <div class="grid grid-cols-2 gap-2 text-foreground relative">
+                    <button
+                        @click="openThemeSelect"
+                        class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">
+                        <icon-swap-vert class="size-5"/>
+                        <span>Change theme</span>
+                    </button>
+
+                    <button
+                        @click="deleteConfirmOpen = true"
+                        :disabled="themeService.defaultThemeSelected"
+                        class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        <icon-delete class="size-5"/>
+                        <span>Delete theme</span>
+                    </button>
+
+                    <div v-if="deleteConfirmOpen" class="absolute inset-0 flex items-center gap-2 bg-background pe-1">
+                        <div class="me-auto">Delete theme?</div>
+                        <button @click="deleteCurrentTheme" class="px-4 bg-secondary/10 hover:bg-secondary/20 transition-colors text-secondary rounded h-full">
+                            <icon-check class="size-5"/>
+                        </button>
+                        <button @click="deleteConfirmOpen = false" class="px-4 bg-primary/10 hover:bg-primary/20 transition-colors text-primary rounded h-full">
+                            <icon-close class="size-5"/>
+                        </button>
+                    </div>
                 </div>
 
-                <input-checkbox v-model="themeService.currentTheme.isDark" class="my-1">Inherit dark colors</input-checkbox>
+                <!-- theme name and base theme -->
+                <div class="grid grid-cols-2 items-center gap-2 text-nowrap font-light">
+                    <label>Name</label>
+                    <input
+                        type="text"
+                        v-model="themeService.currentTheme.name"
+                        :disabled="themeService.defaultThemeSelected"
+                        class="bg-transparent rounded outline outline-1 outline-foreground/30 py-0.5 px-2 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground"
+                    />
 
-                <color-picker
-                    v-for="(color, index) in themeService.currentTheme.colors" :key="color.name"
-                    v-model="themeService.currentTheme.colors[index]"
-                    @change="themeService.applyColor(color)"
-                    class="px-2 py-0.5 rounded border border-foreground text-sm"
-                />
+                    <label>Default color values</label>
+                    <select v-model="themeService.currentTheme.base" :disabled="themeService.defaultThemeSelected" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
+                        <option :value="undefined">None</option>
+                        <option
+                            v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme, ...themeService.themes]"
+                            :value="theme.id"
+                            :hidden="theme.id === themeService.currentTheme.id"
+                        >
+                            {{ theme.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- colors -->
+                <div class="grid gap-1">
+                    <color-picker
+                        v-for="(color, index) in themeService.currentTheme.colors" :key="color.name"
+                        v-model="themeService.currentTheme.colors[index]"
+                        @change="themeService.applyColor(color)"
+                        class="px-2 py-0.5 rounded border border-foreground text-sm"
+                    />
+                </div>
             </div>
         </editor-tab-item>
     </editor-tab>

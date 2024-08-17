@@ -1,6 +1,7 @@
 import Theme from "@/models/Theme";
 import Color from "@/models/Color";
 import LocalStorageAutosaveService from "@/services/LocalStorageAutosaveService";
+import { themeService } from "@/main";
 
 export default class ThemeService {
     // only store a list of themes and the current theme id
@@ -59,31 +60,54 @@ export default class ThemeService {
         return theme.id === this.defaultLightTheme.id || theme.id === this.defaultDarkTheme.id;
     }
 
+    getBaseTheme(id: string | undefined): Theme | undefined {
+        let baseTheme: Theme | undefined = undefined;
+
+        if(id) {
+            // create a list of all themes
+            const themes: Theme[] = [themeService.defaultLightTheme, this.defaultDarkTheme, ...themeService.themes];
+
+            // search for the base theme
+            baseTheme = themes.find(t => t.id === id);
+        }
+
+        return baseTheme;
+    }
+
+    getDefaultColorValue(color: Color): string | undefined {
+        // get the base theme id
+        const id: string | undefined = themeService.currentTheme.base;
+
+        let baseTheme: Theme | undefined = this.getBaseTheme(id);
+
+        if(!baseTheme) {
+            return undefined;
+        }
+
+        // get the color from the base theme
+        const baseColor: Color | undefined = baseTheme.colors.find(c => c.name === color.name);
+
+        return baseColor?.value;
+    }
+
     // determine if a color value differs from the default value
     isColorModified(color: Color): boolean {
-        // get the current theme
-        const theme: Theme = this.currentTheme;
+        // get the default color value
+        const defaultValue: string | undefined = this.getDefaultColorValue(color);
 
-        // get the default theme
-        const defaultTheme: Theme = theme.isDark ? this.defaultDarkTheme : this.defaultLightTheme;
+        // if there is no default value, return false
+        if(!defaultValue) {
+            return false;
+        }
 
-        // find the default color value
-        const defaultValue: string | undefined = defaultTheme.colors.find(c => c.name === color.name)?.value;
-
-        // compare the values
-        return defaultValue !== color.value;
+        // compare the value to the default
+        return this.getDefaultColorValue(color) !== color.value;
     }
 
     // reset a single color to its default value
     resetColor(color: Color): void {
-        // get the current theme
-        const theme: Theme = this.currentTheme;
-
-        // get the default theme
-        const defaultTheme: Theme = theme.isDark ? this.defaultDarkTheme : this.defaultLightTheme;
-
-        // find the default color value
-        const defaultValue: string | undefined = defaultTheme.colors.find(c => c.name === color.name)?.value;
+        // get the default color value
+        const defaultValue: string | undefined = this.getDefaultColorValue(color);
 
         // if there is a one, change it and apply the color
         if (defaultValue) {
@@ -178,7 +202,7 @@ export function createDefaultLightTheme(): Theme {
     return {
         id: 'default-light',
         name: 'Light',
-        isDark: false,
+        base: undefined,
         colors: getCssVariables(':root')
     };
 }
@@ -199,7 +223,7 @@ export function createDefaultDarkTheme(): Theme {
     return {
         id: 'default-dark',
         name: 'Dark',
-        isDark: true,
+        base: undefined,
         colors: colors
     };
 }
