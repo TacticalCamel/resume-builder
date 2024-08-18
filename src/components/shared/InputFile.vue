@@ -25,6 +25,8 @@
 
     const isDragging = ref<boolean>(false);
 
+    const input = ref<HTMLInputElement | null>(null);
+
     // handle upload by file upload dialog
     function uploadByDialog(event: Event) {
         // get the target element
@@ -96,6 +98,11 @@
         else if (props.format === 'text') {
             reader.readAsText(file, 'UTF-8');
         }
+
+        // reset input value
+        if (input.value) {
+            input.value.value = '';
+        }
     }
 </script>
 
@@ -108,7 +115,7 @@
         class="group"
         :class="{'dragover': isDragging}"
     >
-        <input type="file" @change="uploadByDialog" class="hidden" :accept="accept" :multiple="multiple"/>
+        <input ref="input" type="file" @change="uploadByDialog" class="hidden" :accept="accept" :multiple="multiple"/>
         <span class="block pointer-events-none">
             <slot/>
         </span>

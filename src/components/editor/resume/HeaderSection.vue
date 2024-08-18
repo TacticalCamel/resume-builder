@@ -1,6 +1,6 @@
 <script setup lang="ts">
+    import { inject } from "vue";
     import draggable from "vuedraggable";
-    import { settings } from "@/main";
     import { checkGroupMatch } from "@/models/BuildingBlock";
     import InputText from "@/components/shared/InputText.vue";
     import { ContactMap, contacts } from "@/models/ContactMap";
@@ -22,6 +22,8 @@
     const model = defineModel<HeaderSectionModel>({
         required: true
     });
+
+    const editable = inject<boolean>('editable', false);
 </script>
 
 <template>
@@ -43,15 +45,15 @@
                     item-key="id"
                     key="draggable"
                     :group="{name: 'contact', pull: true, put: checkGroupMatch}"
-                    :disabled="!settings.editable"
+                    :disabled="!editable"
                     drag-class="dragging"
                     ghost-class="ghost"
                     animation="200"
                     class="text-sm grid gap-1.5"
                 >
                     <template #item="{element: key}: {element: keyof ContactMap}">
-                        <div class="p-0.5" :class="{'moveable': settings.editable}">
-                            <a class="flex items-center hover:transition-colors gap-2" :href="settings.editable ? undefined : contacts[key].createURL(model[key])" :class="settings.editable || !contacts[key].createURL(model[key]) ? undefined : 'hover:text-primary'">
+                        <div class="p-0.5" :class="{'moveable': editable}">
+                            <a class="flex items-center hover:transition-colors gap-2" :href="editable ? undefined : contacts[key].createURL(model[key])" :class="editable || !contacts[key].createURL(model[key]) ? undefined : 'hover:text-primary'">
                                 <component :is="contacts[key].icon" class="size-5"/>
                                 <input-text v-model="model[key]" :placeholder="contacts[key].placeholder"/>
                             </a>

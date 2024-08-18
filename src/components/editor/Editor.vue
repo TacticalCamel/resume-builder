@@ -38,7 +38,7 @@
 
         <div class="relative grow">
             <div class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip" id="editor-content" :style="resumeStyle">
-                <resume v-if="model.value" v-model="model.value"/>
+                <resume v-if="model.value" v-model="model.value" editable/>
             </div>
         </div>
     </div>

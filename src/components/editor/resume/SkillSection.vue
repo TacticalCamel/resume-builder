@@ -1,4 +1,5 @@
 <script setup lang="ts">
+    import { inject } from "vue";
     import draggable from "vuedraggable";
     import RatingBar from "@/components/editor/resume/RatingBar.vue";
     import InputText from "@/components/shared/InputText.vue";
@@ -6,7 +7,6 @@
     import IconIncrease from "@/components/icons/IconIncrease.vue";
     import ResumeSection, { SectionModel } from "@/components/editor/resume/ResumeSection.vue";
     import {checkGroupMatch} from "@/models/BuildingBlock";
-    import {settings} from "@/main";
 
     export interface SkillList extends SectionModel<SkillCategory>{
         title: string
@@ -26,6 +26,8 @@
     const model = defineModel<SkillList>({
         required: true
     });
+
+    const editable = inject<boolean>('editable', false);
 
     const maxSkillLevel: number = 5;
 
@@ -60,16 +62,16 @@
                         drag-class="dragging"
                         ghost-class="ghost"
                         animation="200"
-                        :disabled="!settings.editable"
+                        :disabled="!editable"
                         :group="{name: 'skill', pull: true, put: checkGroupMatch}"
                     >
                         <template #item="{element: skill}: {element: Skill}">
-                            <div class="flex gap-3 p-0.5 text-nowrap items-center skill-row" :class="{'moveable': settings.editable}">
+                            <div class="flex gap-3 p-0.5 text-nowrap items-center skill-row" :class="{'moveable': editable}">
                                 <rating-bar :value="skill.level" :max="maxSkillLevel"/>
 
                                 <input-text v-model="skill.name" class="font-light skill-text" placeholder="Skill name"/>
 
-                                <div v-if="settings.editable" class="ms-auto flex gap-1 skill-row-edit-controls">
+                                <div v-if="editable" class="ms-auto flex gap-1 skill-row-edit-controls">
                                     <button @click="decreaseSkillLevel(skill)" class="bg-transparent hover:bg-error/20 text-error py-0.5 px-1.5 rounded transition-all">
                                         <icon-decrease class="size-4"/>
                                     </button>

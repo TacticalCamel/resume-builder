@@ -6,9 +6,6 @@
     import FeatureCard from "@/components/home/FeatureCard.vue";
 
     function getStarted() {
-        // enable editing
-        settings.editable = true;
-
         // switch to the first tab
         settings.tabIndex = 0;
 
