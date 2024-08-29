@@ -5,11 +5,10 @@
     import IconDelete from "@/components/icons/IconDelete.vue";
     import IconUploadFile from "@/components/icons/IconUploadFile.vue";
 
-    const picture = defineModel<string | null>({
+    const picture = defineModel<string | undefined>({
         required: true
     });
 
-    // set the profile picture
     function setProfilePicture(contents: string | ArrayBuffer) {
         if(typeof contents !== 'string') {
             return;
@@ -18,9 +17,8 @@
         picture.value = contents;
     }
 
-    // remove the profile picture
     function removeProfilePicture() {
-        picture.value = null;
+        picture.value = undefined;
     }
 
     const editable = inject<boolean>('editable', false);

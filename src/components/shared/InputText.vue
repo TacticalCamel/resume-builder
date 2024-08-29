@@ -3,14 +3,14 @@
 
     const model = defineModel<string>();
 
+    const editable = inject<boolean>('editable', false);
+
     defineProps({
         placeholder: {
             type: String,
             default: '...'
         }
     });
-
-    const editable = inject<boolean>('editable', false);
 
     function saveChanges(e: Event) {
         model.value = (e.target as HTMLElement).innerText;
@@ -20,7 +20,7 @@
 <template>
     <div>
         <div class="inline-block">
-            <div class="relative" :class="{'editable': editable}">
+            <div class="relative" :class="{editable}">
                 <div class="text-input" :contenteditable="editable" @focusout="saveChanges">{{ model }}</div>
                 <div v-show="editable" class="text-overlay pointer-events-none opacity-60">{{ placeholder }}</div>
             </div>

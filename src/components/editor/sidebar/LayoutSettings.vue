@@ -1,7 +1,6 @@
 <script setup lang="ts">
-    import { Component as ComponentType } from "vue";
+    import { Component } from "vue";
     import draggable from "vuedraggable";
-    import { sectionComponents } from "@/models/SectionMap";
     import BuildingBlock from "@/models/BuildingBlock";
     import DeleteArea from "@/components/editor/sidebar/DeleteArea.vue";
     import IconLink from "@/components/icons/IconLink.vue";
@@ -9,35 +8,42 @@
     import IconCube from "@/components/icons/IconCube.vue";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
-    import IconDelete from "@/components/icons/IconDelete.vue";
-    import { Education } from "@/components/editor/resume/EducationSection.vue";
-    import { Experience } from "@/components/editor/resume/ExperienceSection.vue";
-    import { Skill, SkillCategory } from "@/components/editor/resume/SkillSection.vue";
-    import { Language } from "@/components/editor/resume/LanguageSection.vue";
-    import { Project } from "@/components/editor/resume/ProjectSection.vue";
-    import { contacts } from "@/models/ContactMap";
+    import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
+    import { Contact, ContactView } from "@/models/resume/Header";
+    import { Education, EducationList } from "@/models/resume/Educations";
+    import { Experience, ExperienceList } from "@/models/resume/Experiences";
+    import { Language, LanguageList } from "@/models/resume/Languages";
+    import { Project, ProjectList } from "@/models/resume/Projects";
 
     interface BlockGroup {
-        [key: string]: {
-            blocks: BuildingBlock[]
-            icon: ComponentType
-        };
+        blocks: BuildingBlock[]
+        icon: Component
     }
 
-    const groups: BlockGroup = {
+    const sections: Record<string, any> = {
+        'educations': EducationList,
+        'experiences': ExperienceList,
+        'skills': SkillList,
+        'languages': LanguageList,
+        'projects': ProjectList
+    };
+
+    const groups: Record<string, BlockGroup> = {
         sections: {
-            blocks: Object.keys(sectionComponents).map(section => ({
-                name: section,
+            blocks: Object.entries(sections).map(([key, value]) => ({
+                name: key,
                 group: 'section',
-                clone: (): string => section,
+                clone: (): string => new value(),
             })),
             icon: IconSegment
         },
         contacts: {
-            blocks: Object.keys(contacts).map(contact => ({
-                name: contact,
+            blocks: Object.keys(ContactView.BINDINGS).map(type => ({
+                name: type,
                 group: 'contact',
-                clone: (): string => contact,
+                clone: (): Contact => {
+                    return new Contact(type, '');
+                },
             })),
             icon: IconLink
         },
@@ -46,14 +52,7 @@
                 {
                     name: 'education',
                     group: 'education',
-                    clone: (): Education => {
-                        return {
-                            school: '',
-                            major: '',
-                            start: '',
-                            finish: ''
-                        }
-                    }
+                    clone: () => new Education()
                 },
                 {
                     name: 'experience',
@@ -124,13 +123,13 @@
 <template>
     <editor-tab>
         <editor-tab-item
-            v-for="(_, key) in groups"
-            :title="key.toString()"
-            :icon="groups[key].icon"
+            v-for="(group, key) in groups"
+            :title="key"
+            :icon="group.icon"
         >
             <transition-group>
                 <draggable
-                    v-model="groups[key].blocks"
+                    v-model="group.blocks"
                     item-key="id"
                     key="draggable"
                     class="block-group grid grid-cols-3 gap-2 text-sm"
@@ -143,8 +142,8 @@
                 >
                     <template #item="{element: block}: {element: BuildingBlock}">
                         <div :data-group="block.group">
-                            <div class="building-block">
-                                <div class="first-letter:uppercase text-center font-light">{{ block.name }}</div>
+                            <div class="flex items-center justify-center h-12 px-1 rounded border-2 border-foreground/30 hover:border-foreground text-foreground/70 hover:text-foreground transition-colors font-light cursor-move">
+                                <span class="first-letter:uppercase">{{ block.name }}</span>
                             </div>
                         </div>
                     </template>
@@ -152,25 +151,8 @@
             </transition-group>
         </editor-tab-item>
 
-        <editor-tab-item title="delete items" :icon="IconDelete">
+        <editor-tab-item title="delete elements">
             <delete-area/>
         </editor-tab-item>
     </editor-tab>
 </template>
-
-<!--suppress CssUnusedSymbol -->
-<style lang="postcss" scoped>
-    .building-block {
-        @apply flex items-center justify-center;
-        @apply h-12 px-2 rounded border border-foreground/30;
-        @apply outline outline-2 outline-transparent -outline-offset-1 cursor-move text-foreground/70;
-
-        transition-property: outline-color, color;
-        transition-duration: 150ms;
-        transition-timing-function: ease-in-out;
-    }
-
-    .building-block:hover {
-        @apply outline-foreground text-foreground;
-    }
-</style>

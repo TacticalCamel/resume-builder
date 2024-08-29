@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import ResumeModel from "@/models/ResumeModel";
     import ThemeSettings from "@/components/editor/sidebar/ThemeSettings.vue";
     import LayoutSettings from "@/components/editor/sidebar/LayoutSettings.vue";
     import FontSettings from "@/components/editor/sidebar/FontSettings.vue";
@@ -8,13 +7,28 @@
     import IconPalette from "@/components/icons/IconPalette.vue";
     import IconText from "@/components/icons/IconText.vue";
     import ExportSettings from "@/components/editor/sidebar/ExportSettings.vue";
-    import { settings } from "@/main";
     import IconPublish from "@/components/icons/IconPublish.vue";
     import IconSelect from "@/components/icons/IconSelect.vue";
     import SelectionSettings from "@/components/editor/sidebar/SelectionSettings.vue";
+    import ResumeModel from "@/models/resume/ResumeModel";
+    import SettingsModel from "@/models/SettingsModel";
 
-    const resume = defineModel<ResumeModel | null>({
+    const resume = defineModel<ResumeModel | null>('resume', {
         required: true
+    });
+
+    const settings = defineModel<SettingsModel>('settings', {
+        required: true
+    });
+
+    const currentTabComponent = computed(() => {
+        const index = settings.value.tabIndex;
+
+        if(0 <= index && index < tabs.length) {
+            return tabs[index].component;
+        }
+
+        return undefined;
     });
 
     const tabs = [
@@ -45,16 +59,6 @@
             conditional: true
         }
     ];
-
-    const selectedTab = computed(() => {
-        const index = settings.tabIndex;
-
-        if(0 <= index && index < tabs.length) {
-            return tabs[index].component;
-        }
-
-        return undefined;
-    });
 </script>
 
 <template>
@@ -79,7 +83,7 @@
         <!-- tab contents -->
         <div class="editor-tab-container scrollbar overflow-y-auto">
             <transition name="fade" mode="out-in">
-                <component :is="selectedTab" v-model:resume="resume"/>
+                <component :is="currentTabComponent" v-model:resume="resume" v-model:settings="settings"/>
             </transition>
         </div>
     </div>

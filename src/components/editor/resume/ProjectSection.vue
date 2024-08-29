@@ -2,22 +2,11 @@
     import { inject } from "vue";
     import InputText from "@/components/shared/InputText.vue";
     import IconLink from "@/components/icons/IconLink.vue";
-    import ResumeSection, { SectionModel } from "@/components/editor/resume/ResumeSection.vue";
+    import ResumeSection from "@/components/editor/resume/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/TechnologyList.vue";
+    import { Project, ProjectList } from "@/models/resume/Projects";
 
-    export interface ProjectList extends SectionModel<Project>{
-        title: string
-        elements: Project[]
-        disclaimer: string
-    }
-
-    export interface Project {
-        description: string
-        url: string
-        technologies: string[]
-    }
-
-    const model = defineModel<ProjectList>({
+    const projects = defineModel<ProjectList>({
         required: true
     });
 
@@ -26,14 +15,14 @@
 
 <template>
     <resume-section
-        v-model="model"
+        v-model="projects"
         group="project"
         grid-columns="1fr"
         :gap-y="1.5"
     >
         <template #header>
-            <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="model.elements.length && (model.disclaimer.length || editable)">
-                <input-text v-model="model.disclaimer" placeholder="Disclaimer about the projects"/>
+            <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="projects.elements.length && (projects.disclaimer.length || editable)">
+                <input-text v-model="projects.disclaimer" placeholder="Disclaimer about the projects"/>
             </div>
         </template>
 

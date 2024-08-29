@@ -12,17 +12,11 @@ export default class ThemeService {
     readonly defaultLightTheme: Theme;
     readonly defaultDarkTheme: Theme
 
-    // CSS selector for the element the styles are applied to
-    readonly selector: string;
-
     constructor() {
-        this.themesStorage = new LocalStorageAutosaveService<Theme[]>('themes', () => [], {deep: true});
+        this.themesStorage = new LocalStorageAutosaveService<Theme[]>('themes', () => []);
         this.currentThemeIdStorage = new LocalStorageAutosaveService<string>('current-theme', () => 'default-light');
-        this.selector = 'html';
         this.defaultLightTheme = createDefaultLightTheme();
         this.defaultDarkTheme = createDefaultDarkTheme();
-
-        this.applyTheme(this.currentTheme);
     }
 
     // expose theme list
@@ -47,12 +41,10 @@ export default class ThemeService {
 
     set currentTheme(theme: Theme) {
         this.currentThemeIdStorage.value = theme.id;
-
-        this.applyTheme(theme);
     }
 
     // is the current theme one of the default themes
-    get defaultThemeSelected(): boolean {
+    get isDefaultThemeSelected(): boolean {
         // get the current theme
         const theme: Theme = this.currentTheme;
 
@@ -112,33 +104,17 @@ export default class ThemeService {
         // if there is a one, change it and apply the color
         if (defaultValue) {
             color.value = defaultValue;
-
-            this.applyColor(color);
         }
     }
 
     // apply a color
     applyColor(color: Color): void {
-        const element: HTMLElement | null = document.querySelector(this.selector);
-
-        if(!element) {
-            return;
-        }
-
-        element.style.setProperty(color.name, color.value);
+        document.body.style.setProperty(color.name, color.value);
     }
 
     // apply a theme
     applyTheme(theme: Theme): void {
-        const element: HTMLElement | null = document.querySelector(this.selector);
-
-        if(!element) {
-            return;
-        }
-
-        theme.colors.forEach(color => {
-            element.style.setProperty(color.name, color.value);
-        });
+        theme.colors.forEach(color => this.applyColor(color));
     }
 }
 
@@ -198,7 +174,7 @@ function getCssVariables(selector: string): Color[] {
     return results;
 }
 
-export function createDefaultLightTheme(): Theme {
+function createDefaultLightTheme(): Theme {
     return {
         id: 'default-light',
         name: 'Light',
@@ -207,7 +183,7 @@ export function createDefaultLightTheme(): Theme {
     };
 }
 
-export function createDefaultDarkTheme(): Theme {
+function createDefaultDarkTheme(): Theme {
     const colors: Color[] = getCssVariables(':root');
 
     const foregroundColor: Color | undefined = colors.find(c => c.name === '--foreground');

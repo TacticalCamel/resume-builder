@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref } from "vue";
     import { themeService } from "@/main";
-    import ResumeModel from "@/models/ResumeModel";
     import InputFile from "@/components/shared/InputFile.vue";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
@@ -10,6 +9,7 @@
     import IconUploadFile from "@/components/icons/IconUploadFile.vue";
     import IconCheck from "@/components/icons/IconCheck.vue";
     import IconClose from "@/components/icons/IconClose.vue";
+    import ResumeModel from "@/models/resume/ResumeModel";
 
     // defines a category of data that can be included for export
     interface DataCategory {
@@ -22,7 +22,6 @@
     // defines the categories that the editor content is split into
     interface ExportModel {
         resume: DataCategory
-        picture: DataCategory
         themes: DataCategory
         fonts: DataCategory
     }
@@ -58,32 +57,13 @@
                     return undefined;
                 }
 
-                const copy = JSON.parse(JSON.stringify(resume.value));
-
-                delete copy.header.picture;
+                const json = ResumeModel.serializer.serialize(resume.value);
 
                 return {
-                    value: copy,
-                    json: JSON.stringify(copy, null, 2)
+                    value: JSON.parse(json),
+                    json: json
                 };
             },
-        },
-        picture: {
-            include: true,
-            name: 'Profile picture',
-            result: undefined,
-            convert: () => {
-                const picture = resume.value?.header.picture;
-
-                if (!picture) {
-                    return undefined;
-                }
-
-                return {
-                    value: picture,
-                    json: JSON.stringify(picture, null, 2)
-                };
-            }
         },
         themes: {
             include: true,
@@ -199,18 +179,16 @@
         }
 
         importedModel.value.validate.push({
-            title: 'Data integrity (not implemented)',
+            title: 'Data integrity (coming soon)',
             valid: undefined
         });
-
-        console.log('yes');
     }
 
     // load the uploaded data into the editor
     function importFile() {
         if (importedModel.value.data) {
             importedModel.value.data.resume.header.picture = importedModel.value.data.picture ?? null;
-            resume.value = importedModel.value.data.resume;
+            resume.value = ResumeModel.serializer.deserialize(importedModel.value.data.resume);
         }
 
         if (importedModel.value.data.themes) {
@@ -233,7 +211,7 @@
         }
 
         // get the JSON content
-        const content: string = JSON.stringify(model, null, 2);
+        const content: string = JSON.stringify(model);
 
         // create a blob from the content
         const blob = new Blob([content], {type: 'application/json'});

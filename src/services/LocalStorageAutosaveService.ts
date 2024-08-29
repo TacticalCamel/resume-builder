@@ -1,13 +1,14 @@
-import { ref, watch, Ref, WatchOptions } from "vue";
+import { ref, Ref, watchEffect } from "vue";
 import LocalStorageService from "@/services/LocalStorageService";
+import JsonSerializer from "@/services/JsonSerializer";
 
 export default class LocalStorageAutosaveService<T> {
     private readonly service: LocalStorageService<T>;
     private readonly data: Ref<T>;
 
-    constructor(storageKey: string, createDefault: () => T, options: WatchOptions<false> | undefined = undefined) {
+    constructor(storageKey: string, createDefault: () => T, serializer: JsonSerializer = new JsonSerializer()) {
         // initialize the service
-        this.service = new LocalStorageService<T>(storageKey);
+        this.service = new LocalStorageService<T>(storageKey, serializer);
 
         // attempt to load the saved data
         let savedData: T | null = this.service.load();
@@ -23,17 +24,14 @@ export default class LocalStorageAutosaveService<T> {
         this.data = ref<T>(savedData) as Ref<T>;
 
         // watch for changes to the data
-        watch(this.data, (newData: T | null): void => {
-            // if a non-null value is provided, save it to the local storage
-            if (newData) {
-                this.service.save(newData);
+        watchEffect(() => {
+            if(this.data.value) {
+                this.service.save(this.data.value);
             }
-
-            // otherwise, remove the value from the local storage
             else {
                 this.service.remove();
             }
-        }, options);
+        });
     }
 
     get value(): T {

@@ -1,25 +1,16 @@
 <script setup lang="ts">
     import InputText from "@/components/shared/InputText.vue";
-    import ResumeSection, { SectionModel } from "@/components/editor/resume/ResumeSection.vue";
+    import ResumeSection from "@/components/editor/resume/ResumeSection.vue";
+    import { Language, LanguageList } from "@/models/resume/Languages";
 
-    export interface LanguageList extends SectionModel<Language>{
-        title: string
-        elements: Language[]
-    }
-
-    export interface Language{
-        name: string
-        level: string
-    }
-
-    const model = defineModel<LanguageList>({
+    const languages = defineModel<LanguageList>({
         required: true
     });
 </script>
 
 <template>
     <resume-section
-        v-model="model"
+        v-model="languages"
         group="language"
         :gap-x="4"
         :gap-y="0.125"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { computed } from "vue";
-    import { navigationService } from "@/main";
+    import { computed, onMounted } from "vue";
+    import { navigationService, themeService } from "@/main";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/Templates.vue";
@@ -16,6 +16,10 @@
 
     // the currently active view
     const currentView = computed(() => routes[navigationService.currentPath.value as keyof typeof routes] || NotFound);
+
+    onMounted(() => {
+        themeService.applyTheme(themeService.defaultDarkTheme);
+    });
 </script>
 
 <template>

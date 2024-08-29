@@ -1,13 +1,17 @@
+import JsonSerializer from "@/services/JsonSerializer";
+
 export default class LocalStorageService<T> {
     private readonly storageKey: string;
+    private readonly serializer: JsonSerializer;
 
-    constructor(storageKey: string) {
+    constructor(storageKey: string, serializer: JsonSerializer = new JsonSerializer()) {
         this.storageKey = storageKey;
+        this.serializer = serializer;
     }
 
     save(data: T): void {
         try {
-            const serializedData: string = JSON.stringify(data);
+            const serializedData: string = this.serializer.serialize<T>(data);
 
             localStorage.setItem(this.storageKey, serializedData);
         }
@@ -21,7 +25,7 @@ export default class LocalStorageService<T> {
             const serializedData: string | null = localStorage.getItem(this.storageKey);
 
             if (serializedData) {
-                return JSON.parse(serializedData) as T;
+                return this.serializer.deserialize<T>(serializedData);
             }
 
             return null;

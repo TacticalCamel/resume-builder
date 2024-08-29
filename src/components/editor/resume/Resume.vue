@@ -1,10 +1,10 @@
 <script setup lang="ts">
     import { provide } from "vue";
+    import { canDragToList } from "@/models/BuildingBlock";
     import draggable from "vuedraggable";
-    import { sectionComponents, type SectionMap } from "@/models/SectionMap";
-    import { checkGroupMatch } from "@/models/BuildingBlock";
+    import ResumeModel from "@/models/resume/ResumeModel";
+    import ISection from "@/models/interfaces/ISection";
     import HeaderSection from "@/components/editor/resume/HeaderSection.vue";
-    import ResumeModel from "@/models/ResumeModel";
 
     const resume = defineModel<ResumeModel>({
         required: true
@@ -29,7 +29,7 @@
                 key="draggable"
                 class="grid max-w-[960px] mx-auto gap-12"
                 :disabled="!editable"
-                :group="{name: 'section', pull: true, put: checkGroupMatch}"
+                :group="{name: 'section', pull: true, put: canDragToList}"
                 drag-class="dragging"
                 ghost-class="ghost"
                 animation="200"
@@ -37,8 +37,9 @@
                 <template #header>
                     <header-section v-model="resume.header"/>
                 </template>
-                <template #item="{element: key}: {element: keyof SectionMap}">
-                    <component :is="sectionComponents[key]" v-model="resume[key]"/>
+
+                <template #item="{element: section, index}: {element: ISection, index: number}">
+                    <component :is="{...section.component}" v-model="resume.sections[index]"/>
                 </template>
             </draggable>
         </transition-group>

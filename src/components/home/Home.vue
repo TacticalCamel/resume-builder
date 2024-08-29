@@ -1,17 +1,8 @@
 <script setup lang="ts">
-    import { settings } from "@/main";
     import { navigationService } from "@/main";
     import HeroSection from "@/components/home/HeroSection.vue";
     import ArrowButton from "@/components/home/ArrowButton.vue";
     import FeatureCard from "@/components/home/FeatureCard.vue";
-
-    function getStarted() {
-        // switch to the first tab
-        settings.tabIndex = 0;
-
-        // navigate to the editor
-        navigationService.navigateTo('/editor', {init: true});
-    }
 </script>
 
 <template>
@@ -27,7 +18,7 @@
             </template>
 
             <template #actions>
-                <arrow-button @click="getStarted">Start now</arrow-button>
+                <arrow-button @click="navigationService.navigateTo('/editor', {init: true})">Start now</arrow-button>
                 <arrow-button @click="navigationService.navigateTo('/templates')">Browse templates</arrow-button>
             </template>
         </hero-section>

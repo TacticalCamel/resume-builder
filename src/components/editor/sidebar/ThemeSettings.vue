@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { ref } from "vue";
     import draggable from "vuedraggable";
-    import { checkGroupMatch } from "@/models/BuildingBlock";
-    import { settings, themeService } from "@/main";
+    import { themeService } from "@/main";
+    import { canDragToList } from "@/models/BuildingBlock";
     import Theme from "@/models/Theme";
     import ThemeCard from "@/components/editor/sidebar/ThemeCard.vue";
     import ColorPicker from "@/components/editor/sidebar/ColorPicker.vue";
@@ -13,10 +13,15 @@
     import IconSwapVert from "@/components/icons/IconSwapVert.vue";
     import IconCheck from "@/components/icons/IconCheck.vue";
     import IconClose from "@/components/icons/IconClose.vue";
+    import SettingsModel from "@/models/SettingsModel";
 
     const deleteConfirmOpen = ref<boolean>(false);
     const themeSelectOpen = ref<boolean>(false);
     const newTheme = ref<Theme | undefined>(undefined);
+
+    const settings = defineModel<SettingsModel>('settings', {
+        required: true
+    });
 
     function setTheme(theme: Theme): void {
         themeService.currentTheme = theme;
@@ -80,9 +85,6 @@
                 theme.base = undefined;
             }
         });
-
-        // apply the new theme
-        themeService.applyTheme(themeService.currentTheme);
     }
 
     function openThemeSelect() {
@@ -150,7 +152,7 @@
                     ghost-class="ghost"
                     animation="200"
                     class="flex flex-col gap-3"
-                    :group="{name: 'theme', pull: true, put: checkGroupMatch}"
+                    :group="{name: 'theme', pull: true, put: canDragToList}"
                 >
                     <template #header>
                         <theme-card
@@ -201,7 +203,7 @@
 
                     <button
                         @click="deleteConfirmOpen = true"
-                        :disabled="themeService.defaultThemeSelected"
+                        :disabled="themeService.isDefaultThemeSelected"
                         class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors"
                     >
                         <icon-delete class="size-5"/>
@@ -225,12 +227,12 @@
                     <input
                         type="text"
                         v-model="themeService.currentTheme.name"
-                        :disabled="themeService.defaultThemeSelected"
+                        :disabled="themeService.isDefaultThemeSelected"
                         class="bg-transparent rounded outline outline-1 outline-foreground/30 py-0.5 px-2 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground"
                     />
 
                     <label>Default color values</label>
-                    <select v-model="themeService.currentTheme.base" :disabled="themeService.defaultThemeSelected" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
+                    <select v-model="themeService.currentTheme.base" :disabled="themeService.isDefaultThemeSelected" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
                         <option :value="undefined">None</option>
                         <option
                             v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme, ...themeService.themes]"
@@ -243,12 +245,12 @@
                 </div>
 
                 <!-- colors -->
-                <div class="grid gap-1">
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="col-span-2 font-light">Colors</label>
                     <color-picker
                         v-for="(color, index) in themeService.currentTheme.colors" :key="color.name"
                         v-model="themeService.currentTheme.colors[index]"
-                        @change="themeService.applyColor(color)"
-                        class="px-2 py-0.5 rounded border border-foreground text-sm"
+                        class="px-2 py-0.5 rounded border-2 border-foreground/30 text-sm"
                     />
                 </div>
             </div>

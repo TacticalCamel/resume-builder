@@ -1,30 +1,17 @@
 <script setup lang="ts">
     import InputText from "@/components/shared/InputText.vue";
-    import ResumeSection, { SectionModel } from "@/components/editor/resume/ResumeSection.vue";
+    import ResumeSection from "@/components/editor/resume/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/TechnologyList.vue";
+    import { Experience, ExperienceList } from "@/models/resume/Experiences";
 
-    export interface ExperienceList extends SectionModel<Experience>{
-        title: string
-        elements: Experience[]
-    }
-
-    export interface Experience {
-        company: string
-        position: string
-        start: string
-        finish: string
-        description: string
-        stack: string[]
-    }
-
-    const model = defineModel<ExperienceList>({
+    const experiences = defineModel<ExperienceList>({
         required: true
     });
 </script>
 
 <template>
     <resume-section
-        v-model="model"
+        v-model="experiences"
         group="experience"
         :gap-x="2"
         :gap-y="1"

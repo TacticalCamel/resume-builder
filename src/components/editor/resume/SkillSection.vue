@@ -5,44 +5,28 @@
     import InputText from "@/components/shared/InputText.vue";
     import IconDecrease from "@/components/icons/IconDecrease.vue";
     import IconIncrease from "@/components/icons/IconIncrease.vue";
-    import ResumeSection, { SectionModel } from "@/components/editor/resume/ResumeSection.vue";
-    import {checkGroupMatch} from "@/models/BuildingBlock";
+    import ResumeSection from "@/components/editor/resume/ResumeSection.vue";
+    import {canDragToList} from "@/models/BuildingBlock";
+    import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
 
-    export interface SkillList extends SectionModel<SkillCategory>{
-        title: string
-        elements: SkillCategory[]
-    }
-
-    export interface SkillCategory{
-        title: string
-        elements: Skill[]
-    }
-
-    export interface Skill {
-        name: string
-        level: number
-    }
-
-    const model = defineModel<SkillList>({
+    const skills = defineModel<SkillList>({
         required: true
     });
 
     const editable = inject<boolean>('editable', false);
 
-    const maxSkillLevel: number = 5;
-
     function decreaseSkillLevel(skill: Skill) {
-        skill.level = Math.min(maxSkillLevel, Math.max(0, skill.level - 1));
+        skill.level = Math.min(skills.value.maxLevel, Math.max(0, skill.level - 1));
     }
 
     function increaseSkillLevel(skill: Skill) {
-        skill.level = Math.min(maxSkillLevel, Math.max(0, skill.level + 1));
+        skill.level = Math.min(skills.value.maxLevel, Math.max(0, skill.level + 1));
     }
 </script>
 
 <template>
     <resume-section
-        v-model="model"
+        v-model="skills"
         group="skill-category"
         grid-columns="1fr 1fr"
         :gap-x="2"
@@ -63,11 +47,11 @@
                         ghost-class="ghost"
                         animation="200"
                         :disabled="!editable"
-                        :group="{name: 'skill', pull: true, put: checkGroupMatch}"
+                        :group="{name: 'skill', pull: true, put: canDragToList}"
                     >
                         <template #item="{element: skill}: {element: Skill}">
                             <div class="flex gap-3 p-0.5 text-nowrap items-center skill-row" :class="{'moveable': editable}">
-                                <rating-bar :value="skill.level" :max="maxSkillLevel"/>
+                                <rating-bar :value="skill.level" :max="skills.maxLevel"/>
 
                                 <input-text v-model="skill.name" class="font-light skill-text" placeholder="Skill name"/>
 

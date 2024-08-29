@@ -2,33 +2,23 @@ import LocalStorageAutosaveService from "@/services/LocalStorageAutosaveService"
 import FontData from "@/models/FontData";
 
 export default class FontService {
-    private readonly font: LocalStorageAutosaveService<string | null>;
-    private readonly cssFontVariable: string;
+    private readonly current: LocalStorageAutosaveService<string>;
     readonly defaultFont: string;
+    readonly fonts: LocalStorageAutosaveService<string[]>;
 
     constructor(cssFontVariable: string) {
-        this.font = new LocalStorageAutosaveService<string | null>('current-font', () => null);
-        this.cssFontVariable = cssFontVariable;
         this.defaultFont = getCssVariable('html', cssFontVariable)?.replace(/"/g, '') ?? 'sans-serif';
+
+        this.current = new LocalStorageAutosaveService<string>('current-font', () => this.defaultFont);
+        this.fonts = new LocalStorageAutosaveService<string[]>('fonts', () => [this.defaultFont]);
     }
 
     get currentFont(): string {
-        return this.font.value ?? this.defaultFont;
+        return this.fonts.value.find(font => font === this.current.value) ?? this.defaultFont;
     }
 
     set currentFont(value: string) {
-        this.font.value = value;
-        this.applyFont(value);
-    }
-
-    applyFont(font: string): void {
-        const element: HTMLElement | null = document.getElementById('editor-content');
-
-        if (!element) {
-            return;
-        }
-
-        element.style.setProperty(this.cssFontVariable, font);
+        this.current.value = value;
     }
 
     static async getLocalFonts(): Promise<FontData[]> {
@@ -42,6 +32,10 @@ export default class FontService {
         catch (error) {
             return Promise.resolve([]);
         }
+    }
+
+    static get isQueryLocalFontsSupported(): boolean {
+        return 'queryLocalFonts' in window && typeof window.queryLocalFonts === 'function';
     }
 }
 

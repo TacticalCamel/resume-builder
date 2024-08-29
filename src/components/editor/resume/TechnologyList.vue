@@ -2,10 +2,9 @@
     import { inject } from "vue";
     import draggable from "vuedraggable";
     import InputText from "@/components/shared/InputText.vue";
-    import {checkGroupMatch} from "@/models/BuildingBlock";
+    import {canDragToList} from "@/models/BuildingBlock";
 
-    // except a list of strings as a model
-    const model = defineModel<string[]>({
+    const technologies = defineModel<string[]>({
         required: true
     });
 
@@ -16,11 +15,11 @@
     <div>
         <transition-group>
             <draggable
-                v-model="model"
+                v-model="technologies"
                 item-key="id"
                 key="draggable"
                 :disabled="!editable"
-                :group="{name: 'technology', pull: true, put: checkGroupMatch}"
+                :group="{name: 'technology', pull: true, put: canDragToList}"
                 drag-class="dragging"
                 ghost-class="ghost"
                 animation="200"
@@ -29,7 +28,7 @@
                 <template #item="{index}: {index: number}">
                     <div class="flex relative">
                         <span class="px-1 rounded bg-primary font-semibold shadow-sm shadow-[#000000bb] transition-all text-nowrap">
-                            <input-text v-model="model[index]" placeholder="Technology"/>
+                            <input-text v-model="technologies[index]" placeholder="Technology"/>
                         </span>
                     </div>
                 </template>

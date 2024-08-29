@@ -3,9 +3,9 @@
     import draggable from "vuedraggable";
     import IconInfo from "@/components/icons/IconInfo.vue";
     import InputText from "@/components/shared/InputText.vue";
-    import { checkGroupMatch } from "@/models/BuildingBlock";
+    import { canDragToList } from "@/models/BuildingBlock";
 
-    export interface SectionModel<T> {
+    interface SectionModel<T> {
         title: string
         elements: T[]
     }
@@ -33,13 +33,13 @@
         }
     });
 
-    const model = defineModel<SectionModel<T>>({
+    const section = defineModel<SectionModel<T>>({
         required: true
     });
 
     const outerGridStyle = computed(() => {
         return {
-            'grid-template-columns': model.value.elements.length ? props.gridColumns : '1fr',
+            'grid-template-columns': section.value.elements.length ? props.gridColumns : '1fr',
             'gap': `${props.gapY}rem ${props.gapX}rem`
         };
     });
@@ -52,17 +52,17 @@
 </script>
 
 <template>
-    <div v-if="editable || model.elements.length" class="rounded-lg" :class="{'moveable': editable}">
+    <div v-if="editable || section.elements.length" class="rounded-lg" :class="{'moveable': editable}">
         <div class="max-w-[720px] mx-auto">
             <div class="flex flex-col items-start">
-                <input-text v-model="model.title" placeholder="Section title" class="uppercase text-2xl"/>
+                <input-text v-model="section.title" placeholder="Section title" class="uppercase text-2xl"/>
             </div>
 
             <slot name="header"/>
 
             <transition-group>
                 <draggable
-                    v-model="model.elements"
+                    v-model="section.elements"
                     item-key="id"
                     key="draggable"
                     drag-class="dragging"
@@ -70,7 +70,7 @@
                     animation="200"
                     class="grid p-2 pe-0"
                     :disabled="!editable"
-                    :group="{name: group, pull: true, put: checkGroupMatch}"
+                    :group="{name: group, pull: true, put: canDragToList}"
                     :style="outerGridStyle"
                 >
                     <template #item="{element, index}: {element: T, index: number}">
@@ -79,7 +79,7 @@
                         </div>
                     </template>
 
-                    <template #footer v-if="editable && !model.elements.length">
+                    <template #footer v-if="editable && !section.elements.length">
                         <div class="flex gap-4 items-center justify-center outline-2 outline-dashed outline-secondary bg-secondary/5 rounded-lg text-secondary p-2 h-20">
                             <icon-info class="size-6"/>
                             <span>Empty section will not be displayed - drag items here to add content</span>

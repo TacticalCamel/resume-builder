@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { computed } from "vue";
+    import { themeService } from "@/main";
     import Color, { hasDarkContrastText } from "@/models/Color";
     import IconCopy from "@/components/icons/IconCopy.vue";
-    import IconReset from "@/components/icons/IconReset.vue";
-    import { themeService } from "@/main";
+    import IconRenew from "@/components/icons/IconRenew.vue";
 
     const color = defineModel<Color>({
         required: true
@@ -51,19 +51,19 @@
 </script>
 
 <template>
-    <label class="color-picker inline-flex w-full" :class="{'dark-text': colorInfo.darkText}" :style="{background: colorInfo.hexColor}">
-        <input type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute" :disabled="themeService.defaultThemeSelected">
+    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': colorInfo.darkText}" :style="{background: colorInfo.hexColor}">
+        <input type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute" :disabled="themeService.isDefaultThemeSelected">
 
         <span class="flex flex-col gap-0.5">
             <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
-            <button class="group font-mono inline-flex items-center gap-2" @click.prevent.stop="copyColor">
-                <span>{{ colorInfo.hexColor }}</span>
-                <icon-copy class="size-4 opacity-0 group-hover:opacity-100 transition-opacity"/>
-            </button>
+            <span class="inline-flex items-center gap-1">
+                <button class="peer font-mono opacity-60 hover:opacity-100 transition-opacity" @click.prevent.stop="copyColor">{{ colorInfo.hexColor }}</button>
+                <icon-copy class="size-4 opacity-0 peer-hover:opacity-100 peer-focus:opacity-100 transition-opacity pointer-events-none"/>
+            </span>
         </span>
 
-        <button class="disabled:invisible transition-all px-4 py-2 ms-auto" @click="themeService.resetColor(color)" :disabled="!themeService.isColorModified(color)">
-            <icon-reset class="size-5 -scale-100 rotate-180"/>
+        <button v-if="themeService.isColorModified(color)" @click.prevent.stop="themeService.resetColor(color)" class="transition-all px-2">
+            <icon-renew class="size-5 -scale-100 rotate-180"/>
         </button>
     </label>
 </template>
