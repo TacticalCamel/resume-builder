@@ -9,6 +9,10 @@ export class Skill {
         this.name = '';
         this.level = 0;
     }
+
+    static get draggableCategory(): string {
+        return Skill.name;
+    }
 }
 
 export class SkillList implements ISection {
@@ -34,5 +38,9 @@ export class SkillCategory{
     constructor() {
         this.title = '';
         this.elements = [];
+    }
+
+    static get draggableCategory(): string {
+        return SkillCategory.name;
     }
 }

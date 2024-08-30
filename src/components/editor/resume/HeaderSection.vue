@@ -1,17 +1,20 @@
 <script setup lang="ts">
+    import { inject } from "vue";
+    import { Contact, ContactView, ResumeHeader } from "@/models/resume/Header";
     import InputText from "@/components/shared/InputText.vue";
     import ProfilePicture from "@/components/editor/resume/ProfilePicture.vue";
-    import { ResumeHeader } from "@/models/resume/Header";
-    import ContactList from "@/components/editor/resume/ContactList.vue";
+    import DraggableList from "@/components/editor/resume/DraggableList.vue";
 
     const header = defineModel<ResumeHeader>({
         required: true
     });
+
+    const editable = inject<boolean>('editable', false);
 </script>
 
 <template>
     <div class="grid gap-12 max-w-[960px] mx-auto pb-24">
-        <div class="text-nowrap flex gap-6 justify-center items-center flex-col md:flex-row print:flex-row">
+        <div class="text-nowrap flex gap-6 justify-center items-center">
             <div class="flex items-center gap-6">
                 <profile-picture v-model="header.picture" class="size-32"/>
 
@@ -21,7 +24,28 @@
                 </div>
             </div>
 
-            <contact-list v-model="header.contacts"/>
+            <draggable-list
+                v-model="header.contacts"
+                :group="Contact.draggableCategory"
+                class="text-sm grid gap-1.5"
+            >
+                <template #item="{element: contact}: {element: Contact}">
+                    <div class="p-0.5">
+                        <a
+                            class="flex items-center hover:transition-colors gap-2"
+                            :href="editable ? undefined : ContactView.BINDINGS[contact.type].createURL(contact.value)"
+                            :class="editable || !ContactView.BINDINGS[contact.type].createURL(contact.value) ? undefined : 'hover:text-primary'"
+                        >
+                            <component :is="ContactView.BINDINGS[contact.type].icon" class="size-5"/>
+                            <input-text v-model="contact.value" :placeholder="ContactView.BINDINGS[contact.type].placeholder"/>
+                        </a>
+                    </div>
+                </template>
+
+                <template #empty>
+                    <div class="list-placeholder px-2 h-12">Drag contacts here</div>
+                </template>
+            </draggable-list>
         </div>
 
         <div class="text-justify mx-auto max-w-[720px]">

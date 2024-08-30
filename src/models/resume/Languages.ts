@@ -9,6 +9,10 @@ export class Language{
         this.name = '';
         this.level = '';
     }
+
+    static get draggableCategory(): string {
+        return Language.name;
+    }
 }
 
 export class LanguageList implements ISection{

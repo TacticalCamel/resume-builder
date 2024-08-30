@@ -11,7 +11,7 @@
 <template>
     <resume-section
         v-model="languages"
-        group="language"
+        :group="Language.draggableCategory"
         :gap-x="4"
         :gap-y="0.125"
         :sub-grid-columns="2"

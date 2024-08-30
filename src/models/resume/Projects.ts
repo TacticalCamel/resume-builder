@@ -11,6 +11,10 @@ export class Project {
         this.url = '';
         this.technologies = [];
     }
+
+    static get draggableCategory(): string {
+        return Project.name;
+    }
 }
 
 export class ProjectList implements ISection{

@@ -42,7 +42,7 @@
 
 <template>
     <div class="flex grow">
-        <div class="relative w-[440px] no-print">
+        <div class="relative w-[440px]">
             <div class="absolute inset-0">
                 <editor-sidebar v-model:resume="resume.value" v-model:settings="settings.value"/>
             </div>

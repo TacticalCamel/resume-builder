@@ -1,19 +1,25 @@
 <script setup lang="ts">
     import { Component } from "vue";
     import draggable from "vuedraggable";
-    import BuildingBlock from "@/models/BuildingBlock";
     import DeleteArea from "@/components/editor/sidebar/DeleteArea.vue";
     import IconLink from "@/components/icons/IconLink.vue";
     import IconSegment from "@/components/icons/IconSegment.vue";
     import IconCube from "@/components/icons/IconCube.vue";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
-    import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
     import { Contact, ContactView } from "@/models/resume/Header";
+    import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
     import { Education, EducationList } from "@/models/resume/Educations";
     import { Experience, ExperienceList } from "@/models/resume/Experiences";
     import { Language, LanguageList } from "@/models/resume/Languages";
     import { Project, ProjectList } from "@/models/resume/Projects";
+    import { Technology } from "@/models/resume/Technologies";
+
+    interface BuildingBlock {
+        group: string
+        name: string
+        clone: () => any
+    }
 
     interface BlockGroup {
         blocks: BuildingBlock[]
@@ -21,11 +27,11 @@
     }
 
     const sections: Record<string, any> = {
-        'educations': EducationList,
-        'experiences': ExperienceList,
-        'skills': SkillList,
-        'languages': LanguageList,
-        'projects': ProjectList
+        'Educations': EducationList,
+        'Experiences': ExperienceList,
+        'Skills': SkillList,
+        'Languages': LanguageList,
+        'Projects': ProjectList
     };
 
     const groups: Record<string, BlockGroup> = {
@@ -39,8 +45,8 @@
         },
         contacts: {
             blocks: Object.keys(ContactView.BINDINGS).map(type => ({
-                name: type,
-                group: 'contact',
+                name: type[0].toUpperCase() + type.slice(1),
+                group: Contact.draggableCategory,
                 clone: (): Contact => {
                     return new Contact(type, '');
                 },
@@ -50,69 +56,39 @@
         items: {
             blocks: [
                 {
-                    name: 'education',
-                    group: 'education',
+                    name: 'Education',
+                    group: Education.draggableCategory,
                     clone: () => new Education()
                 },
                 {
-                    name: 'experience',
-                    group: 'experience',
-                    clone: (): Experience => {
-                        return {
-                            company: '',
-                            position: '',
-                            start: '',
-                            finish: '',
-                            description: '',
-                            stack: []
-                        }
-                    }
+                    name: 'Experience',
+                    group: Experience.draggableCategory,
+                    clone: () => new Experience()
                 },
                 {
-                    name: 'skill',
-                    group: 'skill',
-                    clone: (): Skill => {
-                        return {
-                            name: '',
-                            level: 0
-                        }
-                    }
+                    name: 'Skill',
+                    group: Skill.draggableCategory,
+                    clone: () => new Skill()
                 },
                 {
-                    name: 'skill category',
-                    group: 'skill-category',
-                    clone: (): SkillCategory => {
-                        return {
-                            title: '',
-                            elements: []
-                        }
-                    }
+                    name: 'Skill category',
+                    group: SkillCategory.draggableCategory,
+                    clone: () => new SkillCategory()
                 },
                 {
-                    name: 'language',
-                    group: 'language',
-                    clone: (): Language => {
-                        return {
-                            name: '',
-                            level: ''
-                        }
-                    }
+                    name: 'Language',
+                    group: Language.draggableCategory,
+                    clone: () => new Language()
                 },
                 {
-                    name: 'project',
-                    group: 'project',
-                    clone: (): Project => {
-                        return {
-                            description: '',
-                            url: '',
-                            technologies: []
-                        }
-                    }
+                    name: 'Project',
+                    group: Project.draggableCategory,
+                    clone: () => new Project()
                 },
                 {
-                    name: 'technology',
-                    group: 'technology',
-                    clone: (): string => ''
+                    name: 'Technology',
+                    group: Technology.draggableCategory,
+                    clone: () => new Technology()
                 }
             ],
             icon: IconCube
@@ -142,8 +118,8 @@
                 >
                     <template #item="{element: block}: {element: BuildingBlock}">
                         <div :data-group="block.group">
-                            <div class="flex items-center justify-center h-12 px-1 rounded border-2 border-foreground/30 hover:border-foreground text-foreground/70 hover:text-foreground transition-colors font-light cursor-move">
-                                <span class="first-letter:uppercase">{{ block.name }}</span>
+                            <div class="building-block flex items-center justify-center px-1 text-foreground/70 hover:text-foreground transition-colors cursor-move min-w-20">
+                                {{ block.name }}
                             </div>
                         </div>
                     </template>
@@ -156,3 +132,10 @@
         </editor-tab-item>
     </editor-tab>
 </template>
+
+<style lang="postcss" scoped>
+    /* Only apply styles if the element is inside the container, so these styles are not applied when dragged elsewhere */
+    .block-group .building-block {
+        @apply h-12 grid rounded border-2 border-foreground/30 hover:border-foreground font-light;
+    }
+</style>

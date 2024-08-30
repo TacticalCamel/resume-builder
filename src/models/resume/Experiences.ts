@@ -17,6 +17,10 @@ export class Experience {
         this.description = '';
         this.stack = [];
     }
+
+    static get draggableCategory(): string {
+        return Experience.name;
+    }
 }
 
 export class ExperienceList implements ISection {

@@ -2,7 +2,6 @@
     import { ref } from "vue";
     import draggable from "vuedraggable";
     import { themeService } from "@/main";
-    import { canDragToList } from "@/models/BuildingBlock";
     import Theme from "@/models/Theme";
     import ThemeCard from "@/components/editor/sidebar/ThemeCard.vue";
     import ColorPicker from "@/components/editor/sidebar/ColorPicker.vue";
@@ -152,7 +151,6 @@
                     ghost-class="ghost"
                     animation="200"
                     class="flex flex-col gap-3"
-                    :group="{name: 'theme', pull: true, put: canDragToList}"
                 >
                     <template #header>
                         <theme-card

@@ -16,24 +16,26 @@
 <template>
     <resume-section
         v-model="projects"
-        group="project"
+        :group="Project.draggableCategory"
         grid-columns="1fr"
         :gap-y="1.5"
     >
         <template #header>
-            <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="projects.elements.length && (projects.disclaimer.length || editable)">
+            <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="editable || (projects.disclaimer.length && projects.elements.length)">
                 <input-text v-model="projects.disclaimer" placeholder="Disclaimer about the projects"/>
             </div>
         </template>
 
         <template #item="{element: project}: {element: Project}">
             <div>
-                <div class="flex items-center justify-start mb-1">
-                    <icon-link class="size-5 me-1"/>
-                    <a :href="editable ? undefined : project.url" target="_blank" class="hover:transition-colors flex items-center underline text-nowrap me-2" :class="editable ? undefined : 'hover:text-primary'">
-                        <input-text v-model="project.url" placeholder="Project URL"/>
-                    </a>
-                    <technology-list v-model="project.technologies"/>
+                <div class="flex items-center flex-wrap">
+                    <div class="flex items-center gap-1 mb-1 me-2">
+                        <icon-link class="size-5"/>
+                        <a :href="editable ? undefined : project.url" target="_blank" class="underline text-nowrap" :class="{'hover:text-primary hover:transition-colors': !editable}">
+                            <input-text v-model="project.url" placeholder="Project URL"/>
+                        </a>
+                    </div>
+                    <technology-list v-model="project.technologies" class="mb-1"/>
                 </div>
 
                 <div class="flex">

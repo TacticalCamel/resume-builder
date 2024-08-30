@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <div class="sticky z-10 top-0 backdrop-blur border-b border-b-foreground/10 no-print">
+    <div class="sticky z-10 top-0 backdrop-blur border-b border-b-foreground/10">
         <div class="mx-auto max-w-[1280px] px-4 flex items-center justify-between">
             <navigation-title>Resume Builder</navigation-title>
 

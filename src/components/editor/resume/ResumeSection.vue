@@ -1,9 +1,7 @@
 <script setup lang="ts" generic="T">
     import { computed, inject, reactive } from "vue";
-    import draggable from "vuedraggable";
-    import IconInfo from "@/components/icons/IconInfo.vue";
     import InputText from "@/components/shared/InputText.vue";
-    import { canDragToList } from "@/models/BuildingBlock";
+    import DraggableList from "@/components/editor/resume/DraggableList.vue";
 
     interface SectionModel<T> {
         title: string
@@ -39,20 +37,22 @@
 
     const outerGridStyle = computed(() => {
         return {
-            'grid-template-columns': section.value.elements.length ? props.gridColumns : '1fr',
-            'gap': `${props.gapY}rem ${props.gapX}rem`
+            gridTemplateColumns: section.value.elements.length ? props.gridColumns : '1fr',
+            gap: `${props.gapY}rem ${props.gapX}rem`
         };
     });
 
     const innerGridStyle = reactive({
-        'grid-column': `span ${props.subGridColumns} / span ${props.subGridColumns}`
+        display: 'grid',
+        gridTemplateColumns: 'subgrid',
+        gridColumn: `span ${props.subGridColumns} / span ${props.subGridColumns}`,
     });
 
     const editable = inject<boolean>('editable', false);
 </script>
 
 <template>
-    <div v-if="editable || section.elements.length" class="rounded-lg" :class="{'moveable': editable}">
+    <div v-if="editable || section.elements.length" class="rounded-lg">
         <div class="max-w-[720px] mx-auto">
             <div class="flex flex-col items-start">
                 <input-text v-model="section.title" placeholder="Section title" class="uppercase text-2xl"/>
@@ -60,33 +60,23 @@
 
             <slot name="header"/>
 
-            <transition-group>
-                <draggable
-                    v-model="section.elements"
-                    item-key="id"
-                    key="draggable"
-                    drag-class="dragging"
-                    ghost-class="ghost"
-                    animation="200"
-                    class="grid p-2 pe-0"
-                    :disabled="!editable"
-                    :group="{name: group, pull: true, put: canDragToList}"
-                    :style="outerGridStyle"
-                >
-                    <template #item="{element, index}: {element: T, index: number}">
-                        <div class="grid grid-cols-subgrid" :class="{'moveable': editable}" :style="innerGridStyle">
-                            <slot name="item" :element="element" :index="index"/>
-                        </div>
-                    </template>
+            <draggable-list
+                v-model="section.elements"
+                :group="group"
+                class="grid p-2 pe-0"
+                :style="outerGridStyle"
+                :item-style="innerGridStyle"
+            >
+                <template #item="{element, index}: {element: T, index: number}">
+                    <slot name="item" :element="element" :index="index"/>
+                </template>
 
-                    <template #footer v-if="editable && !section.elements.length">
-                        <div class="flex gap-4 items-center justify-center outline-2 outline-dashed outline-secondary bg-secondary/5 rounded-lg text-secondary p-2 h-20">
-                            <icon-info class="size-6"/>
-                            <span>Empty section will not be displayed - drag items here to add content</span>
-                        </div>
-                    </template>
-                </draggable>
-            </transition-group>
+                <template #empty>
+                    <div class="list-placeholder h-12">
+                        Drag section elements here
+                    </div>
+                </template>
+            </draggable-list>
         </div>
     </div>
 </template>

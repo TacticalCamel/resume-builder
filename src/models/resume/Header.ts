@@ -33,6 +33,10 @@ export class Contact {
         this.type = type;
         this.value = value;
     }
+
+    static get draggableCategory(): string {
+        return Contact.name;
+    }
 }
 
 export class ContactView {
@@ -47,30 +51,10 @@ export class ContactView {
     }
 
     static BINDINGS: Record<string, ContactView> = {
-        email: {
-            icon: IconEmail,
-            placeholder: 'Email address',
-            createURL: (value: string): string => `mailto:${value}`
-        },
-        phone: {
-            icon: IconPhone,
-            placeholder: 'Phone number',
-            createURL: (_: string) => undefined
-        },
-        github: {
-            icon: IconGithub,
-            placeholder: 'Github profile URL',
-            createURL: (value: string) => value
-        },
-        location: {
-            icon: IconLocation,
-            placeholder: 'Physical location',
-            createURL: (_: string) => undefined
-        },
-        linkedin: {
-            icon: IconLinkedIn,
-            placeholder: 'LinkedIn profile URL',
-            createURL: (value: string) => value
-        }
+        email: new ContactView(IconEmail, 'Email address', (value: string) => `mailto:${value}`),
+        phone: new ContactView(IconPhone, 'Phone number', (_: string) => undefined),
+        github: new ContactView(IconGithub, 'Github profile URL', (value: string) => value),
+        location: new ContactView(IconLocation, 'Physical location', (_: string) => undefined),
+        linkedin: new ContactView(IconLinkedIn, 'LinkedIn profile URL', (value: string) => value)
     };
 }
