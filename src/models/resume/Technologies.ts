@@ -1,5 +1,5 @@
 export class Technology {
-    name: string;
+    name: string
 
     constructor() {
         this.name = '';

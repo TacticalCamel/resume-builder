@@ -65,7 +65,7 @@ body {
 }
 
 .list-placeholder {
-    @apply border-2 border-dashed border-info rounded text-info flex justify-center items-center text-sm select-none;
+    @apply border-2 border-dashed border-info rounded text-info flex justify-center items-center text-sm select-none italic font-light;
 }
 
 @keyframes slide-down {

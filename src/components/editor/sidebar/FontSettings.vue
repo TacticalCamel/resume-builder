@@ -1,54 +1,33 @@
 <script setup lang="ts">
     import { ref } from "vue";
-    import { fontService } from "@/main";
+    import { fontService } from "@/services";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
     import InputFile from "@/components/shared/InputFile.vue";
-    import FontCard from "@/components/editor/sidebar/FontCard.vue";
     import IconUploadFile from "@/components/icons/IconUploadFile.vue";
     import IconSearch from "@/components/icons/IconSearch.vue";
-    import FontService from "@/services/FontService";
     import IconClose from "@/components/icons/IconClose.vue";
     import IconCheck from "@/components/icons/IconCheck.vue";
+    import FontCard from "@/components/editor/sidebar/FontCard.vue";
 
     const searchText = ref<string>('');
 
     function uploadFont(fontFile: string | ArrayBuffer, fileName: string) {
-        // font file must be binary
         if (typeof fontFile === 'string') {
             return;
         }
 
-        // transform file name to contain only alphanumeric characters
         const fontName: string = fileName.split('.')[0].replace(/[^a-zA-Z0-9]/g, ' ');
 
-        // create a font face
         const fontFace = new FontFace(fontName, fontFile);
 
-        // error loading font face
         if (fontFace.status !== 'loaded') {
             return;
         }
 
-        // apply font face to the document
         document.fonts.add(fontFace);
 
-        // add font face to the list of fonts
-        fontService.fonts.value.push(fontFace.family);
-    }
-
-    async function loadLocalFonts() {
-        const allFonts = await FontService.getLocalFonts();
-
-        const localFonts = allFonts
-            .filter(font => font.style === 'Regular')
-            .map(font => font.fullName);
-
-        for (const localFont of localFonts) {
-            if(!fontService.fonts.value.some(font => font === localFont)) {
-                fontService.fonts.value.push(localFont);
-            }
-        }
+        fontService.customFonts.push({name: fontFace.family, data: undefined});
     }
 </script>
 
@@ -61,25 +40,6 @@
                     <span class="font-light text-sm">Drag and drop fonts here <br/> or click to browse local files</span>
                 </div>
             </input-file>
-
-            <div class="flex items-center justify-between mt-4 group">
-                <button
-                    class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors text-sm"
-                    :disabled="!FontService.isQueryLocalFontsSupported"
-                    @click="loadLocalFonts"
-                >
-                    Load local fonts
-                </button>
-
-                <span v-if="FontService.isQueryLocalFontsSupported" class="flex items-center gap-1 text-secondary text-xs">
-                    <icon-check class="size-4"/>
-                    <span>Browser supported</span>
-                </span>
-                <span v-else class="flex items-center gap-1 text-error text-xs">
-                    <icon-close class="size-4"/>
-                    <span>Browser not supported</span>
-                </span>
-            </div>
         </editor-tab-item>
 
         <editor-tab-item title="current font">
@@ -88,10 +48,46 @@
                 <input type="text" v-model.trim="searchText" placeholder="Search fonts..." class="bg-transparent w-full outline-0 text-sm"/>
             </div>
 
-            <div class="flex flex-col gap-1 scrollbar overflow-y-auto px-px py-2 max-h-96">
-                <template v-for="font in fontService.fonts.value.sort()">
-                    <font-card :font="font" @click="fontService.currentFont = font" v-if="font.toLowerCase().includes(searchText.toLowerCase()) || font === fontService.currentFont"/>
+            <div class="relative flex flex-col gap-1 scrollbar overflow-y-auto px-px max-h-96">
+                <template v-if="fontService.customFonts.length">
+                    <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80">Custom fonts</div>
+                    <template v-for="font in fontService.customFonts.sort()">
+                        <font-card
+                            v-if="font.name.toLowerCase().includes(searchText.toLowerCase())"
+                            @click="fontService.currentFont = font.name"
+                            :font="font.name"
+                            class="cursor-pointer"
+                        />
+                    </template>
                 </template>
+
+                <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80 mt-2">System fonts</div>
+                <template v-if="fontService.systemFonts.length" v-for="font in fontService.systemFonts.sort()">
+                    <font-card
+                        v-if="font.name.toLowerCase().includes(searchText.toLowerCase())"
+                        @click="fontService.currentFont = font.name"
+                        :font="font.name"
+                        class="cursor-pointer"
+                    />
+                </template>
+                <div v-else class="flex items-center justify-between group">
+                    <button
+                        class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors text-sm"
+                        :disabled="!fontService.canLoadSystemFonts"
+                        @click="fontService.loadSystemFonts()"
+                    >
+                        Load system fonts
+                    </button>
+
+                    <span v-if="fontService.canLoadSystemFonts" class="flex items-center gap-1 text-secondary text-xs">
+                        <icon-check class="size-4"/>
+                        <span>Browser supported</span>
+                    </span>
+                    <span v-else class="flex items-center gap-1 text-error text-xs">
+                        <icon-close class="size-4"/>
+                        <span>Browser not supported</span>
+                    </span>
+                </div>
             </div>
         </editor-tab-item>
     </editor-tab>

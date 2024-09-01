@@ -21,6 +21,10 @@
         unit: {
             type: String,
             default: undefined
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     });
 
@@ -39,6 +43,7 @@
             :step="step"
             v-model.number="model"
             class="w-full outline-0 h-[0.25em] rounded-[1px] appearance-none bg-foreground/20 shadow shadow-black/20"
+            :disabled="disabled"
         />
 
         <!-- thumb -->

@@ -1,4 +1,6 @@
-export default class JsonSerializer {
+import ISerializer from "@/services/interfaces/ISerializer";
+
+export default class JsonSerializer implements ISerializer{
     serialize<T>(data: T): string {
         return JSON.stringify(data);
     }

@@ -1,10 +1,9 @@
-import JsonSerializer from "@/services/JsonSerializer";
+import ISerializer from "@/services/interfaces/ISerializer";
 
-export default class TypedJsonSerializer extends JsonSerializer {
+export default class TypedJsonSerializer implements ISerializer{
     private readonly types: Record<string, any>
 
     constructor(types: Record<string, any>) {
-        super();
         this.types = types;
     }
 

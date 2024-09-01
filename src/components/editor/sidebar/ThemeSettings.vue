@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import draggable from "vuedraggable";
-    import { themeService } from "@/main";
+    import { themeService } from "@/services";
     import Theme from "@/models/Theme";
     import ThemeCard from "@/components/editor/sidebar/ThemeCard.vue";
     import ColorPicker from "@/components/editor/sidebar/ColorPicker.vue";
@@ -12,13 +12,13 @@
     import IconSwapVert from "@/components/icons/IconSwapVert.vue";
     import IconCheck from "@/components/icons/IconCheck.vue";
     import IconClose from "@/components/icons/IconClose.vue";
-    import SettingsModel from "@/models/SettingsModel";
+    import EditorSettings from "@/models/EditorSettings";
 
     const deleteConfirmOpen = ref<boolean>(false);
     const themeSelectOpen = ref<boolean>(false);
-    const newTheme = ref<Theme | undefined>(undefined);
+    const themeCreateForm = ref<{ name: string, base: string | undefined } | undefined>(undefined);
 
-    const settings = defineModel<SettingsModel>('settings', {
+    const settings = defineModel<EditorSettings>('settings', {
         required: true
     });
 
@@ -28,58 +28,41 @@
     }
 
     function createTheme(apply: boolean): void {
-        // check if there is a valid value
-        if(!newTheme.value) {
+        if (!themeCreateForm.value) {
             return;
         }
 
-        // find the selected base theme
-        const baseTheme: Theme = themeService.getBaseTheme(newTheme.value.base) ?? themeService.defaultLightTheme;
-
-        // copy the colors of the base theme
-        newTheme.value.colors = baseTheme.colors.map(color => ({...color}));
-
-        // add the new theme to the list
-        themeService.themes.push(newTheme.value);
+        const theme: Theme = themeService.createTheme(themeCreateForm.value.name, themeCreateForm.value.base);
 
         if (apply) {
-            // apply the new theme
-            themeService.currentTheme = newTheme.value;
-
-            // close theme select
-            themeSelectOpen.value = false;
-
-            // clear the new theme value
-            newTheme.value = undefined;
+            themeCreateForm.value = undefined;
+            setTheme(theme);
+            return;
         }
-        else {
-            // clear form
-            newTheme.value = {
-                id: crypto.randomUUID(),
-                name: '',
-                base: undefined,
-                colors: [],
-            };
-        }
+
+        themeCreateForm.value = {
+            name: '',
+            base: undefined,
+        };
     }
 
     function deleteCurrentTheme() {
         const id = themeService.currentTheme.id;
 
-        const index = themeService.themes.findIndex(theme => theme.id === id);
+        const index = themeService.customThemes.findIndex(theme => theme.id === id);
 
         if (index === -1) {
             return;
         }
 
         // delete the theme
-        themeService.themes.splice(index, 1);
+        themeService.customThemes.splice(index, 1);
 
         // close the confirm dialog
         deleteConfirmOpen.value = false;
 
         // erase this theme as a base theme from all other themes
-        themeService.themes.forEach(theme => {
+        themeService.customThemes.forEach(theme => {
             if (theme.base === id) {
                 theme.base = undefined;
             }
@@ -89,17 +72,27 @@
     function openThemeSelect() {
         themeSelectOpen.value = true;
 
-        if(newTheme.value) {
+        if (themeCreateForm.value) {
             return;
         }
 
-        newTheme.value = {
-            id: crypto.randomUUID(),
+        themeCreateForm.value = {
             name: '',
-            base: undefined,
-            colors: [],
+            base: undefined
         };
     }
+
+    const isDefaultCurrentTheme = computed<boolean>(() => {
+        const theme: Theme = themeService.currentTheme;
+
+        for(const key in themeService.defaultThemes){
+            if(themeService.defaultThemes[key].id === theme.id) {
+                return true;
+            }
+        }
+
+        return false;
+    });
 </script>
 
 <template>
@@ -112,21 +105,21 @@
             </div>
         </editor-tab-item>
 
-        <editor-tab-item v-if="newTheme" title="Create new theme">
+        <editor-tab-item v-if="themeCreateForm" title="Create new theme">
             <div class="grid gap-4 font-light text-sm">
                 <div class="grid grid-cols-2 items-center gap-2 text-nowrap font-light">
                     <label>Name</label>
                     <input
                         type="text"
-                        v-model="newTheme.name"
+                        v-model="themeCreateForm.name"
                         class="bg-transparent rounded outline outline-1 outline-foreground/30 py-0.5 px-2 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground"
                     />
 
                     <label>Default color values</label>
-                    <select v-model="newTheme.base" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
+                    <select v-model="themeCreateForm.base" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
                         <option :value="undefined">None</option>
                         <option
-                            v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme, ...themeService.themes]"
+                            v-for="theme in themeService.allThemes"
                             :value="theme.id"
                         >
                             {{ theme.name }}
@@ -144,7 +137,7 @@
         <editor-tab-item title="themes">
             <transition-group>
                 <draggable
-                    v-model="themeService.themes"
+                    v-model="themeService.customThemes"
                     item-key="id"
                     key="draggable"
                     drag-class="dragging"
@@ -154,7 +147,7 @@
                 >
                     <template #header>
                         <theme-card
-                            v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme]"
+                            v-for="theme in themeService.defaultThemes"
                             @click="setTheme(theme)"
                             :theme="theme"
                             :is-default="true"
@@ -190,7 +183,6 @@
 
         <editor-tab-item title="theme">
             <div class="grid text-sm gap-4">
-                <!-- change or delete theme -->
                 <div class="grid grid-cols-2 gap-2 text-foreground relative">
                     <button
                         @click="openThemeSelect"
@@ -201,7 +193,7 @@
 
                     <button
                         @click="deleteConfirmOpen = true"
-                        :disabled="themeService.isDefaultThemeSelected"
+                        :disabled="isDefaultCurrentTheme"
                         class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors"
                     >
                         <icon-delete class="size-5"/>
@@ -219,21 +211,20 @@
                     </div>
                 </div>
 
-                <!-- theme name and base theme -->
                 <div class="grid grid-cols-2 items-center gap-2 text-nowrap font-light">
                     <label>Name</label>
                     <input
                         type="text"
                         v-model="themeService.currentTheme.name"
-                        :disabled="themeService.isDefaultThemeSelected"
+                        :disabled="isDefaultCurrentTheme"
                         class="bg-transparent rounded outline outline-1 outline-foreground/30 py-0.5 px-2 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground"
                     />
 
                     <label>Default color values</label>
-                    <select v-model="themeService.currentTheme.base" :disabled="themeService.isDefaultThemeSelected" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
+                    <select v-model="themeService.currentTheme.base" :disabled="isDefaultCurrentTheme" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
                         <option :value="undefined">None</option>
                         <option
-                            v-for="theme in [themeService.defaultLightTheme, themeService.defaultDarkTheme, ...themeService.themes]"
+                            v-for="theme in themeService.allThemes"
                             :value="theme.id"
                             :hidden="theme.id === themeService.currentTheme.id"
                         >
@@ -242,13 +233,13 @@
                     </select>
                 </div>
 
-                <!-- colors -->
                 <div class="grid grid-cols-2 gap-2">
                     <label class="col-span-2 font-light">Colors</label>
                     <color-picker
                         v-for="(color, index) in themeService.currentTheme.colors" :key="color.name"
                         v-model="themeService.currentTheme.colors[index]"
                         class="px-2 py-0.5 rounded border-2 border-foreground/30 text-sm"
+                        :disabled="isDefaultCurrentTheme"
                     />
                 </div>
             </div>

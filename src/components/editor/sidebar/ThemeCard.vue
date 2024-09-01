@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { PropType, reactive } from "vue";
     import Theme from '@/models/Theme';
-    import Color, { hasDarkContrastText } from "@/models/Color";
     import InputText from "@/components/shared/InputText.vue";
+    import Color from "@/models/Color";
 
     const props = defineProps({
         theme: {
@@ -32,7 +32,7 @@
 
         return {
             value: `rgb(${rgb})`,
-            darkText: hasDarkContrastText(rgb)
+            darkText: color?.isDarkContrast
         };
     }
 </script>

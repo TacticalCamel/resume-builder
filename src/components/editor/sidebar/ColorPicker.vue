@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { themeService } from "@/main";
-    import Color, { hasDarkContrastText } from "@/models/Color";
+    import { themeService } from "@/services";
+    import Color from "@/models/Color";
     import IconCopy from "@/components/icons/IconCopy.vue";
     import IconRenew from "@/components/icons/IconRenew.vue";
 
@@ -13,12 +13,14 @@
         change: []
     }>();
 
-    const colorInfo = computed(() => {
-        return {
-            hexColor: rgb2hex(color.value.value),
-            darkText: hasDarkContrastText(color.value.value)
-        };
+    defineProps({
+        disabled: {
+            type: Boolean,
+            default: false
+        }
     });
+
+    const hexColor = computed(() => rgb2hex(color.value.value));
 
     function setColor(event: Event): void {
         const input = event.target as HTMLInputElement;
@@ -29,7 +31,7 @@
     }
 
     function copyColor(): void {
-        navigator.clipboard.writeText(colorInfo.value.hexColor);
+        navigator.clipboard.writeText(hexColor.value);
     }
 
     function hex2rgb(hex: string): string {
@@ -51,13 +53,19 @@
 </script>
 
 <template>
-    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': colorInfo.darkText}" :style="{background: colorInfo.hexColor}">
-        <input type="color" :value="colorInfo.hexColor" @change="setColor" class="invisible w-0 absolute" :disabled="themeService.isDefaultThemeSelected">
+    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': color.isDarkContrast}" :style="{background: hexColor}">
+        <input
+            type="color"
+            class="invisible w-0 absolute"
+            :value="hexColor"
+            :disabled="disabled"
+            @change="setColor"
+        >
 
         <span class="flex flex-col gap-0.5">
             <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
             <span class="inline-flex items-center gap-1">
-                <button class="peer font-mono opacity-60 hover:opacity-100 transition-opacity" @click.prevent.stop="copyColor">{{ colorInfo.hexColor }}</button>
+                <button class="peer font-mono opacity-60 hover:opacity-100 transition-opacity" @click.prevent.stop="copyColor">{{ hexColor }}</button>
                 <icon-copy class="size-4 opacity-0 peer-hover:opacity-100 peer-focus:opacity-100 transition-opacity pointer-events-none"/>
             </span>
         </span>

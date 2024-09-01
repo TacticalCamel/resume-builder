@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref } from "vue";
-    import { themeService } from "@/main";
+    import { themeService } from "@/services";
     import InputFile from "@/components/shared/InputFile.vue";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
@@ -10,6 +10,9 @@
     import IconCheck from "@/components/icons/IconCheck.vue";
     import IconClose from "@/components/icons/IconClose.vue";
     import ResumeModel from "@/models/resume/ResumeModel";
+    import InputToggle from "@/components/shared/InputToggle.vue";
+    import InputRange from "@/components/shared/InputRange.vue";
+    import EditorSettings from "@/models/EditorSettings";
 
     // defines a category of data that can be included for export
     interface DataCategory {
@@ -41,10 +44,17 @@
         calculateValues();
     });
 
-    // the resume loaded in the editor
     const resume = defineModel<ResumeModel | null>('resume', {
         required: true
     });
+
+    const settings = defineModel<EditorSettings>('settings', {
+        required: true
+    });
+
+    const paperSizes: string[] = ['A3', 'A4', 'A5'];
+
+    const paperOrientations: string[] = ['Portrait', 'Landscape'];
 
     // configuration for exporting the editor data
     const options = ref<ExportModel>({
@@ -70,13 +80,13 @@
             name: 'Themes',
             result: undefined,
             convert: () => {
-                if (!themeService.themes.length) {
+                if (!themeService.customThemes.length) {
                     return undefined;
                 }
 
                 return {
-                    value: themeService.themes,
-                    json: JSON.stringify(themeService.themes, null, 2)
+                    value: themeService.customThemes,
+                    json: JSON.stringify(themeService.customThemes, null, 2)
                 };
             }
         },
@@ -186,14 +196,15 @@
 
     // load the uploaded data into the editor
     function importFile() {
-        if (importedModel.value.data) {
-            importedModel.value.data.resume.header.picture = importedModel.value.data.picture ?? null;
-            resume.value = ResumeModel.serializer.deserialize(importedModel.value.data.resume);
+        if (importedModel.value.data.resume) {
+            resume.value = ResumeModel.serializer.deserialize(JSON.stringify(importedModel.value.data.resume));
         }
 
         if (importedModel.value.data.themes) {
-            themeService.themes = importedModel.value.data.themes;
+            themeService.customThemes = importedModel.value.data.themes;
         }
+
+        clearImportedData();
     }
 
     // export the editor data to a JSON file
@@ -236,32 +247,7 @@
 
 <template>
     <editor-tab>
-        <editor-tab-item title="export editor data">
-            <div class="grid grid-cols-2 items-center gap-2 text-sm font-light text-foreground/70">
-                <template v-for="category in options">
-                    <input-checkbox v-model="category.include" :disabled="!category.result">{{ category.name }}</input-checkbox>
-                    <div>{{ sizeToString(category.result?.json.length) }}</div>
-                </template>
-
-                <div class="grid grid-cols-subgrid col-span-2 pt-2 border-t border-foreground/30 font-medium text-foreground">
-                    <div class="px-1">
-                        <button @click="exportFile" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">
-                            Export
-                        </button>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <span class="basis-1/3 text-nowrap">{{ totalSize }}</span>
-                        <button @click="calculateValues" class="flex justify-center items-center gap-1 p-1 rounded hover:bg-foreground/10 text-foreground/60 hover:text-foreground transition-colors text-xs">
-                            <icon-renew class="size-4"/>
-                            <span>Refresh</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </editor-tab-item>
-
-        <editor-tab-item title="import editor data">
+        <editor-tab-item title="import content">
             <div class="grid gap-4">
                 <input-file @upload="uploadFile" accept=".json" format="text">
                     <div class="flex gap-4 items-center justify-center rounded py-2 px-4 border border-dashed border-foreground/30 hover:bg-foreground/10 transition-colors text-foreground/70">
@@ -298,6 +284,55 @@
                         </div>
                     </div>
                 </template>
+            </div>
+        </editor-tab-item>
+
+        <editor-tab-item title="export content">
+            <div class="grid grid-cols-2 items-center gap-2 text-sm font-light text-foreground/70">
+                <template v-for="category in options">
+                    <input-checkbox v-model="category.include" :disabled="!category.result">{{ category.name }}</input-checkbox>
+                    <div>{{ sizeToString(category.result?.json.length) }}</div>
+                </template>
+
+                <div class="grid grid-cols-subgrid col-span-2 pt-2 border-t border-foreground/30 font-medium text-foreground">
+                    <div class="px-1">
+                        <button @click="exportFile" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">
+                            Export
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="basis-1/3 text-nowrap">{{ totalSize }}</span>
+                        <button @click="calculateValues" class="flex justify-center items-center gap-1 p-1 rounded hover:bg-foreground/10 text-foreground/60 hover:text-foreground transition-colors text-xs">
+                            <icon-renew class="size-4"/>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </editor-tab-item>
+
+        <editor-tab-item title="print content">
+            <div class="grid text-sm gap-2">
+                <div class="flex items-center gap-2">
+                    <input-toggle v-model="settings.printing.preview"/>
+                    <span>Preview printing</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 items-center">
+                    <span>Scale</span>
+                    <input-range v-model="settings.printing.scale" :min="50" :max="150" :step="2.5" unit="%" :disabled="!settings.printing.preview"/>
+
+                    <span>Size</span>
+                    <select v-model="settings.printing.size" :disabled="!settings.printing.preview" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
+                        <option v-for="size in paperSizes" :value="size">{{ size }}</option>
+                    </select>
+
+                    <span>Orientation</span>
+                    <select v-model="settings.printing.orientation" :disabled="!settings.printing.preview" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 opacity-100 disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground">
+                        <option v-for="orientation in paperOrientations" :value="orientation">{{ orientation }}</option>
+                    </select>
+                </div>
             </div>
         </editor-tab-item>
     </editor-tab>

@@ -11,18 +11,21 @@
     import IconSelect from "@/components/icons/IconSelect.vue";
     import SelectionSettings from "@/components/editor/sidebar/SelectionSettings.vue";
     import ResumeModel from "@/models/resume/ResumeModel";
-    import SettingsModel from "@/models/SettingsModel";
+    import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
+    import EditorSettings from "@/models/EditorSettings";
 
     const resume = defineModel<ResumeModel | null>('resume', {
         required: true
     });
 
-    const settings = defineModel<SettingsModel>('settings', {
+    const settings = defineModel<EditorSettings>('settings', {
         required: true
     });
 
-    const currentTabComponent = computed(() => {
-        const index = settings.value.tabIndex;
+    const activeTab = new LocalStorageAutosaveService<number>('active-editor-tab', () => 0);
+
+    const activeTabComponent = computed(() => {
+        const index = activeTab.value;
 
         if(0 <= index && index < tabs.length) {
             return tabs[index].component;
@@ -63,49 +66,33 @@
 
 <template>
     <div class="flex h-full">
-        <!-- tab selection -->
-        <div class="editor-tab-list">
+        <div class="relative flex flex-col overflow-clip bg-darker">
             <button
-                v-for="(tab, index) in tabs" @click="settings.tabIndex = index"
+                v-for="(tab, index) in tabs" @click="activeTab.value = index"
                 class="flex flex-col items-center justify-center gap-1 size-[72px] hover:text-opacity-100 transition-colors relative z-10"
-                :class="{'text-foreground': !tab.conditional, 'text-secondary': tab.conditional, 'text-opacity-70': index !== settings.tabIndex }"
+                :class="{'text-foreground': !tab.conditional, 'text-secondary': tab.conditional, 'text-opacity-70': index !== activeTab.value }"
             >
                 <component :is="tab.icon" class="size-6"/>
                 <span class="text-xs">{{ tab.name }}</span>
             </button>
 
-            <span :style="{top: `${-8 + settings.tabIndex * 72}px`}">
-                <span class="-bottom-2"/>
-                <span class="-top-2"/>
+            <span class="absolute w-full h-[88px] bg-background pointer-events-none transition-all" :style="{top: `${-8 + activeTab.value * 72}px`}">
+                <span class="absolute w-full h-4 rounded-e-full bg-darker -bottom-2"/>
+                <span class="absolute w-full h-4 rounded-e-full bg-darker -top-2"/>
             </span>
         </div>
 
-        <!-- tab contents -->
-        <div class="editor-tab-container scrollbar overflow-y-auto">
+        <div class="grow p-4 border-e border-e-foreground/10 scrollbar overflow-y-auto">
             <transition name="fade" mode="out-in">
-                <component :is="currentTabComponent" v-model:resume="resume" v-model:settings="settings"/>
+                <component :is="activeTabComponent" v-model:resume="resume" v-model:settings="settings"/>
             </transition>
         </div>
     </div>
 </template>
 
 <style lang="postcss" scoped>
-    .editor-tab-list {
-        @apply relative overflow-clip flex flex-col;
+    .bg-darker {
         background-color: color-mix(in srgb, rgb(var(--background)) 60%, black);
-    }
-
-    .editor-tab-list > span {
-        @apply absolute w-full h-[88px] bg-background pointer-events-none transition-all;
-    }
-
-    .editor-tab-list > span > span {
-        @apply absolute w-full h-4 rounded-e-full;
-        background-color: color-mix(in srgb, rgb(var(--background)) 60%, black);
-    }
-
-    .editor-tab-container {
-        @apply grow p-4 border-e border-e-foreground/10;
     }
 
     .fade-enter-active, .fade-leave-active {

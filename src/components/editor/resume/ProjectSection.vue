@@ -19,6 +19,7 @@
         :group="Project.draggableCategory"
         grid-columns="1fr"
         :gap-y="1.5"
+        :style="{pageBreakAfter: 'always'}"
     >
         <template #header>
             <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="editable || (projects.disclaimer.length && projects.elements.length)">
@@ -29,12 +30,10 @@
         <template #item="{element: project}: {element: Project}">
             <div>
                 <div class="flex items-center flex-wrap">
-                    <div class="flex items-center gap-1 mb-1 me-2">
+                    <a class="flex items-center gap-1 mb-1 me-2" :class="{'hover:text-info hover:transition-colors': !editable}" :href="editable ? undefined : project.url" target="_blank">
                         <icon-link class="size-5"/>
-                        <a :href="editable ? undefined : project.url" target="_blank" class="underline text-nowrap" :class="{'hover:text-primary hover:transition-colors': !editable}">
-                            <input-text v-model="project.url" placeholder="Project URL"/>
-                        </a>
-                    </div>
+                        <input-text :class="{'underline': !editable}" v-model="project.url" placeholder="Project URL"/>
+                    </a>
                     <technology-list v-model="project.technologies" class="mb-1"/>
                 </div>
 

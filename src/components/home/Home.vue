@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { navigationService } from "@/main";
+    import { navigationService } from "@/services";
     import HeroSection from "@/components/home/HeroSection.vue";
     import ArrowButton from "@/components/home/ArrowButton.vue";
     import FeatureCard from "@/components/home/FeatureCard.vue";

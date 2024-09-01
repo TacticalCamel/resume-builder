@@ -2,7 +2,7 @@
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
 
-    const style = window.getComputedStyle(document.body);
+    const style: object = window.getComputedStyle(document.body);
 </script>
 
 <template>
@@ -11,13 +11,11 @@
             <div class="grid grid-cols-2 gap-2 text-sm">
                 <template v-for="key in style">
                     <div class="font-medium">{{ key }}</div>
-                    <div class="text-foreground/70 font-light">{{ style[key as keyof CSSStyleDeclaration] }}</div>
+                    <div>
+                        <input type="text" :placeholder="style[key]" class="bg-transparent font-light w-full"/>
+                    </div>
                 </template>
             </div>
         </editor-tab-item>
     </editor-tab>
 </template>
-
-<style scoped>
-
-</style>

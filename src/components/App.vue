@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, onMounted } from "vue";
-    import { navigationService, themeService } from "@/main";
+    import { navigationService, themeService } from "@/services";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/Templates.vue";
@@ -15,10 +15,10 @@
     };
 
     // the currently active view
-    const currentView = computed(() => routes[navigationService.currentPath.value as keyof typeof routes] || NotFound);
+    const currentView = computed(() => routes[navigationService.path as keyof typeof routes] || NotFound);
 
     onMounted(() => {
-        themeService.applyTheme(themeService.defaultDarkTheme);
+        themeService.applyTheme(document.body, themeService.defaultThemes.dark);
     });
 </script>
 
@@ -27,7 +27,7 @@
         <navigation/>
 
         <transition name="fade" mode="out-in">
-            <component :is="currentView" :route-parameters="navigationService.parameters.value"/>
+            <component :is="currentView" :route-parameters="navigationService.parameters"/>
         </transition>
     </main>
 </template>

@@ -1,30 +1,32 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { fontService, navigationService, themeService } from "@/main";
-    import LocalStorageAutosaveService from "@/services/LocalStorageAutosaveService";
+    import { fontService, navigationService, themeService } from "@/services";
+    import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
     import Resume from "@/components/editor/resume/Resume.vue";
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
     import ResumeModel from "@/models/resume/ResumeModel";
-    import SettingsModel from "@/models/SettingsModel";
+    import EditorSettings from "@/models/EditorSettings";
 
     const props = defineProps({
         routeParameters: {
             type: Object,
-            required: false,
             default: {}
         }
     });
 
-    const settings = new LocalStorageAutosaveService<SettingsModel>('settings', () => {
-        return {
-            tabIndex: 0,
-            filters: {
-                grayscale: 0,
-                contrast: 100,
-                brightness: 100
-            }
-        };
-    });
+    const settings = new LocalStorageAutosaveService<EditorSettings>('settings', () => ({
+        filters: {
+            grayscale: 0,
+            contrast: 100,
+            brightness: 100
+        },
+        printing: {
+            preview: false,
+            scale: 100,
+            orientation: 'Portrait',
+            size: 'A4'
+        }
+    }));
 
     const resume = new LocalStorageAutosaveService<ResumeModel | null>('resume', () => {
         return props.routeParameters.init ? new ResumeModel() : null;
@@ -49,8 +51,9 @@
         </div>
 
         <div class="relative grow">
-            <div class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip bg-background text-foreground" :style="editorStyles">
+            <div id="editor" class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip bg-background text-foreground" :style="editorStyles">
                 <resume v-if="resume.value" v-model="resume.value" editable/>
+
                 <div v-else class="flex flex-col size-full justify-center items-center gap-2 text-2xl">
                     <button @click="resume.value = new ResumeModel()" class="underline hover:text-secondary transition-colors">Create an empty resume</button>
                     <span class="text-xl text-foreground/70">or</span>
@@ -60,3 +63,29 @@
         </div>
     </div>
 </template>
+
+<style lang="postcss" scoped>
+    /*#editor {
+        @apply fixed z-50 inset-0;
+    }*/
+
+    /*#editor::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 1px solid red;
+        height: 297mm;
+        width: 210mm;
+    }
+
+    #editor > * {
+        transform: scale(0.5);
+        transform-origin: 50% 0;
+    }
+
+    @page {
+        size: A4 portrait;
+    }*/
+</style>

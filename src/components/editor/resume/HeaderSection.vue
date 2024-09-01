@@ -34,7 +34,7 @@
                         <a
                             class="flex items-center hover:transition-colors gap-2"
                             :href="editable ? undefined : ContactView.BINDINGS[contact.type].createURL(contact.value)"
-                            :class="editable || !ContactView.BINDINGS[contact.type].createURL(contact.value) ? undefined : 'hover:text-primary'"
+                            :class="editable || !ContactView.BINDINGS[contact.type].createURL(contact.value) ? undefined : 'hover:text-info'"
                         >
                             <component :is="ContactView.BINDINGS[contact.type].icon" class="size-5"/>
                             <input-text v-model="contact.value" :placeholder="ContactView.BINDINGS[contact.type].placeholder"/>

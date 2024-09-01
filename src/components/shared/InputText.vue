@@ -5,6 +5,10 @@
 
     const editable = inject<boolean>('editable', false);
 
+    defineOptions({
+        inheritAttrs: false
+    });
+
     defineProps({
         placeholder: {
             type: String,
@@ -21,7 +25,7 @@
     <div>
         <div class="inline-block">
             <div class="relative" :class="{editable}">
-                <div class="text-input" :contenteditable="editable" @focusout="saveChanges">{{ model }}</div>
+                <div class="text-input" v-bind="$attrs" :contenteditable="editable" spellcheck="false" @focusout="saveChanges">{{ model }}</div>
                 <div v-show="editable" class="text-overlay pointer-events-none opacity-60">{{ placeholder }}</div>
             </div>
         </div>

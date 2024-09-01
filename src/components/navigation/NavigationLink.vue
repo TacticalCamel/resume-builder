@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { navigationService } from "@/main";
+    import { navigationService } from "@/services";
 
     const props = defineProps<{
         route: string
     }>();
 
-    const active = computed(() => navigationService.currentPath.value === props.route);
+    const active = computed(() => navigationService.path === props.route);
 </script>
 
 <template>
