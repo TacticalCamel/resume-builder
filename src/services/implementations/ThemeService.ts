@@ -1,15 +1,15 @@
 import IThemeService from "@/services/interfaces/IThemeService";
-import IValueStore from "@/services/interfaces/IValueStore";
-import DefaultThemes from "@/services/implementations/DefaultThemes";
-import Theme from "@/models/Theme";
-import Color from "@/models/Color";
+import DefaultThemes from "@/models/style/DefaultThemes";
+import Theme from "@/models/style/Theme";
+import Color from "@/models/style/Color";
+import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
 
 export default class ThemeService implements IThemeService<DefaultThemes> {
     private readonly _defaultThemes: DefaultThemes
-    private readonly customThemesStore: IValueStore<Theme[]>;
-    private readonly currentThemeStore: IValueStore<string>;
+    private readonly customThemesStore: LocalStorageAutosaveService<Theme[]>;
+    private readonly currentThemeStore: LocalStorageAutosaveService<string>;
 
-    constructor(defaultThemes: DefaultThemes, customThemesStore: IValueStore<Theme[]>, currentThemeStore: IValueStore<string>) {
+    constructor(defaultThemes: DefaultThemes, customThemesStore: LocalStorageAutosaveService<Theme[]>, currentThemeStore: LocalStorageAutosaveService<string>) {
         this._defaultThemes = defaultThemes;
         this.customThemesStore = customThemesStore;
         this.currentThemeStore = currentThemeStore;

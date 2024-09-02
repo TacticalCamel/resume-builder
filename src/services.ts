@@ -4,11 +4,14 @@ import IThemeService from "@/services/interfaces/IThemeService";
 import ThemeService from "@/services/implementations/ThemeService";
 import IFontService from "@/services/interfaces/IFontService";
 import FontService from "@/services/implementations/FontService";
-import DefaultThemes from "@/services/implementations/DefaultThemes";
 import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
-import Color from "@/models/Color";
-import Theme from "@/models/Theme";
-import Font from "@/models/Font";
+import DefaultThemes from "@/models/style/DefaultThemes";
+import Color from "@/models/style/Color";
+import Theme from "@/models/style/Theme";
+import { DBSchema, IDBPDatabase, openDB } from "idb";
+import AsyncObjectStore from "@/services/implementations/AsyncObjectStore";
+import Font from "@/models/style/Font";
+import { ResumeModel } from "@/models/resume/Resume";
 
 // project-specific variables and functions to configure services
 class CssUtils {
@@ -153,28 +156,64 @@ class CssUtils {
     }
 }
 
-/*
-export const db = await openDB<DatabaseSchema>('resume-builder-db', 1, {
+// project-specific variables and functions to configure the client side database
+export default interface DatabaseSchema extends DBSchema {
+    customThemes: {
+        key: string
+        value: Theme
+    }
+    customFonts: {
+        key: string
+        value: Font
+    }
+    systemFonts: {
+        key: string
+        value: Font
+    }
+    templates: {
+        key: string
+        value: ResumeModel
+    }
+}
+
+const defaultThemes: DefaultThemes = new DefaultThemes(CssUtils.getDefaultLightTheme(), CssUtils.getDefaultDarkTheme());
+const defaultFont: string = CssUtils.getDefaultFont();
+
+const db = await openDB<DatabaseSchema>('resume-builder-db', 1, {
     upgrade(db: IDBPDatabase<DatabaseSchema>): void {
-        db.createObjectStore('customThemes');
-        db.createObjectStore('customFonts')
-        db.createObjectStore('systemFonts');
-        db.createObjectStore('templates');
+        db.createObjectStore('customThemes', {
+            keyPath: 'id'
+        });
+
+        const customFonts = db.createObjectStore('customFonts', {
+            keyPath: 'name'
+        })
+
+        customFonts.add({
+            name: defaultFont,
+            data: undefined
+        });
+
+        db.createObjectStore('systemFonts', {
+            keyPath: 'name'
+        });
+
+        db.createObjectStore('templates', {
+            autoIncrement: true
+        });
     }
 });
 
-await db.getAll('customFonts')*/
-
-const defaultThemes = new DefaultThemes(CssUtils.getDefaultLightTheme(), CssUtils.getDefaultDarkTheme());
-const customThemesStore = new LocalStorageAutosaveService<Theme[]>('custom-themes', () => [], Theme.serializer)
-const currentThemeStore = new LocalStorageAutosaveService<string>('current-theme', () => defaultThemes.light.id);
-
-const defaultFont = CssUtils.getDefaultFont();
-const systemFontsStore = new LocalStorageAutosaveService<Font[]>('system-fonts', () => []);
-const customFontsStore = new LocalStorageAutosaveService<Font[]>('custom-fonts', () => [{name: defaultFont, data: undefined}]);
-const currentFontStore = new LocalStorageAutosaveService<string>('current-font', () => defaultFont);
-
-// initialize singleton services
 export const navigationService: INavigationService = new NavigationService();
-export const themeService: IThemeService<DefaultThemes> = new ThemeService(defaultThemes, customThemesStore, currentThemeStore);
-export const fontService: IFontService = new FontService(systemFontsStore, customFontsStore, currentFontStore);
+
+export const themeService: IThemeService<DefaultThemes> = new ThemeService(
+    defaultThemes,
+    new LocalStorageAutosaveService<Theme[]>('custom-themes', () => [], Theme.serializer),
+    new LocalStorageAutosaveService<string>('current-theme', () => defaultThemes.light.id)
+);
+
+export const fontService: IFontService = new FontService(
+    new AsyncObjectStore(db, 'systemFonts'),
+    new AsyncObjectStore(db, 'customFonts'),
+    new LocalStorageAutosaveService<string>('current-font', () => defaultFont)
+);

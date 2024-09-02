@@ -1,14 +1,15 @@
-import Font from "@/models/Font";
+import Font from "@/models/style/Font";
 
 export default interface IFontService {
     get currentFont(): string
     set currentFont(font: string)
 
-    get systemFonts(): Font[]
+    get systemFonts(): Promise<Font[]>
 
-    get customFonts(): Font[]
+    get customFonts(): Promise<Font[]>
 
     get canLoadSystemFonts(): boolean
 
-    loadSystemFonts(): void
+    loadSystemFonts(): Promise<void>
+    addCustomFont(font: Font): Promise<void>
 }

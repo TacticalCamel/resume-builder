@@ -1,4 +1,4 @@
-import Theme from "@/models/Theme";
+import Theme from "@/models/style/Theme";
 
 export default class DefaultThemes {
     [key: string]: Theme

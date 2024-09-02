@@ -10,7 +10,7 @@
     import IconPublish from "@/components/icons/IconPublish.vue";
     import IconSelect from "@/components/icons/IconSelect.vue";
     import SelectionSettings from "@/components/editor/sidebar/SelectionSettings.vue";
-    import ResumeModel from "@/models/resume/ResumeModel";
+    import { ResumeModel } from "@/models/resume/Resume";
     import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
     import EditorSettings from "@/models/EditorSettings";
 
@@ -27,7 +27,7 @@
     const activeTabComponent = computed(() => {
         const index = activeTab.value;
 
-        if(0 <= index && index < tabs.length) {
+        if (0 <= index && index < tabs.length) {
             return tabs[index].component;
         }
 

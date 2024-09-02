@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import { themeService } from "@/services";
-    import Color from "@/models/Color";
+    import Color from "@/models/style/Color";
     import IconCopy from "@/components/icons/IconCopy.vue";
     import IconRenew from "@/components/icons/IconRenew.vue";
 

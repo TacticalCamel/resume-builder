@@ -1,4 +1,4 @@
-import ISection from "@/models/interfaces/ISection";
+import { Component } from "@vue/runtime-core";
 import { Contact, ResumeHeader } from "@/models/resume/Header";
 import { Education, EducationList } from "@/models/resume/Educations";
 import { Experience, ExperienceList } from "@/models/resume/Experiences";
@@ -8,7 +8,7 @@ import { Project, ProjectList } from "@/models/resume/Projects";
 import { Technology } from "@/models/resume/Technologies";
 import TypedJsonSerializer from "@/services/implementations/TypedJsonSerializer";
 
-export default class ResumeModel {
+export class ResumeModel {
     header: ResumeHeader
     sections: ISection[]
 
@@ -34,4 +34,8 @@ export default class ResumeModel {
         Project,
         Technology
     });
+}
+
+export interface ISection {
+    get component(): Component
 }

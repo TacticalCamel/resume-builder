@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { PropType, reactive } from "vue";
-    import Theme from '@/models/Theme';
+    import Theme from '@/models/style/Theme';
     import InputText from "@/components/shared/InputText.vue";
-    import Color from "@/models/Color";
+    import Color from "@/models/style/Color";
 
     const props = defineProps({
         theme: {

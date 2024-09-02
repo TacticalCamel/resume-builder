@@ -9,10 +9,10 @@
     import IconUploadFile from "@/components/icons/IconUploadFile.vue";
     import IconCheck from "@/components/icons/IconCheck.vue";
     import IconClose from "@/components/icons/IconClose.vue";
-    import ResumeModel from "@/models/resume/ResumeModel";
     import InputToggle from "@/components/shared/InputToggle.vue";
     import InputRange from "@/components/shared/InputRange.vue";
     import EditorSettings from "@/models/EditorSettings";
+    import { ResumeModel } from "@/models/resume/Resume";
 
     // defines a category of data that can be included for export
     interface DataCategory {

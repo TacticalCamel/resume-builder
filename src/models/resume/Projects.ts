@@ -1,5 +1,5 @@
-import ISection from "@/models/interfaces/ISection";
 import ProjectSection from "@/components/editor/resume/ProjectSection.vue";
+import { ISection } from "@/models/resume/Resume";
 
 export class Project {
     description: string

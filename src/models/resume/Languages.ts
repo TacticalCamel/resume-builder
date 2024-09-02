@@ -1,5 +1,5 @@
-import ISection from "@/models/interfaces/ISection";
 import LanguageSection from "@/components/editor/resume/LanguageSection.vue";
+import { ISection } from "@/models/resume/Resume";
 
 export class Language{
     name: string

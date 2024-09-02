@@ -1,9 +1,8 @@
 <script setup lang="ts">
     import { provide } from "vue";
-    import ISection from "@/models/interfaces/ISection";
-    import ResumeModel from "@/models/resume/ResumeModel";
     import HeaderSection from "@/components/editor/resume/HeaderSection.vue";
     import DraggableList from "@/components/editor/resume/DraggableList.vue";
+    import { ISection, ResumeModel } from "@/models/resume/Resume";
 
     const resume = defineModel<ResumeModel>({
         required: true

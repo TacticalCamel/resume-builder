@@ -1,5 +1,5 @@
-import ISection from "@/models/interfaces/ISection";
 import EducationSection from "@/components/editor/resume/EducationSection.vue";
+import { ISection } from "@/models/resume/Resume";
 
 export class Education {
     school: string

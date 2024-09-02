@@ -1,5 +1,5 @@
-import ISection from "@/models/interfaces/ISection";
 import ExperienceSection from "@/components/editor/resume/ExperienceSection.vue";
+import { ISection } from "@/models/resume/Resume";
 
 export class Experience {
     company: string

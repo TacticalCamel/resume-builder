@@ -1,8 +1,7 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import draggable from "vuedraggable";
     import { themeService } from "@/services";
-    import Theme from "@/models/Theme";
+    import Theme from "@/models/style/Theme";
     import ThemeCard from "@/components/editor/sidebar/ThemeCard.vue";
     import ColorPicker from "@/components/editor/sidebar/ColorPicker.vue";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
@@ -85,8 +84,8 @@
     const isDefaultCurrentTheme = computed<boolean>(() => {
         const theme: Theme = themeService.currentTheme;
 
-        for(const key in themeService.defaultThemes){
-            if(themeService.defaultThemes[key].id === theme.id) {
+        for (const key in themeService.defaultThemes) {
+            if (themeService.defaultThemes[key].id === theme.id) {
                 return true;
             }
         }
@@ -135,35 +134,15 @@
         </editor-tab-item>
 
         <editor-tab-item title="themes">
-            <transition-group>
-                <draggable
-                    v-model="themeService.customThemes"
-                    item-key="id"
-                    key="draggable"
-                    drag-class="dragging"
-                    ghost-class="ghost"
-                    animation="200"
-                    class="flex flex-col gap-3"
-                >
-                    <template #header>
-                        <theme-card
-                            v-for="theme in themeService.defaultThemes"
-                            @click="setTheme(theme)"
-                            :theme="theme"
-                            :is-default="true"
-                            :is-active="themeService.currentTheme.id === theme.id"
-                        />
-                    </template>
-
-                    <template #item="{element: theme}: {element: Theme}">
-                        <theme-card
-                            @click="setTheme(theme)"
-                            :theme="theme"
-                            :is-active="themeService.currentTheme.id === theme.id"
-                        />
-                    </template>
-                </draggable>
-            </transition-group>
+            <div class="grid gap-3">
+                <theme-card
+                    v-for="theme in themeService.allThemes"
+                    @click="setTheme(theme)"
+                    :theme="theme"
+                    :is-default="themeService.defaultThemes.light.id === theme.id || themeService.defaultThemes.dark.id === theme.id"
+                    :is-active="themeService.currentTheme.id === theme.id"
+                />
+            </div>
         </editor-tab-item>
     </editor-tab>
 

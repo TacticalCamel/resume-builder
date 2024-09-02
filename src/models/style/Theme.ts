@@ -1,4 +1,4 @@
-import Color from "@/models/Color";
+import Color from "@/models/style/Color";
 import TypedJsonSerializer from "@/services/implementations/TypedJsonSerializer";
 
 export default class Theme {

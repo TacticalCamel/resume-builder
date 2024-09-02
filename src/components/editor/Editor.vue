@@ -4,8 +4,8 @@
     import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
     import Resume from "@/components/editor/resume/Resume.vue";
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
-    import ResumeModel from "@/models/resume/ResumeModel";
     import EditorSettings from "@/models/EditorSettings";
+    import { ResumeModel } from "@/models/resume/Resume";
 
     const props = defineProps({
         routeParameters: {
@@ -52,6 +52,8 @@
 
         <div class="relative grow">
             <div id="editor" class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip bg-background text-foreground" :style="editorStyles">
+                {{ fontService.currentFont }}
+
                 <resume v-if="resume.value" v-model="resume.value" editable/>
 
                 <div v-else class="flex flex-col size-full justify-center items-center gap-2 text-2xl">

@@ -1,5 +1,5 @@
-import ISection from "@/models/interfaces/ISection";
 import SkillSection from "@/components/editor/resume/SkillSection.vue";
+import { ISection } from "@/models/resume/Resume";
 
 export class Skill {
     name: string

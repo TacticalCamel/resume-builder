@@ -1,9 +1,8 @@
 import { ref, Ref, watchEffect } from "vue";
 import ISerializer from "@/services/interfaces/ISerializer";
 import JsonSerializer from "@/services/implementations/JsonSerializer";
-import IValueStore from "@/services/interfaces/IValueStore";
 
-export default class LocalStorageAutosaveService<T> implements IValueStore<T>{
+export default class LocalStorageAutosaveService<T> {
     private readonly service: LocalStorageService<T>;
     private readonly data: Ref<T>;
 
@@ -48,7 +47,7 @@ class LocalStorageService<T> {
     private readonly storageKey: string;
     private readonly serializer: ISerializer;
 
-    constructor(storageKey: string, serializer: ISerializer = new JsonSerializer()) {
+    constructor(storageKey: string, serializer: ISerializer) {
         this.storageKey = storageKey;
         this.serializer = serializer;
     }

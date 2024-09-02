@@ -1,5 +1,5 @@
-import Theme from "@/models/Theme";
-import Color from "@/models/Color";
+import Theme from "@/models/style/Theme";
+import Color from "@/models/style/Color";
 
 export default interface IThemeService<TDefaultThemes extends Record<string, Theme>> {
     get currentTheme(): Theme

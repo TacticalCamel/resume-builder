@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { onBeforeMount, ref } from "vue";
     import { fontService } from "@/services";
     import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
@@ -9,6 +9,25 @@
     import IconClose from "@/components/icons/IconClose.vue";
     import IconCheck from "@/components/icons/IconCheck.vue";
     import FontCard from "@/components/editor/sidebar/FontCard.vue";
+    import Font from "@/models/style/Font";
+
+    const customFonts = ref<Font[]>([]);
+    const systemFonts = ref<Font[]>([]);
+
+    onBeforeMount(async () => {
+        customFonts.value = await fontService.customFonts;
+        systemFonts.value = await fontService.systemFonts;
+
+        for (const font of customFonts.value) {
+            if (!font.data) {
+                continue;
+            }
+
+            const fontFace = new FontFace(font.name, font.data)
+
+            document.fonts.add(fontFace);
+        }
+    })
 
     const searchText = ref<string>('');
 
@@ -27,7 +46,26 @@
 
         document.fonts.add(fontFace);
 
-        fontService.customFonts.push({name: fontFace.family, data: undefined});
+        const font: Font = {
+            name: fontName,
+            data: fontFile
+        };
+
+        fontService.addCustomFont(font);
+        customFonts.value.push(font);
+    }
+
+    function setCurrentFont(font: Font) {
+        fontService.currentFont = font.name;
+    }
+
+    function shouldDisplay(font: Font) {
+        return font.name.toLowerCase().includes(searchText.value.toLowerCase());
+    }
+
+    async function loadSystemFonts() {
+        await fontService.loadSystemFonts();
+        systemFonts.value = await fontService.systemFonts;
     }
 </script>
 
@@ -49,12 +87,12 @@
             </div>
 
             <div class="relative flex flex-col gap-1 scrollbar overflow-y-auto px-px max-h-96">
-                <template v-if="fontService.customFonts.length">
+                <template v-if="customFonts.length">
                     <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80">Custom fonts</div>
-                    <template v-for="font in fontService.customFonts.sort()">
+                    <template v-for="font in customFonts">
                         <font-card
-                            v-if="font.name.toLowerCase().includes(searchText.toLowerCase())"
-                            @click="fontService.currentFont = font.name"
+                            v-if="shouldDisplay(font)"
+                            @click="setCurrentFont(font)"
                             :font="font.name"
                             class="cursor-pointer"
                         />
@@ -62,10 +100,10 @@
                 </template>
 
                 <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80 mt-2">System fonts</div>
-                <template v-if="fontService.systemFonts.length" v-for="font in fontService.systemFonts.sort()">
+                <template v-if="systemFonts.length" v-for="font in systemFonts">
                     <font-card
-                        v-if="font.name.toLowerCase().includes(searchText.toLowerCase())"
-                        @click="fontService.currentFont = font.name"
+                        v-if="shouldDisplay(font)"
+                        @click="setCurrentFont(font)"
                         :font="font.name"
                         class="cursor-pointer"
                     />
@@ -74,7 +112,7 @@
                     <button
                         class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors text-sm"
                         :disabled="!fontService.canLoadSystemFonts"
-                        @click="fontService.loadSystemFonts()"
+                        @click="loadSystemFonts()"
                     >
                         Load system fonts
                     </button>
