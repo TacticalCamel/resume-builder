@@ -1,4 +1,4 @@
-import LanguageSection from "@/components/editor/resume/LanguageSection.vue";
+import LanguageSection from "@/components/editor/resume/sections/LanguageSection.vue";
 import { ISection } from "@/models/resume/Resume";
 
 export class Language{

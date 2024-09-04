@@ -1,9 +1,9 @@
 import { Component } from "vue";
-import IconEmail from "@/components/icons/IconEmail.vue";
-import IconPhone from "@/components/icons/IconPhone.vue";
-import IconGithub from "@/components/icons/IconGithub.vue";
-import IconLocation from "@/components/icons/IconLocation.vue";
-import IconLinkedIn from "@/components/icons/IconLinkedIn.vue";
+import IconEmail from "@/components/shared/icons/IconEmail.vue";
+import IconPhone from "@/components/shared/icons/IconPhone.vue";
+import IconGithub from "@/components/shared/icons/IconGithub.vue";
+import IconLocation from "@/components/shared/icons/IconLocation.vue";
+import IconLinkedIn from "@/components/shared/icons/IconLinkedIn.vue";
 
 export class ResumeHeader {
     picture: string | undefined

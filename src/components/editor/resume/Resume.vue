@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { provide } from "vue";
-    import HeaderSection from "@/components/editor/resume/HeaderSection.vue";
-    import DraggableList from "@/components/editor/resume/DraggableList.vue";
+    import HeaderSection from "@/components/editor/resume/sections/HeaderSection.vue";
+    import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import { ISection, ResumeModel } from "@/models/resume/Resume";
 
     const resume = defineModel<ResumeModel>({

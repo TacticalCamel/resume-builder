@@ -5,7 +5,7 @@ import ThemeService from "@/services/implementations/ThemeService";
 import IFontService from "@/services/interfaces/IFontService";
 import FontService from "@/services/implementations/FontService";
 import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
-import DefaultThemes from "@/models/style/DefaultThemes";
+import DefaultThemes from "@/models/DefaultThemes";
 import Color from "@/models/style/Color";
 import Theme from "@/models/style/Theme";
 import { DBSchema, IDBPDatabase, openDB } from "idb";

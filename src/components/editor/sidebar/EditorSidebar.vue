@@ -1,18 +1,18 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import ThemeSettings from "@/components/editor/sidebar/ThemeSettings.vue";
-    import LayoutSettings from "@/components/editor/sidebar/LayoutSettings.vue";
-    import FontSettings from "@/components/editor/sidebar/FontSettings.vue";
-    import IconDashboard from "@/components/icons/IconDashboard.vue";
-    import IconPalette from "@/components/icons/IconPalette.vue";
-    import IconText from "@/components/icons/IconText.vue";
-    import ExportSettings from "@/components/editor/sidebar/ExportSettings.vue";
-    import IconPublish from "@/components/icons/IconPublish.vue";
-    import IconSelect from "@/components/icons/IconSelect.vue";
-    import SelectionSettings from "@/components/editor/sidebar/SelectionSettings.vue";
     import { ResumeModel } from "@/models/resume/Resume";
-    import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
     import EditorSettings from "@/models/EditorSettings";
+    import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
+    import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
+    import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
+    import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
+    import ExportTab from "@/components/editor/sidebar/tabs/ExportTab.vue";
+    import SelectionTab from "@/components/editor/sidebar/tabs/SelectionTab.vue";
+    import IconDashboard from "@/components/shared/icons/IconDashboard.vue";
+    import IconPalette from "@/components/shared/icons/IconPalette.vue";
+    import IconText from "@/components/shared/icons/IconText.vue";
+    import IconPublish from "@/components/shared/icons/IconPublish.vue";
+    import IconSelect from "@/components/shared/icons/IconSelect.vue";
 
     const resume = defineModel<ResumeModel | null>('resume', {
         required: true
@@ -38,27 +38,27 @@
         {
             name: 'Layout',
             icon: IconDashboard,
-            component: LayoutSettings
+            component: LayoutTab
         },
         {
             name: 'Colors',
             icon: IconPalette,
-            component: ThemeSettings
+            component: ThemeTab
         },
         {
             name: 'Text',
             icon: IconText,
-            component: FontSettings
+            component: FontTab
         },
         {
             name: 'Export',
             icon: IconPublish,
-            component: ExportSettings
+            component: ExportTab
         },
         {
             name: 'Selection',
             icon: IconSelect,
-            component: SelectionSettings,
+            component: SelectionTab,
             conditional: true
         }
     ];
@@ -84,7 +84,9 @@
 
         <div class="grow p-4 border-e border-e-foreground/10 scrollbar overflow-y-auto">
             <transition name="fade" mode="out-in">
-                <component :is="activeTabComponent" v-model:resume="resume" v-model:settings="settings"/>
+                <keep-alive>
+                    <component :is="activeTabComponent" v-model:resume="resume" v-model:settings="settings"/>
+                </keep-alive>
             </transition>
         </div>
     </div>

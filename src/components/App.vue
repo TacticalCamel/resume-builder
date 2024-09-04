@@ -3,9 +3,9 @@
     import { navigationService, themeService } from "@/services";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
-    import Templates from "@/components/Templates.vue";
-    import Navigation from "@/components/navigation/Navigation.vue";
-    import NotFound from "@/components/NotFound.vue";
+    import Templates from "@/components/templates/Templates.vue";
+    import Navigation from "@/components/shared/navigation/Navigation.vue";
+    import NotFound from "@/components/shared/NotFound.vue";
 
     // define the routes of the application
     const routes = {

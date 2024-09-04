@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T">
     import { computed, inject, reactive } from "vue";
-    import InputText from "@/components/shared/InputText.vue";
-    import DraggableList from "@/components/editor/resume/DraggableList.vue";
+    import InputText from "@/components/shared/form/InputText.vue";
+    import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
 
     interface SectionModel<T> {
         title: string
@@ -52,7 +52,7 @@
 </script>
 
 <template>
-    <div v-if="editable || section.elements.length" class="rounded-lg">
+    <div v-if="editable || section.elements.length" class="rounded-lg print:break-inside-avoid">
         <div class="max-w-[720px] mx-auto">
             <div class="flex flex-col items-start">
                 <input-text v-model="section.title" placeholder="Section title" class="uppercase text-2xl"/>

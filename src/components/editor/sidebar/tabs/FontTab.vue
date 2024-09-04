@@ -1,14 +1,14 @@
 <script setup lang="ts">
     import { onBeforeMount, ref } from "vue";
     import { fontService } from "@/services";
-    import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
-    import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
-    import InputFile from "@/components/shared/InputFile.vue";
-    import IconUploadFile from "@/components/icons/IconUploadFile.vue";
-    import IconSearch from "@/components/icons/IconSearch.vue";
-    import IconClose from "@/components/icons/IconClose.vue";
-    import IconCheck from "@/components/icons/IconCheck.vue";
-    import FontCard from "@/components/editor/sidebar/FontCard.vue";
+    import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
+    import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
+    import InputFile from "@/components/shared/form/InputFile.vue";
+    import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
+    import IconSearch from "@/components/shared/icons/IconSearch.vue";
+    import IconClose from "@/components/shared/icons/IconClose.vue";
+    import IconCheck from "@/components/shared/icons/IconCheck.vue";
+    import FontCard from "@/components/editor/sidebar/reusable/FontCard.vue";
     import Font from "@/models/style/Font";
 
     const customFonts = ref<Font[]>([]);

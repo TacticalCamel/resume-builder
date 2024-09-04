@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref } from "vue";
     import draggable from "vuedraggable";
-    import IconDelete from "@/components/icons/IconDelete.vue";
+    import IconDelete from "@/components/shared/icons/IconDelete.vue";
 
     const sink = ref<unknown[]>([]);
 </script>

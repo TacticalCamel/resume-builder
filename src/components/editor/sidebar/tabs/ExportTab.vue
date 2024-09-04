@@ -1,16 +1,16 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref } from "vue";
     import { themeService } from "@/services";
-    import InputFile from "@/components/shared/InputFile.vue";
-    import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
-    import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
-    import InputCheckbox from "@/components/shared/InputCheckbox.vue";
-    import IconRenew from "@/components/icons/IconRenew.vue";
-    import IconUploadFile from "@/components/icons/IconUploadFile.vue";
-    import IconCheck from "@/components/icons/IconCheck.vue";
-    import IconClose from "@/components/icons/IconClose.vue";
-    import InputToggle from "@/components/shared/InputToggle.vue";
-    import InputRange from "@/components/shared/InputRange.vue";
+    import InputFile from "@/components/shared/form/InputFile.vue";
+    import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
+    import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
+    import InputCheckbox from "@/components/shared/form/InputCheckbox.vue";
+    import IconRenew from "@/components/shared/icons/IconRenew.vue";
+    import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
+    import IconCheck from "@/components/shared/icons/IconCheck.vue";
+    import IconClose from "@/components/shared/icons/IconClose.vue";
+    import InputToggle from "@/components/shared/form/InputToggle.vue";
+    import InputRange from "@/components/shared/form/InputRange.vue";
     import EditorSettings from "@/models/EditorSettings";
     import { ResumeModel } from "@/models/resume/Resume";
 
@@ -53,7 +53,6 @@
     });
 
     const paperSizes: string[] = ['A3', 'A4', 'A5'];
-
     const paperOrientations: string[] = ['Portrait', 'Landscape'];
 
     // configuration for exporting the editor data

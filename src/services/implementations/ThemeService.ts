@@ -1,5 +1,5 @@
 import IThemeService from "@/services/interfaces/IThemeService";
-import DefaultThemes from "@/models/style/DefaultThemes";
+import DefaultThemes from "@/models/DefaultThemes";
 import Theme from "@/models/style/Theme";
 import Color from "@/models/style/Color";
 import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";

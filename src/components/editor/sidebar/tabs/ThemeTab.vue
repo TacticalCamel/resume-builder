@@ -2,15 +2,15 @@
     import { computed, ref } from "vue";
     import { themeService } from "@/services";
     import Theme from "@/models/style/Theme";
-    import ThemeCard from "@/components/editor/sidebar/ThemeCard.vue";
-    import ColorPicker from "@/components/editor/sidebar/ColorPicker.vue";
-    import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
-    import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
-    import InputRange from "@/components/shared/InputRange.vue";
-    import IconDelete from "@/components/icons/IconDelete.vue";
-    import IconSwapVert from "@/components/icons/IconSwapVert.vue";
-    import IconCheck from "@/components/icons/IconCheck.vue";
-    import IconClose from "@/components/icons/IconClose.vue";
+    import ThemeCard from "@/components/editor/sidebar/reusable/ThemeCard.vue";
+    import ColorPicker from "@/components/editor/sidebar/reusable/ColorPicker.vue";
+    import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
+    import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
+    import InputRange from "@/components/shared/form/InputRange.vue";
+    import IconDelete from "@/components/shared/icons/IconDelete.vue";
+    import IconSwapVert from "@/components/shared/icons/IconSwapVert.vue";
+    import IconCheck from "@/components/shared/icons/IconCheck.vue";
+    import IconClose from "@/components/shared/icons/IconClose.vue";
     import EditorSettings from "@/models/EditorSettings";
 
     const deleteConfirmOpen = ref<boolean>(false);

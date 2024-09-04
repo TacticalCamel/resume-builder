@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import InputText from "@/components/shared/InputText.vue";
-    import ResumeSection from "@/components/editor/resume/ResumeSection.vue";
+    import InputText from "@/components/shared/form/InputText.vue";
+    import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import { Language, LanguageList } from "@/models/resume/Languages";
 
     const languages = defineModel<LanguageList>({
@@ -20,6 +20,7 @@
             <div class="flex">
                 <input-text v-model="language.name" placeholder="Language"/>
             </div>
+
             <div class="flex font-light">
                 <input-text v-model="language.level" placeholder="Level"/>
             </div>

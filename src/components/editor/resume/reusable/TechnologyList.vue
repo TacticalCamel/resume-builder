@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { Technology } from "@/models/resume/Technologies";
-    import InputText from "@/components/shared/InputText.vue";
-    import DraggableList from "@/components/editor/resume/DraggableList.vue";
+    import InputText from "@/components/shared/form/InputText.vue";
+    import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
 
     const technologies = defineModel<Technology[]>({
         required: true

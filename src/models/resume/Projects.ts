@@ -1,4 +1,4 @@
-import ProjectSection from "@/components/editor/resume/ProjectSection.vue";
+import ProjectSection from "@/components/editor/resume/sections/ProjectSection.vue";
 import { ISection } from "@/models/resume/Resume";
 
 export class Project {

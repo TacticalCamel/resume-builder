@@ -1,4 +1,4 @@
-import ExperienceSection from "@/components/editor/resume/ExperienceSection.vue";
+import ExperienceSection from "@/components/editor/resume/sections/ExperienceSection.vue";
 import { ISection } from "@/models/resume/Resume";
 
 export class Experience {

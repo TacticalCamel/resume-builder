@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { PropType, reactive } from "vue";
     import Theme from '@/models/style/Theme';
-    import InputText from "@/components/shared/InputText.vue";
+    import InputText from "@/components/shared/form/InputText.vue";
     import Color from "@/models/style/Color";
 
     const props = defineProps({

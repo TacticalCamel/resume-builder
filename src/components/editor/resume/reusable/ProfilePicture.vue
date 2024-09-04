@@ -1,13 +1,15 @@
 <script setup lang="ts">
     import { inject } from "vue";
-    import IconProfile from "@/components/icons/IconProfile.vue";
-    import InputFile from "@/components/shared/InputFile.vue";
-    import IconDelete from "@/components/icons/IconDelete.vue";
-    import IconUploadFile from "@/components/icons/IconUploadFile.vue";
+    import IconProfile from "@/components/shared/icons/IconProfile.vue";
+    import InputFile from "@/components/shared/form/InputFile.vue";
+    import IconDelete from "@/components/shared/icons/IconDelete.vue";
+    import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
 
     const picture = defineModel<string | undefined>({
         required: true
     });
+
+    const editable = inject<boolean>('editable', false);
 
     function setProfilePicture(contents: string | ArrayBuffer) {
         if(typeof contents !== 'string') {
@@ -20,8 +22,6 @@
     function removeProfilePicture() {
         picture.value = undefined;
     }
-
-    const editable = inject<boolean>('editable', false);
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { inject } from "vue";
-    import InputText from "@/components/shared/InputText.vue";
-    import IconLink from "@/components/icons/IconLink.vue";
-    import ResumeSection from "@/components/editor/resume/ResumeSection.vue";
-    import TechnologyList from "@/components/editor/resume/TechnologyList.vue";
+    import InputText from "@/components/shared/form/InputText.vue";
+    import IconLink from "@/components/shared/icons/IconLink.vue";
+    import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
+    import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
     import { Project, ProjectList } from "@/models/resume/Projects";
 
     const projects = defineModel<ProjectList>({
@@ -19,7 +19,6 @@
         :group="Project.draggableCategory"
         grid-columns="1fr"
         :gap-y="1.5"
-        :style="{pageBreakAfter: 'always'}"
     >
         <template #header>
             <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="editable || (projects.disclaimer.length && projects.elements.length)">
@@ -34,6 +33,7 @@
                         <icon-link class="size-5"/>
                         <input-text :class="{'underline': !editable}" v-model="project.url" placeholder="Project URL"/>
                     </a>
+
                     <technology-list v-model="project.technologies" class="mb-1"/>
                 </div>
 

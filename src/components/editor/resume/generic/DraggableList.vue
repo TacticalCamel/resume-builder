@@ -33,6 +33,7 @@
     <transition-group>
         <draggable
             v-model="elements"
+            tag="ul"
             key="draggable"
             item-key="id"
             drag-class="dragging"
@@ -47,9 +48,9 @@
             </template>
 
             <template #item="{element, index}: {element: T, index: number}">
-                <div :style="itemStyle" :class="{'moveable': editable}">
+                <li :style="itemStyle" class="empty:hidden" :class="{'moveable': editable}">
                     <slot name="item" :element="element" :index="index"/>
-                </div>
+                </li>
             </template>
 
             <template #footer>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { Component } from "vue";
     import draggable from "vuedraggable";
-    import DeleteArea from "@/components/editor/sidebar/DeleteArea.vue";
-    import IconLink from "@/components/icons/IconLink.vue";
-    import IconSegment from "@/components/icons/IconSegment.vue";
-    import IconCube from "@/components/icons/IconCube.vue";
-    import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
-    import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
+    import DeleteArea from "@/components/editor/sidebar/reusable/DeleteArea.vue";
+    import IconLink from "@/components/shared/icons/IconLink.vue";
+    import IconSegment from "@/components/shared/icons/IconSegment.vue";
+    import IconCube from "@/components/shared/icons/IconCube.vue";
+    import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
+    import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import { Contact, ContactView } from "@/models/resume/Header";
     import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
     import { Education, EducationList } from "@/models/resume/Educations";

@@ -1,4 +1,4 @@
-import EducationSection from "@/components/editor/resume/EducationSection.vue";
+import EducationSection from "@/components/editor/resume/sections/EducationSection.vue";
 import { ISection } from "@/models/resume/Resume";
 
 export class Education {

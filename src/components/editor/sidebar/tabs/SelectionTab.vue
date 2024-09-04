@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import EditorTab from "@/components/editor/sidebar/EditorTab.vue";
-    import EditorTabItem from "@/components/editor/sidebar/EditorTabItem.vue";
+    import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
+    import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
 
     const style: object = window.getComputedStyle(document.body);
 </script>

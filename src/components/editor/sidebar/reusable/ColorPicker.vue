@@ -2,8 +2,8 @@
     import { computed } from "vue";
     import { themeService } from "@/services";
     import Color from "@/models/style/Color";
-    import IconCopy from "@/components/icons/IconCopy.vue";
-    import IconRenew from "@/components/icons/IconRenew.vue";
+    import IconCopy from "@/components/shared/icons/IconCopy.vue";
+    import IconRenew from "@/components/shared/icons/IconRenew.vue";
 
     const color = defineModel<Color>({
         required: true

@@ -37,24 +37,23 @@
             filter: `grayscale(${settings.value.filters.grayscale}%) contrast(${settings.value.filters.contrast}%) brightness(${settings.value.filters.brightness}%)`,
             backdropFilter: `grayscale(${settings.value.filters.grayscale}%)`,
             fontFamily: fontService.currentFont,
-            ...themeService.currentTheme.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
+            ...themeService.currentTheme.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {}),
+            '--page-size': 'A3'
         };
     });
 </script>
 
 <template>
     <div class="flex grow">
-        <div class="relative w-[440px]">
+        <div class="relative w-[440px] print:hidden">
             <div class="absolute inset-0">
                 <editor-sidebar v-model:resume="resume.value" v-model:settings="settings.value"/>
             </div>
         </div>
 
         <div class="relative grow">
-            <div id="editor" class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip bg-background text-foreground" :style="editorStyles">
-                {{ fontService.currentFont }}
-
-                <resume v-if="resume.value" v-model="resume.value" editable/>
+            <div id="editor" class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip bg-background text-foreground print:relative" :style="editorStyles">
+                <resume v-model="resume.value" v-if="resume.value" editable/>
 
                 <div v-else class="flex flex-col size-full justify-center items-center gap-2 text-2xl">
                     <button @click="resume.value = new ResumeModel()" class="underline hover:text-secondary transition-colors">Create an empty resume</button>
@@ -65,29 +64,3 @@
         </div>
     </div>
 </template>
-
-<style lang="postcss" scoped>
-    /*#editor {
-        @apply fixed z-50 inset-0;
-    }*/
-
-    /*#editor::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        border: 1px solid red;
-        height: 297mm;
-        width: 210mm;
-    }
-
-    #editor > * {
-        transform: scale(0.5);
-        transform-origin: 50% 0;
-    }
-
-    @page {
-        size: A4 portrait;
-    }*/
-</style>

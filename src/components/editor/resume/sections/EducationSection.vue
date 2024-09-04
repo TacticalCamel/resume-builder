@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import InputText from "@/components/shared/InputText.vue";
-    import ResumeSection from "@/components/editor/resume/ResumeSection.vue";
+    import InputText from "@/components/shared/form/InputText.vue";
+    import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import { Education, EducationList } from "@/models/resume/Educations";
 
     const educations = defineModel<EducationList>({
@@ -22,6 +22,7 @@
                 <span class="mx-2">-</span>
                 <input-text v-model="education.finish" placeholder="Finish date"/>
             </div>
+
             <div class="flex flex-col items-start font-light">
                 <input-text v-model="education.school" placeholder="School name"/>
                 <input-text v-model="education.major" placeholder="Major" class="text-foreground text-opacity-60"/>
