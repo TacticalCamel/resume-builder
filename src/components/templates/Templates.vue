@@ -9,6 +9,6 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
 
 </style>

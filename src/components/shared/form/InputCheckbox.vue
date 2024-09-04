@@ -1,16 +1,10 @@
 <script setup lang="ts">
     const model = defineModel<boolean>();
 
-    defineProps({
-        disabled: {
-            type: Boolean,
-            default: false
-        },
-        checked: {
-            type: Boolean,
-            default: false
-        }
-    });
+    const {disabled = false, checked = false} = defineProps<{
+        disabled?: boolean
+        checked?: boolean
+    }>();
 </script>
 
 <template>

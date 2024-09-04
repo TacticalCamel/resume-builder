@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref } from "vue";
-    import { themeService } from "@/services";
+    import { themeService } from "@/services/services";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";

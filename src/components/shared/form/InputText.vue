@@ -9,12 +9,9 @@
         inheritAttrs: false
     });
 
-    defineProps({
-        placeholder: {
-            type: String,
-            default: '...'
-        }
-    });
+    const {placeholder = '...'} = defineProps<{
+        placeholder?: string
+    }>();
 
     function saveChanges(e: Event) {
         model.value = (e.target as HTMLElement).innerText;
@@ -32,7 +29,7 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
     /*
      Style the container for the editable text. Use grid layout to align the text and the placeholder.
     */

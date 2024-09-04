@@ -1,23 +1,16 @@
 <script setup lang="ts">
-    import { ref, PropType } from "vue";
+    import { ref, useTemplateRef } from "vue";
 
-    const props = defineProps({
+    const {accept, multiple, format = 'text'} = defineProps<{
         // the file types to accept in the upload dialog
-        accept: {
-            type: String,
-            default: '*/*'
-        },
+        accept?: string
+
         // whether to allow multiple files to be uploaded
-        multiple: {
-            type: Boolean,
-            default: false
-        },
+        multiple?: boolean
+
         // the data format to return
-        format: {
-            type: String as PropType<'text' | 'binary' | 'base64'>,
-            default: 'text'
-        }
-    });
+        format?: 'text' | 'binary' | 'base64'
+    }>();
 
     const emits = defineEmits<{
         upload: [fileContent: string | ArrayBuffer, fileName: string]
@@ -25,7 +18,7 @@
 
     const isDragging = ref<boolean>(false);
 
-    const input = ref<HTMLInputElement | null>(null);
+    const input = useTemplateRef<HTMLInputElement>('input');
 
     // handle upload by file upload dialog
     function uploadByDialog(event: Event) {
@@ -85,17 +78,17 @@
         }
 
         // read as binary
-        if (props.format === 'binary') {
+        if (format === 'binary') {
             reader.readAsArrayBuffer(file);
         }
 
         // read as base64
-        else if (props.format === 'base64') {
+        else if (format === 'base64') {
             reader.readAsDataURL(file);
         }
 
         // read as text
-        else if (props.format === 'text') {
+        else if (format === 'text') {
             reader.readAsText(file, 'UTF-8');
         }
 

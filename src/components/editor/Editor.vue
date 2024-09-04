@@ -1,18 +1,15 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { fontService, navigationService, themeService } from "@/services";
+    import { fontService, navigationService, themeService } from "@/services/services";
     import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
     import Resume from "@/components/editor/resume/Resume.vue";
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
     import EditorSettings from "@/models/EditorSettings";
     import { ResumeModel } from "@/models/resume/Resume";
 
-    const props = defineProps({
-        routeParameters: {
-            type: Object,
-            default: {}
-        }
-    });
+    const {routeParameters} = defineProps<{
+        routeParameters: any
+    }>();
 
     const settings = new LocalStorageAutosaveService<EditorSettings>('settings', () => ({
         filters: {
@@ -29,7 +26,7 @@
     }));
 
     const resume = new LocalStorageAutosaveService<ResumeModel | null>('resume', () => {
-        return props.routeParameters.init ? new ResumeModel() : null;
+        return routeParameters.init ? new ResumeModel() : null;
     }, ResumeModel.serializer);
 
     const editorStyles = computed(() => {
@@ -37,8 +34,7 @@
             filter: `grayscale(${settings.value.filters.grayscale}%) contrast(${settings.value.filters.contrast}%) brightness(${settings.value.filters.brightness}%)`,
             backdropFilter: `grayscale(${settings.value.filters.grayscale}%)`,
             fontFamily: fontService.currentFont,
-            ...themeService.currentTheme.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {}),
-            '--page-size': 'A3'
+            ...themeService.currentTheme.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
         };
     });
 </script>

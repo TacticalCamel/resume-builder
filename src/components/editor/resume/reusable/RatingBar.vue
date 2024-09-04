@@ -1,26 +1,26 @@
 <script setup lang="ts">
-    const props = defineProps<{
+    const {value, max, style = 'card'} = defineProps<{
         value: number
         max: number
         style?: 'card' | 'bar'
     }>();
 
     function getColor(i: number) {
-        if (i > props.value || 0 > i) {
+        if (i > value || 0 > i) {
             return 0;
         }
 
-        if (i > props.max) {
-            return props.max;
+        if (i > max) {
+            return max;
         }
 
-        return props.value;
+        return value;
     }
 </script>
 
 <template>
-    <div :class="`style-${style ?? 'card'}`">
-        <div v-for="i in props.max" :style="{backgroundColor: `rgb(var(--rating-bar-${getColor(i)}))`}"/>
+    <div :class="`style-${style}`">
+        <div v-for="i in max" :style="{backgroundColor: `rgb(var(--rating-bar-${getColor(i)}))`}"/>
     </div>
 </template>
 

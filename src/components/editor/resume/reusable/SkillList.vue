@@ -11,18 +11,18 @@
         required: true
     });
 
-    const props = defineProps<{
+    const {maxLevel} = defineProps<{
         maxLevel: number
     }>();
 
     const editable = inject<boolean>('editable', false);
 
     function decreaseSkillLevel(skill: Skill) {
-        skill.level = Math.min(props.maxLevel, Math.max(0, skill.level - 1));
+        skill.level = Math.min(maxLevel, Math.max(0, skill.level - 1));
     }
 
     function increaseSkillLevel(skill: Skill) {
-        skill.level = Math.min(props.maxLevel, Math.max(0, skill.level + 1));
+        skill.level = Math.min(maxLevel, Math.max(0, skill.level + 1));
     }
 </script>
 

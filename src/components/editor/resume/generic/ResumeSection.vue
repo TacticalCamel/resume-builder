@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T">
-    import { computed, inject, reactive } from "vue";
+    import { computed, inject, ref } from "vue";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
 
@@ -8,28 +8,13 @@
         elements: T[]
     }
 
-    const props = defineProps({
-        group: {
-            type: String,
-            required: true
-        },
-        gridColumns: {
-            type: String,
-            default: 'min-content'
-        },
-        subGridColumns: {
-            type: Number,
-            default: 1
-        },
-        gapX: {
-            type: Number,
-            default: 0
-        },
-        gapY: {
-            type: Number,
-            default: 0
-        }
-    });
+    const {group, gridColumns = 'min-content', subGridColumns = 1, gapX = 0, gapY = 0} = defineProps<{
+        group: string,
+        gridColumns?: string,
+        subGridColumns?: number,
+        gapX?: number,
+        gapY?: number
+    }>();
 
     const section = defineModel<SectionModel<T>>({
         required: true
@@ -37,15 +22,15 @@
 
     const outerGridStyle = computed(() => {
         return {
-            gridTemplateColumns: section.value.elements.length ? props.gridColumns : '1fr',
-            gap: `${props.gapY}rem ${props.gapX}rem`
+            gridTemplateColumns: section.value.elements.length ? gridColumns : '1fr',
+            gap: `${gapY}rem ${gapX}rem`
         };
     });
 
-    const innerGridStyle = reactive({
+    const innerGridStyle = ref({
         display: 'grid',
         gridTemplateColumns: 'subgrid',
-        gridColumn: `span ${props.subGridColumns} / span ${props.subGridColumns}`,
+        gridColumn: `span ${subGridColumns} / span ${subGridColumns}`,
     });
 
     const editable = inject<boolean>('editable', false);

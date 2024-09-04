@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { themeService } from "@/services";
+    import { themeService } from "@/services/services";
     import Color from "@/models/style/Color";
     import IconCopy from "@/components/shared/icons/IconCopy.vue";
     import IconRenew from "@/components/shared/icons/IconRenew.vue";
@@ -13,12 +13,9 @@
         change: []
     }>();
 
-    defineProps({
-        disabled: {
-            type: Boolean,
-            default: false
-        }
-    });
+    const {disabled = false} = defineProps<{
+        disabled?: boolean
+    }>();
 
     const hexColor = computed(() => rgb2hex(color.value.value));
 
@@ -79,21 +76,21 @@
 <style lang="postcss" scoped>
     .color-picker {
         @apply text-white;
+
+        > button:hover {
+            filter: drop-shadow(1px 1px 3px white);
+        }
+
+        &:has(input:disabled) {
+            @apply cursor-not-allowed;
+        }
     }
 
     .color-picker.dark-text {
         @apply text-black;
-    }
 
-    .color-picker:has(input:disabled) {
-        @apply cursor-not-allowed;
-    }
-
-    .color-picker > button:hover {
-        filter: drop-shadow(1px 1px 3px white);
-    }
-
-    .color-picker.dark-text > button:hover {
-        filter: drop-shadow(1px 1px 3px black);
+        > button:hover {
+            filter: drop-shadow(1px 1px 3px black);
+        }
     }
 </style>

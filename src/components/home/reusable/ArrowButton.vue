@@ -15,19 +15,19 @@
         @apply transition-all;
     }
 
-    .arrow-button:hover .arrow-tip {
-        transform: translateX(100px);
-    }
-
     .arrow-line {
         opacity: 0;
     }
 
-    .arrow-button:hover .arrow-line {
-        opacity: 1;
-    }
-
     .arrow-button:hover {
         box-shadow: 0 0 1.5rem 0.5rem rgb(var(--primary) / 0.5);
+
+        .arrow-line {
+            opacity: 1;
+        }
+
+        .arrow-tip {
+            transform: translateX(100px);
+        }
     }
 </style>

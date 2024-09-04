@@ -1,25 +1,16 @@
 <script setup lang="ts">
-    import { PropType, reactive } from "vue";
+    import { ref } from "vue";
     import Theme from '@/models/style/Theme';
     import InputText from "@/components/shared/form/InputText.vue";
     import Color from "@/models/style/Color";
 
-    const props = defineProps({
-        theme: {
-            type: Object as PropType<Theme>,
-            required: true
-        },
-        isDefault: {
-            type: Boolean,
-            default: false
-        },
-        isActive: {
-            type: Boolean,
-            default: false
-        }
-    });
+    const {theme, isDefault = false, isActive = false} = defineProps<{
+        theme: Theme,
+        isDefault?: boolean,
+        isActive?: boolean
+    }>();
 
-    const themeColors = reactive({
+    const themeColors = ref({
         background: getThemeColor('--background'),
         foreground: getThemeColor('--foreground'),
         primary: getThemeColor('--primary'),
@@ -27,7 +18,7 @@
     });
 
     function getThemeColor(key: string) {
-        const color: Color | undefined = props.theme.colors.find(c => c.name === key);
+        const color: Color | undefined = theme.colors.find(c => c.name === key);
         const rgb = color?.value ?? '0 0 0';
 
         return {
@@ -63,10 +54,10 @@
         @apply outline outline-2 outline-transparent -outline-offset-1 select-none;
 
         transition: outline-color 150ms ease-in-out;
-    }
 
-    .theme-card.active {
-        @apply outline-foreground;
+        &.active {
+            @apply outline-foreground;
+        }
     }
 
     .theme-colors {
@@ -74,17 +65,17 @@
         transition-property: all;
         transition-duration: 300ms;
         transition-timing-function: ease-in-out;
+
+        span {
+            @apply opacity-0 transition-opacity duration-300;
+        }
     }
 
     .theme-card:hover .theme-colors {
         @apply h-[calc(100%+2px)];
-    }
 
-    .theme-card .theme-colors span {
-        @apply opacity-0 transition-opacity duration-300;
-    }
-
-    .theme-card:hover .theme-colors span {
-        @apply opacity-100;
+        span {
+            @apply opacity-100;
+        }
     }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { themeService } from "@/services";
+    import { themeService } from "@/services/services";
     import Theme from "@/models/style/Theme";
     import ThemeCard from "@/components/editor/sidebar/reusable/ThemeCard.vue";
     import ColorPicker from "@/components/editor/sidebar/reusable/ColorPicker.vue";

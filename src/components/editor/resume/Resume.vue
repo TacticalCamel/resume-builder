@@ -8,14 +8,11 @@
         required: true
     });
 
-    const props = defineProps({
-        editable: {
-            type: Boolean,
-            default: false
-        }
-    });
+    const {editable = false} = defineProps<{
+        editable?: boolean
+    }>();
 
-    provide<boolean>('editable', props.editable);
+    provide<boolean>('editable', editable);
 </script>
 
 <template>

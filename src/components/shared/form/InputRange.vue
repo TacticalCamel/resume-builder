@@ -5,31 +5,16 @@
         required: true
     });
 
-    const props = defineProps({
-        min: {
-            type: Number,
-            required: true
-        },
-        max: {
-            type: Number,
-            required: true
-        },
-        step: {
-            type: Number,
-            default: 1
-        },
-        unit: {
-            type: String,
-            default: undefined
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        }
-    });
+    const { min, max, step = 1, unit = undefined, disabled = false } = defineProps<{
+        min: number
+        max: number
+        step?: number
+        unit?: string
+        disabled?: boolean
+    }>();
 
     const progress = computed(() => {
-        return ~~((model.value - props.min) / (props.max - props.min) * 100) + '%';
+        return ~~((model.value - min) / (max - min) * 100) + '%';
     });
 </script>
 

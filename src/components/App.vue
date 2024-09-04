@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, onMounted } from "vue";
-    import { navigationService, themeService } from "@/services";
+    import { navigationService, themeService } from "@/services/services";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/templates/Templates.vue";
@@ -33,7 +33,7 @@
 </template>
 
 <!--suppress CssUnusedSymbol -->
-<style scoped>
+<style lang="postcss" scoped>
     .fade-enter-active, .fade-leave-active {
         transition: all 200ms ease-out;
     }

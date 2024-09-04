@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { onBeforeMount, ref } from "vue";
-    import { fontService } from "@/services";
+    import { fontService } from "@/services/services";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";

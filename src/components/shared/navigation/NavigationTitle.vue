@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { navigationService } from "@/services";
+    import { navigationService } from "@/services/services";
     import logo from '@/assets/logo.svg'
 </script>
 

@@ -1,27 +1,11 @@
 <script setup lang="ts">
-    import { navigationService } from "@/services";
-    import HeroSection from "@/components/home/HeroSection.vue";
-    import ArrowButton from "@/components/home/ArrowButton.vue";
-    import FeatureCard from "@/components/home/FeatureCard.vue";
+    import HeroSection from "@/components/home/sections/HeroSection.vue";
+    import FeatureCard from "@/components/home/reusable/FeatureCard.vue";
 </script>
 
 <template>
-    <div class="relative">
-        <hero-section class="mt-48">
-            <template #title>
-                Free and accessible <br/>
-                resume building
-            </template>
-
-            <template #subtitle>
-                Create professional resumes effortlessly with an intuitive drag-and-drop interface, customizable templates, and real-time previews.
-            </template>
-
-            <template #actions>
-                <arrow-button @click="navigationService.navigateTo('/editor', {init: true})">Start now</arrow-button>
-                <arrow-button @click="navigationService.navigateTo('/templates')">Browse templates</arrow-button>
-            </template>
-        </hero-section>
+    <div class=" gap-24">
+        <hero-section class="mt-48"/>
 
         <section class="h-[720px] mt-24">
             <div class="size-full flex justify-center items-center border">
@@ -29,7 +13,7 @@
             </div>
         </section>
 
-        <section class="mt-24 flex justify-center gap-8">
+        <section class="flex justify-center gap-8">
             <feature-card>
                 <template #title>Intuitive</template>
                 <template #content>
@@ -52,7 +36,7 @@
             </feature-card>
         </section>
 
-        <footer class="mt-24 border-t border-t-foreground/10">
+        <footer class="border-t border-t-foreground/10">
             <section class="flex py-4">
                 <div class="size-full flex justify-center items-center border h-24">
                     <div class="text-5xl text-foreground/70 font-mono select-none">Placeholder for footer</div>
@@ -62,12 +46,8 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
     section {
-        max-width: 1280px;
-        padding-left: 20px;
-        padding-right: 20px;
-        margin-left: auto;
-        margin-right: auto;
+        @apply max-w-[1280px] px-5 mx-auto;
     }
 </style>
