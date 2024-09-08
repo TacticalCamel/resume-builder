@@ -3,12 +3,13 @@
     import { Contact, ContactView } from "@/models/resume/Header";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import InputText from "@/components/shared/form/InputText.vue";
+    import { editableInjectionKey } from "@/services/keys";
 
     const contacts = defineModel<Contact[]>({
         required: true
     });
 
-    const editable = inject<boolean>('editable', false);
+    const editable = inject<boolean>(editableInjectionKey, false);
 </script>
 
 <template>

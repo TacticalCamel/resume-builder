@@ -2,6 +2,7 @@
     import { computed, inject, ref } from "vue";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
+    import { editableInjectionKey } from "@/services/keys";
 
     interface SectionModel<T> {
         title: string
@@ -33,7 +34,7 @@
         gridColumn: `span ${subGridColumns} / span ${subGridColumns}`,
     });
 
-    const editable = inject<boolean>('editable', false);
+    const editable = inject<boolean>(editableInjectionKey, false);
 </script>
 
 <template>

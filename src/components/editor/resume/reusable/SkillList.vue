@@ -6,6 +6,7 @@
     import RatingBar from "@/components/editor/resume/reusable/RatingBar.vue";
     import IconIncrease from "@/components/shared/icons/IconIncrease.vue";
     import InputText from "@/components/shared/form/InputText.vue";
+    import { editableInjectionKey } from "@/services/keys";
 
     const skills = defineModel<Skill[]>({
         required: true
@@ -15,7 +16,7 @@
         maxLevel: number
     }>();
 
-    const editable = inject<boolean>('editable', false);
+    const editable = inject<boolean>(editableInjectionKey, false);
 
     function decreaseSkillLevel(skill: Skill) {
         skill.level = Math.min(maxLevel, Math.max(0, skill.level - 1));

@@ -1,25 +1,24 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-// noinspection JSUnusedGlobalSymbols
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
         "./index.html",
-        "./src/**/*.{vue,js,ts,jsx,tsx}",
+        "./src/**/*.{vue,js,ts}",
     ],
     theme: {
         extend: {
             colors: {
-                foreground: ({opacityValue}) => colorWithOpacity('--foreground', opacityValue),
-                background: ({opacityValue}) => colorWithOpacity('--background', opacityValue),
+                foreground: defineColor('--foreground'),
+                background: defineColor('--background'),
 
-                primary: ({opacityValue}) => colorWithOpacity('--primary', opacityValue),
-                secondary: ({opacityValue}) => colorWithOpacity('--secondary', opacityValue),
+                primary: defineColor('--primary'),
+                secondary: defineColor('--secondary'),
 
-                success: ({opacityValue}) => colorWithOpacity('--success', opacityValue),
-                warning: ({opacityValue}) => colorWithOpacity('--warning', opacityValue),
-                error: ({opacityValue}) => colorWithOpacity('--error', opacityValue),
-                info: ({opacityValue}) => colorWithOpacity('--info', opacityValue),
+                success: defineColor('--success'),
+                warning: defineColor('--warning'),
+                error: defineColor('--error'),
+                info: defineColor('--info'),
             }
         },
         screens: {
@@ -30,6 +29,8 @@ export default {
     plugins: []
 }
 
-function colorWithOpacity(color: string, opacity: string | undefined) {
-    return `rgba(var(${color}) / ${opacity ?? 1})`
+function defineColor(name: string) {
+    return (opacity: Partial<{ opacityVariable: string, opacityValue: number }>): string => {
+        return `rgba(var(${name}) / ${opacity.opacityValue ?? 1})`;
+    };
 }

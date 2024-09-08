@@ -191,7 +191,8 @@ const db = await openDB<DatabaseSchema>('resume-builder-db', 1, {
 
         customFonts.add({
             name: defaultFont,
-            data: undefined
+            data: undefined,
+            system: false
         });
 
         db.createObjectStore('systemFonts', {

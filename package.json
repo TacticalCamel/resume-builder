@@ -11,8 +11,9 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "dexie": "^4.0.8",
     "idb": "^8.0.0",
-    "vue": "^3.5.1",
+    "vue": "^3.5.2",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {

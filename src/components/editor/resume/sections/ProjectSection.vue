@@ -5,12 +5,13 @@
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
     import { Project, ProjectList } from "@/models/resume/Projects";
+    import { editableInjectionKey } from "@/services/keys";
 
     const projects = defineModel<ProjectList>({
         required: true
     });
 
-    const editable = inject<boolean>('editable', false);
+    const editable = inject<boolean>(editableInjectionKey, false);
 </script>
 
 <template>

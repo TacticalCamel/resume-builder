@@ -1,11 +1,10 @@
 <script setup lang="ts">
-
+    import TemplateCard from "@/components/templates/TemplateCard.vue";
 </script>
 
 <template>
-    <div class="mx-auto max-w-[1280px] px-4 py-16 text-center text-xl font-bold">
-        <span class="me-4 pe-4 border-e-2 align-middle">Templates</span>
-        <span class="align-middle">Coming soon ...</span>
+    <div class="mx-auto max-w-[1600px] p-8 flex flex-wrap gap-8">
+        <template-card v-for="() in 23"/>
     </div>
 </template>
 

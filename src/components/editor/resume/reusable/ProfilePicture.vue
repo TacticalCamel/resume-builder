@@ -4,12 +4,13 @@
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconDelete from "@/components/shared/icons/IconDelete.vue";
     import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
+    import { editableInjectionKey } from "@/services/keys";
 
     const picture = defineModel<string | undefined>({
         required: true
     });
 
-    const editable = inject<boolean>('editable', false);
+    const editable = inject<boolean>(editableInjectionKey, false);
 
     function setProfilePicture(contents: string | ArrayBuffer) {
         if(typeof contents !== 'string') {
