@@ -18,7 +18,8 @@ Packages used in this project and their purpose. The project has minimal depende
 
 - **[Vue.js](https://vuejs.org) :: JavaScript framework.** A component-based approach was necessary for an app of this scale. I chose Vue due to its excellent documentation and intuitive features that work with reactive data.
 - **[Tailwind CSS](https://tailwindcss.com) :: CSS framework.** Using mostly predefined classes and limiting custom styles to component scopes essentially eliminates CSS bugs. Also allows easy theming, which is used extensively in the app.
-- **[Vue draggable](https://github.com/SortableJS/vue.draggable.next) :: Drag-and-drop functionality.** Based on Sortable JS, it's simple and proved to be reliable, so it made sense to include it instead of trying to implement something similar by myself. 
+- **[Vue draggable](https://github.com/SortableJS/vue.draggable.next) :: Drag-and-drop functionality.** Based on Sortable JS, it's simple and proved to be reliable, so it made sense to include it instead of trying to implement something similar by myself.
+- **[Dexie.js](https://github.com/dexie/Dexie.js) :: Indexed DB wrapper.** Greatly simplifies working with indexed DB. Allows querying and based on promises instead of callbacks. Used together with @vueuse/rxjs to make queries reactive.
 
 ## Design considerations
 

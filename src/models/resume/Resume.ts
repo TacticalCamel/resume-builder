@@ -6,7 +6,7 @@ import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
 import { Language, LanguageList } from "@/models/resume/Languages";
 import { Project, ProjectList } from "@/models/resume/Projects";
 import { Technology } from "@/models/resume/Technologies";
-import TypedJsonSerializer from "@/services/implementations/TypedJsonSerializer";
+import { ISerializer, useSerializer } from "@/composables/Serializer";
 
 export class ResumeModel {
     header: ResumeHeader
@@ -17,7 +17,7 @@ export class ResumeModel {
         this.sections = [];
     }
 
-    static readonly serializer: TypedJsonSerializer = new TypedJsonSerializer({
+    static readonly serializer: ISerializer = useSerializer({
         ResumeModel,
         ResumeHeader,
         Contact,

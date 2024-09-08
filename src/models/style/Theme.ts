@@ -1,5 +1,5 @@
 import Color from "@/models/style/Color";
-import TypedJsonSerializer from "@/services/implementations/TypedJsonSerializer";
+import { ISerializer, useSerializer } from "@/composables/Serializer";
 
 export default class Theme {
     id: string
@@ -14,7 +14,7 @@ export default class Theme {
         this.colors = colors
     }
 
-    static readonly serializer: TypedJsonSerializer = new TypedJsonSerializer({
+    static readonly serializer: ISerializer = useSerializer({
         Theme,
         Color
     });

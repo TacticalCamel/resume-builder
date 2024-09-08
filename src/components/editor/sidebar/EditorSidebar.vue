@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { computed } from "vue";
+    import { usePersistentRef } from "@/composables/PersistentRef";
     import { ResumeModel } from "@/models/resume/Resume";
     import EditorSettings from "@/models/EditorSettings";
-    import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
     import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
@@ -22,7 +22,7 @@
         required: true
     });
 
-    const activeTab = new LocalStorageAutosaveService<number>('active-editor-tab', () => 0);
+    const activeTab = usePersistentRef<number>('active-editor-tab', () => 0);
 
     const activeTabComponent = computed(() => {
         const index = activeTab.value;
@@ -68,15 +68,15 @@
     <div class="flex h-full">
         <div class="relative flex flex-col overflow-clip bg-darker">
             <button
-                v-for="(tab, index) in tabs" @click="activeTab.value = index"
+                v-for="(tab, index) in tabs" @click="activeTab = index"
                 class="flex flex-col items-center justify-center gap-1 size-[72px] hover:text-opacity-100 transition-colors relative z-10"
-                :class="{'text-foreground': !tab.conditional, 'text-secondary': tab.conditional, 'text-opacity-70': index !== activeTab.value }"
+                :class="{'text-foreground': !tab.conditional, 'text-secondary': tab.conditional, 'text-opacity-70': index !== activeTab }"
             >
                 <component :is="tab.icon" class="size-6"/>
                 <span class="text-xs">{{ tab.name }}</span>
             </button>
 
-            <span class="absolute w-full h-[88px] bg-background pointer-events-none transition-all" :style="{top: `${-8 + activeTab.value * 72}px`}">
+            <span class="absolute w-full h-[88px] bg-background pointer-events-none transition-all" :style="{top: `${-8 + activeTab * 72}px`}">
                 <span class="absolute w-full h-4 rounded-e-full bg-darker -bottom-2"/>
                 <span class="absolute w-full h-4 rounded-e-full bg-darker -top-2"/>
             </span>

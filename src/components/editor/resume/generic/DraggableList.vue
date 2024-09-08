@@ -1,8 +1,9 @@
 <!--suppress VueUnrecognizedSlot -->
 <script setup lang="ts" generic="T">
     import { inject } from "vue";
+    import { editableInjectionKey } from "@/main";
     import draggable from "vuedraggable";
-    import { editableInjectionKey } from "@/services/keys";
+
 
     defineProps<{
         group: string

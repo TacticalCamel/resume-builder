@@ -1,12 +1,13 @@
 <script setup lang="ts">
     import { inject } from "vue";
+    import { editableInjectionKey } from "@/main";
     import { Skill } from "@/models/resume/Skills";
     import IconDecrease from "@/components/shared/icons/IconDecrease.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import RatingBar from "@/components/editor/resume/reusable/RatingBar.vue";
     import IconIncrease from "@/components/shared/icons/IconIncrease.vue";
     import InputText from "@/components/shared/form/InputText.vue";
-    import { editableInjectionKey } from "@/services/keys";
+
 
     const skills = defineModel<Skill[]>({
         required: true

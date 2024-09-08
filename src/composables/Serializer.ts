@@ -1,6 +1,28 @@
-import ISerializer from "@/services/interfaces/ISerializer";
+export function useSerializer(types: Record<string, any> | undefined = undefined): ISerializer {
+    if(types) {
+        return new TypedJsonSerializer(types);
+    }
 
-export default class TypedJsonSerializer implements ISerializer{
+    return new JsonSerializer();
+}
+
+export interface ISerializer {
+    serialize<T>(data: T): string;
+
+    deserialize<T>(data: string): T;
+}
+
+class JsonSerializer implements ISerializer {
+    serialize<T>(data: T): string {
+        return JSON.stringify(data);
+    }
+
+    deserialize<T>(data: string): T {
+        return JSON.parse(data);
+    }
+}
+
+class TypedJsonSerializer implements ISerializer {
     private readonly types: Record<string, any>
 
     constructor(types: Record<string, any>) {

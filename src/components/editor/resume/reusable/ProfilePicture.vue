@@ -1,10 +1,11 @@
 <script setup lang="ts">
     import { inject } from "vue";
+    import { editableInjectionKey } from "@/main";
     import IconProfile from "@/components/shared/icons/IconProfile.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconDelete from "@/components/shared/icons/IconDelete.vue";
     import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
-    import { editableInjectionKey } from "@/services/keys";
+
 
     const picture = defineModel<string | undefined>({
         required: true

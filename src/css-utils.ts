@@ -1,20 +1,7 @@
-import INavigationService from "@/services/interfaces/INavigationService";
-import NavigationService from "@/services/implementations/NavigationService";
-import IThemeService from "@/services/interfaces/IThemeService";
-import ThemeService from "@/services/implementations/ThemeService";
-import IFontService from "@/services/interfaces/IFontService";
-import FontService from "@/services/implementations/FontService";
-import LocalStorageAutosaveService from "@/services/implementations/LocalStorageAutosaveService";
-import DefaultThemes from "@/models/DefaultThemes";
 import Color from "@/models/style/Color";
 import Theme from "@/models/style/Theme";
-import { DBSchema, IDBPDatabase, openDB } from "idb";
-import AsyncObjectStore from "@/services/implementations/AsyncObjectStore";
-import Font from "@/models/style/Font";
-import { ResumeModel } from "@/models/resume/Resume";
 
-// project-specific variables and functions to configure services
-class CssUtils {
+export class CssUtils {
     static readonly VARIABLE_PREFIX = '--';
     static readonly ROOT_SELECTOR = ':root';
     static readonly HTML_SELECTOR = 'html';
@@ -155,66 +142,3 @@ class CssUtils {
         return value.replace(/"/g, '');
     }
 }
-
-// project-specific variables and functions to configure the client side database
-export default interface DatabaseSchema extends DBSchema {
-    customThemes: {
-        key: string
-        value: Theme
-    }
-    customFonts: {
-        key: string
-        value: Font
-    }
-    systemFonts: {
-        key: string
-        value: Font
-    }
-    templates: {
-        key: string
-        value: ResumeModel
-    }
-}
-
-const defaultThemes: DefaultThemes = new DefaultThemes(CssUtils.getDefaultLightTheme(), CssUtils.getDefaultDarkTheme());
-const defaultFont: string = CssUtils.getDefaultFont();
-
-const db = await openDB<DatabaseSchema>('resume-builder-db', 1, {
-    upgrade(db: IDBPDatabase<DatabaseSchema>): void {
-        db.createObjectStore('customThemes', {
-            keyPath: 'id'
-        });
-
-        const customFonts = db.createObjectStore('customFonts', {
-            keyPath: 'name'
-        })
-
-        customFonts.add({
-            name: defaultFont,
-            data: undefined,
-            system: false
-        });
-
-        db.createObjectStore('systemFonts', {
-            keyPath: 'name'
-        });
-
-        db.createObjectStore('templates', {
-            autoIncrement: true
-        });
-    }
-});
-
-export const navigationService: INavigationService = new NavigationService();
-
-export const themeService: IThemeService<DefaultThemes> = new ThemeService(
-    defaultThemes,
-    new LocalStorageAutosaveService<Theme[]>('custom-themes', () => [], Theme.serializer),
-    new LocalStorageAutosaveService<string>('current-theme', () => defaultThemes.light.id)
-);
-
-export const fontService: IFontService = new FontService(
-    new AsyncObjectStore(db, 'systemFonts'),
-    new AsyncObjectStore(db, 'customFonts'),
-    new LocalStorageAutosaveService<string>('current-font', () => defaultFont)
-);

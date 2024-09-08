@@ -1,9 +1,11 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { themeService } from "@/services/services";
+    import { useThemeService } from "@/composables/ThemeService";
     import Color from "@/models/style/Color";
     import IconCopy from "@/components/shared/icons/IconCopy.vue";
     import IconRenew from "@/components/shared/icons/IconRenew.vue";
+
+    const themeService = useThemeService();
 
     const color = defineModel<Color>({
         required: true

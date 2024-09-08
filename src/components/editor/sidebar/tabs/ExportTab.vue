@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref } from "vue";
-    import { themeService } from "@/services/services";
+    import { useThemeService } from "@/composables/ThemeService";
+    import EditorSettings from "@/models/EditorSettings";
+    import { ResumeModel } from "@/models/resume/Resume";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
@@ -11,8 +13,8 @@
     import IconClose from "@/components/shared/icons/IconClose.vue";
     import InputToggle from "@/components/shared/form/InputToggle.vue";
     import InputRange from "@/components/shared/form/InputRange.vue";
-    import EditorSettings from "@/models/EditorSettings";
-    import { ResumeModel } from "@/models/resume/Resume";
+
+    const themeService = useThemeService();
 
     // defines a category of data that can be included for export
     interface DataCategory {

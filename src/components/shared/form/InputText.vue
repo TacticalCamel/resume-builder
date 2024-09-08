@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { inject } from "vue";
-    import { editableInjectionKey } from "@/services/keys";
+
+    import { editableInjectionKey } from "@/main";
 
     const model = defineModel<string>();
 

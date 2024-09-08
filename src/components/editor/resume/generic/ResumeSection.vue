@@ -1,8 +1,9 @@
 <script setup lang="ts" generic="T">
     import { computed, inject, ref } from "vue";
+    import { editableInjectionKey } from "@/main";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
-    import { editableInjectionKey } from "@/services/keys";
+
 
     interface SectionModel<T> {
         title: string

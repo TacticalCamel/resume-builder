@@ -1,6 +1,8 @@
 <script setup lang="ts">
+    import { useNavigationService } from "@/composables/NavigationService";
     import ArrowButton from "@/components/home/reusable/ArrowButton.vue";
-    import { navigationService } from "@/services/services";
+
+    const navigationService = useNavigationService();
 </script>
 
 <template>

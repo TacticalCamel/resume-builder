@@ -1,7 +1,24 @@
-import { Ref, ref } from "vue";
-import INavigationService from "@/services/interfaces/INavigationService";
+import { ref, Ref } from "vue";
 
-export default class NavigationService implements INavigationService {
+let instance: INavigationService | undefined;
+
+export function useNavigationService(): INavigationService {
+    if(instance) {
+        return instance;
+    }
+
+    instance = new NavigationService();
+
+    return instance;
+}
+
+export interface INavigationService {
+    get path(): string
+    get parameters(): object
+    navigateTo(path: string, parameters?: object): void
+}
+
+class NavigationService implements INavigationService {
     private readonly currentPath: Ref<string> = ref<string>(window.location.pathname);
     private readonly currentParameters: Ref<object> = ref<object>({});
 

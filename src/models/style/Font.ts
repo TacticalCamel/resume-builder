@@ -1,5 +1,5 @@
 export default interface Font {
     name: string
-    system: boolean
+    system: number
     data: ArrayBuffer | undefined
 }

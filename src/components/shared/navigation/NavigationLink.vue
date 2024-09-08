@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { navigationService } from "@/services/services";
+    import { useNavigationService } from "@/composables/NavigationService";
+
+    const navigationService = useNavigationService();
 
     const {route} = defineProps<{
         route: string

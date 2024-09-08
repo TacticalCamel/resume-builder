@@ -1,6 +1,7 @@
 <script setup lang="ts">
-    import { onBeforeMount, ref } from "vue";
-    import { fontService } from "@/services/services";
+    import { ref } from "vue";
+    import { useFontService } from "@/composables/FontService";
+    import Font from "@/models/style/Font";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
@@ -9,29 +10,14 @@
     import IconClose from "@/components/shared/icons/IconClose.vue";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
     import FontCard from "@/components/editor/sidebar/reusable/FontCard.vue";
-    import Font from "@/models/style/Font";
 
-    const customFonts = ref<Font[]>([]);
-    const systemFonts = ref<Font[]>([]);
+    const fontService = useFontService();
 
-    onBeforeMount(async () => {
-        customFonts.value = await fontService.customFonts;
-        systemFonts.value = await fontService.systemFonts;
-
-        for (const font of customFonts.value) {
-            if (!font.data) {
-                continue;
-            }
-
-            const fontFace = new FontFace(font.name, font.data)
-
-            document.fonts.add(fontFace);
-        }
-    })
-
+    // text used for filtering fonts
     const searchText = ref<string>('');
 
-    function uploadFont(fontFile: string | ArrayBuffer, fileName: string) {
+    // upload and create a custom font
+    async function uploadFont(fontFile: string | ArrayBuffer, fileName: string) {
         if (typeof fontFile === 'string') {
             return;
         }
@@ -44,28 +30,21 @@
             return;
         }
 
-        document.fonts.add(fontFace);
-
-        const font: Font = {
+        await fontService.addCustomFont({
             name: fontName,
-            data: fontFile
-        };
-
-        fontService.addCustomFont(font);
-        customFonts.value.push(font);
+            data: fontFile,
+            system: 0
+        });
     }
 
+    // set the current font to the provided one
     function setCurrentFont(font: Font) {
         fontService.currentFont = font.name;
     }
 
-    function shouldDisplay(font: Font) {
+    // filter a font by the current search text
+    function shouldDisplay(font: Font): boolean {
         return font.name.toLowerCase().includes(searchText.value.toLowerCase());
-    }
-
-    async function loadSystemFonts() {
-        await fontService.loadSystemFonts();
-        systemFonts.value = await fontService.systemFonts;
     }
 </script>
 
@@ -87,9 +66,9 @@
             </div>
 
             <div class="relative flex flex-col gap-1 scrollbar overflow-y-auto px-px max-h-96">
-                <template v-if="customFonts.length">
+                <template v-if="fontService.customFonts.length">
                     <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80">Custom fonts</div>
-                    <template v-for="font in customFonts">
+                    <template v-for="font in fontService.customFonts">
                         <font-card
                             v-if="shouldDisplay(font)"
                             @click="setCurrentFont(font)"
@@ -100,7 +79,7 @@
                 </template>
 
                 <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80 mt-2">System fonts</div>
-                <template v-if="systemFonts.length" v-for="font in systemFonts">
+                <template v-if="fontService.systemFonts.length" v-for="font in fontService.systemFonts">
                     <font-card
                         v-if="shouldDisplay(font)"
                         @click="setCurrentFont(font)"
@@ -112,7 +91,7 @@
                     <button
                         class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors text-sm"
                         :disabled="!fontService.canLoadSystemFonts"
-                        @click="loadSystemFonts()"
+                        @click="fontService.loadSystemFonts()"
                     >
                         Load system fonts
                     </button>

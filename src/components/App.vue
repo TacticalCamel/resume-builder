@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { computed, onMounted } from "vue";
-    import { navigationService, themeService } from "@/services/services";
+    import { useThemeService } from "@/composables/ThemeService";
+    import { useNavigationService } from "@/composables/NavigationService";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/templates/Templates.vue";
@@ -13,6 +14,9 @@
         '/editor': Editor,
         '/templates': Templates
     };
+
+    const navigationService = useNavigationService();
+    const themeService = useThemeService();
 
     // the currently active view
     const currentView = computed(() => routes[navigationService.path as keyof typeof routes] || NotFound);

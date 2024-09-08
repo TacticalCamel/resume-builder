@@ -1,9 +1,10 @@
 <script setup lang="ts">
     import { provide } from "vue";
+    import { editableInjectionKey } from "@/main";
     import HeaderSection from "@/components/editor/resume/sections/HeaderSection.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import { ISection, ResumeModel } from "@/models/resume/Resume";
-    import { editableInjectionKey } from "@/services/keys";
+
 
     const resume = defineModel<ResumeModel>({
         required: true

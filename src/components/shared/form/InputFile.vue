@@ -34,8 +34,13 @@
         }
 
         // upload all selected files
-        for (let i = 0; i < files.length; i++) {
-            uploadFile(files[i]);
+        for (const file of files) {
+            uploadFile(file);
+        }
+
+        // reset input value
+        if (input.value) {
+            input.value.value = '';
         }
     }
 
@@ -50,8 +55,13 @@
         }
 
         // upload all selected files
-        for (let i = 0; i < files.length; i++) {
-            uploadFile(files[i]);
+        for (const file of files) {
+            uploadFile(file);
+        }
+
+        // reset input value
+        if (input.value) {
+            input.value.value = '';
         }
     }
 
@@ -90,11 +100,6 @@
         // read as text
         else if (format === 'text') {
             reader.readAsText(file, 'UTF-8');
-        }
-
-        // reset input value
-        if (input.value) {
-            input.value.value = '';
         }
     }
 </script>
