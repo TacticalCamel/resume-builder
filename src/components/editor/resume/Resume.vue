@@ -5,7 +5,6 @@
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import { ISection, ResumeModel } from "@/models/resume/Resume";
 
-
     const resume = defineModel<ResumeModel>({
         required: true
     });

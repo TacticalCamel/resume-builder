@@ -4,7 +4,6 @@
     import { editableInjectionKey } from "@/main";
     import draggable from "vuedraggable";
 
-
     defineProps<{
         group: string
         itemStyle?: Record<string, any>

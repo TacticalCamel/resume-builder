@@ -6,7 +6,6 @@
     import IconDelete from "@/components/shared/icons/IconDelete.vue";
     import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
 
-
     const picture = defineModel<string | undefined>({
         required: true
     });

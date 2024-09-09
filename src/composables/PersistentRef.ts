@@ -1,7 +1,7 @@
 import { Ref, ref, watchEffect } from 'vue';
 import { ISerializer, useSerializer } from "@/composables/Serializer";
 
-export function usePersistentRef<T>(key: string, defaultValue: () => T, serializer: ISerializer | undefined) {
+export function usePersistentRef<T>(key: string, defaultValue: () => T, serializer: ISerializer | undefined = undefined): Ref<T> {
     // initialize the service
     const storage: LocalStorageService<T> = new LocalStorageService<T>(key, serializer ?? useSerializer());
 

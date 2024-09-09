@@ -63,6 +63,10 @@ class ThemeService implements IThemeService<DefaultThemes> {
         this._customThemes = useReactiveQuery(() => this._themes.toArray());
 
         watch(computed(() => this.currentTheme), (value: Theme) => {
+            if(value.id === this.defaultThemes.light.id || value.id === this.defaultThemes.dark.id) {
+                return;
+            }
+
             this._themes.put(toRaw<Theme>(value));
         }, {deep: true});
     }
@@ -95,9 +99,14 @@ class ThemeService implements IThemeService<DefaultThemes> {
 
     async createTheme(name: string, baseThemeId: string | undefined): Promise<Theme> {
         const id: string = crypto.randomUUID();
-        const colors: Color[] = (this.getBaseTheme(baseThemeId) ?? this.defaultThemes.light).colors.map(color => new Color(color.name, color.value));
+        const colors: Color[] = (this.getBaseTheme(baseThemeId) ?? this.defaultThemes.light).colors.map(color => ({name: color.name, value: color.value}));
 
-        const theme: Theme = new Theme(id, name, baseThemeId, colors);
+        const theme: Theme = {
+            id: id,
+            name: name,
+            base: baseThemeId,
+            colors: colors
+        };
 
         await this._themes.add(theme);
 

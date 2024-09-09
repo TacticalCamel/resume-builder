@@ -106,12 +106,17 @@ export class CssUtils {
         const variables: Record<string, string> = CssUtils.getVariables(CssUtils.ROOT_SELECTOR);
 
         // map key-value pairs to colors
-        return Object.keys(variables).map(key => new Color(key, variables[key]));
+        return Object.keys(variables).map(key => ({name: key, value: variables[key]}));
     }
 
     // Create a theme from the initial CSS values.
     static getDefaultLightTheme(): Theme {
-        return new Theme('default-light', 'Light', undefined, CssUtils.getColors());
+        return {
+            id: 'default-light',
+            name: 'Light',
+            base: undefined,
+            colors: CssUtils.getColors()
+        };
     }
 
     // Create a theme from the initial CSS values but swap the background and foreground colors.
@@ -128,7 +133,12 @@ export class CssUtils {
             backgroundColor.value = temp;
         }
 
-        return new Theme('default-dark', 'Dark', undefined, colors);
+        return {
+            id: 'default-dark',
+            name: 'Dark',
+            base: undefined,
+            colors: colors
+        };
     }
 
     // Get the initial font value from CSS.

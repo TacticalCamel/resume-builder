@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import { useThemeService } from "@/composables/ThemeService";
-    import Color from "@/models/style/Color";
+    import Color, { isDarkContrast } from "@/models/style/Color";
     import IconCopy from "@/components/shared/icons/IconCopy.vue";
     import IconRenew from "@/components/shared/icons/IconRenew.vue";
 
@@ -52,7 +52,7 @@
 </script>
 
 <template>
-    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': color.isDarkContrast}" :style="{background: hexColor}">
+    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': isDarkContrast(color.value)}" :style="{background: hexColor}">
         <input
             type="color"
             class="invisible w-0 absolute"

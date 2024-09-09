@@ -2,7 +2,7 @@
     import { ref } from "vue";
     import Theme from '@/models/style/Theme';
     import InputText from "@/components/shared/form/InputText.vue";
-    import Color from "@/models/style/Color";
+    import Color, { isDarkContrast } from "@/models/style/Color";
 
     const {theme, isDefault = false, isActive = false} = defineProps<{
         theme: Theme,
@@ -23,7 +23,7 @@
 
         return {
             value: `rgb(${rgb})`,
-            darkText: color?.isDarkContrast
+            darkText: isDarkContrast(rgb)
         };
     }
 </script>

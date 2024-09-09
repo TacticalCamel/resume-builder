@@ -4,7 +4,6 @@
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
 
-
     interface SectionModel<T> {
         title: string
         elements: T[]

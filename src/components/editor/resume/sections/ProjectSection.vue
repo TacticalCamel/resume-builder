@@ -7,7 +7,6 @@
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
     import { Project, ProjectList } from "@/models/resume/Projects";
 
-
     const projects = defineModel<ProjectList>({
         required: true
     });

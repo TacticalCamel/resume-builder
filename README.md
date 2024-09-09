@@ -2,8 +2,22 @@
 
 ## Overview
 
-This repository is a web application with the goal of creating web-based resumes. 
+This repository is a web application with the goal of creating web-based resumes.
 It focuses on providing an easy-to-use interface that requires no programming knowledge from the end-user, while also offering high levels of customizability.
+
+## Demo
+
+> TODO
+
+## Installation
+
+Latest version is [hosted on Firebase](https://cv-template-9f6e4.firebaseapp.com).
+
+Run locally:
+
+1. Have [Node.js](https://nodejs.org/en) installed
+2. Install dependencies with `npm install`
+3. Run with `npm run dev`
 
 ## Features
 
@@ -11,6 +25,10 @@ It focuses on providing an easy-to-use interface that requires no programming kn
 - Configurable colors and fonts
 - Import, export or print the contents of the editor
 - Fully offline, no server-side data storage
+
+## Motivation
+
+> TODO
 
 ## Tools used
 
@@ -21,16 +39,10 @@ Packages used in this project and their purpose. The project has minimal depende
 - **[Vue draggable](https://github.com/SortableJS/vue.draggable.next) :: Drag-and-drop functionality.** Based on Sortable JS, it's simple and proved to be reliable, so it made sense to include it instead of trying to implement something similar by myself.
 - **[Dexie.js](https://github.com/dexie/Dexie.js) :: Indexed DB wrapper.** Greatly simplifies working with indexed DB. Allows querying and based on promises instead of callbacks. Used together with @vueuse/rxjs to make queries reactive.
 
-## Design considerations
+## Application architecture
 
-Components use Vue's composition API due to better logic reuse and generally more flexibility. 
+This is a monolithic application that follows a layered architecture, which is perfect for its current level of complexity.
 
-## Usage
-
-Latest version is hosted on [Firebase](https://cv-template-9f6e4.firebaseapp.com).
-
-Run locally:
-
-1. Have Node.js installed
-2. Install dependencies with `npm install`
-3. Run with `npm run dev`
+- **Data access** - Completely client-side, using a combination of localStorage and indexedDB. I could use Firebase for storing it server-side, but none of the current features of the app require it.
+- **Business logic** - Services are encapsulated in [composables](https://vuejs.org/guide/reusability/composables.html#what-is-a-composable) that components can import and use. 
+- **Views** - Components use Vue's [composition API](https://vuejs.org/guide/introduction.html#api-styles) due to better logic reuse and more flexibility. Dependence on stateful logic is limited to composables.

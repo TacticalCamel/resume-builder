@@ -5,7 +5,6 @@
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import InputText from "@/components/shared/form/InputText.vue";
 
-
     const contacts = defineModel<Contact[]>({
         required: true
     });
