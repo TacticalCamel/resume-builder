@@ -12,7 +12,7 @@
 <template>
     <resume-section
         v-model="skills"
-        :group="SkillCategory.draggableCategory"
+        group="SkillCategory"
         grid-columns="1fr 1fr"
         :gap-x="2"
         :gap-y="1"
@@ -23,7 +23,7 @@
                     <input-text v-model="category.title" placeholder="Category name"/>
                 </div>
 
-                <skill-list v-model="category.elements" :max-level="skills.maxLevel"/>
+                <skill-list v-model="category.elements" :max-level="category.maxLevel"/>
             </div>
         </template>
     </resume-section>

@@ -1,41 +1,21 @@
-import { Component } from "@vue/runtime-core";
-import { Contact, ResumeHeader } from "@/models/resume/Header";
-import { Education, EducationList } from "@/models/resume/Educations";
-import { Experience, ExperienceList } from "@/models/resume/Experiences";
-import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
-import { Language, LanguageList } from "@/models/resume/Languages";
-import { Project, ProjectList } from "@/models/resume/Projects";
-import { Technology } from "@/models/resume/Technologies";
-import { ISerializer, useSerializer } from "@/composables/Serializer";
+import { ResumeHeader } from "@/models/resume/Header";
 
-export class ResumeModel {
+export interface ResumeModel {
+    id: string
     header: ResumeHeader
-    sections: ISection[]
-
-    constructor() {
-        this.header = new ResumeHeader();
-        this.sections = [];
-    }
-
-    static readonly serializer: ISerializer = useSerializer({
-        ResumeModel,
-        ResumeHeader,
-        Contact,
-        EducationList,
-        ExperienceList,
-        SkillList,
-        LanguageList,
-        ProjectList,
-        Education,
-        Experience,
-        SkillCategory,
-        Skill,
-        Language,
-        Project,
-        Technology
-    });
+    sections: Section[]
 }
 
-export interface ISection {
-    get component(): Component
+export enum SectionType {
+    educations = 0,
+    experiences = 1,
+    skills = 2,
+    languages = 3,
+    projects = 4
+}
+
+export interface Section<T = any> {
+    type: SectionType
+    title: string
+    elements: T[]
 }

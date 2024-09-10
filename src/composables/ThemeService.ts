@@ -6,7 +6,7 @@ import { EntityTable } from "dexie";
 import DefaultThemes from "@/models/DefaultThemes";
 import Theme from "@/models/style/Theme";
 import Color from "@/models/style/Color";
-
+import { IThemeService } from "@/models/services/IThemeService";
 import { CssUtils } from "@/css-utils";
 
 let instance: IThemeService<DefaultThemes> | undefined;
@@ -24,27 +24,10 @@ export function useThemeService(): IThemeService<DefaultThemes> {
     instance = new ThemeService(
         defaultThemes,
         useDatabase().themes,
-        usePersistentRef<string>('current-theme', () => defaultThemes.light.id)
+        usePersistentRef<string>('current-theme', defaultThemes.light.id)
     );
 
     return instance;
-}
-
-export interface IThemeService<TDefaultThemes extends Record<string, Theme>> {
-    get currentTheme(): Theme
-    set currentTheme(theme: Theme)
-
-    get customThemes(): Theme[]
-    set customThemes(themes: Theme[])
-
-    get defaultThemes(): TDefaultThemes
-
-    get allThemes(): Theme[]
-
-    createTheme(name: string, baseThemeId: string | undefined): Promise<Theme>
-    applyTheme(element: HTMLElement, theme: Theme): void
-    isColorModified(color: Color): boolean
-    resetColor(color: Color): void
 }
 
 class ThemeService implements IThemeService<DefaultThemes> {

@@ -31,9 +31,13 @@
         }
     }));
 
-    const resume = usePersistentRef<ResumeModel | null>('resume', () => {
-        return routeParameters.init ? new ResumeModel() : null;
-    }, ResumeModel.serializer);
+    const resume = usePersistentRef<ResumeModel | undefined>('resume', () => {
+        if (!routeParameters.init) {
+            return undefined;
+        }
+
+        return getEmptyResume();
+    });
 
     const editorStyles = computed(() => {
         return {
@@ -43,6 +47,24 @@
             ...themeService.currentTheme.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
         };
     });
+
+    function createEmptyResume() {
+        resume.value = getEmptyResume();
+    }
+
+    function getEmptyResume() {
+        return {
+            id: crypto.randomUUID(),
+            header: {
+                picture: undefined,
+                name: '',
+                profession: '',
+                description: '',
+                contacts: []
+            },
+            sections: []
+        };
+    }
 </script>
 
 <template>
@@ -58,7 +80,7 @@
                 <resume v-model="resume" v-if="resume" editable/>
 
                 <div v-else class="flex flex-col size-full justify-center items-center gap-2 text-2xl">
-                    <button @click="resume = new ResumeModel()" class="underline hover:text-secondary transition-colors">Create an empty resume</button>
+                    <button @click="createEmptyResume" class="underline hover:text-secondary transition-colors">Create an empty resume</button>
                     <span class="text-xl text-foreground/70">or</span>
                     <button @click="navigationService.navigateTo('/templates')" class="underline hover:text-secondary transition-colors">Browse templates</button>
                 </div>

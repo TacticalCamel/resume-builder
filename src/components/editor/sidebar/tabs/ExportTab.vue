@@ -68,7 +68,7 @@
                     return undefined;
                 }
 
-                const json = ResumeModel.serializer.serialize(resume.value);
+                const json = JSON.stringify(resume.value);
 
                 return {
                     value: JSON.parse(json),
@@ -198,7 +198,7 @@
     // load the uploaded data into the editor
     function importFile() {
         if (importedModel.value.data.resume) {
-            resume.value = ResumeModel.serializer.deserialize(JSON.stringify(importedModel.value.data.resume));
+            resume.value = importedModel.value.data.resume;
         }
 
         if (importedModel.value.data.themes) {

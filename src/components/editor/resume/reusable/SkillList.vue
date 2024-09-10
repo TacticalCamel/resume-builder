@@ -30,7 +30,7 @@
 <template>
     <draggable-list
         v-model="skills"
-        :group="Skill.draggableCategory"
+        group="Skill"
     >
         <template #item="{element: skill}: {element: Skill}">
             <div class="flex gap-3 p-0.5 text-nowrap items-center skill-row">

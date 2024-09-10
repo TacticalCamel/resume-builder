@@ -11,7 +11,7 @@
 <template>
     <draggable-list
         v-model="technologies"
-        :group="Technology.draggableCategory"
+        group="Technology"
         class="flex flex-wrap gap-2 text-sm items-start"
     >
         <template #item="{element: technology}">

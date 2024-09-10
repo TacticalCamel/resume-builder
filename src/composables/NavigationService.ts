@@ -1,4 +1,5 @@
 import { ref, Ref } from "vue";
+import { INavigationService } from "@/models/services/INavigationService";
 
 let instance: INavigationService | undefined;
 
@@ -10,12 +11,6 @@ export function useNavigationService(): INavigationService {
     instance = new NavigationService();
 
     return instance;
-}
-
-export interface INavigationService {
-    get path(): string
-    get parameters(): object
-    navigateTo(path: string, parameters?: object): void
 }
 
 class NavigationService implements INavigationService {

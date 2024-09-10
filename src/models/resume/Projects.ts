@@ -1,34 +1,13 @@
-import ProjectSection from "@/components/editor/resume/sections/ProjectSection.vue";
-import { ISection } from "@/models/resume/Resume";
+import { Section } from "@/models/resume/Resume";
 
-export class Project {
+export interface Project {
     description: string
     url: string
     technologies: string[]
-
-    constructor() {
-        this.description = '';
-        this.url = '';
-        this.technologies = [];
-    }
-
-    static get draggableCategory(): string {
-        return Project.name;
-    }
 }
 
-export class ProjectList implements ISection{
+export interface ProjectList extends Section<Project>{
     title: string
     elements: Project[]
     disclaimer: string
-
-    constructor() {
-        this.title = 'Projects';
-        this.elements = [];
-        this.disclaimer = '';
-    }
-
-    get component() {
-        return ProjectSection;
-    }
 }

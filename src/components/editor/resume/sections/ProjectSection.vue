@@ -17,7 +17,7 @@
 <template>
     <resume-section
         v-model="projects"
-        :group="Project.draggableCategory"
+        group="Project"
         grid-columns="1fr"
         :gap-y="1.5"
     >

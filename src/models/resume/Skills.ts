@@ -1,46 +1,17 @@
-import SkillSection from "@/components/editor/resume/sections/SkillSection.vue";
-import { ISection } from "@/models/resume/Resume";
+import { Section } from "@/models/resume/Resume";
 
-export class Skill {
+export interface Skill {
     name: string
     level: number
-
-    constructor() {
-        this.name = '';
-        this.level = 0;
-    }
-
-    static get draggableCategory(): string {
-        return Skill.name;
-    }
 }
 
-export class SkillList implements ISection {
-    title: string
-    elements: SkillCategory[]
-    maxLevel: number
-
-    constructor() {
-        this.title = "Skills";
-        this.elements = [];
-        this.maxLevel = 5;
-    }
-
-    get component() {
-        return SkillSection;
-    }
-}
-
-export class SkillCategory{
+export interface SkillCategory{
     title: string
     elements: Skill[]
+    maxLevel: number
+}
 
-    constructor() {
-        this.title = '';
-        this.elements = [];
-    }
-
-    static get draggableCategory(): string {
-        return SkillCategory.name;
-    }
+export interface SkillList extends Section<SkillCategory> {
+    title: string
+    elements: SkillCategory[]
 }

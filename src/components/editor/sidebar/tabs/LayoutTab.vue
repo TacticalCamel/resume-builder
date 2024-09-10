@@ -1,19 +1,25 @@
 <script setup lang="ts">
     import { Component } from "vue";
+    import { useContactViews } from "@/composables/ContactViews";
+    import { useSectionViews } from "@/composables/SectionViews";
     import draggable from "vuedraggable";
     import DeleteArea from "@/components/editor/sidebar/reusable/DeleteArea.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
     import IconSegment from "@/components/shared/icons/IconSegment.vue";
-    import IconCube from "@/components/shared/icons/IconCube.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
-    import { Contact, ContactView } from "@/models/resume/Header";
-    import { Skill, SkillCategory, SkillList } from "@/models/resume/Skills";
-    import { Education, EducationList } from "@/models/resume/Educations";
-    import { Experience, ExperienceList } from "@/models/resume/Experiences";
-    import { Language, LanguageList } from "@/models/resume/Languages";
-    import { Project, ProjectList } from "@/models/resume/Projects";
+    import { Contact } from "@/models/resume/Header";
+    import { Section } from "@/models/resume/Resume";
     import { Technology } from "@/models/resume/Technologies";
+    import { Project } from "@/models/resume/Projects";
+    import { Language } from "@/models/resume/Languages";
+    import { Skill, SkillCategory } from "@/models/resume/Skills";
+    import IconCube from "@/components/shared/icons/IconCube.vue";
+    import { Experience } from "@/models/resume/Experiences";
+    import { Education } from "@/models/resume/Educations";
+
+    const {getSectionViews} = useSectionViews();
+    const {getContactViews} = useContactViews();
 
     interface BuildingBlock {
         group: string
@@ -26,30 +32,27 @@
         icon: Component
     }
 
-    const sections: Record<string, any> = {
-        'Educations': EducationList,
-        'Experiences': ExperienceList,
-        'Skills': SkillList,
-        'Languages': LanguageList,
-        'Projects': ProjectList
-    };
-
     const groups: Record<string, BlockGroup> = {
         sections: {
-            blocks: Object.entries(sections).map(([key, value]) => ({
-                name: key,
-                group: 'section',
-                clone: (): string => new value(),
+            blocks: getSectionViews().map(([type, view]) => ({
+                name: view.name,
+                group: 'Section',
+                clone: (): Section => ({
+                    type: type,
+                    title: view.name,
+                    elements: []
+                }),
             })),
             icon: IconSegment
         },
         contacts: {
-            blocks: Object.keys(ContactView.BINDINGS).map(type => ({
-                name: type[0].toUpperCase() + type.slice(1),
-                group: Contact.draggableCategory,
-                clone: (): Contact => {
-                    return new Contact(type, '');
-                },
+            blocks: getContactViews().map(([type, view]) => ({
+                name: view.name,
+                group: 'Contact',
+                clone: (): Contact => ({
+                    type: type,
+                    value: ''
+                }),
             })),
             icon: IconLink
         },
@@ -57,38 +60,66 @@
             blocks: [
                 {
                     name: 'Education',
-                    group: Education.draggableCategory,
-                    clone: () => new Education()
+                    group: 'Education',
+                    clone: (): Education => ({
+                        school: '',
+                        major: '',
+                        start: '',
+                        finish: ''
+                    })
                 },
                 {
                     name: 'Experience',
-                    group: Experience.draggableCategory,
-                    clone: () => new Experience()
+                    group: 'Experience',
+                    clone: (): Experience => ({
+                        company: '',
+                        position: '',
+                        start: '',
+                        finish: '',
+                        description: '',
+                        stack: []
+                    })
                 },
                 {
                     name: 'Skill',
-                    group: Skill.draggableCategory,
-                    clone: () => new Skill()
+                    group: 'Skill',
+                    clone: (): Skill => ({
+                        name: '',
+                        level: 0
+                    })
                 },
                 {
                     name: 'Skill category',
-                    group: SkillCategory.draggableCategory,
-                    clone: () => new SkillCategory()
+                    group: 'SkillCategory',
+                    clone: (): SkillCategory => ({
+                        title: '',
+                        elements: [],
+                        maxLevel: 5
+                    })
                 },
                 {
                     name: 'Language',
-                    group: Language.draggableCategory,
-                    clone: () => new Language()
+                    group: 'Language',
+                    clone: (): Language => ({
+                        name: '',
+                        level: ''
+                    })
                 },
                 {
                     name: 'Project',
-                    group: Project.draggableCategory,
-                    clone: () => new Project()
+                    group: 'Project',
+                    clone: (): Project => ({
+                        description: '',
+                        url: '',
+                        technologies: []
+                    })
                 },
                 {
                     name: 'Technology',
-                    group: Technology.draggableCategory,
-                    clone: () => new Technology()
+                    group: 'Technology',
+                    clone: (): Technology => ({
+                        name: ''
+                    })
                 }
             ],
             icon: IconCube

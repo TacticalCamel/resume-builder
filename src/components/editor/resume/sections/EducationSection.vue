@@ -11,7 +11,7 @@
 <template>
     <resume-section
         v-model="educations"
-        :group="Education.draggableCategory"
+        group="Education"
         :gap-x="2"
         :gap-y="1"
         :sub-grid-columns="2"

@@ -14,7 +14,7 @@
     import IconPublish from "@/components/shared/icons/IconPublish.vue";
     import IconSelect from "@/components/shared/icons/IconSelect.vue";
 
-    const resume = defineModel<ResumeModel | null>('resume', {
+    const resume = defineModel<ResumeModel | undefined>('resume', {
         required: true
     });
 
@@ -22,7 +22,7 @@
         required: true
     });
 
-    const activeTab = usePersistentRef<number>('active-editor-tab', () => 0);
+    const activeTab = usePersistentRef<number>('active-editor-tab', 0);
 
     const activeTabComponent = computed(() => {
         const index = activeTab.value;

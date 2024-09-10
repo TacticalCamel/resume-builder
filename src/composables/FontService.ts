@@ -5,6 +5,7 @@ import { useDatabase } from "@/composables/Database";
 import { EntityTable, Transaction } from "dexie";
 import Font from "@/models/style/Font";
 import { CssUtils } from "@/css-utils";
+import { IFontService } from "@/models/services/IFontService";
 
 let instance: IFontService | undefined;
 
@@ -17,7 +18,7 @@ export function useFontService(): IFontService {
     const defaultFont = CssUtils.getDefaultFont();
 
     instance = new FontService(
-        usePersistentRef<string>('current-font', () => defaultFont),
+        usePersistentRef<string>('current-font', defaultFont),
         db.fonts
     );
 
@@ -30,20 +31,6 @@ export function useFontService(): IFontService {
     });
 
     return instance;
-}
-
-export interface IFontService {
-    get currentFont(): string
-    set currentFont(font: string)
-
-    get customFonts(): Font[]
-
-    get systemFonts(): Font[]
-
-    get canLoadSystemFonts(): boolean
-
-    loadSystemFonts(): Promise<void>
-    addCustomFont(font: Font): Promise<void>
 }
 
 class FontService implements IFontService {

@@ -12,7 +12,7 @@
 <template>
     <resume-section
         v-model="experiences"
-        :group="Experience.draggableCategory"
+        group="Experience"
         :gap-x="2"
         :gap-y="1"
         grid-columns="min-content min-content 1fr"
