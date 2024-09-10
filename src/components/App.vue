@@ -36,7 +36,6 @@
     </main>
 </template>
 
-<!--suppress CssUnusedSymbol -->
 <style lang="postcss" scoped>
     .fade-enter-active, .fade-leave-active {
         transition: all 200ms ease-out;

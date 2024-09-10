@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { inject } from "vue";
-
     import { editableInjectionKey } from "@/main";
 
     const model = defineModel<string>();
@@ -34,19 +33,14 @@
 <style lang="postcss" scoped>
     /*
      Style the container for the editable text. Use grid layout to align the text and the placeholder.
-    */
-    .editable {
-        display: grid;
-        grid-template-columns: 1fr;
-        border-radius: 0.25rem;
-        transition: background-color 150ms ease-in-out;
-    }
-
-    /*
      Highlight the editable text when hovered.
     */
-    .editable:hover {
-        background-color: rgb(var(--foreground) / 0.15);
+    .editable {
+        @apply grid rounded transition-colors grid-cols-[1fr];
+
+        &:hover {
+            @apply bg-foreground/15;
+        }
     }
 
     /*
@@ -54,24 +48,19 @@
      We want to consider the width of the placeholder too, so absolute positioning is not ideal.
     */
     .editable > div {
-        grid-row-start: 1;
-        grid-column-start: 1;
+        @apply col-start-1 row-start-1;
     }
 
     /*
       Style the text input when it is editable.
+      Outline for the focused text input to indicate that it is being edited.
     */
     .editable > .text-input {
-        border-radius: 0.25rem;
-        outline: transparent;
-        transition: outline-color 150ms;
-    }
+        @apply rounded outline-transparent transition-[outline-color];
 
-    /*
-     Outline for the focused text input to indicate that it is being edited.
-    */
-    .editable > .text-input:focus {
-        outline: 2px dashed rgb(var(--warning));
+        &:focus {
+            @apply outline-2 outline-dashed outline-warning;
+        }
     }
 
     /*
@@ -79,6 +68,6 @@
      Must use CSS to do this since the model is only updated on focusout.
     */
     .editable > .text-input:not(:empty) + .text-overlay {
-        display: none;
+        @apply hidden;
     }
 </style>

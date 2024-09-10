@@ -1,13 +1,13 @@
 import { computed, Ref, toRaw, watch } from "vue";
 import { usePersistentRef } from "@/composables/PersistentRef";
-import { ReactiveQuery, useReactiveQuery } from "@/composables/ReactiveQuery";
-import { useDatabase } from "@/composables/Database";
+import { ReactiveQuery, useReactiveQuery } from "@/composables/internal/ReactiveQuery";
+import { useDatabase } from "@/composables/internal/Database";
+import { getDefaultLightTheme, getDefaultDarkTheme } from "@/composables/internal/CssUtils";
 import { EntityTable } from "dexie";
 import DefaultThemes from "@/models/DefaultThemes";
 import Theme from "@/models/style/Theme";
 import Color from "@/models/style/Color";
 import { IThemeService } from "@/models/services/IThemeService";
-import { CssUtils } from "@/css-utils";
 
 let instance: IThemeService<DefaultThemes> | undefined;
 
@@ -17,8 +17,8 @@ export function useThemeService(): IThemeService<DefaultThemes> {
     }
 
     const defaultThemes: DefaultThemes = new DefaultThemes(
-        CssUtils.getDefaultLightTheme(),
-        CssUtils.getDefaultDarkTheme()
+        getDefaultLightTheme(),
+        getDefaultDarkTheme()
     );
 
     instance = new ThemeService(

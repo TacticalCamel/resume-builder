@@ -1,4 +1,3 @@
-<!--suppress VueUnrecognizedSlot -->
 <script setup lang="ts" generic="T">
     import { inject } from "vue";
     import { editableInjectionKey } from "@/main";

@@ -1,11 +1,11 @@
 import { Ref } from "vue";
-import { ReactiveQuery, useReactiveQuery } from "@/composables/ReactiveQuery";
-import { usePersistentRef } from "@/composables/PersistentRef";
-import { useDatabase } from "@/composables/Database";
 import { EntityTable, Transaction } from "dexie";
-import Font from "@/models/style/Font";
-import { CssUtils } from "@/css-utils";
+import { ReactiveQuery, useReactiveQuery } from "@/composables/internal/ReactiveQuery";
+import { usePersistentRef } from "@/composables/PersistentRef";
+import { useDatabase } from "@/composables/internal/Database";
+import { getDefaultFont } from "@/composables/internal/CssUtils";
 import { IFontService } from "@/models/services/IFontService";
+import Font from "@/models/style/Font";
 
 let instance: IFontService | undefined;
 
@@ -15,7 +15,7 @@ export function useFontService(): IFontService {
     }
 
     const db = useDatabase();
-    const defaultFont = CssUtils.getDefaultFont();
+    const defaultFont = getDefaultFont();
 
     instance = new FontService(
         usePersistentRef<string>('current-font', defaultFont),

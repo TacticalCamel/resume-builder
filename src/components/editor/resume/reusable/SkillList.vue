@@ -56,7 +56,6 @@
     </draggable-list>
 </template>
 
-<!--suppress CssUnusedSymbol -->
 <style lang="postcss" scoped>
     .skill-row:hover .skill-row-edit-controls {
         @apply opacity-100;

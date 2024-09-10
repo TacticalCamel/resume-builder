@@ -28,7 +28,6 @@
     </div>
 </template>
 
-<!--suppress CssUnusedSymbol -->
 <style lang="postcss" scoped>
     .delete-area * {
         @apply hidden;
