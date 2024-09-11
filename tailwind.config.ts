@@ -1,7 +1,11 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+import { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme';
 
-/** @type {import('tailwindcss').Config} */
-export default {
+function defineColor(name: string): string {
+    return `rgb(var(${name}))`
+}
+
+const config: Config = {
     content: [
         "./index.html",
         "./src/**/*.{vue,js,ts}",
@@ -11,7 +15,6 @@ export default {
             colors: {
                 foreground: defineColor('--foreground'),
                 background: defineColor('--background'),
-
                 primary: defineColor('--primary'),
                 secondary: defineColor('--secondary'),
 
@@ -29,8 +32,4 @@ export default {
     plugins: []
 }
 
-function defineColor(name: string) {
-    return (opacity: Partial<{ opacityVariable: string, opacityValue: number }>): string => {
-        return `rgba(var(${name}) / ${opacity.opacityValue ?? 1})`;
-    };
-}
+export default config;
