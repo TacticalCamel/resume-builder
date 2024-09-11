@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref } from "vue";
     import { useThemeService } from "@/composables/ThemeService";
-    import EditorSettings from "@/models/EditorSettings";
+    import { EditorSettings } from "@/models/EditorSettings";
     import { ResumeModel } from "@/models/resume/Resume";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";

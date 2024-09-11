@@ -1,8 +1,11 @@
 <script setup lang="ts">
     import { ref } from "vue";
-    import Theme from '@/models/style/Theme';
+    import { useThemeService } from "@/composables/ThemeService";
+    import { Theme } from "@/models/style/Theme";
+    import { Color } from "@/models/style/Color";
     import InputText from "@/components/shared/form/InputText.vue";
-    import Color, { isDarkContrast } from "@/models/style/Color";
+
+    const themeService = useThemeService();
 
     const {theme, isDefault = false, isActive = false} = defineProps<{
         theme: Theme,
@@ -11,19 +14,18 @@
     }>();
 
     const themeColors = ref({
-        background: getThemeColor('--background'),
-        foreground: getThemeColor('--foreground'),
-        primary: getThemeColor('--primary'),
-        secondary: getThemeColor('--secondary')
+        background: getColorInformation('--background'),
+        foreground: getColorInformation('--foreground'),
+        primary: getColorInformation('--primary'),
+        secondary: getColorInformation('--secondary')
     });
 
-    function getThemeColor(key: string) {
-        const color: Color | undefined = theme.colors.find(c => c.name === key);
-        const rgb = color?.value ?? '0 0 0';
+    function getColorInformation(name: string) {
+        const color: Color | undefined = theme.colors.find(c => c.name === name);
 
         return {
-            value: `rgb(${rgb})`,
-            darkText: isDarkContrast(rgb)
+            value: color ? `rgb(${color.value})` : 'black',
+            darkText: color ? themeService.isDarkContrast(color) : false
         };
     }
 </script>

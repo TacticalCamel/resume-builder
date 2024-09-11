@@ -1,6 +1,6 @@
-import Theme from "@/models/style/Theme";
+import { Theme } from "@/models/style/Theme";
 
-export default class DefaultThemes {
+export class DefaultThemes {
     [key: string]: Theme
 
     readonly light: Theme

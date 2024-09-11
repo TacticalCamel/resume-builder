@@ -1,5 +1,5 @@
-import Color from "@/models/style/Color";
-import Theme from "@/models/style/Theme";
+import { Color } from "@/models/style/Color";
+import { Theme } from "@/models/style/Theme";
 
 const VARIABLE_PREFIX = '--';
 const ROOT_SELECTOR = ':root';

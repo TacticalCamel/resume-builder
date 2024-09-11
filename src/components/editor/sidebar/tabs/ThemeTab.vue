@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
     import { useThemeService } from "@/composables/ThemeService";
-    import Theme from "@/models/style/Theme";
-    import EditorSettings from "@/models/EditorSettings";
+    import { Theme } from "@/models/style/Theme";
+    import { EditorSettings } from "@/models/EditorSettings";
     import ThemeCard from "@/components/editor/sidebar/reusable/ThemeCard.vue";
     import ColorPicker from "@/components/editor/sidebar/reusable/ColorPicker.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";

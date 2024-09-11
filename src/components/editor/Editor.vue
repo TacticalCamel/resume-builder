@@ -1,17 +1,19 @@
 <script setup lang="ts">
-    import { computed } from "vue";
+    import { computed, onBeforeMount } from "vue";
     import { useNavigationService } from "@/composables/NavigationService";
     import { useFontService } from "@/composables/FontService";
     import { useThemeService } from "@/composables/ThemeService";
+    import { useTemplateService } from "@/composables/TemplateService";
     import { usePersistentRef } from "@/composables/PersistentRef";
     import { ResumeModel } from "@/models/resume/Resume";
-    import EditorSettings from "@/models/EditorSettings";
+    import { EditorSettings } from "@/models/EditorSettings";
     import Resume from "@/components/editor/resume/Resume.vue";
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
 
     const fontService = useFontService();
     const navigationService = useNavigationService();
     const themeService = useThemeService();
+    const templateService = useTemplateService();
 
     const {routeParameters} = defineProps<{
         routeParameters: any
@@ -31,13 +33,7 @@
         }
     }));
 
-    const resume = usePersistentRef<ResumeModel | undefined>('resume', () => {
-        if (!routeParameters.init) {
-            return undefined;
-        }
-
-        return getEmptyResume();
-    });
+    const resume = usePersistentRef<ResumeModel | undefined>('resume', undefined);
 
     const editorStyles = computed(() => {
         return {
@@ -46,6 +42,14 @@
             fontFamily: fontService.currentFont,
             ...themeService.currentTheme.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
         };
+    });
+
+    onBeforeMount(() => {
+        const loadId: any = routeParameters.load;
+
+        if(loadId && typeof loadId === 'string') {
+            console.log('load', loadId)
+        }
     });
 
     function createEmptyResume() {
@@ -85,6 +89,13 @@
                     <button @click="navigationService.navigateTo('/templates')" class="underline hover:text-secondary transition-colors">Browse templates</button>
                 </div>
             </div>
+
+            <!--
+            <div class="absolute inset-0 bg-background/80 z-10 flex justify-center items-center">
+
+            </div>
+            -->
         </div>
+
     </div>
 </template>

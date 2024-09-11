@@ -1,11 +1,11 @@
 <script setup lang="ts">
     import { inject } from "vue";
     import { editableInjectionKey } from "@/main";
+    import { Project, ProjectList } from "@/models/resume/Projects";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
-    import { Project, ProjectList } from "@/models/resume/Projects";
 
     const projects = defineModel<ProjectList>({
         required: true

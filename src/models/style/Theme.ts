@@ -1,6 +1,6 @@
-import Color from "@/models/style/Color";
+import { Color } from "@/models/style/Color";
 
-export default interface Theme {
+export interface Theme {
     id: string
     name: string
     base: string | undefined

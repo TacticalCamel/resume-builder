@@ -2,12 +2,13 @@
     import { computed } from "vue";
     import { usePersistentRef } from "@/composables/PersistentRef";
     import { ResumeModel } from "@/models/resume/Resume";
-    import EditorSettings from "@/models/EditorSettings";
+    import { EditorSettings } from "@/models/EditorSettings";
     import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
     import ExportTab from "@/components/editor/sidebar/tabs/ExportTab.vue";
     import SelectionTab from "@/components/editor/sidebar/tabs/SelectionTab.vue";
+    import FadeTransition from "@/components/shared/FadeTransition.vue";
     import IconDashboard from "@/components/shared/icons/IconDashboard.vue";
     import IconPalette from "@/components/shared/icons/IconPalette.vue";
     import IconText from "@/components/shared/icons/IconText.vue";
@@ -83,11 +84,11 @@
         </div>
 
         <div class="grow p-4 border-e border-e-foreground/10 scrollbar overflow-y-auto">
-            <transition name="fade" mode="out-in">
+            <fade-transition>
                 <keep-alive>
                     <component :is="activeTabComponent" v-model:resume="resume" v-model:settings="settings"/>
                 </keep-alive>
-            </transition>
+            </fade-transition>
         </div>
     </div>
 </template>
@@ -95,13 +96,5 @@
 <style lang="postcss" scoped>
     .bg-darker {
         background-color: color-mix(in srgb, rgb(var(--background)) 60%, black);
-    }
-
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity 150ms ease-in-out;
-    }
-
-    .fade-enter-from, .fade-leave-to {
-        opacity: 0;
     }
 </style>

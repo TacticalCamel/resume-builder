@@ -5,7 +5,7 @@ import { usePersistentRef } from "@/composables/PersistentRef";
 import { useDatabase } from "@/composables/internal/Database";
 import { getDefaultFont } from "@/composables/internal/CssUtils";
 import { IFontService } from "@/models/services/IFontService";
-import Font from "@/models/style/Font";
+import { Font } from "@/models/style/Font";
 
 let instance: IFontService | undefined;
 

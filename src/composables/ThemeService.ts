@@ -1,13 +1,13 @@
 import { computed, Ref, toRaw, watch } from "vue";
-import { usePersistentRef } from "@/composables/PersistentRef";
-import { ReactiveQuery, useReactiveQuery } from "@/composables/internal/ReactiveQuery";
-import { useDatabase } from "@/composables/internal/Database";
-import { getDefaultLightTheme, getDefaultDarkTheme } from "@/composables/internal/CssUtils";
 import { EntityTable } from "dexie";
-import DefaultThemes from "@/models/DefaultThemes";
-import Theme from "@/models/style/Theme";
-import Color from "@/models/style/Color";
+import { usePersistentRef } from "@/composables/PersistentRef";
+import { getDefaultLightTheme, getDefaultDarkTheme } from "@/composables/internal/CssUtils";
+import { useDatabase } from "@/composables/internal/Database";
+import { useReactiveQuery, ReactiveQuery } from "@/composables/internal/ReactiveQuery";
+import { DefaultThemes } from "@/models/DefaultThemes";
+import { Theme } from "@/models/style/Theme";
 import { IThemeService } from "@/models/services/IThemeService";
+import { Color } from "@/models/style/Color";
 
 let instance: IThemeService<DefaultThemes> | undefined;
 
@@ -121,6 +121,16 @@ class ThemeService implements IThemeService<DefaultThemes> {
         if (defaultValue) {
             color.value = defaultValue;
         }
+    }
+
+    isDarkContrast(color: Color): boolean {
+        const rgb: string[] = color.value.split(' ');
+
+        const r: number = parseInt(rgb[0]);
+        const g: number = parseInt(rgb[1]);
+        const b: number = parseInt(rgb[2]);
+
+        return r * 0.299 + g * 0.587 + b * 0.114 > 150;
     }
 
     private getDefaultColorValue(color: Color): string | undefined {

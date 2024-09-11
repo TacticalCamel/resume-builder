@@ -1,7 +1,7 @@
 <script setup lang="ts">
+    import { Education, EducationList } from "@/models/resume/Educations";
     import InputText from "@/components/shared/form/InputText.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
-    import { Education, EducationList } from "@/models/resume/Educations";
 
     const educations = defineModel<EducationList>({
         required: true

@@ -1,8 +1,8 @@
 <script setup lang="ts">
+    import { Experience, ExperienceList } from "@/models/resume/Experiences";
     import InputText from "@/components/shared/form/InputText.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
-    import { Experience, ExperienceList } from "@/models/resume/Experiences";
 
     const experiences = defineModel<ExperienceList>({
         required: true

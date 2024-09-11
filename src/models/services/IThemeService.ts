@@ -1,12 +1,11 @@
-import Theme from "@/models/style/Theme";
-import Color from "@/models/style/Color";
+import { Theme } from "@/models/style/Theme";
+import { Color } from "@/models/style/Color";
 
 export interface IThemeService<TDefaultThemes extends Record<string, Theme>> {
     get currentTheme(): Theme
     set currentTheme(theme: Theme)
 
     get customThemes(): Theme[]
-    set customThemes(themes: Theme[])
 
     get defaultThemes(): TDefaultThemes
 
@@ -16,4 +15,5 @@ export interface IThemeService<TDefaultThemes extends Record<string, Theme>> {
     applyTheme(element: HTMLElement, theme: Theme): void
     isColorModified(color: Color): boolean
     resetColor(color: Color): void
+    isDarkContrast(color: Color): boolean
 }

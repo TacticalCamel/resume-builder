@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref } from "vue";
     import { useFontService } from "@/composables/FontService";
-    import Font from "@/models/style/Font";
+    import { Font } from "@/models/style/Font";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";

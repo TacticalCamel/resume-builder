@@ -3,20 +3,20 @@
     import { useContactViews } from "@/composables/ContactViews";
     import { useSectionViews } from "@/composables/SectionViews";
     import draggable from "vuedraggable";
+    import { Section } from "@/models/resume/Resume";
+    import { Contact } from "@/models/resume/Header";
+    import { Education } from "@/models/resume/Educations";
+    import { Experience } from "@/models/resume/Experiences";
+    import { Skill, SkillCategory } from "@/models/resume/Skills";
+    import { Language } from "@/models/resume/Languages";
+    import { Project } from "@/models/resume/Projects";
+    import { Technology } from "@/models/resume/Technologies";
     import DeleteArea from "@/components/editor/sidebar/reusable/DeleteArea.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
     import IconSegment from "@/components/shared/icons/IconSegment.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
-    import { Contact } from "@/models/resume/Header";
-    import { Section } from "@/models/resume/Resume";
-    import { Technology } from "@/models/resume/Technologies";
-    import { Project } from "@/models/resume/Projects";
-    import { Language } from "@/models/resume/Languages";
-    import { Skill, SkillCategory } from "@/models/resume/Skills";
     import IconCube from "@/components/shared/icons/IconCube.vue";
-    import { Experience } from "@/models/resume/Experiences";
-    import { Education } from "@/models/resume/Educations";
 
     const {getSectionViews} = useSectionViews();
     const {getContactViews} = useContactViews();

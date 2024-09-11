@@ -1,4 +1,4 @@
-export default interface EditorSettings {
+export interface EditorSettings {
     filters: {
         grayscale: number
         contrast: number
