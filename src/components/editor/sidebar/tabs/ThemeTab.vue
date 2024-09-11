@@ -56,7 +56,6 @@
 
     function setTheme(theme: Theme): void {
         themeService.currentTheme = theme;
-        themeSelectOpen.value = false;
     }
 
     function deleteCurrentTheme() {

@@ -1,4 +1,4 @@
-import Font from "@/models/style/Font";
+import { Font } from "@/models/style/Font";
 
 export interface IFontService {
     get currentFont(): string

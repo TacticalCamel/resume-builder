@@ -1,15 +1,18 @@
 <script setup lang="ts">
-    import { useNavigationService } from "@/composables/NavigationService";
     import { useThemeService } from "@/composables/ThemeService";
     import { ResumeModel } from "@/models/resume/Resume";
     import Resume from "@/components/editor/resume/Resume.vue";
 
-    const navigationService = useNavigationService();
     const themeService = useThemeService();
 
     const template = defineModel<ResumeModel>({
         required: true
     });
+
+    const emit = defineEmits<{
+        preview: [],
+        edit: []
+    }>();
 
     const scale = 2;
 
@@ -21,11 +24,11 @@
     };
 
     function preview() {
-
+        emit('preview');
     }
 
     function edit() {
-        navigationService.navigateTo('/editor', {load: template.value.id});
+        emit('edit');
     }
 </script>
 
@@ -38,8 +41,8 @@
 
             <div class="absolute inset-0 p-4 actions opacity-0 transition-all flex flex-col justify-end">
                 <div class="grid grid-cols-2 gap-2">
-                    <button @click="preview()">Preview</button>
                     <button @click="edit()">Edit</button>
+                    <button @click="preview()">Preview</button>
                 </div>
             </div>
         </div>
@@ -53,6 +56,6 @@
     }
 
     button {
-        @apply p-1 bg-background border-2 border-foreground/30 hover:border-foreground text-foreground/80 hover:text-foreground transition-colors rounded text-sm font-medium;
+        @apply p-1 bg-background text-foreground/80 hover:text-foreground transition-colors rounded text-sm font-medium;
     }
 </style>

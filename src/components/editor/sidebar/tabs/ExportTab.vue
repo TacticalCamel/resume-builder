@@ -1,6 +1,7 @@
 <script setup lang="ts">
-    import { computed, onBeforeMount, ref } from "vue";
+    import { computed, onBeforeMount, ref, toRaw } from "vue";
     import { useThemeService } from "@/composables/ThemeService";
+    import { useTemplateService } from "@/composables/TemplateService";
     import { EditorSettings } from "@/models/EditorSettings";
     import { ResumeModel } from "@/models/resume/Resume";
     import InputFile from "@/components/shared/form/InputFile.vue";
@@ -15,6 +16,7 @@
     import InputRange from "@/components/shared/form/InputRange.vue";
 
     const themeService = useThemeService();
+    const templateService = useTemplateService();
 
     // defines a category of data that can be included for export
     interface DataCategory {
@@ -46,7 +48,7 @@
         calculateValues();
     });
 
-    const resume = defineModel<ResumeModel | null>('resume', {
+    const resume = defineModel<ResumeModel | undefined>('resume', {
         required: true
     });
 
@@ -244,6 +246,20 @@
     function clearImportedData() {
         importedModel.value.data = undefined;
     }
+
+    async function saveAsTemplate(copy: boolean) {
+        if(!resume.value) {
+            return;
+        }
+
+        const raw: ResumeModel = toRaw(resume.value);
+
+        if(copy) {
+            raw.id = crypto.randomUUID();
+        }
+
+        await templateService.createTemplate(raw);
+    }
 </script>
 
 <template>
@@ -313,6 +329,7 @@
             </div>
         </editor-tab-item>
 
+        <!--
         <editor-tab-item title="print content">
             <div class="grid text-sm gap-2">
                 <div class="flex items-center gap-2">
@@ -334,6 +351,14 @@
                         <option v-for="orientation in paperOrientations" :value="orientation">{{ orientation }}</option>
                     </select>
                 </div>
+            </div>
+        </editor-tab-item>
+        -->
+
+        <editor-tab-item title="save as template">
+            <div class="grid grid-cols-2 text-sm gap-4 px-1">
+                <button class="text-center p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveAsTemplate(false)">Save</button>
+                <button class="text-center p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveAsTemplate(true)">Save as copy</button>
             </div>
         </editor-tab-item>
     </editor-tab>
