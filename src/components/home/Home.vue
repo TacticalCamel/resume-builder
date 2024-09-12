@@ -1,10 +1,11 @@
 <script setup lang="ts">
     import HeroSection from "@/components/home/sections/HeroSection.vue";
     import FeatureCard from "@/components/home/reusable/FeatureCard.vue";
+    import FooterSection from "@/components/home/sections/FooterSection.vue";
 </script>
 
 <template>
-    <div class=" gap-24">
+    <div>
         <hero-section class="mt-48"/>
 
         <section class="h-[720px] mt-24">
@@ -13,7 +14,7 @@
             </div>
         </section>
 
-        <section class="flex justify-center gap-8">
+        <section class="flex justify-center gap-8 mt-24">
             <feature-card>
                 <template #title>Intuitive</template>
                 <template #content>
@@ -36,13 +37,7 @@
             </feature-card>
         </section>
 
-        <footer class="border-t border-t-foreground/10">
-            <section class="flex py-4">
-                <div class="size-full flex justify-center items-center border h-24">
-                    <div class="text-5xl text-foreground/70 font-mono select-none">Placeholder for footer</div>
-                </div>
-            </section>
-        </footer>
+        <footer-section/>
     </div>
 </template>
 
