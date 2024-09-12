@@ -1,11 +1,14 @@
 <script setup lang="ts">
     import { inject } from "vue";
+    import { useDraggableGroups } from "@/composables/DraggableGroups";
     import { editableInjectionKey } from "@/main";
     import { Project, ProjectList } from "@/models/resume/Projects";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
+
+    const {projectGroup} = useDraggableGroups();
 
     const projects = defineModel<ProjectList>({
         required: true
@@ -17,12 +20,12 @@
 <template>
     <resume-section
         v-model="projects"
-        group="Project"
+        :group="projectGroup"
         grid-columns="1fr"
         :gap-y="1.5"
     >
         <template #header>
-            <div class="italic text-opacity-60 text-foreground font-light mb-4 text-sm flex" v-if="editable || (projects.disclaimer.length && projects.elements.length)">
+            <div class="italic text-foreground/60 font-light mb-4 text-sm flex" v-if="editable || (projects.disclaimer.length && projects.elements.length)">
                 <input-text v-model="projects.disclaimer" placeholder="Disclaimer about the projects"/>
             </div>
         </template>
@@ -39,7 +42,7 @@
                 </div>
 
                 <div class="flex">
-                    <input-text class="font-light" v-model="project.description" placeholder="Short description of the project"/>
+                    <input-text class="font-light text-foreground/60" v-model="project.description" placeholder="Short description of the project"/>
                 </div>
             </div>
         </template>

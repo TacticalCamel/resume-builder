@@ -1,7 +1,10 @@
 <script setup lang="ts">
+    import { useDraggableGroups } from "@/composables/DraggableGroups";
     import { Contact } from "@/models/resume/Header";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import ContactCard from "@/components/editor/resume/reusable/ContactCard.vue";
+
+    const {contactGroup} = useDraggableGroups();
 
     const contacts = defineModel<Contact[]>({
         required: true
@@ -11,7 +14,7 @@
 <template>
     <draggable-list
         v-model="contacts"
-        group="Contact"
+        :group="contactGroup"
         class="text-sm grid gap-1.5"
     >
         <template #item="{index}: {index: number}">

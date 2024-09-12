@@ -1,7 +1,10 @@
 <script setup lang="ts">
+    import { useDraggableGroups } from "@/composables/DraggableGroups";
     import { Technology } from "@/models/resume/Technologies";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
+
+    const {technologyGroup} = useDraggableGroups();
 
     const technologies = defineModel<Technology[]>({
         required: true
@@ -11,7 +14,7 @@
 <template>
     <draggable-list
         v-model="technologies"
-        group="Technology"
+        :group="technologyGroup"
         class="flex flex-wrap gap-2 text-sm items-start"
     >
         <template #item="{element: technology}">

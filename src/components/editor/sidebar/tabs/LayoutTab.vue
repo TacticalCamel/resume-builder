@@ -2,6 +2,7 @@
     import { Component } from "vue";
     import { useContactViews } from "@/composables/ContactViews";
     import { useSectionViews } from "@/composables/SectionViews";
+    import { useDraggableGroups } from "@/composables/DraggableGroups";
     import draggable from "vuedraggable";
     import { Section } from "@/models/resume/Resume";
     import { Contact } from "@/models/resume/Header";
@@ -20,6 +21,7 @@
 
     const {getSectionViews} = useSectionViews();
     const {getContactViews} = useContactViews();
+    const {educationGroup, skillGroup, skillCategoryGroup, sectionGroup, experienceGroup, technologyGroup, languageGroup, projectGroup, contactGroup} = useDraggableGroups();
 
     interface BuildingBlock {
         group: string
@@ -36,7 +38,7 @@
         sections: {
             blocks: getSectionViews().map(([type, view]) => ({
                 name: view.name,
-                group: 'Section',
+                group: sectionGroup,
                 clone: (): Section => ({
                     type: type,
                     title: view.name,
@@ -48,7 +50,7 @@
         contacts: {
             blocks: getContactViews().map(([type, view]) => ({
                 name: view.name,
-                group: 'Contact',
+                group: contactGroup,
                 clone: (): Contact => ({
                     type: type,
                     value: ''
@@ -60,7 +62,7 @@
             blocks: [
                 {
                     name: 'Education',
-                    group: 'Education',
+                    group: educationGroup,
                     clone: (): Education => ({
                         school: '',
                         major: '',
@@ -70,7 +72,7 @@
                 },
                 {
                     name: 'Experience',
-                    group: 'Experience',
+                    group: experienceGroup,
                     clone: (): Experience => ({
                         company: '',
                         position: '',
@@ -82,7 +84,7 @@
                 },
                 {
                     name: 'Skill',
-                    group: 'Skill',
+                    group: skillGroup,
                     clone: (): Skill => ({
                         name: '',
                         level: 0
@@ -90,7 +92,7 @@
                 },
                 {
                     name: 'Skill category',
-                    group: 'SkillCategory',
+                    group: skillCategoryGroup,
                     clone: (): SkillCategory => ({
                         title: '',
                         elements: [],
@@ -99,7 +101,7 @@
                 },
                 {
                     name: 'Language',
-                    group: 'Language',
+                    group: languageGroup,
                     clone: (): Language => ({
                         name: '',
                         level: ''
@@ -107,7 +109,7 @@
                 },
                 {
                     name: 'Project',
-                    group: 'Project',
+                    group: projectGroup,
                     clone: (): Project => ({
                         description: '',
                         url: '',
@@ -116,7 +118,7 @@
                 },
                 {
                     name: 'Technology',
-                    group: 'Technology',
+                    group: technologyGroup,
                     clone: (): Technology => ({
                         name: ''
                     })

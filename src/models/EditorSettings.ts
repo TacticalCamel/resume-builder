@@ -4,10 +4,4 @@ export interface EditorSettings {
         contrast: number
         brightness: number
     }
-    printing: {
-        preview: boolean
-        scale: number
-        orientation: string
-        size: string
-    }
 }

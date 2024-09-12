@@ -128,7 +128,7 @@
                         </select>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-2 gap-2 font-medium">
                         <button @click="createTheme(false)" class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">Create</button>
                         <button @click="createTheme(true)" class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">Create and apply</button>
                     </div>
@@ -141,8 +141,6 @@
                         v-for="theme in themeService.allThemes"
                         @click="setTheme(theme)"
                         :theme="theme"
-                        :is-default="themeService.defaultThemes.light.id === theme.id || themeService.defaultThemes.dark.id === theme.id"
-                        :is-active="themeService.currentTheme.id === theme.id"
                     />
                 </div>
             </editor-tab-item>
@@ -221,7 +219,8 @@
                     <div class="grid grid-cols-2 gap-2">
                         <label class="col-span-2 font-light">Colors</label>
                         <color-picker
-                            v-for="(color, index) in themeService.currentTheme.colors" :key="color.name"
+                            v-for="(color, index) in themeService.currentTheme.colors"
+                            :key="color.name"
                             v-model="themeService.currentTheme.colors[index]"
                             class="px-2 py-0.5 rounded border-2 border-foreground/30 text-sm"
                             :disabled="isDefaultCurrentTheme"

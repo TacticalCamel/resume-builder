@@ -16,19 +16,13 @@
     // text used for filtering fonts
     const searchText = ref<string>('');
 
-    // upload and create a custom font
+    // upload and add a font to the list of custom fonts
     async function uploadFont(fontFile: string | ArrayBuffer, fileName: string) {
         if (typeof fontFile === 'string') {
             return;
         }
 
         const fontName: string = fileName.split('.')[0].replace(/[^a-zA-Z0-9]/g, ' ');
-
-        const fontFace = new FontFace(fontName, fontFile);
-
-        if (fontFace.status !== 'loaded') {
-            return;
-        }
 
         await fontService.addCustomFont({
             name: fontName,
@@ -43,7 +37,7 @@
     }
 
     // filter a font by the current search text
-    function shouldDisplay(font: Font): boolean {
+    function shouldDisplayFont(font: Font): boolean {
         return font.name.toLowerCase().includes(searchText.value.toLowerCase());
     }
 </script>
@@ -70,7 +64,7 @@
                     <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80">Custom fonts</div>
                     <template v-for="font in fontService.customFonts">
                         <font-card
-                            v-if="shouldDisplay(font)"
+                            v-if="shouldDisplayFont(font)"
                             @click="setCurrentFont(font)"
                             :font="font.name"
                             class="cursor-pointer"
@@ -81,7 +75,7 @@
                 <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80 mt-2">System fonts</div>
                 <template v-if="fontService.systemFonts.length" v-for="font in fontService.systemFonts">
                     <font-card
-                        v-if="shouldDisplay(font)"
+                        v-if="shouldDisplayFont(font)"
                         @click="setCurrentFont(font)"
                         :font="font.name"
                         class="cursor-pointer"

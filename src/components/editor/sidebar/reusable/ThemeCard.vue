@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import { useThemeService } from "@/composables/ThemeService";
     import { Theme } from "@/models/style/Theme";
     import { Color } from "@/models/style/Color";
@@ -7,10 +7,8 @@
 
     const themeService = useThemeService();
 
-    const {theme, isDefault = false, isActive = false} = defineProps<{
+    const {theme} = defineProps<{
         theme: Theme,
-        isDefault?: boolean,
-        isActive?: boolean
     }>();
 
     const themeColors = ref({
@@ -19,6 +17,10 @@
         primary: getColorInformation('--primary'),
         secondary: getColorInformation('--secondary')
     });
+
+    const isActive = computed(() => themeService.currentTheme.id === theme.id);
+
+    const isDefault = computed(() => themeService.defaultThemes.light.id === theme.id || themeService.defaultThemes.dark.id === theme.id);
 
     function getColorInformation(name: string) {
         const color: Color | undefined = theme.colors.find(c => c.name === name);

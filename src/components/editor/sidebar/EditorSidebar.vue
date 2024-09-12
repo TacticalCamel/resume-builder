@@ -7,7 +7,6 @@
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
     import ExportTab from "@/components/editor/sidebar/tabs/ExportTab.vue";
-    import SelectionTab from "@/components/editor/sidebar/tabs/SelectionTab.vue";
     import FadeTransition from "@/components/shared/FadeTransition.vue";
     import IconDashboard from "@/components/shared/icons/IconDashboard.vue";
     import IconPalette from "@/components/shared/icons/IconPalette.vue";
@@ -55,12 +54,6 @@
             name: 'Export',
             icon: IconPublish,
             component: ExportTab
-        },
-        {
-            name: 'Selection',
-            icon: IconSelect,
-            component: SelectionTab,
-            conditional: true
         }
     ];
 </script>
@@ -70,8 +63,8 @@
         <div class="relative flex flex-col overflow-clip bg-darker">
             <button
                 v-for="(tab, index) in tabs" @click="activeTab = index"
-                class="flex flex-col items-center justify-center gap-1 size-[72px] hover:text-opacity-100 transition-colors relative z-10"
-                :class="{'text-foreground': !tab.conditional, 'text-secondary': tab.conditional, 'text-opacity-70': index !== activeTab }"
+                class="flex flex-col items-center justify-center gap-1 size-[72px] transition-colors z-10 hover:opacity-100"
+                :class="{'text-secondary': index === activeTab }"
             >
                 <component :is="tab.icon" class="size-6"/>
                 <span class="text-xs">{{ tab.name }}</span>

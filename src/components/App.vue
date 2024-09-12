@@ -7,6 +7,7 @@
     import Templates from "@/components/templates/Templates.vue";
     import Navigation from "@/components/shared/navigation/Navigation.vue";
     import NotFound from "@/components/shared/NotFound.vue";
+    import FadeTransition from "@/components/shared/FadeTransition.vue";
 
     // define the routes of the application
     const routes = {
@@ -30,18 +31,8 @@
     <main class="relative min-h-full flex flex-col">
         <navigation/>
 
-        <transition name="fade" mode="out-in">
+        <fade-transition>
             <component :is="currentView" :route-parameters="navigationService.parameters"/>
-        </transition>
+        </fade-transition>
     </main>
 </template>
-
-<style lang="postcss" scoped>
-    .fade-enter-active, .fade-leave-active {
-        transition: all 200ms ease-out;
-    }
-
-    .fade-enter-from, .fade-leave-to {
-        opacity: 0;
-    }
-</style>

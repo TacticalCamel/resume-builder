@@ -34,12 +34,6 @@
             grayscale: 0,
             contrast: 100,
             brightness: 100
-        },
-        printing: {
-            preview: false,
-            scale: 100,
-            orientation: 'Portrait',
-            size: 'A4'
         }
     }));
 
@@ -134,7 +128,7 @@
             </fade-transition>
 
             <fade-transition>
-                <div v-if="resume" class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip bg-background text-foreground print:relative" :style="editorStyles">
+                <div v-if="resume" class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip bg-background text-foreground print:relative print:h-full" :style="editorStyles">
                     <resume v-model="resume" editable/>
                 </div>
 

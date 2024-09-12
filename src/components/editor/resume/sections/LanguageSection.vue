@@ -1,7 +1,10 @@
 <script setup lang="ts">
+    import { useDraggableGroups } from "@/composables/DraggableGroups";
     import { Language, LanguageList } from "@/models/resume/Languages";
     import InputText from "@/components/shared/form/InputText.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
+
+    const {languageGroup} = useDraggableGroups();
 
     const languages = defineModel<LanguageList>({
         required: true
@@ -11,7 +14,7 @@
 <template>
     <resume-section
         v-model="languages"
-        group="Language"
+        :group="languageGroup"
         :gap-x="4"
         :gap-y="0.125"
         :sub-grid-columns="2"

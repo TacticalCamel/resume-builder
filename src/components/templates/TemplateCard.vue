@@ -33,10 +33,10 @@
 </script>
 
 <template>
-    <div class="grid gap-4" ref="modal">
-        <div class="card relative w-[340px] h-[480px] border border-foreground/30 rounded shadow-lg shadow-black overflow-clip">
-            <div class="relative origin-top-left pointer-events-none select-none p-8 bg-background text-foreground" :style="templateStyle">
-                <resume v-model="template" class="absolute top-0 left-0"/>
+    <div class="grid gap-4">
+        <div class="card relative w-[360px] h-[520px] border border-foreground/30 rounded shadow-lg shadow-black overflow-clip">
+            <div class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground" :style="templateStyle">
+                <resume v-model="template" class=""/>
             </div>
 
             <div class="absolute inset-0 p-4 actions opacity-0 transition-all flex flex-col justify-end">
