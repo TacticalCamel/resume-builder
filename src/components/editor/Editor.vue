@@ -146,6 +146,5 @@
                 </div>
             </fade-transition>
         </div>
-
     </div>
 </template>
