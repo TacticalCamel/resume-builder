@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    import { toRaw } from "vue";
     import { useTemplateService } from "@/composables/TemplateService";
     import { ResumeModel } from "@/models/resume/Resume";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
@@ -18,7 +17,7 @@
             return;
         }
 
-        const raw: ResumeModel = toRaw(resume.value);
+        const raw: ResumeModel = JSON.parse(JSON.stringify(resume.value));
 
         if(copy) {
             raw.id = crypto.randomUUID();
@@ -32,9 +31,9 @@
     <editor-tab>
         <template-import v-model="resume"/>
 
-        <template-export v-model="resume"/>
+        <template-export :resume="resume"/>
 
-        <editor-tab-item title="save as template">
+        <editor-tab-item title="save to templates">
             <div class="grid grid-cols-2 text-sm gap-4 px-1">
                 <button class="text-center p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveAsTemplate(false)">Save</button>
                 <button class="text-center p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveAsTemplate(true)">Save as copy</button>

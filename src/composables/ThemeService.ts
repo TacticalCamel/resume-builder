@@ -96,6 +96,10 @@ class ThemeService implements IThemeService<DefaultThemes> {
         return theme;
     }
 
+    async addTheme(theme: Theme): Promise<void> {
+        this._themes.put(theme, theme.id);
+    }
+
     applyTheme(element: HTMLElement, theme: Theme): void {
         theme.colors.forEach(color => element.style.setProperty(color.name, color.value));
     }

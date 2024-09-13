@@ -12,6 +12,7 @@ export interface IThemeService<TDefaultThemes extends Record<string, Theme>> {
     get allThemes(): Theme[]
 
     createTheme(name: string, baseThemeId: string | undefined): Promise<Theme>
+    addTheme(theme: Theme): Promise<void>
     applyTheme(element: HTMLElement, theme: Theme): void
     isColorModified(color: Color): boolean
     resetColor(color: Color): void
