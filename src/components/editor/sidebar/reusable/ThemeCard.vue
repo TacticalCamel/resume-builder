@@ -1,14 +1,15 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { useThemeService } from "@/composables/ThemeService";
+    import { useThemes } from "@/composables/Themes";
     import { Theme } from "@/models/style/Theme";
     import { Color } from "@/models/style/Color";
     import InputText from "@/components/shared/form/InputText.vue";
 
-    const themeService = useThemeService();
+    const {defaultLightTheme, defaultDarkTheme, isDarkContrast} = useThemes();
 
-    const {theme} = defineProps<{
+    const {theme, active} = defineProps<{
         theme: Theme,
+        active: boolean
     }>();
 
     const themeColors = ref({
@@ -18,25 +19,24 @@
         secondary: getColorInformation('--secondary')
     });
 
-    const isActive = computed(() => themeService.currentTheme.id === theme.id);
 
-    const isDefault = computed(() => themeService.defaultThemes.light.id === theme.id || themeService.defaultThemes.dark.id === theme.id);
+    const isDefault = computed(() => defaultLightTheme.id === theme.id || defaultDarkTheme.id === theme.id);
 
     function getColorInformation(name: string) {
         const color: Color | undefined = theme.colors.find(c => c.name === name);
 
         return {
             value: color ? `rgb(${color.value})` : 'black',
-            darkText: color ? themeService.isDarkContrast(color) : false
+            darkText: color ? isDarkContrast(color) : false
         };
     }
 </script>
 
 <template>
     <div>
-        <div class="theme-card" :class="{'active': isActive}">
+        <div class="theme-card" :class="{'active': active}">
             <div class="grow flex items-center justify-between gap-2 text-sm px-2 pb-2">
-                <input-text v-if="isActive" v-model="theme.name" placeholder="Theme name"/>
+                <input-text v-if="active" v-model="theme.name" placeholder="Theme name"/>
                 <span v-else-if="theme.name.length">{{ theme.name }}</span>
                 <span v-else class="italic opacity-70">Unnamed</span>
 

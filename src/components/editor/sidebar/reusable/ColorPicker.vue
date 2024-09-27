@@ -1,22 +1,23 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { useThemeService } from "@/composables/ThemeService";
+    import { useThemes } from "@/composables/Themes";
     import { Color } from "@/models/style/Color";
     import IconCopy from "@/components/shared/icons/IconCopy.vue";
     import IconRenew from "@/components/shared/icons/IconRenew.vue";
 
-    const themeService = useThemeService();
+    const {isDarkContrast} = useThemes();
 
     const color = defineModel<Color>({
         required: true
     });
 
-    const emits = defineEmits<{
-        change: []
+    const {disabled = false, modified = false} = defineProps<{
+        disabled?: boolean,
+        modified?: boolean
     }>();
 
-    const {disabled = false} = defineProps<{
-        disabled?: boolean
+    const emits = defineEmits<{
+        reset: []
     }>();
 
     const hexColor = computed(() => rgb2hex(color.value.value));
@@ -25,8 +26,6 @@
         const input = event.target as HTMLInputElement;
 
         color.value.value = hex2rgb(input.value);
-
-        emits('change');
     }
 
     function copyColor(): void {
@@ -49,10 +48,14 @@
 
         return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
     }
+
+    function reset() {
+        emits('reset');
+    }
 </script>
 
 <template>
-    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': themeService.isDarkContrast(color)}" :style="{background: hexColor}">
+    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': isDarkContrast(color)}" :style="{background: hexColor}">
         <input
             type="color"
             class="invisible w-0 absolute"
@@ -69,7 +72,7 @@
             </span>
         </span>
 
-        <button v-if="themeService.isColorModified(color)" @click.prevent.stop="themeService.resetColor(color)" class="transition-all px-2">
+        <button v-if="modified" @click.prevent.stop="reset()" class="transition-all px-2">
             <icon-renew class="size-5 -scale-100 rotate-180"/>
         </button>
     </label>

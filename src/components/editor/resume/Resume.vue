@@ -1,15 +1,13 @@
 <script setup lang="ts">
-    import { provide } from "vue";
-    import { useSectionViews } from "@/composables/SectionViews";
-    import { useDraggableGroups } from "@/composables/DraggableGroups";
-    import { editableInjectionKey } from "@/main";
-    import { ResumeModel, Section } from "@/models/resume/Resume";
+    import { useEditable } from "@/composables/Editable";
+    import { ResumeModel, Section, SectionType } from "@/models/resume/Resume";
     import HeaderSection from "@/components/editor/resume/sections/HeaderSection.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
-
-    const {sectionGroup} = useDraggableGroups();
-
-    const {getSectionView} = useSectionViews();
+    import EducationSection from "@/components/editor/resume/sections/EducationSection.vue";
+    import ExperienceSection from "@/components/editor/resume/sections/ExperienceSection.vue";
+    import SkillSection from "@/components/editor/resume/sections/SkillSection.vue";
+    import LanguageSection from "@/components/editor/resume/sections/LanguageSection.vue";
+    import ProjectSection from "@/components/editor/resume/sections/ProjectSection.vue";
 
     const resume = defineModel<ResumeModel>({
         required: true
@@ -19,14 +17,31 @@
         editable?: boolean
     }>();
 
-    provide<boolean>(editableInjectionKey, editable);
+    const {provideEditable} = useEditable();
+
+    provideEditable(editable);
+
+    function getSectionComponent(type: SectionType) {
+        switch (type) {
+            case SectionType.educations:
+                return EducationSection;
+            case SectionType.experiences:
+                return ExperienceSection;
+            case SectionType.skills:
+                return SkillSection;
+            case SectionType.languages:
+                return LanguageSection;
+            case SectionType.projects:
+                return ProjectSection;
+        }
+    }
 </script>
 
 <template>
     <div class="py-10 px-3">
         <draggable-list
             v-model="resume.sections"
-            :group="sectionGroup"
+            group="Section"
             class="grid max-w-[960px] mx-auto gap-12"
         >
             <template #header>
@@ -34,7 +49,7 @@
             </template>
 
             <template #item="{element: section, index}: {element: Section, index: number}">
-                <component :is="getSectionView(section.type).component" v-model="resume.sections[index]"/>
+                <component :is="getSectionComponent(section.type)" v-model="resume.sections[index]"/>
             </template>
 
             <template #empty>

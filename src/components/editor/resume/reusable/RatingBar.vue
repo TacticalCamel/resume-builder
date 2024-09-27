@@ -19,13 +19,13 @@
 </script>
 
 <template>
-    <div :class="`style-${style}`">
+    <div :class="style">
         <div v-for="i in max" :style="{backgroundColor: `rgb(var(--rating-bar-${getColor(i)}))`}"/>
     </div>
 </template>
 
 <style lang="postcss" scoped>
-    .style-card {
+    .card {
         @apply flex gap-[3px] px-[3px] py-px rounded-sm select-none shadow-sm shadow-black bg-background;
 
         * {
@@ -33,7 +33,7 @@
         }
     }
 
-    .style-bar {
+    .bar {
         @apply flex items-stretch rounded-sm select-none shadow-sm shadow-black bg-background overflow-clip;
 
         * {

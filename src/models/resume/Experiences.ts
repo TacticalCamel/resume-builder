@@ -1,4 +1,5 @@
 import { Section } from "@/models/resume/Resume";
+import { Technology } from "@/models/resume/Technologies";
 
 export interface Experience {
     company: string
@@ -6,7 +7,7 @@ export interface Experience {
     start: string
     finish: string
     description: string
-    stack: string[]
+    stack: Technology[]
 }
 
 export interface ExperienceList extends Section<Experience> {

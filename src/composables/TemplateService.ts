@@ -1,12 +1,11 @@
 import { EntityTable } from "dexie";
-import { useDatabase } from "@/composables/internal/Database";
-import { ReactiveQuery, useReactiveQuery } from "@/composables/internal/ReactiveQuery";
-import { ResumeModel } from "@/models/resume/Resume";
-import { ITemplateService } from "@/models/services/ITemplateService";
+import { useDatabase } from "@/composables/Database";
+import { ReactiveQuery, useReactiveQuery } from "@/composables/ReactiveQuery";
+import { ResumeTemplate } from "@/models/ResumeTemplate";
 
-let instance: ITemplateService | undefined;
+let instance: TemplateService | undefined;
 
-export function useTemplateService(): ITemplateService {
+export function useTemplateService(): TemplateService {
     if (instance) {
         return instance;
     }
@@ -18,25 +17,25 @@ export function useTemplateService(): ITemplateService {
     return instance;
 }
 
-class TemplateService implements ITemplateService {
-    private readonly _templates: EntityTable<ResumeModel, 'id'>
-    private readonly _query: ReactiveQuery<ResumeModel[]>
+class TemplateService {
+    private readonly _templates: EntityTable<ResumeTemplate, 'id'>
+    private readonly _query: ReactiveQuery<ResumeTemplate[]>
 
-    constructor(templates: EntityTable<ResumeModel, 'id'>) {
+    constructor(templates: EntityTable<ResumeTemplate, 'id'>) {
         this._templates = templates;
         this._query = useReactiveQuery(() => this._templates.toArray());
     }
 
-    get templates(): ResumeModel[] {
+    get templates(): ResumeTemplate[] {
         return this._query.value ?? [];
     }
 
-    async getById(id: string): Promise<ResumeModel | undefined> {
+    async getById(id: string): Promise<ResumeTemplate | undefined> {
         return this._templates.get(id);
     }
 
-    async createTemplate(resume: ResumeModel): Promise<void> {
-        await this._templates.put(resume, resume.id);
+    async createTemplate(template: ResumeTemplate): Promise<void> {
+        await this._templates.put(template, template.id);
     }
 }
 

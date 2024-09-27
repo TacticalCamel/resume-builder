@@ -1,10 +1,7 @@
 <script setup lang="ts">
-    import { useDraggableGroups } from "@/composables/DraggableGroups";
     import { Education, EducationList } from "@/models/resume/Educations";
     import InputText from "@/components/shared/form/InputText.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
-
-    const {educationGroup} = useDraggableGroups();
 
     const educations = defineModel<EducationList>({
         required: true
@@ -14,7 +11,7 @@
 <template>
     <resume-section
         v-model="educations"
-        :group="educationGroup"
+        group="Education"
         :gap-x="2"
         :gap-y="1"
         :sub-grid-columns="2"

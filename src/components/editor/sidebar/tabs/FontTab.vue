@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { ref } from "vue";
-    import { useFontService } from "@/composables/FontService";
+    import { useFonts } from "@/composables/Fonts";
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
     import { Font } from "@/models/style/Font";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
@@ -11,20 +12,24 @@
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
     import FontCard from "@/components/editor/sidebar/reusable/FontCard.vue";
 
-    const fontService = useFontService();
+    const fontService = useFonts();
+
+    const template = defineModel<ResumeTemplate>({
+        required: true
+    });
 
     // text used for filtering fonts
     const searchText = ref<string>('');
 
     // upload and add a font to the list of custom fonts
-    async function uploadFont(fontFile: string | ArrayBuffer, fileName: string) {
+    function uploadFont(fontFile: string | ArrayBuffer, fileName: string) {
         if (typeof fontFile === 'string') {
             return;
         }
 
         const fontName: string = fileName.split('.')[0].replace(/[^a-zA-Z0-9]/g, ' ');
 
-        await fontService.addCustomFont({
+        template.value.fonts.push({
             name: fontName,
             data: fontFile,
             system: 0
@@ -33,7 +38,7 @@
 
     // set the current font to the provided one
     function setCurrentFont(font: Font) {
-        fontService.currentFont = font.name;
+        template.value.currentFont = font.name;
     }
 
     // filter a font by the current search text
@@ -60,9 +65,9 @@
             </div>
 
             <div class="relative flex flex-col gap-1 scrollbar overflow-y-auto px-px max-h-96">
-                <template v-if="fontService.customFonts.length">
+                <template v-if="template.fonts.length">
                     <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80">Custom fonts</div>
-                    <template v-for="font in fontService.customFonts">
+                    <template v-for="font in template.fonts">
                         <font-card
                             v-if="shouldDisplayFont(font)"
                             @click="setCurrentFont(font)"

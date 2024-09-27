@@ -1,10 +1,9 @@
 <script setup lang="ts">
-    import { inject } from "vue";
-    import { editableInjectionKey } from "@/main";
+    import { useEditable } from "@/composables/Editable";
 
     const model = defineModel<string>();
 
-    const editable = inject<boolean>(editableInjectionKey, false);
+    const {editable} = useEditable();
 
     defineOptions({
         inheritAttrs: false

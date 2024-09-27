@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import logo from '@/assets/logo.svg'
-    import { useNavigationService } from "@/composables/NavigationService";
+    import { useNavigation } from "@/composables/Navigation";
 
-    const navigationService = useNavigationService();
+    const {navigateTo} = useNavigation();
 </script>
 
 <template>
@@ -15,9 +15,9 @@
                 </div>
                 <div class="flex flex-col items-start gap-1.5">
                     <div class="text-secondary font-medium mb-2">Pages</div>
-                    <button @click="navigationService.navigateTo('/')">Home</button>
-                    <button @click="navigationService.navigateTo('/editor')">Editor</button>
-                    <button @click="navigationService.navigateTo('/templates')">Templates</button>
+                    <button @click="navigateTo('/')">Home</button>
+                    <button @click="navigateTo('/editor')">Editor</button>
+                    <button @click="navigateTo('/templates')">Templates</button>
                 </div>
 
                 <div class="flex flex-col items-start gap-1.5">

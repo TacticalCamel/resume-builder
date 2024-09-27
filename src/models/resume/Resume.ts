@@ -1,7 +1,6 @@
 import { ResumeHeader } from "@/models/resume/Header";
 
 export interface ResumeModel {
-    id: string
     header: ResumeHeader
     sections: Section[]
 }

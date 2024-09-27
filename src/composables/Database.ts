@@ -1,7 +1,6 @@
 import Dexie, { EntityTable } from "dexie";
-import { Theme } from "@/models/style/Theme";
 import { Font } from "@/models/style/Font";
-import { ResumeModel } from "@/models/resume/Resume";
+import { ResumeTemplate } from "@/models/ResumeTemplate";
 
 let instance: Dexie & DatabaseSchema | undefined;
 
@@ -14,7 +13,6 @@ export function useDatabase(): Dexie & DatabaseSchema {
 
     instance.version(1).stores({
         fonts: 'name,system',
-        themes: 'id',
         templates: 'id'
     });
 
@@ -22,7 +20,6 @@ export function useDatabase(): Dexie & DatabaseSchema {
 }
 
 interface DatabaseSchema {
-    themes: EntityTable<Theme, 'id'>
     fonts: EntityTable<Font, 'name'>
-    templates: EntityTable<ResumeModel, 'id'>
+    templates: EntityTable<ResumeTemplate, 'id'>
 }

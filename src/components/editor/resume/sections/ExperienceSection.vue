@@ -1,11 +1,8 @@
 <script setup lang="ts">
-    import { useDraggableGroups } from "@/composables/DraggableGroups";
     import { Experience, ExperienceList } from "@/models/resume/Experiences";
     import InputText from "@/components/shared/form/InputText.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
-
-    const {experienceGroup} = useDraggableGroups();
 
     const experiences = defineModel<ExperienceList>({
         required: true
@@ -15,7 +12,7 @@
 <template>
     <resume-section
         v-model="experiences"
-        :group="experienceGroup"
+        group="Experience"
         :gap-x="2"
         :gap-y="1"
         grid-columns="min-content min-content 1fr"

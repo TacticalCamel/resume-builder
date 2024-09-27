@@ -1,15 +1,11 @@
 <script setup lang="ts">
-    import { inject } from "vue";
-    import { useDraggableGroups } from "@/composables/DraggableGroups";
-    import { editableInjectionKey } from "@/main";
+    import { useEditable } from "@/composables/Editable";
     import { Skill } from "@/models/resume/Skills";
     import IconDecrease from "@/components/shared/icons/IconDecrease.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import RatingBar from "@/components/editor/resume/reusable/RatingBar.vue";
     import IconIncrease from "@/components/shared/icons/IconIncrease.vue";
     import InputText from "@/components/shared/form/InputText.vue";
-
-    const {skillGroup} = useDraggableGroups();
 
     const skills = defineModel<Skill[]>({
         required: true
@@ -19,7 +15,7 @@
         maxLevel: number
     }>();
 
-    const editable = inject<boolean>(editableInjectionKey, false);
+    const {editable} = useEditable();
 
     function decreaseSkillLevel(skill: Skill) {
         skill.level = Math.min(maxLevel, Math.max(0, skill.level - 1));
@@ -33,7 +29,7 @@
 <template>
     <draggable-list
         v-model="skills"
-        :group="skillGroup"
+        group="Skill"
     >
         <template #item="{element: skill}: {element: Skill}">
             <div class="flex gap-3 p-0.5 text-nowrap items-center skill-row">

@@ -1,13 +1,9 @@
 <script setup lang="ts" generic="T">
-    import { computed, inject, ref } from "vue";
-    import { editableInjectionKey } from "@/main";
+    import { computed, ref } from "vue";
+    import { useEditable } from "@/composables/Editable";
+    import { Section } from "@/models/resume/Resume";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
-
-    interface SectionModel<T> {
-        title: string
-        elements: T[]
-    }
 
     const {group, gridColumns = 'min-content', subGridColumns = 1, gapX = 0, gapY = 0} = defineProps<{
         group: string,
@@ -17,7 +13,7 @@
         gapY?: number
     }>();
 
-    const section = defineModel<SectionModel<T>>({
+    const section = defineModel<Section<T>>({
         required: true
     });
 
@@ -34,7 +30,7 @@
         gridColumn: `span ${subGridColumns} / span ${subGridColumns}`,
     });
 
-    const editable = inject<boolean>(editableInjectionKey, false);
+    const {editable} = useEditable();
 </script>
 
 <template>

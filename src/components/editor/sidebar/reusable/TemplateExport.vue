@@ -1,15 +1,9 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref } from "vue";
-    import { useThemeService } from "@/composables/ThemeService";
-    import { useFontService } from "@/composables/FontService";
-    import { ResumeModel } from "@/models/resume/Resume";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputCheckbox from "@/components/shared/form/InputCheckbox.vue";
     import IconRenew from "@/components/shared/icons/IconRenew.vue";
-
-    const themeService = useThemeService();
-    const fontService = useFontService();
 
     // defines a category of data that can be included for export
     interface DataCategory {
@@ -17,11 +11,11 @@
         name: string
         size: number
         getSize: () => number
-        addToTemplate: (template: ResumeTemplate) => void
+        addToTemplate: (template: Partial<ResumeTemplate>) => void
     }
 
-    const {resume} = defineProps<{
-        resume: ResumeModel | undefined
+    const {template} = defineProps<{
+        template: ResumeTemplate
     }>();
 
     // configuration for exporting the editor data
@@ -30,27 +24,29 @@
             include: true,
             name: 'Resume',
             size: 0,
-            getSize: () => JSON.stringify(resume).length,
-            addToTemplate: (template: ResumeTemplate) => {
-                template.resume = resume;
+            getSize: () => JSON.stringify(template.resume).length,
+            addToTemplate: (exported: Partial<ResumeTemplate>) => {
+                exported.resume = template.resume;
             }
         },
         {
             include: true,
-            name: 'Current theme',
+            name: 'Themes',
             size: 0,
-            getSize: () => JSON.stringify(themeService.currentTheme).length,
-            addToTemplate: (template: ResumeTemplate) => {
-                template.theme = themeService.currentTheme;
+            getSize: () => JSON.stringify(template.themes).length,
+            addToTemplate: (exported: Partial<ResumeTemplate>) => {
+                exported.themes = template.themes;
+                exported.currentTheme = template.currentTheme;
             }
         },
         {
             include: true,
-            name: 'Current font',
+            name: 'Fonts',
             size: 0,
-            getSize: () => JSON.stringify({}).length,
-            addToTemplate: (template: ResumeTemplate) => {
-                template.font = {name: fontService.currentFont, data: undefined, system: 0};
+            getSize: () => JSON.stringify(template.fonts).length,
+            addToTemplate: (exported: Partial<ResumeTemplate>) => {
+                exported.fonts = template.fonts;
+                exported.currentFont = template.currentFont;
             }
         }
     ]);
@@ -102,11 +98,7 @@
 
     // export the editor data to a JSON file
     function exportFile(): void {
-        const template: ResumeTemplate = {
-            resume: undefined,
-            theme: undefined,
-            font: undefined
-        };
+        const template: Partial<ResumeTemplate> = {};
 
         for (const category of categories.value) {
             if (category.include) {
@@ -122,7 +114,7 @@
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'editor.json';
+        a.download = 'template.json';
         a.click();
 
         URL.revokeObjectURL(url);

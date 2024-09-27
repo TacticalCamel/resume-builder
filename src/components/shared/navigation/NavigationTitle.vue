@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import { useNavigationService } from "@/composables/NavigationService";
+    import { useNavigation } from "@/composables/Navigation";
     import logo from '@/assets/logo.svg'
 
-    const navigationService = useNavigationService();
+    const navigationService = useNavigation();
 </script>
 
 <template>

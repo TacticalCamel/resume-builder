@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import { useNavigationService } from "@/composables/NavigationService";
+    import { useNavigation } from "@/composables/Navigation";
     import ArrowButton from "@/components/home/reusable/ArrowButton.vue";
 
-    const navigationService = useNavigationService();
+    const {navigateTo} = useNavigation();
 </script>
 
 <template>
@@ -18,8 +18,8 @@
             </h2>
 
             <div class="flex gap-8 items-center text-nowrap">
-                <arrow-button @click="navigationService.navigateTo('/editor', {init: true})">Start now</arrow-button>
-                <arrow-button @click="navigationService.navigateTo('/templates')">Browse templates</arrow-button>
+                <arrow-button @click="navigateTo('/editor', {init: true})">Start now</arrow-button>
+                <arrow-button @click="navigateTo('/templates')">Browse templates</arrow-button>
             </div>
         </div>
     </section>

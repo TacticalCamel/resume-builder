@@ -1,11 +1,8 @@
 <script setup lang="ts">
-    import { useThemeService } from "@/composables/ThemeService";
-    import { ResumeModel } from "@/models/resume/Resume";
-    import Resume from "@/components/editor/resume/Resume.vue";
+    import ResumeFrame from "@/components/editor/resume/ResumeFrame.vue";
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
 
-    const themeService = useThemeService();
-
-    const template = defineModel<ResumeModel>({
+    const template = defineModel<ResumeTemplate>({
         required: true
     });
 
@@ -20,7 +17,6 @@
         height: `${scale * 100}%`,
         width: `${scale * 100}%`,
         transform: `scale(${1 / scale})`,
-        ...themeService.defaultThemes.light.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
     };
 
     function preview() {
@@ -35,9 +31,11 @@
 <template>
     <div class="grid gap-4">
         <div class="card relative w-[360px] h-[520px] border border-foreground/30 rounded shadow-lg shadow-black overflow-clip">
-            <div class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground" :style="templateStyle">
-                <resume v-model="template" class=""/>
-            </div>
+            <resume-frame
+                v-model="template"
+                :style="templateStyle"
+                class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground"
+            />
 
             <div class="absolute inset-0 p-4 actions opacity-0 transition-all flex flex-col justify-end">
                 <div class="grid grid-cols-2 gap-2">
@@ -46,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-center">{{ template.header.profession }}</div>
+        <div class="text-center">{{ template.resume.header.profession }}</div>
     </div>
 </template>
 

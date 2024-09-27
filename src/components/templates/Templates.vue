@@ -1,17 +1,17 @@
 <script setup lang="ts">
     import { ref } from "vue";
     import { useTemplateService } from "@/composables/TemplateService";
-    import { ResumeModel } from "@/models/resume/Resume";
+    import { useNavigation } from "@/composables/Navigation";
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
     import TemplateCard from "@/components/templates/TemplateCard.vue";
-    import Resume from "@/components/editor/resume/Resume.vue";
-    import { useNavigationService } from "@/composables/NavigationService";
+    import ResumeFrame from "@/components/editor/resume/ResumeFrame.vue";
 
     const templateService = useTemplateService();
-    const navigationService = useNavigationService();
+    const {navigateTo} = useNavigation();
 
-    const preview = ref<ResumeModel | undefined>(undefined);
+    const preview = ref<ResumeTemplate | undefined>(undefined);
 
-    function openPreview(template: ResumeModel) {
+    function openPreview(template: ResumeTemplate) {
         preview.value = template;
     }
 
@@ -19,18 +19,19 @@
         preview.value = undefined;
     }
 
-    function loadToEditor(template: ResumeModel) {
-        navigationService.navigateTo('/editor', {load: template.id});
+    function loadToEditor(template: ResumeTemplate) {
+        navigateTo('/editor', {load: template.id});
     }
 
-    const predefinedTemplates: ResumeModel[] = [];
+    const predefinedTemplates: ResumeTemplate[] = [];
 </script>
 
 <template>
     <div class="grow relative">
         <div class="absolute inset-0 scrollbar overflow-y-auto print:relative">
             <div v-if="preview" class="relative">
-                <resume v-model="preview"/>
+                <resume-frame v-model="preview"/>
+
                 <div class="absolute z-10 top-4 right-4 grid gap-2">
                     <button @click="closePreview()" class="px-2 py-1 text-error rounded bg-error/10 hover:bg-error/20 transition-colors">Close preview</button>
                     <button @click="loadToEditor(preview)" class="px-2 py-1 text-secondary rounded bg-secondary/10 hover:bg-secondary/20 transition-colors">Edit</button>

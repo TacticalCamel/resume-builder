@@ -1,8 +1,7 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import { usePersistentRef } from "@/composables/PersistentRef";
-    import { ResumeModel } from "@/models/resume/Resume";
-    import { EditorSettings } from "@/models/EditorSettings";
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
     import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
@@ -12,13 +11,8 @@
     import IconPalette from "@/components/shared/icons/IconPalette.vue";
     import IconText from "@/components/shared/icons/IconText.vue";
     import IconPublish from "@/components/shared/icons/IconPublish.vue";
-    import IconSelect from "@/components/shared/icons/IconSelect.vue";
 
-    const resume = defineModel<ResumeModel | undefined>('resume', {
-        required: true
-    });
-
-    const settings = defineModel<EditorSettings>('settings', {
+    const template = defineModel<ResumeTemplate>('template', {
         required: true
     });
 
@@ -79,7 +73,7 @@
         <div class="grow p-4 border-e border-e-foreground/10 scrollbar overflow-y-auto">
             <fade-transition>
                 <keep-alive>
-                    <component :is="activeTabComponent" v-model:resume="resume" v-model:settings="settings"/>
+                    <component :is="activeTabComponent" v-model="template"/>
                 </keep-alive>
             </fade-transition>
         </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useTemplateService } from "@/composables/TemplateService";
-    import { ResumeModel } from "@/models/resume/Resume";
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import TemplateImport from "@/components/editor/sidebar/reusable/TemplateImport.vue";
@@ -8,16 +8,16 @@
 
     const templateService = useTemplateService();
 
-    const resume = defineModel<ResumeModel | undefined>('resume', {
+    const template = defineModel<ResumeTemplate>({
         required: true
     });
 
     async function saveAsTemplate(copy: boolean) {
-        if(!resume.value) {
+        if(!template.value) {
             return;
         }
 
-        const raw: ResumeModel = JSON.parse(JSON.stringify(resume.value));
+        const raw: ResumeTemplate = JSON.parse(JSON.stringify(template.value));
 
         if(copy) {
             raw.id = crypto.randomUUID();
@@ -29,9 +29,9 @@
 
 <template>
     <editor-tab>
-        <template-import v-model="resume"/>
+        <template-import v-model="template"/>
 
-        <template-export :resume="resume"/>
+        <template-export :template="template"/>
 
         <editor-tab-item title="save to templates">
             <div class="grid grid-cols-2 text-sm gap-4 px-1">

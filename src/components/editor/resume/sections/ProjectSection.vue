@@ -1,26 +1,22 @@
 <script setup lang="ts">
-    import { inject } from "vue";
-    import { useDraggableGroups } from "@/composables/DraggableGroups";
-    import { editableInjectionKey } from "@/main";
+    import { useEditable } from "@/composables/Editable";
     import { Project, ProjectList } from "@/models/resume/Projects";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
 
-    const {projectGroup} = useDraggableGroups();
-
     const projects = defineModel<ProjectList>({
         required: true
     });
 
-    const editable = inject<boolean>(editableInjectionKey, false);
+    const {editable} = useEditable();
 </script>
 
 <template>
     <resume-section
         v-model="projects"
-        :group="projectGroup"
+        group="Project"
         grid-columns="1fr"
         :gap-y="1.5"
     >

@@ -1,16 +1,11 @@
 <script setup lang="ts">
     import { reactive } from "vue";
-    import { useThemeService } from "@/composables/ThemeService";
-    import { useFontService } from "@/composables/FontService";
-    import { ResumeModel } from "@/models/resume/Resume";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconClose from "@/components/shared/icons/IconClose.vue";
     import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
-
-    const themeService = useThemeService();
-    const fontService = useFontService();
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
 
     interface ImportModel {
         template?: any
@@ -27,7 +22,7 @@
         validationSteps: []
     });
 
-    const resume = defineModel<ResumeModel | undefined>({
+    const template = defineModel<ResumeTemplate>({
         required: true
     });
 
@@ -62,18 +57,7 @@
     }
 
     function importFile() {
-        if (model.template.resume) {
-            resume.value = model.template.resume;
-        }
-
-        if (model.template.theme) {
-            themeService.addTheme(model.template.theme)
-            themeService.currentTheme = model.template.theme.id;
-        }
-
-        if(model.template?.font.name) {
-            fontService.currentFont = model.template.font.name;
-        }
+        template.value = model.template;
 
         clearForm();
     }
