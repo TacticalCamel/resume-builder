@@ -4,7 +4,7 @@
     import { useNavigation } from "@/composables/Navigation";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import TemplateCard from "@/components/templates/TemplateCard.vue";
-    import ResumeFrame from "@/components/editor/resume/ResumeFrame.vue";
+    import Resume from "@/components/editor/resume/Resume.vue";
 
     const templateService = useTemplateService();
     const {navigateTo} = useNavigation();
@@ -22,15 +22,13 @@
     function loadToEditor(template: ResumeTemplate) {
         navigateTo('/editor', {load: template.id});
     }
-
-    const predefinedTemplates: ResumeTemplate[] = [];
 </script>
 
 <template>
     <div class="grow relative">
         <div class="absolute inset-0 scrollbar overflow-y-auto print:relative">
             <div v-if="preview" class="relative">
-                <resume-frame v-model="preview"/>
+                <resume v-model="preview"/>
 
                 <div class="absolute z-10 top-4 right-4 grid gap-2">
                     <button @click="closePreview()" class="px-2 py-1 text-error rounded bg-error/10 hover:bg-error/20 transition-colors">Close preview</button>
@@ -57,8 +55,8 @@
 
                     <div class="flex flex-wrap gap-x-8 gap-y-6">
                         <template-card
-                            v-for="(template, index) in predefinedTemplates"
-                            v-model="predefinedTemplates[index]"
+                            v-for="(template, index) in templateService.predefinedTemplates"
+                            v-model="templateService.predefinedTemplates[index]"
                             @preview="openPreview(template)"
                             @edit="loadToEditor(template)"
                         />

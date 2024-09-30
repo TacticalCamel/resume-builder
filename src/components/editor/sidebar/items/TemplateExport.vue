@@ -18,7 +18,6 @@
         template: ResumeTemplate
     }>();
 
-    // configuration for exporting the editor data
     const categories = ref<DataCategory[]>([
         {
             include: true,
@@ -69,14 +68,12 @@
         calculateCategoryResults();
     });
 
-    // recalculate the results of all data categories
     function calculateCategoryResults() {
         for (const category of categories.value) {
             category.size = category.getSize();
         }
     }
 
-    // convert a size in bytes to a human-readable string
     function sizeToString(size: number): string {
         const units = [
             {size: Math.pow(2, 30), name: 'GB'},
@@ -96,8 +93,7 @@
         return `${size} B`;
     }
 
-    // export the editor data to a JSON file
-    function exportFile(): void {
+    function exportTemplate(): void {
         const template: Partial<ResumeTemplate> = {};
 
         for (const category of categories.value) {
@@ -122,8 +118,8 @@
 </script>
 
 <template>
-    <editor-tab-item title="export template">
-        <div class="grid grid-cols-2 items-center gap-2 text-sm font-light text-foreground/70">
+    <editor-tab-item title="export to file">
+        <div class="grid grid-cols-2 items-center gap-2 text-sm text-foreground/70">
             <div class="grid grid-cols-subgrid col-span-2 gap-2 py-1">
                 <template v-for="category in categories">
                     <input-checkbox v-model="category.include">{{ category.name }}</input-checkbox>
@@ -133,7 +129,7 @@
 
             <div class="grid grid-cols-subgrid col-span-2 pt-2 border-t border-foreground/30 font-medium text-foreground">
                 <div class="px-1">
-                    <button @click="exportFile" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">
+                    <button @click="exportTemplate" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">
                         Export
                     </button>
                 </div>
@@ -149,7 +145,3 @@
         </div>
     </editor-tab-item>
 </template>
-
-<style scoped lang="postcss">
-
-</style>

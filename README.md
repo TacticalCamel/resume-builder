@@ -15,7 +15,7 @@ Latest version is [hosted on Firebase](https://cv-template-9f6e4.firebaseapp.com
 
 Run locally:
 
-1. Have [Node.js](https://nodejs.org/en) installed
+1. Have [Node.js 20](https://nodejs.org/en) installed
 2. Install dependencies with `npm install`
 3. Run with `npm run dev`
 
@@ -28,7 +28,11 @@ Run locally:
 
 ## Motivation
 
-> TODO
+I obviously needed a resume and I thought it'd be cool to create one from scratch. From the very start I've preferred HTML and CSS over the dumpster fire MS Word is.
+It started as a static HTML markup with some styles, which was fine for my single use case, but not for anything or anyone else.
+
+So the idea of making it an actual application was born. It's a seemingly endless pursuit for more customizability, making it more complex with every step,
+hence the insane amount of refactoring that was done as my end goal evolved.
 
 ## Tools used
 
@@ -46,3 +50,10 @@ This is a monolithic application that follows a layered architecture, which is p
 - **Data access** - Completely client-side, using a combination of localStorage and indexedDB. I could use Firebase for storing it server-side, but none of the current features of the app require it.
 - **Business logic** - Services are encapsulated in [composables](https://vuejs.org/guide/reusability/composables.html#what-is-a-composable) that components can import and use. 
 - **Views** - Components use Vue's [composition API](https://vuejs.org/guide/introduction.html#api-styles) due to better logic reuse and more flexibility. Dependence on stateful logic is limited to composables.
+
+## Development status
+
+- [x] Prototype <br/>
+- [x] Minimum viable product <br/>
+- [ ] Feature complete <br/>
+- [ ] Refinement and maintenance <br/>

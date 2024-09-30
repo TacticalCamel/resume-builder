@@ -6,7 +6,7 @@
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
     import ExportTab from "@/components/editor/sidebar/tabs/ExportTab.vue";
-    import FadeTransition from "@/components/shared/FadeTransition.vue";
+    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
     import IconDashboard from "@/components/shared/icons/IconDashboard.vue";
     import IconPalette from "@/components/shared/icons/IconPalette.vue";
     import IconText from "@/components/shared/icons/IconText.vue";
@@ -16,7 +16,7 @@
         required: true
     });
 
-    const activeTab = usePersistentRef<number>('active-editor-tab', 0);
+    const activeTab = usePersistentRef<number>('active-tab', 0);
 
     const activeTabComponent = computed(() => {
         const index = activeTab.value;

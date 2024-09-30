@@ -23,7 +23,7 @@
 
         <div class="absolute inset-0 flex gap-4 items-center justify-center text-error select-none">
             <icon-delete class="size-8"/>
-            <span class="text-sm">Drag elements here to delete</span>
+            <span>Drag elements here to delete</span>
         </div>
     </div>
 </template>

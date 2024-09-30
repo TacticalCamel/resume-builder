@@ -17,7 +17,7 @@
                 :list="items"
                 item-key="id"
                 key="draggable"
-                class="block-group grid grid-cols-3 gap-2 text-sm"
+                class="block-group grid grid-cols-3 gap-2"
                 drag-class="dragging"
                 ghost-class="invisible"
                 animation="200"

@@ -3,8 +3,8 @@
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
-    import TemplateImport from "@/components/editor/sidebar/reusable/TemplateImport.vue";
-    import TemplateExport from "@/components/editor/sidebar/reusable/TemplateExport.vue";
+    import TemplateImport from "@/components/editor/sidebar/items/TemplateImport.vue";
+    import TemplateExport from "@/components/editor/sidebar/items/TemplateExport.vue";
 
     const templateService = useTemplateService();
 

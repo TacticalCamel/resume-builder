@@ -1,11 +1,11 @@
 <script setup lang="ts">
     import { reactive } from "vue";
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconClose from "@/components/shared/icons/IconClose.vue";
     import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
 
     interface ImportModel {
         template?: any
@@ -68,7 +68,7 @@
 </script>
 
 <template>
-    <editor-tab-item title="import template">
+    <editor-tab-item title="import from file">
         <div class="grid gap-4">
             <input-file @upload="validateFile" accept=".json" format="text">
                 <div class="flex gap-4 items-center justify-center rounded py-2 px-4 border border-dashed border-foreground/30 hover:bg-foreground/10 transition-colors text-foreground/70">

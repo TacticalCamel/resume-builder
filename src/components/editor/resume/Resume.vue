@@ -1,60 +1,29 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/Editable";
-    import { ResumeModel, Section, SectionType } from "@/models/resume/Resume";
-    import HeaderSection from "@/components/editor/resume/sections/HeaderSection.vue";
-    import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
-    import EducationSection from "@/components/editor/resume/sections/EducationSection.vue";
-    import ExperienceSection from "@/components/editor/resume/sections/ExperienceSection.vue";
-    import SkillSection from "@/components/editor/resume/sections/SkillSection.vue";
-    import LanguageSection from "@/components/editor/resume/sections/LanguageSection.vue";
-    import ProjectSection from "@/components/editor/resume/sections/ProjectSection.vue";
+    import { computed } from "vue";
+    import { useTemplate } from "@/composables/Template";
+    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import ResumeBody from "@/components/editor/resume/ResumeBody.vue";
 
-    const resume = defineModel<ResumeModel>({
+    const template = defineModel<ResumeTemplate>({
         required: true
     });
+
+    const {currentTheme} = useTemplate(template);
 
     const {editable = false} = defineProps<{
         editable?: boolean
     }>();
 
-    const {provideEditable} = useEditable();
-
-    provideEditable(editable);
-
-    function getSectionComponent(type: SectionType) {
-        switch (type) {
-            case SectionType.educations:
-                return EducationSection;
-            case SectionType.experiences:
-                return ExperienceSection;
-            case SectionType.skills:
-                return SkillSection;
-            case SectionType.languages:
-                return LanguageSection;
-            case SectionType.projects:
-                return ProjectSection;
-        }
-    }
+    const styles = computed(() => ({
+        filter: `grayscale(${template.value.filters.grayscale}%) contrast(${template.value.filters.contrast}%) brightness(${template.value.filters.brightness}%)`,
+        backdropFilter: `grayscale(${template.value.filters.grayscale}%)`,
+        fontFamily: template.value.currentFont,
+        ...currentTheme.value.colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
+    }));
 </script>
 
 <template>
-    <div class="py-10 px-3">
-        <draggable-list
-            v-model="resume.sections"
-            group="Section"
-            class="grid max-w-[960px] mx-auto gap-12"
-        >
-            <template #header>
-                <header-section v-model="resume.header"/>
-            </template>
-
-            <template #item="{element: section, index}: {element: Section, index: number}">
-                <component :is="getSectionComponent(section.type)" v-model="resume.sections[index]"/>
-            </template>
-
-            <template #empty>
-                <div class="list-placeholder h-40">Drag sections here</div>
-            </template>
-        </draggable-list>
+    <div class="bg-background text-foreground py-10 px-3" :style="styles">
+        <resume-body v-model="template.resume" :editable="editable"/>
     </div>
 </template>

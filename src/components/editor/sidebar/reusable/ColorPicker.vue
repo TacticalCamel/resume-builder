@@ -28,8 +28,10 @@
         color.value.value = hex2rgb(input.value);
     }
 
-    function copyColor(): void {
+    function copyColor(event: Event): void {
         navigator.clipboard.writeText(hexColor.value);
+
+        (event.target as HTMLElement).blur();
     }
 
     function hex2rgb(hex: string): string {
@@ -67,7 +69,7 @@
         <span class="flex flex-col gap-0.5">
             <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
             <span class="inline-flex items-center gap-1">
-                <button class="peer font-mono opacity-60 hover:opacity-100 transition-opacity" @click.prevent.stop="copyColor">{{ hexColor }}</button>
+                <button class="peer font-mono opacity-60 hover:opacity-100 focus:opacity-100 focus:outline-0 transition-opacity" @click.prevent.stop="copyColor">{{ hexColor }}</button>
                 <icon-copy class="size-4 opacity-0 peer-hover:opacity-100 peer-focus:opacity-100 transition-opacity pointer-events-none"/>
             </span>
         </span>
@@ -82,8 +84,9 @@
     .color-picker {
         @apply text-white;
 
-        > button:hover {
+        > button:hover, > button:focus {
             filter: drop-shadow(1px 1px 3px white);
+            outline: none;
         }
 
         &:has(input:disabled) {
@@ -94,7 +97,7 @@
     .color-picker.dark-text {
         @apply text-black;
 
-        > button:hover {
+        > button:hover, > button:focus {
             filter: drop-shadow(1px 1px 3px black);
         }
     }

@@ -1,95 +1,97 @@
 <script setup lang="ts">
-    import { onBeforeMount, ref } from "vue";
+    import { ref, onBeforeMount } from "vue";
     import { useNavigation } from "@/composables/Navigation";
     import { useTemplateService } from "@/composables/TemplateService";
-    import { useThemes } from "@/composables/Themes";
     import { usePersistentRef } from "@/composables/PersistentRef";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
-    import FadeTransition from "@/components/shared/FadeTransition.vue";
-    import ResumeFrame from "@/components/editor/resume/ResumeFrame.vue";
+    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
+    import Resume from "@/components/editor/resume/Resume.vue";
 
     const {navigateTo} = useNavigation();
-    const {defaultLightTheme} = useThemes();
     const templateService = useTemplateService();
 
     const {routeParameters} = defineProps<{
         routeParameters: any
     }>();
 
-    const template = usePersistentRef<ResumeTemplate | undefined>('template', undefined);
+    // the id of the currently displayed template in the editor, undefined if empty
+    // persist between page reloads and sessions
+    const activeTemplateId = usePersistentRef<string | undefined>('active-template', undefined);
 
-    const loadedId = ref<string | undefined>(undefined);
+    // the id of the template that is attempting to load, undefined if there is no loading action
+    // need to declare this separately from the current id, since we need a dialog to confirm or cancel overriding the current template that may not be saved
+    const loadingTemplateId = ref<string | undefined>(undefined);
+
+    // the currently displayed template
+    // not a computed property because of its async update function
+    const template = ref<ResumeTemplate | undefined>(undefined);
 
     onBeforeMount(() => {
-        const load: any = routeParameters.load;
-        const init: any = routeParameters.init;
+        // attempt to load a new template with this id
+        const load: string | undefined = typeof routeParameters.load === 'string' ? routeParameters.load : undefined;
 
-        if (init && !template.value) {
-            createEmptyResume();
-            return;
-        }
+        // initialize a default template when there is none loaded
+        const init: boolean | undefined = typeof routeParameters.init === 'boolean' ? routeParameters.init : undefined;
 
-        if (load && typeof load === 'string') {
-            if (template.value && template.value.id === load) {
+        if (load) {
+            // current id matches the loaded one, nothing to do
+            if (activeTemplateId.value === load) {
                 return;
             }
 
-            loadedId.value = load;
+            loadingTemplateId.value = load;
 
-            if (!template.value) {
+            // skip confirmation dialog if no template was present previously
+            if (!activeTemplateId.value) {
                 confirmLoad();
             }
         }
+
+        // initialize only when load is not specified
+        else if (init && !activeTemplateId.value) {
+            setEmptyTemplate();
+        }
+
+        // no special action, load current template
+        else {
+            updateTemplate();
+        }
     });
 
-    async function confirmLoad() {
-        if (!loadedId.value) {
+    function setEmptyTemplate(): void {
+        activeTemplateId.value = 'empty';
+
+        updateTemplate();
+    }
+
+    function confirmLoad(): void {
+        if (!loadingTemplateId.value) {
             return;
         }
 
-        const loadedTemplate: ResumeTemplate | undefined = await templateService.getById(loadedId.value);
+        activeTemplateId.value = loadingTemplateId.value;
+        loadingTemplateId.value = undefined;
 
-        if (!loadedTemplate) {
-            console.error(`Template with id '${loadedId.value}' was not found`)
-        } else {
-            template.value = loadedTemplate;
+        updateTemplate();
+    }
+
+    function cancelLoad(): void {
+        loadingTemplateId.value = undefined;
+    }
+
+    async function updateTemplate(): Promise<void> {
+        if (!activeTemplateId.value) {
+            return;
         }
 
-        loadedId.value = undefined;
-    }
+        const resultTemplate: ResumeTemplate | undefined = await templateService.getById(activeTemplateId.value);
 
-    function cancelLoad() {
-        loadedId.value = undefined;
-    }
-
-    function createEmptyResume() {
-        template.value = getEmptyResume();
-    }
-
-    function getEmptyResume() {
-        return {
-            id: crypto.randomUUID(),
-            currentTheme: defaultLightTheme.id,
-            currentFont: 'Inter',
-            resume: {
-                header: {
-                    picture: undefined,
-                    name: '',
-                    profession: '',
-                    description: '',
-                    contacts: []
-                },
-                sections: []
-            },
-            themes: [],
-            fonts: [{name: 'Inter', system: 0, data: undefined}],
-            filters: {
-                grayscale: 0,
-                contrast: 100,
-                brightness: 100
-            }
-        };
+        if (!resultTemplate) {
+            console.error(`Template with id '${activeTemplateId.value}' was not found`)
+        } else {
+            template.value = resultTemplate;
+        }
     }
 </script>
 
@@ -104,7 +106,7 @@
 
             <div class="relative grow">
                 <fade-transition>
-                    <div v-if="loadedId" class="absolute inset-0 bg-background/60 z-10 flex flex-col justify-center items-center backdrop-blur-sm">
+                    <div v-if="loadingTemplateId" class="absolute inset-0 bg-background/60 z-10 flex flex-col justify-center items-center backdrop-blur-sm">
                         <div class="bg-background px-12 py-8 rounded-lg border-2 border-foreground/30 font-medium">
                             <div class="text-center mb-6">
                                 <div>There is already a resume loaded.</div>
@@ -118,7 +120,7 @@
                     </div>
                 </fade-transition>
 
-                <resume-frame
+                <resume
                     v-model="template"
                     class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip print:relative print:h-full"
                     editable
@@ -132,7 +134,7 @@
                     <div>There is no resume loaded.</div>
                 </div>
                 <div class="flex items-center gap-4 text-sm text-nowrap">
-                    <button @click="createEmptyResume()" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Create a new one</button>
+                    <button @click="setEmptyTemplate()" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Create a new one</button>
                     <span>or</span>
                     <button @click="navigateTo('/templates')" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Browse
                         templates

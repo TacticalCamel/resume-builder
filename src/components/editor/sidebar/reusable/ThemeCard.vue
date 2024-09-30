@@ -40,7 +40,7 @@
                 <span v-else-if="theme.name.length">{{ theme.name }}</span>
                 <span v-else class="italic opacity-70">Unnamed</span>
 
-                <span v-if="isDefault" class="font-mono font-bold">[DEFAULT]</span>
+                <span v-if="isDefault" class="font-mono font-semibold italic text-foreground/70">DEFAULT</span>
             </div>
 
             <div class="theme-colors">

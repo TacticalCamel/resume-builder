@@ -58,12 +58,14 @@
             </input-file>
         </editor-tab-item>
 
-        <editor-tab-item title="current font">
+        <editor-tab-item title="search fonts">
             <div class="flex items-center gap-2 px-2 py-1.5 mb-4 outline outline-secondary outline-1 rounded">
                 <icon-search class="size-5 text-foreground/70"/>
                 <input type="text" v-model.trim="searchText" placeholder="Search fonts..." class="bg-transparent w-full outline-0 text-sm"/>
             </div>
+        </editor-tab-item>
 
+        <editor-tab-item title="available fonts">
             <div class="relative flex flex-col gap-1 scrollbar overflow-y-auto px-px max-h-96">
                 <template v-if="template.fonts.length">
                     <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80">Custom fonts</div>

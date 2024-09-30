@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import ResumeFrame from "@/components/editor/resume/ResumeFrame.vue";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import Resume from "@/components/editor/resume/Resume.vue";
 
     const template = defineModel<ResumeTemplate>({
         required: true
@@ -31,7 +31,7 @@
 <template>
     <div class="grid gap-4">
         <div class="card relative w-[360px] h-[520px] border border-foreground/30 rounded shadow-lg shadow-black overflow-clip">
-            <resume-frame
+            <resume
                 v-model="template"
                 :style="templateStyle"
                 class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground"

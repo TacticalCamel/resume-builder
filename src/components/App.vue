@@ -7,7 +7,7 @@
     import Templates from "@/components/templates/Templates.vue";
     import NotFound from "@/components/shared/NotFound.vue";
     import Navigation from "@/components/shared/navigation/Navigation.vue";
-    import FadeTransition from "@/components/shared/FadeTransition.vue";
+    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
 
     const {getActiveView, parameters} = useNavigation();
     const {applyTheme, defaultDarkTheme} = useThemes();
