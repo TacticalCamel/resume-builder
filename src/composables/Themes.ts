@@ -1,11 +1,20 @@
-import { getDefaultLightTheme, getDefaultDarkTheme } from "@/composables/CssUtils";
+import { useStyleSheet } from "@/composables/StyleSheet";
 import { Theme } from "@/models/style/Theme";
 import { Color } from "@/models/style/Color";
 
-const defaultLightTheme: Theme = getDefaultLightTheme();
-const defaultDarkTheme: Theme = getDefaultDarkTheme();
-
 export function useThemes() {
+    const {defaultLightTheme, defaultDarkTheme} = useStyleSheet();
+
+    function getTheme(id: string, themes: Theme[]): Theme {
+        const theme: Theme | undefined = themes.find(theme => theme.id === id);
+
+        if(theme) {
+            return theme;
+        }
+
+        return defaultDarkTheme.id === id ? defaultDarkTheme : defaultLightTheme;
+    }
+
     function applyTheme(element: HTMLElement, theme: Theme): void {
         theme.colors.forEach((color: Color): void => {
             element.style.setProperty(color.name, color.value)
@@ -22,23 +31,11 @@ export function useThemes() {
         return r * 0.299 + g * 0.587 + b * 0.114 > 150;
     }
 
-    function findThemeById(id: string, themes: Theme[]): Theme | undefined {
-        if(defaultLightTheme.id === id){
-            return defaultLightTheme;
-        }
-
-        if(defaultDarkTheme.id === id){
-            return defaultDarkTheme;
-        }
-
-        return themes.find(theme => theme.id === id);
-    }
-
     return {
         defaultLightTheme,
         defaultDarkTheme,
         applyTheme,
         isDarkContrast,
-        findThemeById
+        getTheme
     };
 }

@@ -12,7 +12,7 @@
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
     import FontCard from "@/components/editor/sidebar/reusable/FontCard.vue";
 
-    const fontService = useFonts();
+    const {systemFonts, canLoadSystemFonts, loadSystemFonts} = useFonts();
 
     const template = defineModel<ResumeTemplate>({
         required: true
@@ -80,7 +80,7 @@
                 </template>
 
                 <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80 mt-2">System fonts</div>
-                <template v-if="fontService.systemFonts.length" v-for="font in fontService.systemFonts">
+                <template v-if="systemFonts && systemFonts.length" v-for="font in systemFonts">
                     <font-card
                         v-if="shouldDisplayFont(font)"
                         @click="setCurrentFont(font)"
@@ -91,13 +91,13 @@
                 <div v-else class="flex items-center justify-between group">
                     <button
                         class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors text-sm"
-                        :disabled="!fontService.canLoadSystemFonts"
-                        @click="fontService.loadSystemFonts()"
+                        :disabled="!canLoadSystemFonts"
+                        @click="loadSystemFonts()"
                     >
                         Load system fonts
                     </button>
 
-                    <span v-if="fontService.canLoadSystemFonts" class="flex items-center gap-1 text-secondary text-xs">
+                    <span v-if="canLoadSystemFonts" class="flex items-center gap-1 text-secondary text-xs">
                         <icon-check class="size-4"/>
                         <span>Browser supported</span>
                     </span>

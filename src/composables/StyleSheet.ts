@@ -8,8 +8,20 @@ const FOREGROUND_COLOR_NAME = '--foreground';
 const BACKGROUND_COLOR_NAME = '--background';
 const FONT_VARIABLE_NAME = '--font-family';
 
-// Check all stylesheets for a variable inside a selector and return its value.
-export function getVariable(selectorText: string, variableName: string): string | undefined {
+const defaultLightTheme: Theme = getDefaultLightTheme();
+const defaultDarkTheme: Theme = getDefaultDarkTheme();
+const defaultFont: string = getDefaultFont();
+
+export function useStyleSheet() {
+    return {
+        defaultLightTheme,
+        defaultDarkTheme,
+        defaultFont
+    };
+}
+
+// check all stylesheets for a variable inside a selector and return its value
+function getVariable(selectorText: string, variableName: string): string | undefined {
     // iterate over all the style sheets
     for (let i = 0; i < document.styleSheets.length; i++) {
         // get the current style sheet
@@ -51,8 +63,8 @@ export function getVariable(selectorText: string, variableName: string): string 
     return undefined;
 }
 
-// Check all stylesheets for a selector and return all variables inside it.
-export function getVariables(selectorText: string): Record<string, string> {
+// check all stylesheets for a selector and return all variables inside it
+function getVariables(selectorText: string): Record<string, string> {
     // create a map to store the results
     const results: Record<string, string> = {};
 
@@ -99,8 +111,8 @@ export function getVariables(selectorText: string): Record<string, string> {
     return results;
 }
 
-// Get all colors defined in the root selector.
-export function getColors(): Color[] {
+// get all colors defined in the root selector
+function getColors(): Color[] {
     // get all variable in the root selector and assume they're all colors
     const variables: Record<string, string> = getVariables(ROOT_SELECTOR);
 
@@ -108,8 +120,8 @@ export function getColors(): Color[] {
     return Object.keys(variables).map(key => ({name: key, value: variables[key]}));
 }
 
-// Create a theme from the initial CSS values.
-export function getDefaultLightTheme(): Theme {
+// create a theme from the initial CSS values
+function getDefaultLightTheme(): Theme {
     return {
         id: 'default-light',
         name: 'Light',
@@ -118,8 +130,8 @@ export function getDefaultLightTheme(): Theme {
     };
 }
 
-// Create a theme from the initial CSS values but swap the background and foreground colors.
-export function getDefaultDarkTheme(): Theme {
+// create a theme from the initial CSS values then swap the background and foreground colors
+function getDefaultDarkTheme(): Theme {
     const colors: Color[] = getColors();
 
     const foregroundColor: Color | undefined = colors.find(color => color.name === FOREGROUND_COLOR_NAME);
@@ -140,8 +152,8 @@ export function getDefaultDarkTheme(): Theme {
     };
 }
 
-// Get the initial font value from CSS.
-export function getDefaultFont(): string {
+// get the initial font value from CSS
+function getDefaultFont(): string {
     const value: string | undefined = getVariable(HTML_SELECTOR, FONT_VARIABLE_NAME);
 
     if (!value) {
@@ -150,3 +162,4 @@ export function getDefaultFont(): string {
 
     return value.replace(/"/g, '');
 }
+

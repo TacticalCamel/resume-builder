@@ -1,28 +1,82 @@
 <script setup lang="ts">
-    import { ref } from "vue";
-    import { useTemplate } from "@/composables/Template";
+    import { computed, ref } from "vue";
+    import { useThemes } from "@/composables/Themes";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import { Theme } from "@/models/style/Theme";
+    import { Color } from "@/models/style/Color";
     import ThemeCard from "@/components/editor/sidebar/reusable/ThemeCard.vue";
     import ColorPicker from "@/components/editor/sidebar/reusable/ColorPicker.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
+    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
+    import TemplateFilters from "@/components/editor/sidebar/items/TemplateFilters.vue";
     import IconDelete from "@/components/shared/icons/IconDelete.vue";
     import IconSwapVert from "@/components/shared/icons/IconSwapVert.vue";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
     import IconClose from "@/components/shared/icons/IconClose.vue";
-    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
-    import TemplateFilters from "@/components/editor/sidebar/items/TemplateFilters.vue";
 
     const template = defineModel<ResumeTemplate>({
         required: true
     });
 
-    const {hasDefaultThemeSelected, availableThemes, currentTheme, addTheme, isColorModified, resetColor} = useTemplate(template);
+    const {defaultLightTheme, defaultDarkTheme, getTheme} = useThemes();
 
     const deleteDialogOpen = ref<boolean>(false);
     const themeSelectOpen = ref<boolean>(false);
     const themeCreateForm = ref<{ name: string, base: string | undefined } | undefined>(undefined);
+
+    const hasDefaultThemeSelected = computed<boolean>(() => {
+        return defaultLightTheme.id === template.value.currentTheme || defaultDarkTheme.id === template.value.currentTheme;
+    });
+
+    const availableThemes = computed<Theme[]>(() => {
+        return [defaultLightTheme, defaultDarkTheme, ...template.value.themes];
+    });
+
+    const currentTheme = computed(() => {
+        return getTheme(template.value.currentTheme, template.value.themes);
+    });
+
+    function isColorModified(color: Color): boolean {
+        // get the default color value
+        const defaultValue: string | undefined = getDefaultColorValue(color);
+
+        // if there is no default value, return false
+        if (!defaultValue) {
+            return false;
+        }
+
+        // compare the value to the default
+        return getDefaultColorValue(color) !== color.value;
+    }
+
+    function getDefaultColorValue(color: Color): string | undefined {
+        const id: string | undefined = currentTheme.value.base;
+
+        if(!id) {
+            return undefined;
+        }
+
+        let baseTheme: Theme | undefined = getTheme(id, template.value.themes);
+
+        if (!baseTheme) {
+            return undefined;
+        }
+
+        const baseColor: Color | undefined = baseTheme.colors.find(c => c.name === color.name);
+
+        return baseColor?.value;
+    }
+
+    function resetColor(color: Color): void {
+        // get the default color value
+        const defaultValue: string | undefined = getDefaultColorValue(color);
+
+        // if there is a one, change it and apply the color
+        if (defaultValue) {
+            color.value = defaultValue;
+        }
+    }
 
     function createTheme(apply: boolean) {
         if (!themeCreateForm.value) {
@@ -41,6 +95,23 @@
             name: '',
             base: undefined,
         };
+    }
+
+    function addTheme(name: string, baseThemeId: string | undefined): Theme {
+        const id: string = crypto.randomUUID();
+        const baseTheme: Theme = (baseThemeId ? getTheme(baseThemeId, template.value.themes) : undefined) ?? defaultLightTheme;
+        const colors: Color[] = baseTheme.colors.map(color => ({name: color.name, value: color.value}));
+
+        const theme: Theme = {
+            id: id,
+            name: name,
+            base: baseThemeId,
+            colors: colors
+        };
+
+        template.value.themes.push(theme);
+
+        return theme;
     }
 
     function setTheme(theme: Theme): void {
@@ -73,11 +144,11 @@
     function openThemeSelect() {
         themeSelectOpen.value = !themeSelectOpen.value;
 
-        if (themeCreateForm.value) {
+        if (!themeSelectOpen.value) {
             return;
         }
 
-        themeCreateForm.value = {
+        themeCreateForm.value ??= {
             name: '',
             base: undefined
         };

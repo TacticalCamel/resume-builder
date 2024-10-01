@@ -5,14 +5,14 @@
     import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
-    import ExportTab from "@/components/editor/sidebar/tabs/ExportTab.vue";
+    import TransferTab from "@/components/editor/sidebar/tabs/TransferTab.vue";
     import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
     import IconDashboard from "@/components/shared/icons/IconDashboard.vue";
     import IconPalette from "@/components/shared/icons/IconPalette.vue";
     import IconText from "@/components/shared/icons/IconText.vue";
-    import IconPublish from "@/components/shared/icons/IconPublish.vue";
+    import IconSwapHorizontal from "@/components/shared/icons/IconSwapHorizontal.vue";
 
-    const template = defineModel<ResumeTemplate>('template', {
+    const template = defineModel<ResumeTemplate>({
         required: true
     });
 
@@ -45,9 +45,9 @@
             component: FontTab
         },
         {
-            name: 'Export',
-            icon: IconPublish,
-            component: ExportTab
+            name: 'Transfer',
+            icon: IconSwapHorizontal,
+            component: TransferTab
         }
     ];
 </script>

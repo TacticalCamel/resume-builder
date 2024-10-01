@@ -1,22 +1,13 @@
+import { useDatabase } from "@/composables/Database";
+import { useStyleSheet } from "@/composables/StyleSheet";
 import { EntityTable, Transaction } from "dexie";
 import { ReactiveQuery, useReactiveQuery } from "@/composables/ReactiveQuery";
-import { useDatabase } from "@/composables/Database";
-import { getDefaultFont } from "@/composables/CssUtils";
 import { Font } from "@/models/style/Font";
 
-let instance: FontService | undefined;
-
 export function useFonts() {
-    if (instance) {
-        return instance;
-    }
-
     const db = useDatabase();
-    const defaultFont = getDefaultFont();
-
-    instance = new FontService(
-        db.fonts
-    );
+    const {defaultFont} = useStyleSheet();
+    const table: EntityTable<Font, 'name'> = db.fonts;
 
     db.on('populate', (transaction: Transaction) => {
         transaction.table<Font, string>('fonts').add({
@@ -26,33 +17,16 @@ export function useFonts() {
         });
     });
 
-    return instance;
-}
+    const systemFonts: ReactiveQuery<Font[]> = useReactiveQuery(() => table.where('system').notEqual(0).toArray());
+    const canLoadSystemFonts: boolean = 'queryLocalFonts' in window && typeof window.queryLocalFonts === 'function';
 
-class FontService {
-    private readonly _fonts: EntityTable<Font, 'name'>
-    private readonly _systemFonts: ReactiveQuery<Font[]>
-
-    constructor(fonts: EntityTable<Font, 'name'>) {
-        this._fonts = fonts;
-        this._systemFonts = useReactiveQuery(() => this._fonts.where('system').notEqual(0).toArray());
-    }
-
-    get systemFonts(): Font[] {
-        return this._systemFonts.value ?? [];
-    }
-
-    get canLoadSystemFonts(): boolean {
-        return 'queryLocalFonts' in window && typeof window.queryLocalFonts === 'function';
-    }
-
-    async loadSystemFonts(): Promise<void> {
+    async function loadSystemFonts(): Promise<void> {
         if (!('queryLocalFonts' in window) || typeof window.queryLocalFonts !== 'function') {
             return;
         }
 
         const systemFonts: { family: string, fullName: string, postscriptName: string, style: string }[] = await window.queryLocalFonts();
-        const existingFonts: Font[] = await this._fonts.where('system').equals('true').toArray();
+        const existingFonts: Font[] = await table.where('system').equals('true').toArray();
 
         for (const fontData of systemFonts) {
             if (fontData.style !== 'Regular') {
@@ -69,12 +43,12 @@ class FontService {
                 system: 1
             };
 
-            await this._fonts.add(font);
+            await table.add(font);
         }
     }
 
-    private applyCustomFonts(customFonts: Font[]): void {
-        for (const font of customFonts) {
+    function applyFonts(fonts: Font[]): void {
+        for (const font of fonts) {
             if (!font.data) {
                 continue;
             }
@@ -86,4 +60,11 @@ class FontService {
             }
         }
     }
+
+    return {
+        systemFonts,
+        canLoadSystemFonts,
+        loadSystemFonts,
+        applyFonts
+    };
 }

@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { ref } from "vue";
-    import { useTemplateService } from "@/composables/TemplateService";
+    import { useTemplates } from "@/composables/Templates";
     import { useNavigation } from "@/composables/Navigation";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import TemplateCard from "@/components/templates/TemplateCard.vue";
     import Resume from "@/components/editor/resume/Resume.vue";
 
-    const templateService = useTemplateService();
+    const {templates, predefinedTemplates} = useTemplates();
     const {navigateTo} = useNavigation();
 
     const preview = ref<ResumeTemplate | undefined>(undefined);
@@ -37,13 +37,13 @@
             </div>
 
             <div v-else class="grid gap-16 mx-auto max-w-[1600px] p-8">
-                <div class="grid gap-2">
+                <div v-if="templates" class="grid gap-2">
                     <h1 class="text-xl font-semibold">Custom templates</h1>
 
                     <div class="flex flex-wrap gap-x-8 gap-y-6">
                         <template-card
-                            v-for="(template, index) in templateService.templates"
-                            v-model="templateService.templates[index]"
+                            v-for="(template, index) in templates"
+                            v-model="templates[index]"
                             @preview="openPreview(template)"
                             @edit="loadToEditor(template)"
                         />
@@ -55,8 +55,8 @@
 
                     <div class="flex flex-wrap gap-x-8 gap-y-6">
                         <template-card
-                            v-for="(template, index) in templateService.predefinedTemplates"
-                            v-model="templateService.predefinedTemplates[index]"
+                            v-for="(template, index) in predefinedTemplates"
+                            v-model="predefinedTemplates[index]"
                             @preview="openPreview(template)"
                             @edit="loadToEditor(template)"
                         />

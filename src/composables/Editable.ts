@@ -1,11 +1,13 @@
-import { inject, provide } from "vue";
+import { provide, inject } from "vue";
+
+const injectorKey = Symbol();
 
 export function useEditable() {
     function provideEditable(value: boolean) {
-        provide<boolean>('editable', value);
+        provide<boolean>(injectorKey, value);
     }
 
-    const editable: boolean = inject<boolean>('editable', false);
+    const editable: boolean = inject<boolean>(injectorKey, false);
 
     return {
         editable,

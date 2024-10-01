@@ -11,7 +11,7 @@
     import { LayoutItem } from "@/models/bindings/LayoutItem";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
-    import BlockGroupTabItem from "@/components/editor/sidebar/items/BlockGroupTabItem.vue";
+    import BlockGroup from "@/components/editor/sidebar/items/BlockGroup.vue";
     import DeleteArea from "@/components/editor/sidebar/reusable/DeleteArea.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
     import IconSegment from "@/components/shared/icons/IconSegment.vue";
@@ -143,7 +143,7 @@
 
 <template>
     <editor-tab>
-        <block-group-tab-item
+        <block-group
             v-for="group in groups"
             :icon="group.icon"
             :title="group.title"
