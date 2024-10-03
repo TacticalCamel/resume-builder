@@ -49,15 +49,19 @@ export function useFonts() {
 
     function applyFonts(fonts: Font[]): void {
         for (const font of fonts) {
-            if (!font.data) {
-                continue;
-            }
+            applyFont(font);
+        }
+    }
 
-            const fontFace: FontFace = new FontFace(font.name, font.data);
+    function applyFont(font: Font): void {
+        if (!font.data) {
+            return;
+        }
 
-            if (!document.fonts.has(fontFace)) {
-                document.fonts.add(fontFace);
-            }
+        const fontFace: FontFace = new FontFace(font.name, font.data);
+
+        if (!document.fonts.has(fontFace)) {
+            document.fonts.add(fontFace);
         }
     }
 
@@ -65,6 +69,7 @@ export function useFonts() {
         systemFonts,
         canLoadSystemFonts,
         loadSystemFonts,
+        applyFont,
         applyFonts
     };
 }

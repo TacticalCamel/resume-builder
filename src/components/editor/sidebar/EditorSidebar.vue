@@ -2,6 +2,8 @@
     import { computed } from "vue";
     import { usePersistentRef } from "@/composables/PersistentRef";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { SaveState } from "@/models/SaveState";
+    import SaveStatus from "@/components/editor/sidebar/reusable/SaveStatus.vue";
     import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
@@ -15,6 +17,10 @@
     const template = defineModel<ResumeTemplate>({
         required: true
     });
+
+    const {saveState} = defineProps<{
+        saveState: SaveState
+    }>();
 
     const activeTab = usePersistentRef<number>('active-tab', 0);
 
@@ -70,12 +76,17 @@
             </span>
         </div>
 
-        <div class="grow p-4 border-e border-e-foreground/10 scrollbar overflow-y-auto">
-            <fade-transition>
-                <keep-alive>
-                    <component :is="activeTabComponent" v-model="template"/>
-                </keep-alive>
-            </fade-transition>
+        <div class="flex flex-col grow border-e border-foreground/20">
+            <div class="grow p-4 scrollbar overflow-y-auto">
+                <fade-transition>
+                    <keep-alive>
+                        <component :is="activeTabComponent" v-model="template"/>
+                    </keep-alive>
+                </fade-transition>
+            </div>
+            <div class="shadow-amber-500 border-t border-foreground/20 bg-gradient-to-b from-foreground/5 to-transparent to-60%">
+                <save-status :state="saveState" :id="template.id"/>
+            </div>
         </div>
     </div>
 </template>

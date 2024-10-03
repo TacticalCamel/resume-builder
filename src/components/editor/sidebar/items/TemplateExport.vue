@@ -1,16 +1,13 @@
 <script setup lang="ts">
-    import { computed, onBeforeMount, ref } from "vue";
+    import { computed, ref } from "vue";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputCheckbox from "@/components/shared/form/InputCheckbox.vue";
-    import IconRenew from "@/components/shared/icons/IconRenew.vue";
 
     // defines a category of data that can be included for export
     interface DataCategory {
         include: boolean
         name: string
-        size: number
-        getSize: () => number
         addToTemplate: (template: Partial<ResumeTemplate>) => void
     }
 
@@ -21,28 +18,23 @@
     const categories = ref<DataCategory[]>([
         {
             include: true,
-            name: 'Resume',
-            size: 0,
-            getSize: () => JSON.stringify(template.resume).length,
+            name: 'resume',
             addToTemplate: (exported: Partial<ResumeTemplate>) => {
                 exported.resume = template.resume;
             }
         },
         {
             include: true,
-            name: 'Themes',
-            size: 0,
-            getSize: () => JSON.stringify(template.themes).length,
+            name: 'themes',
             addToTemplate: (exported: Partial<ResumeTemplate>) => {
                 exported.themes = template.themes;
                 exported.currentTheme = template.currentTheme;
+                exported.filters = template.filters;
             }
         },
         {
             include: true,
-            name: 'Fonts',
-            size: 0,
-            getSize: () => JSON.stringify(template.fonts).length,
+            name: 'fonts',
             addToTemplate: (exported: Partial<ResumeTemplate>) => {
                 exported.fonts = template.fonts;
                 exported.currentFont = template.currentFont;
@@ -51,28 +43,10 @@
     ]);
 
     const totalSize = computed<string>(() => {
-        let size = 0;
-
-        for (const category of categories.value) {
-            if (!category.include) {
-                continue;
-            }
-
-            size += category.size;
-        }
+        const size: number = JSON.stringify(template).length;
 
         return sizeToString(size);
     });
-
-    onBeforeMount(() => {
-        calculateCategoryResults();
-    });
-
-    function calculateCategoryResults() {
-        for (const category of categories.value) {
-            category.size = category.getSize();
-        }
-    }
 
     function sizeToString(size: number): string {
         const units = [
@@ -93,16 +67,32 @@
         return `${size} B`;
     }
 
-    function exportTemplate(): void {
-        const template: Partial<ResumeTemplate> = {};
+    function getExportedTemplate(): Partial<ResumeTemplate> {
+        const exported: Partial<ResumeTemplate> = {
+            id: template.id
+        };
 
         for (const category of categories.value) {
             if (category.include) {
-                category.addToTemplate(template);
+                category.addToTemplate(exported);
             }
         }
 
-        const content: string = JSON.stringify(template);
+        return exported;
+    }
+
+    function exportTemplate(): void {
+        const exported: Partial<ResumeTemplate> = {
+            id: template.id
+        };
+
+        for (const category of categories.value) {
+            if (category.include) {
+                category.addToTemplate(exported);
+            }
+        }
+
+        const content: string = JSON.stringify(exported);
 
         const blob = new Blob([content], {type: 'application/json'});
 
@@ -119,28 +109,21 @@
 
 <template>
     <editor-tab-item title="export to file">
-        <div class="grid grid-cols-2 items-center gap-2 text-sm text-foreground/70">
-            <div class="grid grid-cols-subgrid col-span-2 gap-2 py-1">
-                <template v-for="category in categories">
-                    <input-checkbox v-model="category.include">{{ category.name }}</input-checkbox>
-                    <div>{{ sizeToString(category.size) }}</div>
-                </template>
+        <div class="grid gap-4">
+            <div class="grid gap-2">
+                <input-checkbox
+                    v-for="category in categories"
+                    v-model="category.include"
+                    class="rounded px-2 py-1 transition-colors text-foreground/70 border-2 border-foreground/30 hover:border-foreground focus:border-foreground"
+                    :class="{'text-foreground/100': category.include}"
+                >
+                    Include {{ category.name }}
+                </input-checkbox>
             </div>
 
-            <div class="grid grid-cols-subgrid col-span-2 pt-2 border-t border-foreground/30 font-medium text-foreground">
-                <div class="px-1">
-                    <button @click="exportTemplate" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">
-                        Export
-                    </button>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <span class="basis-1/3 text-nowrap">{{ totalSize }}</span>
-                    <button @click="calculateCategoryResults" class="flex justify-center items-center gap-1 p-1 rounded hover:bg-foreground/10 text-foreground/60 hover:text-foreground transition-colors text-xs">
-                        <icon-renew class="size-4"/>
-                        <span>Refresh</span>
-                    </button>
-                </div>
+            <div class="grid grid-cols-2 gap-2 items-center">
+                <button @click="exportTemplate" class="text-center p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-foreground">Export</button>
+                <span class="text-end me-1 text-foreground/70">File size: {{ totalSize }}</span>
             </div>
         </div>
     </editor-tab-item>

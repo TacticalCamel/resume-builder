@@ -12,7 +12,7 @@
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
     import FontCard from "@/components/editor/sidebar/reusable/FontCard.vue";
 
-    const {systemFonts, canLoadSystemFonts, loadSystemFonts} = useFonts();
+    const {systemFonts, canLoadSystemFonts, loadSystemFonts, applyFont} = useFonts();
 
     const template = defineModel<ResumeTemplate>({
         required: true
@@ -29,11 +29,15 @@
 
         const fontName: string = fileName.split('.')[0].replace(/[^a-zA-Z0-9]/g, ' ');
 
-        template.value.fonts.push({
+        const font: Font = {
             name: fontName,
             data: fontFile,
             system: 0
-        });
+        };
+
+        template.value.fonts.push(font);
+
+        applyFont(font);
     }
 
     // set the current font to the provided one

@@ -1,7 +1,8 @@
-import { EntityTable } from "dexie";
+import { isProxy, isReactive, isRef, toRaw } from "vue";
 import { useDatabase } from "@/composables/Database";
 import { useStyleSheet } from "@/composables/StyleSheet";
 import { ReactiveQuery, useReactiveQuery } from "@/composables/ReactiveQuery";
+import { EntityTable } from "dexie";
 import { ResumeTemplate } from "@/models/ResumeTemplate";
 
 const {defaultLightTheme, defaultFont} = useStyleSheet();
@@ -48,7 +49,9 @@ export function useTemplates() {
     }
 
     async function setTemplate(template: ResumeTemplate): Promise<void> {
-        await table.put(template, template.id);
+        const raw: ResumeTemplate = deepToRaw(template);
+
+        await table.put(raw, raw.id);
     }
 
     return {
@@ -57,4 +60,34 @@ export function useTemplates() {
         getTemplate,
         setTemplate
     };
+}
+
+// reactive proxies contain functions, which can not be serialized, so the object must be recursively converted
+// https://github.com/vuejs/core/issues/5303#issuecomment-1543596383
+function deepToRaw<T extends Record<string, any>>(sourceObj: T): T {
+    const objectIterator = (input: any): any => {
+        if (Array.isArray(input)) {
+            return input.map((item) => objectIterator(item));
+        }
+
+        if (isRef(input) || isReactive(input) || isProxy(input)) {
+            return objectIterator(toRaw(input));
+        }
+
+        if (input && typeof input === 'object') {
+            // special treatment for array buffers
+            if(input.byteLength){
+                return input;
+            }
+
+            return Object.keys(input).reduce((acc, key) => {
+                acc[key as keyof typeof acc] = objectIterator(input[key]);
+                return acc;
+            }, {} as T);
+        }
+
+        return input;
+    };
+
+    return objectIterator(sourceObj);
 }
