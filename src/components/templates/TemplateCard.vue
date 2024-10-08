@@ -1,10 +1,15 @@
 <script setup lang="ts">
+    import { computed } from "vue";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import Resume from "@/components/editor/resume/Resume.vue";
 
-    const template = defineModel<ResumeTemplate>({
-        required: true
-    });
+    const {template} = defineProps<{
+        template: ResumeTemplate
+    }>();
+
+    const computedTemplate = computed(() => {
+        return template;
+    })
 
     const emit = defineEmits<{
         preview: [],
@@ -32,7 +37,7 @@
     <div class="grid gap-4">
         <div class="card relative w-[360px] h-[520px] border border-foreground/30 rounded shadow-lg shadow-black overflow-clip">
             <resume
-                v-model="template"
+                v-model="computedTemplate"
                 :style="templateStyle"
                 class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground"
             />
@@ -44,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-center">{{ template.resume.header.profession }}</div>
+        <div class="text-center">{{ computedTemplate.resume.header.profession }}</div>
     </div>
 </template>
 

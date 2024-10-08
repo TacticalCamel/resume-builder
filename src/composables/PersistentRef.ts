@@ -1,9 +1,8 @@
 import { Ref, ref, watchEffect } from 'vue';
-import { ISerializer, useSerializer } from "@/composables/Serializer";
 
 export function usePersistentRef<T>(key: string, defaultValue: T | (() => T)): Ref<T> {
     // initialize the service
-    const storage: LocalStorageService<T> = new LocalStorageService<T>(key, useSerializer());
+    const storage: LocalStorageService<T> = new LocalStorageService<T>(key);
 
     // attempt to load the saved value
     let savedValue: T | undefined = storage.load();
@@ -40,16 +39,14 @@ export function usePersistentRef<T>(key: string, defaultValue: T | (() => T)): R
 
 class LocalStorageService<T> {
     private readonly key: string
-    private readonly serializer: ISerializer
 
-    constructor(key: string, serializer: ISerializer) {
+    constructor(key: string) {
         this.key = key;
-        this.serializer = serializer;
     }
 
     save(value: T): void {
         try {
-            const serializedValue: string = this.serializer.serialize<T>(value);
+            const serializedValue: string = JSON.stringify(value);
 
             localStorage.setItem(this.key, serializedValue);
         }
@@ -63,7 +60,7 @@ class LocalStorageService<T> {
             const serializedValue: string | null = localStorage.getItem(this.key);
 
             if (serializedValue) {
-                return this.serializer.deserialize<T>(serializedValue);
+                return JSON.parse(serializedValue);
             }
         }
         catch (error) {

@@ -6,8 +6,8 @@
 </script>
 
 <template>
-    <footer class="border-t border-t-foreground/10 mt-24">
-        <div class="px-5 py-12 grid w-fit gap-12 mx-auto max-w-[1280px]">
+    <footer class="border-t border-t-foreground/10">
+        <div class="px-5 py-12 grid w-fit gap-12 mx-auto">
             <div class="grid grid-cols-3 gap-24">
                 <div class="flex items-start gap-4">
                     <img :src="logo" alt="logo" class="size-10 -mt-2"/>

@@ -42,8 +42,8 @@
 
                     <div class="flex flex-wrap gap-x-8 gap-y-6">
                         <template-card
-                            v-for="(template, index) in templates"
-                            v-model="templates[index]"
+                            v-for="template in templates"
+                            :template="template"
                             @preview="openPreview(template)"
                             @edit="loadToEditor(template)"
                         />
@@ -55,8 +55,8 @@
 
                     <div class="flex flex-wrap gap-x-8 gap-y-6">
                         <template-card
-                            v-for="(template, index) in predefinedTemplates"
-                            v-model="predefinedTemplates[index]"
+                            v-for="template in predefinedTemplates"
+                            :template="template"
                             @preview="openPreview(template)"
                             @edit="loadToEditor(template)"
                         />

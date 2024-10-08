@@ -25,43 +25,46 @@ export function useFonts() {
             return;
         }
 
-        const systemFonts: { family: string, fullName: string, postscriptName: string, style: string }[] = await window.queryLocalFonts();
-        const existingFonts: Font[] = await table.where('system').equals('true').toArray();
+        const localFonts: { family: string, fullName: string, postscriptName: string, style: string }[] = await window.queryLocalFonts();
+        const fonts: Font[] = [];
 
-        for (const fontData of systemFonts) {
+        for (const fontData of localFonts) {
             if (fontData.style !== 'Regular') {
                 continue;
             }
 
-            if (existingFonts.some(font => font.name === fontData.fullName)) {
+            if (systemFonts.value?.some(font => font.name === fontData.fullName)) {
                 continue;
             }
 
-            const font: Font = {
+            fonts.push({
                 name: fontData.fullName,
                 data: undefined,
                 system: 1
-            };
+            });
+        }
 
-            await table.add(font);
+        await table.bulkAdd(fonts);
+    }
+
+    function applyFont(font: Font): void {
+        // font should already be loaded, like system fonts or fonts imported in css
+        if (!font.data) {
+            return;
+        }
+
+        // create a font face
+        const fontFace: FontFace = new FontFace(font.name, font.data);
+
+        // load the font if it's not already present
+        if (!document.fonts.has(fontFace)) {
+            document.fonts.add(fontFace);
         }
     }
 
     function applyFonts(fonts: Font[]): void {
         for (const font of fonts) {
             applyFont(font);
-        }
-    }
-
-    function applyFont(font: Font): void {
-        if (!font.data) {
-            return;
-        }
-
-        const fontFace: FontFace = new FontFace(font.name, font.data);
-
-        if (!document.fonts.has(fontFace)) {
-            document.fonts.add(fontFace);
         }
     }
 

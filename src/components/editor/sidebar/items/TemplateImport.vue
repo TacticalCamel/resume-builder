@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { reactive } from "vue";
+    import { unpack } from "msgpackr";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
@@ -26,8 +27,8 @@
         import: [template: ResumeTemplate]
     }>()
 
-    function validateFile(contents: string | ArrayBuffer, fileName: string) {
-        if (typeof contents !== 'string') {
+    function validateFile(contents: string | ArrayBuffer, fileName: string): void {
+        if (typeof contents === 'string') {
             return;
         }
 
@@ -36,33 +37,33 @@
         form.validationSteps = [];
 
         try {
-            form.template = JSON.parse(contents);
+            form.template = unpack(contents);
 
             form.validationSteps.push({
-                title: 'Valid JSON',
+                title: 'Valid format',
                 valid: true
             });
         }
         catch (e) {
             form.validationSteps.push({
-                title: 'Invalid JSON',
+                title: 'Invalid format',
                 valid: false
             });
         }
 
         form.validationSteps.push({
-            title: 'Data integrity (coming soon)',
+            title: 'Data integrity',
             valid: undefined
         });
     }
 
-    function importFile() {
+    function importFile(): void {
         emit('import', form.template);
 
         clearForm();
     }
 
-    function clearForm() {
+    function clearForm(): void {
         form.template = undefined;
     }
 </script>
@@ -70,7 +71,7 @@
 <template>
     <editor-tab-item title="import from file">
         <div class="grid gap-4">
-            <input-file @upload="validateFile" accept=".json" format="text">
+            <input-file @upload="validateFile" accept=".msgpack" format="binary">
                 <div class="flex gap-4 items-center justify-center rounded py-2 px-4 border border-dashed border-foreground/30 hover:bg-foreground/10 transition-colors text-foreground/70">
                     <icon-upload-file class="size-8"/>
                     <span>Drag and drop files here <br/> or click to browse local files</span>
@@ -90,7 +91,8 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div class="px-1">
-                        <button @click="importFile()" :disabled="!form.template" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors">
+                        <button @click="importFile()" :disabled="!form.template"
+                                class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors">
                             <span v-if="form.validationSteps.some(x => x.valid === false)">Import with errors</span>
                             <span v-else>Import</span>
                         </button>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import { useFonts } from "@/composables/Fonts";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import { Font } from "@/models/style/Font";
@@ -16,6 +16,18 @@
 
     const template = defineModel<ResumeTemplate>({
         required: true
+    });
+
+    const displayedCustomFonts = computed<Font[]>(() => {
+        return template.value.fonts.filter(font => shouldDisplayFont(font));
+    });
+
+    const displayedSystemFonts = computed<Font[]>(() => {
+        if(!systemFonts.value) {
+            return [];
+        }
+
+        return systemFonts.value.filter(font => shouldDisplayFont(font));
     });
 
     // text used for filtering fonts
@@ -57,25 +69,24 @@
             <input-file accept=".woff,.woff2,.ttf,.otf" format="binary" @upload="uploadFont" multiple>
                 <div class="flex gap-4 items-center justify-center rounded py-2 px-4 border border-dashed border-foreground/30 hover:bg-foreground/10 transition-colors text-foreground/70">
                     <icon-upload-file class="size-8"/>
-                    <span class="font-light text-sm">Drag and drop fonts here <br/> or click to browse local files</span>
+                    <span class="font-light">Drag and drop fonts here <br/> or click to browse local files</span>
                 </div>
             </input-file>
         </editor-tab-item>
 
         <editor-tab-item title="search fonts">
-            <div class="flex items-center gap-2 px-2 py-1.5 mb-4 outline outline-secondary outline-1 rounded">
+            <div class="flex items-center gap-2 px-2 py-1.5 outline outline-secondary outline-1 rounded">
                 <icon-search class="size-5 text-foreground/70"/>
-                <input type="text" v-model.trim="searchText" placeholder="Search fonts..." class="bg-transparent w-full outline-0 text-sm"/>
+                <input type="text" v-model.trim="searchText" placeholder="Search fonts..." class="bg-transparent w-full outline-0"/>
             </div>
         </editor-tab-item>
 
         <editor-tab-item title="available fonts">
             <div class="relative flex flex-col gap-1 scrollbar overflow-y-auto px-px max-h-96">
-                <template v-if="template.fonts.length">
-                    <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80">Custom fonts</div>
-                    <template v-for="font in template.fonts">
+                <template v-if="displayedCustomFonts.length">
+                    <div class="sticky top-0 bg-background pb-0.5 text-foreground/80">Custom fonts</div>
+                    <template v-for="font in displayedCustomFonts">
                         <font-card
-                            v-if="shouldDisplayFont(font)"
                             @click="setCurrentFont(font)"
                             :font="font.name"
                             class="cursor-pointer"
@@ -83,18 +94,18 @@
                     </template>
                 </template>
 
-                <div class="sticky top-0 bg-background pb-0.5 text-sm text-foreground/80 mt-2">System fonts</div>
-                <template v-if="systemFonts && systemFonts.length" v-for="font in systemFonts">
+                <div class="sticky top-0 bg-background pb-0.5 text-foreground/80 mt-2" v-if="displayedSystemFonts.length || systemFonts?.length === 0">System fonts</div>
+                <template v-if="displayedSystemFonts" v-for="font in displayedSystemFonts">
                     <font-card
-                        v-if="shouldDisplayFont(font)"
                         @click="setCurrentFont(font)"
                         :font="font.name"
                         class="cursor-pointer"
                     />
                 </template>
-                <div v-else class="flex items-center justify-between group">
+
+                <div v-if="systemFonts?.length === 0" class="flex items-center justify-between group">
                     <button
-                        class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors text-sm"
+                        class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors"
                         :disabled="!canLoadSystemFonts"
                         @click="loadSystemFonts()"
                     >

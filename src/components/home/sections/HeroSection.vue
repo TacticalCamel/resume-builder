@@ -7,13 +7,13 @@
 
 <template>
     <section class="flex gap-16">
-        <h1 class="text-7xl text-nowrap pb-[0.25em]">
+        <h1 class="text-7xl text-nowrap pb-[0.25em] text-shadow">
             Free and accessible <br/>
             resume building
         </h1>
 
         <div class="grid gap-8 relative mt-5">
-            <h2 class="text-xl text-foreground/70">
+            <h2 class="text-xl">
                 Create professional resumes effortlessly with an intuitive drag-and-drop interface, customizable templates, and real-time previews.
             </h2>
 
@@ -24,3 +24,9 @@
         </div>
     </section>
 </template>
+
+<style lang="postcss" scoped>
+    .text-shadow {
+        text-shadow: 3px 3px rgb(var(--background));
+    }
+</style>
