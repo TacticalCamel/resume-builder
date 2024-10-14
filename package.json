@@ -11,7 +11,6 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
-    "@vueuse/rxjs": "^11.0.3",
     "dexie": "^4.0.8",
     "msgpackr": "^1.11.0",
     "vue": "^3.5.10",

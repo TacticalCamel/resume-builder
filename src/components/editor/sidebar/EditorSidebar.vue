@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { usePersistentRef } from "@/composables/PersistentRef";
+    import { usePersistentRef } from "@/composables/usePersistentRef";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import { SaveState } from "@/models/SaveState";
     import SaveStatus from "@/components/editor/sidebar/reusable/SaveStatus.vue";
@@ -84,7 +84,7 @@
                     </keep-alive>
                 </fade-transition>
             </div>
-            <div class="shadow-amber-500 border-t border-foreground/20 bg-gradient-to-b from-foreground/5 to-transparent to-60%">
+            <div class="px-2 py-0.5 bg-foreground/5">
                 <save-status :state="saveState" :id="template.id"/>
             </div>
         </div>

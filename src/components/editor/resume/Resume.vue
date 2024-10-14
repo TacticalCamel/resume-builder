@@ -1,10 +1,8 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { useThemes } from "@/composables/Themes";
+    import { getTheme } from "@/functions/Themes";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import ResumeBody from "@/components/editor/resume/ResumeBody.vue";
-
-    const {getTheme} = useThemes();
 
     const template = defineModel<ResumeTemplate>({
         required: true

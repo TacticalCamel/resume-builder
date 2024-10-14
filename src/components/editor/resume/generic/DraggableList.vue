@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
     import draggable from "vuedraggable";
-    import { useEditable } from "@/composables/Editable";
+    import { useEditable } from "@/composables/useEditable";
 
     defineProps<{
         group: string

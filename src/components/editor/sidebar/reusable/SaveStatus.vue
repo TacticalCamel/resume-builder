@@ -11,7 +11,7 @@
 </script>
 
 <template>
-    <div class="px-2 py-0.5 flex gap-2 items-center text-sm text-nowrap">
+    <div class="flex gap-2 items-center text-sm text-nowrap">
         <template v-if="state === SaveState.resolved">
             <icon-check class="size-5 text-secondary"/>
             <span class="text-secondary">Template saved</span>
@@ -28,7 +28,7 @@
         </template>
 
         <span class="text-foreground/60 ms-auto font-mono text-[13px]">
-            id={{ id.slice(0, 8) }}
+            #{{ id.slice(0, 8) }}
         </span>
     </div>
 </template>

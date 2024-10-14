@@ -7,7 +7,7 @@ It focuses on providing an easy-to-use interface that requires no programming kn
 
 ## Demo
 
-> TODO
+> Coming soon
 
 ## Installation
 
@@ -40,8 +40,8 @@ Packages used in this project and their purpose. The project has minimal depende
 
 - **[Vue.js](https://vuejs.org) :: JavaScript framework.** A component-based approach was necessary for an app of this scale. I chose Vue due to its excellent documentation and intuitive features that work with reactive data.
 - **[Vue draggable](https://github.com/SortableJS/vue.draggable.next) :: Drag-and-drop functionality.** Based on Sortable JS, it's simple and proved to be reliable, so it made sense to include it instead of trying to implement something similar by myself.
-- **[Dexie.js](https://github.com/dexie/Dexie.js) :: Indexed DB wrapper.** Simplifies working with indexedDB with querying and promises instead of callbacks. Used together with @vueuse/rxjs to make queries reactive.
-- **[msgpackr](https://github.com/kriszyp/msgpackr) :: Binary serializer.** Faster and smaller size compared to JSON. Can also handle binary data, like fonts.
+- **[Dexie.js](https://github.com/dexie/Dexie.js) :: Indexed DB wrapper.** Simplifies working with indexedDB with querying and promises instead of callbacks.
+- **[msgpackr](https://github.com/kriszyp/msgpackr) :: Binary serializer.** Faster and smaller size compared to JSON. Can also handle binary data, like font files.
 
 ## Application architecture
 

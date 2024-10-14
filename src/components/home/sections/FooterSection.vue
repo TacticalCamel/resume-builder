@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import logo from '@/assets/logo.svg'
-    import { useNavigation } from "@/composables/Navigation";
+    import { useNavigation } from "@/composables/useNavigation";
 
     const {navigateTo} = useNavigation();
 </script>

@@ -1,68 +1,26 @@
 <script setup lang="ts">
-    import { ref } from "vue";
-    import { useTemplates } from "@/composables/Templates";
-    import { useNavigation } from "@/composables/Navigation";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
-    import TemplateCard from "@/components/templates/TemplateCard.vue";
-    import Resume from "@/components/editor/resume/Resume.vue";
-
-    const {templates, predefinedTemplates} = useTemplates();
-    const {navigateTo} = useNavigation();
-
-    const preview = ref<ResumeTemplate | undefined>(undefined);
-
-    function openPreview(template: ResumeTemplate) {
-        preview.value = template;
-    }
-
-    function closePreview() {
-        preview.value = undefined;
-    }
-
-    function loadToEditor(template: ResumeTemplate) {
-        navigateTo('/editor', {load: template.id});
-    }
+    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
+    import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+    import TemplateList from "@/components/templates/TemplateList.vue";
 </script>
 
 <template>
     <div class="grow relative">
-        <div class="absolute inset-0 scrollbar overflow-y-auto print:relative">
-            <div v-if="preview" class="relative">
-                <resume v-model="preview"/>
+        <div class="absolute inset-0 scrollbar overflow-y-auto flex print:relative">
+            <fade-transition>
+                <keep-alive>
+                    <suspense>
+                        <template-list/>
 
-                <div class="absolute z-10 top-4 right-4 grid gap-2">
-                    <button @click="closePreview()" class="px-2 py-1 text-error rounded bg-error/10 hover:bg-error/20 transition-colors">Close preview</button>
-                    <button @click="loadToEditor(preview)" class="px-2 py-1 text-secondary rounded bg-secondary/10 hover:bg-secondary/20 transition-colors">Edit</button>
-                </div>
-            </div>
-
-            <div v-else class="grid gap-16 mx-auto max-w-[1600px] p-8">
-                <div v-if="templates" class="grid gap-2">
-                    <h1 class="text-xl font-semibold">Custom templates</h1>
-
-                    <div class="flex flex-wrap gap-x-8 gap-y-6">
-                        <template-card
-                            v-for="template in templates"
-                            :template="template"
-                            @preview="openPreview(template)"
-                            @edit="loadToEditor(template)"
-                        />
-                    </div>
-                </div>
-
-                <div class="grid gap-2">
-                    <h1 class="text-xl font-semibold">Predefined templates</h1>
-
-                    <div class="flex flex-wrap gap-x-8 gap-y-6">
-                        <template-card
-                            v-for="template in predefinedTemplates"
-                            :template="template"
-                            @preview="openPreview(template)"
-                            @edit="loadToEditor(template)"
-                        />
-                    </div>
-                </div>
-            </div>
+                        <template #fallback>
+                            <div class="flex flex-col gap-4 grow justify-center items-center">
+                                <loading-spinner class="text-secondary"/>
+                                <span class="text-lg font-medium ps-2">Loading...</span>
+                            </div>
+                        </template>
+                    </suspense>
+                </keep-alive>
+            </fade-transition>
         </div>
     </div>
 </template>

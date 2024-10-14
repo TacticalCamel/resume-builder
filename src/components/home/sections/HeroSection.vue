@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { useNavigation } from "@/composables/Navigation";
+    import { useNavigation } from "@/composables/useNavigation";
     import ArrowButton from "@/components/home/reusable/ArrowButton.vue";
 
     const {navigateTo} = useNavigation();

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { useNavigation } from "@/composables/Navigation";
+    import { useNavigation } from "@/composables/useNavigation";
 
     const {navigateTo, path} = useNavigation();
 

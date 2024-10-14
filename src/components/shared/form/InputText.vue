@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/Editable";
+    import { useEditable } from "@/composables/useEditable";
 
     const model = defineModel<string>();
 

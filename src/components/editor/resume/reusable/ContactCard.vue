@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, Component as ComponentType } from "vue";
-    import { useEditable } from "@/composables/Editable";
+    import { useEditable } from "@/composables/useEditable";
     import { Contact, ContactType } from "@/models/resume/Header";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconEmail from "@/components/shared/icons/IconEmail.vue";

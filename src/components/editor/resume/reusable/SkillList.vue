@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/Editable";
+    import { useEditable } from "@/composables/useEditable";
     import { Skill } from "@/models/resume/Skills";
     import IconDecrease from "@/components/shared/icons/IconDecrease.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";

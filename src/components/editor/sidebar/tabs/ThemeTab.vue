@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { useThemes } from "@/composables/Themes";
+    import { defaultLightTheme, defaultDarkTheme, getTheme } from "@/functions/Themes";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import { Theme } from "@/models/style/Theme";
     import { Color } from "@/models/style/Color";
@@ -18,8 +18,6 @@
     const template = defineModel<ResumeTemplate>({
         required: true
     });
-
-    const {defaultLightTheme, defaultDarkTheme, getTheme} = useThemes();
 
     const deleteDialogOpen = ref<boolean>(false);
     const themeSelectOpen = ref<boolean>(false);

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref, onBeforeMount } from "vue";
-    import { useNavigation } from "@/composables/Navigation";
-    import { usePersistentRef } from "@/composables/PersistentRef";
+    import { useNavigation } from "@/composables/useNavigation";
+    import { usePersistentRef } from "@/composables/usePersistentRef";
     import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
     import EditorBody from "@/components/editor/EditorBody.vue";
     import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/Editable";
+    import { useEditable } from "@/composables/useEditable";
     import { ResumeModel, Section, SectionType } from "@/models/resume/Resume";
     import HeaderSection from "@/components/editor/resume/sections/HeaderSection.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";

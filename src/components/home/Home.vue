@@ -8,7 +8,7 @@
 <template>
     <div class="grow relative">
         <div class="absolute inset-0 scrollbar overflow-y-auto print:relative overflow-x-clip">
-            <div class="background-graphic absolute top-24 -left-1/4 w-[150%] h-[1000px] -z-10 -rotate-6"/>
+            <div class="background-graphic absolute top-12 -left-1/4 w-[150%] h-[1000px] -z-10"/>
 
             <div class="max-w-[1320px] grid gap-24 px-5 py-24 mx-auto mt-12">
                 <hero-section/>
@@ -47,5 +47,6 @@
         background: linear-gradient(0, rgb(var(--background)) 0%, rgb(var(--primary)) 25%, rgb(var(--error)) 40%, rebeccapurple 80%, rgb(var(--background)) 100%);
         animation: gradient 5s infinite ease-in-out;
         filter: blur(10px);
+        transform: rotate(-8deg);
     }
 </style>

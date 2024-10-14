@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
     import { computed, ref } from "vue";
-    import { useEditable } from "@/composables/Editable";
+    import { useEditable } from "@/composables/useEditable";
     import { Section } from "@/models/resume/Resume";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";

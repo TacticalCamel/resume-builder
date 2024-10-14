@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/Editable";
+    import { useEditable } from "@/composables/useEditable";
     import { Project, ProjectList } from "@/models/resume/Projects";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";

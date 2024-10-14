@@ -1,11 +1,9 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { useThemes } from "@/composables/Themes";
+    import { isDarkContrast, defaultLightTheme, defaultDarkTheme } from "@/functions/Themes";
     import { Theme } from "@/models/style/Theme";
     import { Color } from "@/models/style/Color";
     import InputText from "@/components/shared/form/InputText.vue";
-
-    const {defaultLightTheme, defaultDarkTheme, isDarkContrast} = useThemes();
 
     const {theme, active} = defineProps<{
         theme: Theme,
@@ -18,7 +16,6 @@
         primary: getColorInformation('--primary'),
         secondary: getColorInformation('--secondary')
     });
-
 
     const isDefault = computed(() => defaultLightTheme.id === theme.id || defaultDarkTheme.id === theme.id);
 

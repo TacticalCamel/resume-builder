@@ -1,16 +1,16 @@
 <script setup lang="ts">
     import { onMounted } from "vue";
-    import { useNavigation } from "@/composables/Navigation";
-    import { useThemes } from "@/composables/Themes";
+    import { useNavigation } from "@/composables/useNavigation";
+    import { defaultDarkTheme, applyTheme } from "@/functions/Themes";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/templates/Templates.vue";
     import NotFound from "@/components/shared/NotFound.vue";
     import Navigation from "@/components/shared/navigation/Navigation.vue";
     import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
+    import NotificationArea from "@/components/shared/notifications/NotificationArea.vue";
 
     const {getActiveView, parameters} = useNavigation();
-    const {applyTheme, defaultDarkTheme} = useThemes();
 
     const routes = {
         '/': Home,
@@ -30,5 +30,7 @@
         <fade-transition>
             <component :is="getActiveView(routes) ?? NotFound" :route-parameters="parameters"/>
         </fade-transition>
+
+        <notification-area/>
     </main>
 </template>

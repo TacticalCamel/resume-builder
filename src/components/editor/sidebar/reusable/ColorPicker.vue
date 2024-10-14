@@ -1,11 +1,12 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { useThemes } from "@/composables/Themes";
+    import { isDarkContrast } from "@/functions/Themes";
+    import { useNotifications } from "@/composables/useNotifications";
     import { Color } from "@/models/style/Color";
     import IconCopy from "@/components/shared/icons/IconCopy.vue";
     import IconRenew from "@/components/shared/icons/IconRenew.vue";
 
-    const {isDarkContrast} = useThemes();
+    const {displayNotification} = useNotifications();
 
     const color = defineModel<Color>({
         required: true
@@ -22,6 +23,10 @@
 
     const hexColor = computed(() => rgb2hex(color.value.value));
 
+    const displayName = computed(() => {
+        return color.value.name.substring(2).replace(/-/g, ' ');
+    });
+
     function setColor(event: Event): void {
         const input = event.target as HTMLInputElement;
 
@@ -30,6 +35,10 @@
 
     function copyColor(event: Event): void {
         navigator.clipboard.writeText(hexColor.value);
+
+        displayNotification('success', {
+            message: `Copied color "${displayName.value}"`
+        });
 
         (event.target as HTMLElement).blur();
     }
@@ -67,7 +76,7 @@
         >
 
         <span class="flex flex-col gap-0.5">
-            <span class="capitalize">{{ color.name.substring(2).replace(/\-/g, ' ') }}</span>
+            <span class="first-letter:capitalize">{{ displayName }}</span>
             <span class="inline-flex items-center gap-1">
                 <button class="peer font-mono opacity-60 hover:opacity-100 focus:opacity-100 focus:outline-0 transition-opacity" @click.prevent.stop="copyColor">{{ hexColor }}</button>
                 <icon-copy class="size-4 opacity-0 peer-hover:opacity-100 peer-focus:opacity-100 transition-opacity pointer-events-none"/>
