@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { getSystemFonts, applyFont } from "@/functions/Fonts";
+    import { applyFont, defaultFont, getSystemFonts, unloadFont } from "@/functions/Fonts";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import { Font } from "@/models/style/Font";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
@@ -14,20 +14,20 @@
         required: true
     });
 
-    const systemFonts = ref<string[]>(await getSystemFonts());
+    const systemFonts: string[] = await getSystemFonts();
 
     const displayedCustomFonts = computed<string[]>(() => {
         return template.value.fonts.filter(font => shouldDisplayFont(font.name)).map(font => font.name);
     });
 
     const displayedSystemFonts = computed<string[]>(() => {
-        return systemFonts.value.filter(font => shouldDisplayFont(font));
+        return systemFonts.filter(font => shouldDisplayFont(font));
     });
 
     // text used for filtering fonts
     const searchText = ref<string>('');
 
-    // upload and add a font to the list of custom fonts
+    // add a font to the current template
     function uploadFont(fontFile: string | ArrayBuffer, fileName: string) {
         if (typeof fontFile === 'string') {
             return;
@@ -40,12 +40,13 @@
             data: fontFile
         };
 
-        template.value.fonts.push(font);
-
-        applyFont(font);
+        if (template.value.fonts.some(f => f.name === font.name)) {
+            template.value.fonts.push(font);
+            applyFont(font);
+        }
     }
 
-    // set the current font to the provided one
+    // set the current font of the current template
     function setCurrentFont(value: string) {
         template.value.currentFont = value;
     }
@@ -53,6 +54,29 @@
     // filter a font by the current search text
     function shouldDisplayFont(font: string): boolean {
         return font.toLowerCase().includes(searchText.value.toLowerCase());
+    }
+
+    function deleteFont(selectedFont: string): void {
+        const index: number = template.value.fonts.findIndex(font => font.name === selectedFont);
+
+        if (index < 0) {
+            return;
+        }
+
+        const removed: Font[] = template.value.fonts.splice(index, 1);
+        const font: Font | undefined = removed.length > 0 ? removed[0] : undefined;
+
+        if (!font) {
+            return;
+        }
+
+        // reset the current font if it was deleted
+        if (font.name === template.value.currentFont) {
+            template.value.currentFont = defaultFont;
+        }
+
+        // unload the font
+        unloadFont(font);
     }
 </script>
 
@@ -81,7 +105,9 @@
                     <font-card
                         v-for="font in displayedCustomFonts"
                         @click="setCurrentFont(font)"
+                        @delete="deleteFont(font)"
                         :font="font"
+                        :allow-delete="font !== defaultFont"
                     />
                 </div>
 

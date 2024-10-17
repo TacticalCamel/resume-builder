@@ -15,6 +15,16 @@ function getDefaultFont(): string {
     return value.replace(/"/g, '');
 }
 
+function createFontFace(font: Font): FontFace | undefined {
+    // font data is from other sources, can not proceed
+    if (!font.data) {
+        return undefined;
+    }
+
+    // create a font face
+    return new FontFace(font.name, font.data);
+}
+
 export async function getSystemFonts(): Promise<string[]> {
     if (!('queryLocalFonts' in window) || typeof window.queryLocalFonts !== 'function') {
         return [];
@@ -28,23 +38,20 @@ export async function getSystemFonts(): Promise<string[]> {
 }
 
 export function applyFont(font: Font): void {
-    // font should already be loaded, like system fonts or fonts imported in css
-    if (!font.data) {
-        return;
-    }
-
     // create a font face
-    const fontFace: FontFace = new FontFace(font.name, font.data);
+    const fontFace: FontFace | undefined = createFontFace(font);
 
     // load the font if it's not already present
-    if (!document.fonts.has(fontFace)) {
+    if (fontFace && !document.fonts.has(fontFace)) {
         document.fonts.add(fontFace);
     }
 }
 
-export function applyFonts(fonts: Font[]): void {
-    for (const font of fonts) {
-        applyFont(font);
+export function unloadFont(font: Font): void {
+    const fontFace: FontFace | undefined = createFontFace(font);
+
+    if(fontFace) {
+        document.fonts.delete(fontFace);
     }
 }
 

@@ -26,26 +26,25 @@
 
 <template>
     <div class="grid gap-4">
-        <div class="card relative border border-foreground/30 rounded shadow-lg shadow-black overflow-clip">
+        <div class="card relative border-2 border-foreground/30 rounded-lg shadow-lg shadow-black overflow-clip transition-colors hover:border-secondary">
             <resume
                 v-model="templateModel"
                 :style="templateStyle"
                 class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground"
             />
 
-            <div class="absolute inset-0 p-4 actions opacity-0 transition-all flex flex-col justify-end">
-                <div class="grid grid-cols-2 gap-2">
-                    <button @click="$emit('edit')">Edit</button>
-                    <button @click="$emit('preview')">Preview</button>
-                </div>
+            <div class="absolute inset-0 p-4 actions opacity-0 transition-all flex flex-col justify-end" @click="$emit('edit')">
+                <div class="text-center text-secondary text-lg uppercase">Click to edit</div>
             </div>
         </div>
     </div>
 </template>
 
 <style lang="postcss" scoped>
-    .card:hover .actions {
-        @apply opacity-100 bg-foreground/10;
+    .card:hover {
+        .actions {
+            @apply opacity-100;
+        }
     }
 
     button {

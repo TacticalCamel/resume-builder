@@ -63,14 +63,18 @@
     function cancelLoad(): void {
         loadingTemplateId.value = undefined;
     }
+
+    function resetTemplate(): void {
+        activeTemplateId.value = undefined;
+    }
 </script>
 
 <template>
     <fade-transition>
-        <div v-if="loadingTemplateId" class="absolute inset-0 bg-background/60 z-10 flex flex-col justify-center items-center backdrop-blur-sm">
+        <div v-if="loadingTemplateId" class="flex grow bg-background/60 z-10 flex-col justify-center items-center">
             <div class="bg-background px-12 py-8 rounded-lg border-2 border-foreground/30 font-medium">
                 <div class="text-center mb-6">
-                    <div>There is already a resume loaded.</div>
+                    <div>There is already a template loaded.</div>
                     <div>Do you want to replace it?</div>
                 </div>
                 <div class="flex justify-center gap-8 text-sm">
@@ -87,6 +91,7 @@
                         <editor-body
                             :template-id="activeTemplateId"
                             :key="activeTemplateId"
+                            @loading-failed="resetTemplate()"
                         />
 
                         <template #fallback>
@@ -103,7 +108,7 @@
         <div v-else class="absolute inset-0 flex flex-col justify-center items-center">
             <div class="bg-background px-12 py-8 rounded-lg border-2 border-foreground/30 font-medium">
                 <div class="text-center mb-6">
-                    <div>There is no resume loaded.</div>
+                    <div>There is no template loaded.</div>
                 </div>
                 <div class="flex items-center gap-4 text-sm text-nowrap">
                     <button @click="setEmptyTemplate()" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Create a new one</button>

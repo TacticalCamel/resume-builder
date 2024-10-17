@@ -24,7 +24,7 @@
     }>(autosaveInjectorKey, {});
 
     async function saveTemplateAsCopy() {
-        await setTemplate({...template.value, id: crypto.randomUUID()});
+        await setTemplate(template.value, true);
 
         displayNotification('success', {
             message: 'Copied template'

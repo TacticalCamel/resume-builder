@@ -1,33 +1,39 @@
 <script setup async lang="ts">
-    import { provide, ref } from "vue";
+    import { onMounted, onUnmounted, provide, ref } from "vue";
     import { autosaveInjectorKey } from "@/keys";
+    import { applyFont, unloadFont } from "@/functions/Fonts";
     import { useTemplates } from "@/composables/useTemplates";
     import { useAutoSave } from "@/composables/useAutoSave";
     import { usePersistentRef } from "@/composables/usePersistentRef";
-    import { applyFonts } from "@/functions/Fonts";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
     import Resume from "@/components/editor/resume/Resume.vue";
 
-    const {getTemplate, setTemplate} = useTemplates();
+    const {getTemplate, setTemplate, getFallbackTemplate} = useTemplates();
 
     const {templateId} = defineProps<{
         templateId: string
     }>();
 
+    const emits = defineEmits<{
+        loadingFailed: []
+    }>();
+
     const frequency = usePersistentRef<number>('autosave-period', 0);
-    const template = ref<ResumeTemplate | undefined>(await loadTemplate());
+    const template = ref<ResumeTemplate>(await loadTemplate());
 
     const {state, save} = useAutoSave<ResumeTemplate | undefined>(template, frequency, saveTemplate);
 
-    async function loadTemplate(): Promise<ResumeTemplate | undefined> {
+    async function loadTemplate(): Promise<ResumeTemplate> {
         const loadedTemplate: ResumeTemplate | undefined = await getTemplate(templateId);
 
-        if (loadedTemplate) {
-            applyFonts(loadedTemplate.fonts);
+        if (!loadedTemplate) {
+            emits('loadingFailed');
         }
 
-        return loadedTemplate;
+        // value should never be undefined
+        // the loading failed event should tell the parent not to render this component
+        return loadedTemplate ?? await getFallbackTemplate();
     }
 
     async function saveTemplate(template: ResumeTemplate | undefined) {
@@ -46,10 +52,22 @@
         frequency,
         state
     });
+
+    onMounted(() => {
+        for(const font of template.value.fonts) {
+            applyFont(font);
+        }
+    });
+
+    onUnmounted(() => {
+        for(const font of template.value.fonts) {
+            unloadFont(font);
+        }
+    });
 </script>
 
 <template>
-    <div v-if="template" class="flex grow">
+    <div class="flex grow">
         <div class="relative w-[440px] grid print:hidden">
             <div class="absolute inset-0">
                 <editor-sidebar v-model="template" :save-state="state"/>

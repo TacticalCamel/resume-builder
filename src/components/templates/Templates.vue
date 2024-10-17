@@ -6,7 +6,7 @@
 
 <template>
     <div class="grow relative">
-        <div class="absolute inset-0 scrollbar overflow-y-auto flex print:relative">
+        <div class="absolute inset-0 flex items-center">
             <fade-transition>
                 <keep-alive>
                     <suspense>

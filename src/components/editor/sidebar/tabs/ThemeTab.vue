@@ -96,12 +96,11 @@
     }
 
     function addTheme(name: string, baseThemeId: string | undefined): Theme {
-        const id: string = crypto.randomUUID();
         const baseTheme: Theme = (baseThemeId ? getTheme(baseThemeId, template.value.themes) : undefined) ?? defaultLightTheme;
         const colors: Color[] = baseTheme.colors.map(color => ({name: color.name, value: color.value}));
 
         const theme: Theme = {
-            id: id,
+            id: crypto.randomUUID(),
             name: name,
             base: baseThemeId,
             colors: colors
