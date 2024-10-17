@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { inject, Ref } from "vue";
+    import { autosaveInjectorKey } from "@/keys";
     import { useTemplates } from "@/composables/useTemplates";
     import { useNotifications } from "@/composables/useNotifications";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
@@ -20,7 +21,7 @@
         state?: Ref<SaveState>
         frequency?: Ref<number>
         save?: () => Promise<void>
-    }>('autosave', {});
+    }>(autosaveInjectorKey, {});
 
     async function saveTemplateAsCopy() {
         await setTemplate({...template.value, id: crypto.randomUUID()});

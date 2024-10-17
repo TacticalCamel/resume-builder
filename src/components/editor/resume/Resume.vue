@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { computed } from "vue";
+    import { computed, provide } from "vue";
+    import { editableInjectorKey } from "@/keys";
     import { getTheme } from "@/functions/Themes";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import ResumeBody from "@/components/editor/resume/ResumeBody.vue";
@@ -12,6 +13,8 @@
         editable?: boolean
     }>();
 
+    provide(editableInjectorKey, editable);
+
     const styles = computed(() => ({
         filter: `grayscale(${template.value.filters.grayscale}%) contrast(${template.value.filters.contrast}%) brightness(${template.value.filters.brightness}%)`,
         backdropFilter: `grayscale(${template.value.filters.grayscale}%)`,
@@ -22,6 +25,6 @@
 
 <template>
     <div class="bg-background text-foreground py-10 px-3" :style="styles">
-        <resume-body v-model="template.resume" :editable="editable"/>
+        <resume-body v-model="template.resume"/>
     </div>
 </template>

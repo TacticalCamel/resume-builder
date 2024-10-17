@@ -1,5 +1,6 @@
 <script setup async lang="ts">
     import { provide, ref } from "vue";
+    import { autosaveInjectorKey } from "@/keys";
     import { useTemplates } from "@/composables/useTemplates";
     import { useAutoSave } from "@/composables/useAutoSave";
     import { usePersistentRef } from "@/composables/usePersistentRef";
@@ -40,7 +41,7 @@
         await setTemplate(template);
     }
 
-    provide('autosave', {
+    provide(autosaveInjectorKey, {
         save,
         frequency,
         state

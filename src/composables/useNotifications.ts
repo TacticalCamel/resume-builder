@@ -9,6 +9,8 @@ const notifications: Ref<Notification[]> = ref<Notification[]>([]);
  * Notifications are shown for their duration and then removed automatically.
  */
 export function useNotifications() {
+    const defaultDuration: number = 4000;
+
     function displayNotification(type: NotificationType, content: Partial<Omit<Notification, 'id' & 'type'>>): void {
         // create a new notification with a random id
         const notification: Notification = {
@@ -16,7 +18,7 @@ export function useNotifications() {
             type: type,
             title: content.title,
             message: content.message,
-            duration: content.duration ?? 5000
+            duration: content.duration ?? defaultDuration
         };
 
         // add to the global list

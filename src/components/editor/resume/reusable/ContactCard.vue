@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { computed, Component as ComponentType } from "vue";
-    import { useEditable } from "@/composables/useEditable";
+    import { computed, Component as ComponentType, inject } from "vue";
+    import { editableInjectorKey } from "@/keys";
     import { Contact, ContactType } from "@/models/resume/Header";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconEmail from "@/components/shared/icons/IconEmail.vue";
@@ -9,7 +9,7 @@
     import IconLocation from "@/components/shared/icons/IconLocation.vue";
     import IconLinkedIn from "@/components/shared/icons/IconLinkedIn.vue";
 
-    const {editable} = useEditable();
+    const editable: boolean = inject(editableInjectorKey, false);
 
     const contact = defineModel<Contact>({
         required: true

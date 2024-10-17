@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/useEditable";
+    import { inject } from "vue";
+    import { editableInjectorKey } from "@/keys";
     import IconProfile from "@/components/shared/icons/IconProfile.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconDelete from "@/components/shared/icons/IconDelete.vue";
@@ -9,7 +10,7 @@
         required: true
     });
 
-    const {editable} = useEditable();
+    const editable: boolean = inject(editableInjectorKey, false);
 
     function setProfilePicture(contents: string | ArrayBuffer) {
         if(typeof contents !== 'string') {

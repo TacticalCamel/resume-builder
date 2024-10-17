@@ -18,7 +18,7 @@
             <template-card
                 v-for="template in templates"
                 :template="template"
-                :scale="1"
+                :scale="0.2"
             />
         </div>
     </div>

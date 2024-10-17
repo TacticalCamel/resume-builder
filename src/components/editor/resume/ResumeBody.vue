@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/useEditable";
     import { ResumeModel, Section, SectionType } from "@/models/resume/Resume";
     import HeaderSection from "@/components/editor/resume/sections/HeaderSection.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
@@ -12,14 +11,6 @@
     const resume = defineModel<ResumeModel>({
         required: true
     });
-
-    const {editable = false} = defineProps<{
-        editable?: boolean
-    }>();
-
-    const {provideEditable} = useEditable();
-
-    provideEditable(editable);
 
     function getSectionComponent(type: SectionType) {
         switch (type) {

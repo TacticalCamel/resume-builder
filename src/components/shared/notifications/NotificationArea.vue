@@ -6,7 +6,7 @@
 </script>
 
 <template>
-    <div class="absolute right-0 bottom-0 overflow-clip pointer-events-none">
+    <div class="absolute right-0 bottom-0 pointer-events-none overflow-x-clip">
         <transition-group name="list" tag="div" class="relative flex flex-col-reverse gap-2 pb-6 pe-6">
             <notification
                 v-for="notification in notifications"
@@ -19,12 +19,8 @@
 
 <!--suppress CssUnusedSymbol -->
 <style scoped lang="postcss">
-    .list-move, .list-enter-active, .list-leave-active {
-        transition: all 500ms ease;
-    }
-
-    /*.list-move, .list-enter-active, .list-leave-active {
-        transition: all 1.5s ease;
+        .list-move, .list-enter-active, .list-leave-active {
+        transition: all 0.5s ease;
     }
 
     .list-enter-from, .list-leave-to {
@@ -34,5 +30,7 @@
 
     .list-leave-active {
         position: absolute;
-    }*/
+        left: 0;
+        bottom: 0;
+    }
 </style>

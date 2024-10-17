@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { useEditable } from "@/composables/useEditable";
+    import { inject } from "vue";
+    import { editableInjectorKey } from "@/keys";
     import { Project, ProjectList } from "@/models/resume/Projects";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
@@ -10,7 +11,7 @@
         required: true
     });
 
-    const {editable} = useEditable();
+    const editable: boolean = inject(editableInjectorKey, false);
 </script>
 
 <template>
