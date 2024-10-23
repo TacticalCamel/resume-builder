@@ -16,7 +16,7 @@
     }>();
 
     const emits = defineEmits<{
-        loadingFailed: []
+        change: [id: string | undefined]
     }>();
 
     const frequency = usePersistentRef<number>('autosave-period', 0);
@@ -27,12 +27,13 @@
     async function loadTemplate(): Promise<ResumeTemplate> {
         const loadedTemplate: ResumeTemplate | undefined = await getTemplate(templateId);
 
+        // loading failed, unset the id
         if (!loadedTemplate) {
-            emits('loadingFailed');
+            emits('change', undefined);
         }
 
         // value should never be undefined
-        // the loading failed event should tell the parent not to render this component
+        // the event emitted above should cause the parent not to render this component
         return loadedTemplate ?? await getFallbackTemplate();
     }
 
@@ -54,13 +55,13 @@
     });
 
     onMounted(() => {
-        for(const font of template.value.fonts) {
+        for (const font of template.value.fonts) {
             applyFont(font);
         }
     });
 
     onUnmounted(() => {
-        for(const font of template.value.fonts) {
+        for (const font of template.value.fonts) {
             unloadFont(font);
         }
     });

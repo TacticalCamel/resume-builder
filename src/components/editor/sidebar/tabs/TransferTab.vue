@@ -23,16 +23,20 @@
         save?: () => Promise<void>
     }>(autosaveInjectorKey, {});
 
-    async function saveTemplateAsCopy() {
+    async function saveCopy() {
         await setTemplate(template.value, true);
 
         displayNotification('success', {
-            message: 'Copied template'
+            message: 'Copied template',
         });
     }
 
-    function importTemplate(uploadedTemplate: ResumeTemplate) {
-        template.value = uploadedTemplate;
+    async function importTemplate(uploadedTemplate: ResumeTemplate) {
+        await setTemplate(uploadedTemplate, true);
+
+        displayNotification('success', {
+            message: 'Imported template'
+        });
     }
 
     function getAutosaveText(value: number): string {
@@ -81,7 +85,7 @@
                 </button>
 
                 <div class="text-foreground/70">Create copy</div>
-                <button class="text-center p-0.5 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveTemplateAsCopy()">Copy</button>
+                <button class="text-center p-0.5 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveCopy()">Copy</button>
             </div>
         </editor-tab-item>
     </editor-tab>

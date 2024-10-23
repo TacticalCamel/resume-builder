@@ -6,29 +6,35 @@
     import TemplateLink from "@/components/templates/items/TemplateLink.vue";
 
     const {navigateTo} = useNavigation();
-    const {getPresetTemplates, getCustomTemplates} = useTemplates();
+    const {getPresetTemplates, getCustomTemplates, setTemplate} = useTemplates();
 
     const groups = {
         'Your templates': await getCustomTemplates(),
         'Preset templates': await getPresetTemplates()
     };
 
-    function loadToEditor(template: ResumeTemplate) {
-        navigateTo('/editor', {load: template.id});
+    async function loadToEditor(template: ResumeTemplate, copy: boolean) {
+        let id: string = template.id;
+
+        if (copy) {
+            id = await setTemplate(template, true);
+        }
+
+        navigateTo('/editor', {load: id});
     }
 </script>
 
 <template>
     <div class="absolute inset-0 scrollbar overflow-y-auto flex justify-center gap-24 py-10 px-3">
         <div class="grid grow max-w-[960px] gap-12 mb-10">
-            <template v-for="group in groups">
+            <template v-for="(group, groupName) in groups">
                 <template-card
                     v-for="template in group"
                     :template="template"
                     :scale="0.75"
                     :id="template.id"
-                    class="h-[960px] overflow-clip"
-                    @edit="loadToEditor(template)"
+                    class="h-[960px]"
+                    @edit="loadToEditor(template, groupName === 'Preset templates')"
                 />
             </template>
 

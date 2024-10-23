@@ -1,14 +1,18 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { Notification } from "@/models/Notification";
+    import { useNotifications } from "@/composables/useNotifications";
+    import { Notification, NotificationType } from "@/models/Notification";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
     import IconWarning from "@/components/shared/icons/IconWarning.vue";
     import IconError from "@/components/shared/icons/IconError.vue";
     import IconInfo from "@/components/shared/icons/IconInfo.vue";
+    import IconClose from "@/components/shared/icons/IconClose.vue";
 
     const {notification} = defineProps<{
         notification: Notification
     }>();
+
+    const {removeNotification} = useNotifications();
 
     const icon = computed(() => {
         switch (notification.type) {
@@ -22,23 +26,45 @@
                 return IconInfo;
         }
     });
+
+    function getColorStyle(type?: NotificationType) {
+        return {'--primary': `var(--${type ?? 'foreground'})`};
+    }
 </script>
 
 <template>
-    <div class="border-2 border-primary bg-background rounded-lg overflow-clip w-96 pointer-events-auto" :style="{'--primary': `var(--${notification.type})`}">
-        <div class="flex gap-6 items-center px-4 py-2 bg-foreground/5">
-            <component :is="icon" class="size-6 text-primary"/>
+    <div class="border-2 border-primary bg-background rounded-lg overflow-clip w-96 pointer-events-auto relative" :style="getColorStyle(notification.type)">
+        <div class="bg-foreground/5">
+            <!-- content -->
+            <div class="flex gap-6 items-center px-4 py-2">
+                <component :is="icon" class="size-6 text-primary"/>
 
-            <div class="grid gap-1">
-                <div class="font-semibold uppercase">{{ notification.title ?? notification.type }}</div>
-                <div v-if="notification.message" class="text-sm text-foreground/70">{{ notification.message }}</div>
+                <div class="grow grid gap-1">
+                    <span class="font-semibold uppercase">{{ notification.title ?? notification.type }}</span>
+                    <span v-if="notification.message" class="text-sm text-foreground/70">{{ notification.message }}</span>
+                </div>
             </div>
 
-        </div>
+            <!-- actions -->
+            <div v-if="notification.actions.length" class="px-6 pt-2 pb-3 grid grid-cols-2 gap-6 text-sm">
+                <button
+                    v-for="action in notification.actions"
+                    @click="action.onClick()"
+                    :style="getColorStyle(action.type)"
+                    class="text-primary border border-primary px-2 py-0.5 rounded min-w-28 hover:bg-primary/20 transition-colors"
+                >
+                    {{ action.text }}
+                </button>
+            </div>
 
-        <div class="bg-foreground/5">
+            <!-- timer bar -->
             <div class="timer h-1 bg-primary" :style="{animationDuration: `${notification.duration}ms`}"/>
         </div>
+
+        <!-- close button -->
+        <button class="absolute top-0 right-0 p-2 hover:text-error transition-colors" @click="removeNotification(notification.id)">
+            <icon-close class="size-5"/>
+        </button>
     </div>
 </template>
 

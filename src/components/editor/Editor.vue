@@ -2,11 +2,13 @@
     import { ref, onBeforeMount } from "vue";
     import { useNavigation } from "@/composables/useNavigation";
     import { usePersistentRef } from "@/composables/usePersistentRef";
+    import { useTemplates } from "@/composables/useTemplates";
     import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
     import EditorBody from "@/components/editor/EditorBody.vue";
     import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 
     const {navigateTo} = useNavigation();
+    const {fallbackId} = useTemplates();
 
     const {routeParameters} = defineProps<{
         routeParameters: any
@@ -48,7 +50,7 @@
     });
 
     function setEmptyTemplate(): void {
-        activeTemplateId.value = 'empty';
+        activeTemplateId.value = fallbackId;
     }
 
     function confirmLoad(): void {
@@ -64,8 +66,8 @@
         loadingTemplateId.value = undefined;
     }
 
-    function resetTemplate(): void {
-        activeTemplateId.value = undefined;
+    function setTemplateId(id: string | undefined): void {
+        activeTemplateId.value = id;
     }
 </script>
 
@@ -91,7 +93,7 @@
                         <editor-body
                             :template-id="activeTemplateId"
                             :key="activeTemplateId"
-                            @loading-failed="resetTemplate()"
+                            @change="setTemplateId"
                         />
 
                         <template #fallback>

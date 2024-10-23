@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { computed } from "vue";
+    import { computed, onMounted, useTemplateRef } from "vue";
+    import { applyTheme, getTheme } from "@/functions/Themes";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import Resume from "@/components/editor/resume/Resume.vue";
 
@@ -15,39 +16,31 @@
 
     const templateModel = computed(() => {
         return template;
-    })
+    });
 
     const templateStyle = computed(() => ({
         height: `${100 / scale}%`,
         width: `${100 / scale}%`,
         transform: `scale(${scale})`,
     }));
+
+    const card = useTemplateRef('card');
+
+    onMounted(() => {
+        applyTheme(card.value as HTMLElement, getTheme(template.currentTheme, template.themes));
+    });
 </script>
 
 <template>
-    <div class="grid gap-4">
-        <div class="card relative border-2 border-foreground/30 rounded-lg shadow-lg shadow-black overflow-clip transition-colors hover:border-secondary">
-            <resume
-                v-model="templateModel"
-                :style="templateStyle"
-                class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground"
-            />
+    <div ref="card" class="group bg-background text-foreground relative border-2 border-foreground/30 rounded-lg shadow-lg shadow-black transition-colors hover:border-secondary overflow-clip" @click="$emit('edit')">
+        <resume
+            v-model="templateModel"
+            :style="templateStyle"
+            class="relative origin-top-left pointer-events-none select-none p-4 bg-background text-foreground overflow-clip"
+        />
 
-            <div class="absolute inset-0 p-4 actions opacity-0 transition-all flex flex-col justify-end" @click="$emit('edit')">
-                <div class="text-center text-secondary text-lg uppercase">Click to edit</div>
-            </div>
+        <div class="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-all bg-background pointer-events-none">
+            <div class="text-center text-secondary text-lg border-t-2 border-foreground/30 p-2">Click to preview and edit</div>
         </div>
     </div>
 </template>
-
-<style lang="postcss" scoped>
-    .card:hover {
-        .actions {
-            @apply opacity-100;
-        }
-    }
-
-    button {
-        @apply p-1 bg-background text-foreground/80 hover:text-foreground transition-colors rounded text-sm font-medium;
-    }
-</style>

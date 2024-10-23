@@ -16,19 +16,20 @@ export function useNotifications() {
         const notification: Notification = {
             id: crypto.randomUUID(),
             type: type,
-            title: content.title,
+            duration: content.duration ?? defaultDuration,
+            actions: content.actions ?? [],
+            title: content.title ?? type,
             message: content.message,
-            duration: content.duration ?? defaultDuration
         };
 
         // add to the global list
         notifications.value.push(notification);
 
         // remove after the given duration
-        setTimeout(() => remove(notification.id), notification.duration);
+        setTimeout(() => removeNotification(notification.id), notification.duration);
     }
 
-    function remove(id: string): void {
+    function removeNotification(id: string): void {
         const index: number = notifications.value.findIndex(n => n.id === id);
 
         if (index >= 0) {
@@ -38,6 +39,7 @@ export function useNotifications() {
 
     return {
         notifications: readonly(notifications),
-        displayNotification
+        displayNotification,
+        removeNotification
     }
 }

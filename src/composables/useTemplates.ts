@@ -10,6 +10,9 @@ import { ResumeTemplate } from "@/models/ResumeTemplate";
 export function useTemplates() {
     const db = useDatabase();
     const table= db.templates;
+    const fallback = presetTemplates[0];
+
+    const fallbackId: string = fallback.id;
 
     async function getTemplate(id: string): Promise<ResumeTemplate | undefined> {
         const preset: ResumeTemplate | undefined = presetTemplates.find(template => template.id === id);
@@ -17,26 +20,24 @@ export function useTemplates() {
         return preset ?? await table.get(id);
     }
 
-    async function setTemplate(template: ResumeTemplate, copy: boolean = false): Promise<void> {
+    async function setTemplate(template: ResumeTemplate, copy: boolean = false): Promise<string> {
         // convert to a raw object without function
         const raw: ResumeTemplate = deepToRaw(template);
 
-        // check for copying even when not specified
-        // when the saved record does not exist already, it's a preset which needs a proper id
-        if(!copy) {
-            copy = await table.where('id').equals(raw.id).count() === 0;
-        }
-
-        // generate a new id
+        // generate a new id when copied
         if(copy) {
             raw.id = crypto.randomUUID();
         }
 
+        // update in database
         await table.put(raw, raw.id);
+
+        // return the id
+        return raw.id;
     }
 
     async function getFallbackTemplate(): Promise<ResumeTemplate> {
-        return presetTemplates[0];
+        return fallback;
     }
 
     async function getPresetTemplates(): Promise<ResumeTemplate[]> {
@@ -48,6 +49,7 @@ export function useTemplates() {
     }
 
     return {
+        fallbackId,
         getTemplate,
         setTemplate,
         getFallbackTemplate,

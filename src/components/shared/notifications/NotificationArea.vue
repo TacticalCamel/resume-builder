@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useNotifications } from "@/composables/useNotifications";
-    import Notification from "@/components/shared/notifications/NotificationCard.vue";
+    import NotificationCard from "@/components/shared/notifications/NotificationCard.vue";
 
     const {notifications} = useNotifications();
 </script>
@@ -8,7 +8,7 @@
 <template>
     <div class="absolute right-0 bottom-0 pointer-events-none overflow-x-clip">
         <transition-group name="list" tag="div" class="relative flex flex-col-reverse gap-2 pb-6 pe-6">
-            <notification
+            <notification-card
                 v-for="notification in notifications"
                 :notification="notification"
                 :key="notification.id"
