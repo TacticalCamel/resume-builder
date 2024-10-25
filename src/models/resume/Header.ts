@@ -1,4 +1,6 @@
-export interface ResumeHeader {
+import { UniqueId } from "@/models/UniqueId";
+
+export interface ResumeHeader extends UniqueId {
     picture: string | undefined
     name: string
     profession: string
@@ -14,7 +16,7 @@ export enum ContactType {
     linkedin = 4
 }
 
-export interface Contact {
+export interface Contact extends UniqueId {
     type: ContactType
     value: string
 }

@@ -45,11 +45,11 @@
 
         // initialize only when load is not specified
         else if (init && !activeTemplateId.value) {
-            setEmptyTemplate();
+            initializeEmpty();
         }
     });
 
-    function setEmptyTemplate(): void {
+    function initializeEmpty(): void {
         activeTemplateId.value = fallbackId;
     }
 
@@ -113,7 +113,7 @@
                     <div>There is no template loaded.</div>
                 </div>
                 <div class="flex items-center gap-4 text-sm text-nowrap">
-                    <button @click="setEmptyTemplate()" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Create a new one</button>
+                    <button @click="initializeEmpty()" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Create a new one</button>
                     <span>or</span>
                     <button @click="navigateTo('/templates')" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Browse
                         templates

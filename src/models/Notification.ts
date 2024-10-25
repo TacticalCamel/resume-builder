@@ -1,5 +1,6 @@
-export interface Notification {
-    id: string
+import { UniqueId } from "@/models/UniqueId";
+
+export interface Notification extends UniqueId {
     type: NotificationType
     duration: number
     actions: NotificationAction[]

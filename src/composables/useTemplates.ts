@@ -10,15 +10,7 @@ import { ResumeTemplate } from "@/models/ResumeTemplate";
 export function useTemplates() {
     const db = useDatabase();
     const table= db.templates;
-    const fallback = presetTemplates[0];
-
-    const fallbackId: string = fallback.id;
-
-    async function getTemplate(id: string): Promise<ResumeTemplate | undefined> {
-        const preset: ResumeTemplate | undefined = presetTemplates.find(template => template.id === id);
-
-        return preset ?? await table.get(id);
-    }
+    const fallbackId: string = 'fallback-template';
 
     async function setTemplate(template: ResumeTemplate, copy: boolean = false): Promise<string> {
         // convert to a raw object without function
@@ -36,8 +28,15 @@ export function useTemplates() {
         return raw.id;
     }
 
-    async function getFallbackTemplate(): Promise<ResumeTemplate> {
-        return fallback;
+    async function getTemplate(id: string): Promise<ResumeTemplate | undefined> {
+        return table.get(id);
+    }
+
+    async function getEmptyTemplate(): Promise<ResumeTemplate> {
+        const template: ResumeTemplate = presetTemplates[0];
+        const id: string = await setTemplate(presetTemplates[0], true);
+
+        return await getTemplate(id) ?? template;
     }
 
     async function getPresetTemplates(): Promise<ResumeTemplate[]> {
@@ -50,9 +49,9 @@ export function useTemplates() {
 
     return {
         fallbackId,
-        getTemplate,
         setTemplate,
-        getFallbackTemplate,
+        getTemplate,
+        getEmptyTemplate,
         getPresetTemplates,
         getCustomTemplates
     };
@@ -64,7 +63,9 @@ const presetTemplates: ResumeTemplate[] = [
         currentTheme: defaultLightTheme.id,
         currentFont: defaultFont,
         resume: {
+            id: crypto.randomUUID(),
             header: {
+                id: crypto.randomUUID(),
                 picture: undefined,
                 name: '',
                 profession: '',
@@ -83,6 +84,12 @@ const presetTemplates: ResumeTemplate[] = [
             grayscale: 0,
             contrast: 100,
             brightness: 100
-        }
+        },
+        styles: [
+            {
+                selectors: [],
+                styles: {'background': 'red'}
+            }
+        ]
     }
 ];

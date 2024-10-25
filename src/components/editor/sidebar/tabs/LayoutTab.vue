@@ -22,6 +22,7 @@
             name: name,
             group: 'Contact',
             clone: (): Contact => ({
+                id: crypto.randomUUID(),
                 type: type,
                 value: ''
             })
@@ -33,6 +34,7 @@
             name: name,
             group: 'Section',
             clone: (): Section => ({
+                id: crypto.randomUUID(),
                 type: type,
                 title: name,
                 elements: []
@@ -72,6 +74,7 @@
                 name: 'Education',
                 group: 'Education',
                 clone: (): Education => ({
+                    id: crypto.randomUUID(),
                     school: '',
                     major: '',
                     start: '',
@@ -82,6 +85,7 @@
                 name: 'Experience',
                 group: 'Experience',
                 clone: (): Experience => ({
+                    id: crypto.randomUUID(),
                     company: '',
                     position: '',
                     start: '',
@@ -94,6 +98,7 @@
                 name: 'Skill',
                 group: 'Skill',
                 clone: (): Skill => ({
+                    id: crypto.randomUUID(),
                     name: '',
                     level: 0
                 })
@@ -102,6 +107,7 @@
                 name: 'Skill category',
                 group: 'SkillCategory',
                 clone: (): SkillCategory => ({
+                    id: crypto.randomUUID(),
                     title: '',
                     elements: [],
                     maxLevel: 5
@@ -111,6 +117,7 @@
                 name: 'Language',
                 group: 'Language',
                 clone: (): Language => ({
+                    id: crypto.randomUUID(),
                     name: '',
                     level: ''
                 })
@@ -119,6 +126,7 @@
                 name: 'Project',
                 group: 'Project',
                 clone: (): Project => ({
+                    id: crypto.randomUUID(),
                     description: '',
                     url: '',
                     technologies: []
@@ -128,6 +136,7 @@
                 name: 'Technology',
                 group: 'Technology',
                 clone: (): Technology => ({
+                    id: crypto.randomUUID(),
                     name: ''
                 })
             }

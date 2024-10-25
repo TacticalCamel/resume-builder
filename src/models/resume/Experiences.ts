@@ -1,7 +1,8 @@
 import { Section } from "@/models/resume/Resume";
 import { Technology } from "@/models/resume/Technologies";
+import { UniqueId } from "@/models/UniqueId";
 
-export interface Experience {
+export interface Experience extends UniqueId {
     company: string
     position: string
     start: string
@@ -11,6 +12,4 @@ export interface Experience {
 }
 
 export interface ExperienceList extends Section<Experience> {
-    title: string
-    elements: Experience[]
 }

@@ -13,10 +13,11 @@
         'Preset templates': await getPresetTemplates()
     };
 
-    async function loadToEditor(template: ResumeTemplate, copy: boolean) {
+    async function loadToEditor(template: ResumeTemplate, isPreset: boolean) {
         let id: string = template.id;
 
-        if (copy) {
+        // when selecting a preset, copy it and load the copy instead
+        if (isPreset) {
             id = await setTemplate(template, true);
         }
 

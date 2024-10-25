@@ -9,7 +9,7 @@
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
     import Resume from "@/components/editor/resume/Resume.vue";
 
-    const {getTemplate, setTemplate, getFallbackTemplate} = useTemplates();
+    const {getTemplate, setTemplate, getEmptyTemplate, fallbackId} = useTemplates();
 
     const {templateId} = defineProps<{
         templateId: string
@@ -25,6 +25,15 @@
     const {state, save} = useAutoSave<ResumeTemplate | undefined>(template, frequency, saveTemplate);
 
     async function loadTemplate(): Promise<ResumeTemplate> {
+        // loading an empty template
+        if(templateId === fallbackId) {
+            const emptyTemplate: ResumeTemplate = await getEmptyTemplate();
+
+            emits('change', emptyTemplate.id);
+
+            return emptyTemplate;
+        }
+
         const loadedTemplate: ResumeTemplate | undefined = await getTemplate(templateId);
 
         // loading failed, unset the id
@@ -34,7 +43,7 @@
 
         // value should never be undefined
         // the event emitted above should cause the parent not to render this component
-        return loadedTemplate ?? await getFallbackTemplate();
+        return loadedTemplate ?? await getEmptyTemplate();
     }
 
     async function saveTemplate(template: ResumeTemplate | undefined) {
