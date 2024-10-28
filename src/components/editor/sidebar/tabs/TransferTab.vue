@@ -62,10 +62,6 @@
 
 <template>
     <editor-tab>
-        <template-import @import="importTemplate"/>
-
-        <template-export :template="template"/>
-
         <editor-tab-item title="save options">
             <div class="grid grid-cols-2 gap-2">
                 <div class="text-foreground/70">Autosave</div>
@@ -88,5 +84,9 @@
                 <button class="text-center p-0.5 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveCopy()">Copy</button>
             </div>
         </editor-tab-item>
+
+        <template-import @import="importTemplate"/>
+
+        <template-export :template="template"/>
     </editor-tab>
 </template>

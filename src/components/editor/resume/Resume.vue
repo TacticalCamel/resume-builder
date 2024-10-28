@@ -21,10 +21,25 @@
         fontFamily: template.value.currentFont,
         ...getTheme(template.value.currentTheme, template.value.themes).colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
     }));
+
+    const styleSheet = computed<CSSStyleSheet>(() => {
+        const sheet: CSSStyleSheet = new CSSStyleSheet();
+
+        for(const style of template.value.styles) {
+            const selector: string = style.selectors.map(selector => `#${template.value.id} ${selector}`).join(',');
+            const styles: string = Object.entries(style.styles).map(entry => `${entry[0]}: ${entry[1]}`).join(';');
+
+            sheet.insertRule(`${selector}{${styles}}`);
+        }
+
+        console.log(sheet);
+
+        return sheet;
+    });
 </script>
 
 <template>
-    <div class="bg-background text-foreground py-10 px-3" :style="styles">
+    <div class="bg-background text-foreground py-10 px-3" :style="styles" :id="template.id">
         <resume-body v-model="template.resume"/>
     </div>
 </template>

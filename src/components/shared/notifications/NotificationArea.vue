@@ -6,12 +6,13 @@
 </script>
 
 <template>
-    <div class="absolute right-0 bottom-0 pointer-events-none overflow-x-clip">
-        <transition-group name="list" tag="div" class="relative flex flex-col-reverse gap-2 pb-6 pe-6">
+    <div class="absolute inset-0 pointer-events-none overflow-clip flex flex-col-reverse items-end gap-2 p-6">
+        <transition-group name="list">
             <notification-card
                 v-for="notification in notifications"
                 :notification="notification"
                 :key="notification.id"
+                class="pointer-events-auto"
             />
         </transition-group>
     </div>
@@ -19,18 +20,15 @@
 
 <!--suppress CssUnusedSymbol -->
 <style scoped lang="postcss">
-        .list-move, .list-enter-active, .list-leave-active {
-        transition: all 0.5s ease;
+    .list-move, .list-enter-active, .list-leave-active {
+        @apply transition-all duration-500;
     }
 
     .list-enter-from, .list-leave-to {
-        opacity: 0;
-        transform: translateX(1rem);
+        @apply opacity-0 translate-x-4;
     }
 
     .list-leave-active {
-        position: absolute;
-        left: 0;
-        bottom: 0;
+        @apply absolute;
     }
 </style>

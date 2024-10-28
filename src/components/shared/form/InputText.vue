@@ -15,7 +15,11 @@
     }>();
 
     function saveChanges(e: Event) {
-        model.value = (e.target as HTMLElement).innerText;
+        const element: HTMLElement = e.target as HTMLElement;
+        const text: string = element.textContent ?? '';
+
+        model.value = text;
+        element.textContent = text;
     }
 </script>
 
@@ -23,8 +27,21 @@
     <div>
         <div class="inline-block">
             <div class="relative" :class="{editable}">
-                <div class="text-input" v-bind="$attrs" :contenteditable="editable" spellcheck="false" @focusout="saveChanges">{{ model }}</div>
-                <div v-show="editable" v-bind="$attrs" class="text-overlay pointer-events-none opacity-60">{{ placeholder }}</div>
+                <div
+                    v-bind="$attrs"
+                    v-text="model"
+                    @focusout="saveChanges"
+                    :contenteditable="editable"
+                    spellcheck="false"
+                    class="text-input"
+                />
+
+                <div
+                    v-show="editable"
+                    v-bind="$attrs"
+                    v-text="placeholder"
+                    class="text-overlay pointer-events-none opacity-60"
+                />
             </div>
         </div>
     </div>
@@ -59,7 +76,7 @@
         @apply rounded outline-transparent transition-[outline-color];
 
         &:focus {
-            @apply outline-2 outline-dashed outline-warning;
+            @apply outline outline-2 outline-warning;
         }
     }
 

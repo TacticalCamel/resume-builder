@@ -43,7 +43,7 @@
         </template>
 
         <template #empty>
-            <div class="list-placeholder h-40">Drag sections here</div>
+            <span class="py-12">Drag sections here</span>
         </template>
     </draggable-list>
 </template>

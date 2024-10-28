@@ -1,4 +1,4 @@
-import { readonly, ref, Ref } from "vue";
+import { shallowReadonly, ref, Ref } from "vue";
 import { Notification, NotificationType } from "@/models/Notification";
 
 // use a global state for all notifications
@@ -38,7 +38,7 @@ export function useNotifications() {
     }
 
     return {
-        notifications: readonly(notifications),
+        notifications: shallowReadonly(notifications),
         displayNotification,
         removeNotification
     }

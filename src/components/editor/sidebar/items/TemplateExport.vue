@@ -96,8 +96,8 @@
                 <input-checkbox
                     v-for="category in categories"
                     v-model="category.included"
-                    class="rounded px-2 py-1 transition-colors text-foreground/70 border-2 border-foreground/30 hover:border-foreground focus:border-foreground"
-                    :class="{'text-foreground/100': category.included}"
+                    class="rounded px-2 py-1 transition-colors border-2 border-foreground/30 hover:border-foreground focus:border-foreground"
+                    :class="{'text-foreground/70': !category.included}"
                 >
                     Include {{ category.name }}
                 </input-checkbox>

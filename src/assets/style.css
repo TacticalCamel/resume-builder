@@ -66,18 +66,3 @@ body {
 .dragging > * {
     transform: rotate(5deg);
 }
-
-.list-placeholder {
-    @apply border-2 border-dashed border-info rounded text-info flex justify-center items-center text-sm select-none italic font-light;
-}
-
-@keyframes slide-down {
-    0% {
-        transform: translate(0, -1rem);
-        opacity: 0;
-    }
-    50% {
-        transform: translate(0, -1rem);
-        opacity: 0;
-    }
-}

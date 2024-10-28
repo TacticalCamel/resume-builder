@@ -15,11 +15,11 @@
         class="text-sm grid gap-1.5"
     >
         <template #item="{index}: {index: number}">
-            <contact-card v-model="contacts[index]"/>
+            <contact-card v-model="contacts[index]" :key="contacts[index].id"/>
         </template>
 
         <template #empty>
-            <div class="list-placeholder px-2 h-12">Drag contacts here</div>
+            <span class="p-2">Drag contacts here</span>
         </template>
     </draggable-list>
 </template>

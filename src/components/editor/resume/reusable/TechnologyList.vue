@@ -21,7 +21,7 @@
         </template>
 
         <template #empty>
-            <div class="list-placeholder px-2">Drag technologies here</div>
+            <span class="px-2">Drag technologies here</span>
         </template>
     </draggable-list>
 </template>

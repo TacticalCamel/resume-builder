@@ -63,32 +63,37 @@
     </transition-group>
 </template>
 
+<!--suppress CssUnusedSymbol -->
 <style lang="postcss" scoped>
-    .empty:has(+ .ghost) {
-        @apply hidden;
-    }
-
     .moveable {
         @apply relative cursor-move;
+
+        &::after {
+            @apply content-[''] absolute rounded inset-0 -z-10 opacity-0 pointer-events-none bg-foreground/15 transition-opacity duration-100;
+        }
+
+        &:hover::after {
+            @apply opacity-100;
+        }
+
+        &.dragging::after {
+            @apply invisible;
+        }
+
+        &:has(.moveable:hover), &:has(.editable:hover), &.ghost {
+            @apply cursor-auto;
+
+            &::after {
+                @apply opacity-0;
+            }
+        }
     }
 
-    .moveable:has(.moveable:hover), .moveable:has(.editable:hover), .moveable.ghost {
-        @apply cursor-auto;
-    }
+    .empty {
+        @apply border-2 border-dashed border-info rounded text-info flex justify-center items-center text-sm select-none italic;
 
-    .moveable::after {
-        @apply content-[''] absolute rounded inset-0 -z-10 opacity-0 pointer-events-none bg-foreground/15 transition-opacity duration-100;
-    }
-
-    .moveable:hover::after {
-        @apply opacity-100;
-    }
-
-    .moveable:has(.moveable:hover)::after, .moveable:has(.editable:hover)::after, .moveable.ghost::after {
-        @apply opacity-0;
-    }
-
-    .moveable.dragging::after {
-        @apply invisible;
+        &:has(+ .ghost) {
+            @apply hidden;
+        }
     }
 </style>

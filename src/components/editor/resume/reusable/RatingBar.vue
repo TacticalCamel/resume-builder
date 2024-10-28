@@ -24,6 +24,7 @@
     </div>
 </template>
 
+<!--suppress CssUnusedSymbol -->
 <style lang="postcss" scoped>
     .card {
         @apply flex gap-[3px] px-[3px] py-px rounded-sm select-none shadow-sm shadow-black bg-background;

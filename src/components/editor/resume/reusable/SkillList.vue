@@ -38,12 +38,12 @@
 
                 <input-text v-model="skill.name" class="font-light skill-text" placeholder="Skill name"/>
 
-                <div v-if="editable" class="ms-auto flex gap-1 opacity-0 transition-opacity skill-row-edit-controls">
-                    <button @click="decreaseSkillLevel(skill)" class="bg-transparent hover:bg-error/20 text-error py-0.5 px-1.5 rounded transition-all">
+                <div v-if="editable" class="ms-auto flex gap-1">
+                    <button @click="decreaseSkillLevel(skill)" class="hover:bg-error/20 focus:bg-error/20 text-error">
                         <icon-decrease class="size-4"/>
                     </button>
 
-                    <button @click="increaseSkillLevel(skill)" class="bg-transparent hover:bg-success/20 text-success py-0.5 px-1.5 rounded transition-all">
+                    <button @click="increaseSkillLevel(skill)" class="hover:bg-success/20 focus:bg-success/20 text-success">
                         <icon-increase class="size-4"/>
                     </button>
                 </div>
@@ -51,17 +51,26 @@
         </template>
 
         <template #empty>
-            <div class="list-placeholder h-12">Drag skills here</div>
+            <span class="p-2">Drag skills here</span>
         </template>
     </draggable-list>
 </template>
 
+<!--suppress CssUnusedSymbol -->
 <style lang="postcss" scoped>
-    .skill-row:hover .skill-row-edit-controls {
+    button {
+        @apply opacity-0 transition-all px-2 py-1 rounded outline-0;
+
+        &:hover, &:focus {
+            @apply opacity-100;
+        }
+    }
+
+    .skill-row:hover button {
         @apply opacity-100;
     }
 
-    .skill-row:has(.skill-text:focus-within) .skill-row-edit-controls {
+    .skill-row:has(.skill-text:focus-within) button {
         @apply opacity-0;
     }
 </style>

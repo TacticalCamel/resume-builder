@@ -54,9 +54,7 @@
                 </template>
 
                 <template #empty>
-                    <div class="list-placeholder h-12">
-                        Drag section elements here
-                    </div>
+                    <span class="py-4">Drag section elements here</span>
                 </template>
             </draggable-list>
         </div>

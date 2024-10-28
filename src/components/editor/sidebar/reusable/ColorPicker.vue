@@ -79,7 +79,7 @@
             <span class="first-letter:capitalize">{{ displayName }}</span>
             <span class="inline-flex items-center gap-1">
                 <button class="peer font-mono opacity-60 hover:opacity-100 focus:opacity-100 focus:outline-0 transition-opacity" @click.prevent.stop="copyColor">{{ hexColor }}</button>
-                <icon-copy class="size-4 opacity-0 peer-hover:opacity-100 peer-focus:opacity-100 transition-opacity pointer-events-none"/>
+                <icon-copy class="size-4 opacity-60 peer-hover:opacity-100 peer-focus:opacity-100 transition-opacity pointer-events-none"/>
             </span>
         </span>
 

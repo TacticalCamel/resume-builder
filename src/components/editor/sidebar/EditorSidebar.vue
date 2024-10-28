@@ -3,15 +3,18 @@
     import { usePersistentRef } from "@/composables/usePersistentRef";
     import { ResumeTemplate } from "@/models/ResumeTemplate";
     import { SaveState } from "@/models/SaveState";
+    import { EditorTabInfo } from "@/models/bindings/EditorTabInfo";
     import SaveStatus from "@/components/editor/sidebar/reusable/SaveStatus.vue";
     import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
     import ThemeTab from "@/components/editor/sidebar/tabs/ThemeTab.vue";
     import FontTab from "@/components/editor/sidebar/tabs/FontTab.vue";
+    import StyleTab from "@/components/editor/sidebar/tabs/StyleTab.vue";
     import TransferTab from "@/components/editor/sidebar/tabs/TransferTab.vue";
     import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
     import IconDashboard from "@/components/shared/icons/IconDashboard.vue";
     import IconPalette from "@/components/shared/icons/IconPalette.vue";
     import IconText from "@/components/shared/icons/IconText.vue";
+    import IconCode from "@/components/shared/icons/IconCode.vue";
     import IconSwapHorizontal from "@/components/shared/icons/IconSwapHorizontal.vue";
 
     const template = defineModel<ResumeTemplate>({
@@ -34,7 +37,7 @@
         return undefined;
     });
 
-    const tabs = [
+    const tabs: EditorTabInfo[] = [
         {
             name: 'Layout',
             icon: IconDashboard,
@@ -51,6 +54,11 @@
             component: FontTab
         },
         {
+            name: 'Style',
+            icon: IconCode,
+            component: StyleTab
+        },
+        {
             name: 'Transfer',
             icon: IconSwapHorizontal,
             component: TransferTab
@@ -60,7 +68,7 @@
 
 <template>
     <div class="flex h-full">
-        <div class="relative flex flex-col overflow-clip bg-darker">
+        <div class="relative flex flex-col overflow-clip bg-black/40">
             <button
                 v-for="(tab, index) in tabs" @click="activeTab = index"
                 class="flex flex-col items-center justify-center gap-1 size-[72px] transition-colors z-10 hover:opacity-100"
@@ -71,8 +79,8 @@
             </button>
 
             <span class="absolute w-full h-[88px] bg-background pointer-events-none transition-all" :style="{top: `${-8 + activeTab * 72}px`}">
-                <span class="absolute w-full h-4 rounded-e-full bg-darker -bottom-2"/>
-                <span class="absolute w-full h-4 rounded-e-full bg-darker -top-2"/>
+                <span class="side-cover -bottom-2"/>
+                <span class="side-cover -top-2"/>
             </span>
         </div>
 
@@ -92,7 +100,11 @@
 </template>
 
 <style lang="postcss" scoped>
-    .bg-darker {
-        background-color: color-mix(in srgb, rgb(var(--background)) 60%, black);
+    .side-cover {
+        @apply absolute w-full h-4 rounded-e-full bg-background;
+
+        &:after {
+            @apply content-[''] absolute inset-0 bg-black/40 rounded-e-full;
+        }
     }
 </style>
