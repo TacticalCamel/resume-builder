@@ -8,6 +8,8 @@ interface EditorModel {
     editorState: Ref<EditorState>
     selectedElements: Ref<ElementSelection>
     isGroupSelection: Ref<boolean>
+    highlightSelection: Ref<boolean>
+    loadTemplate: (id: string | undefined) => void
 }
 
 export function provideEditorModel(model: EditorModel): void {
@@ -18,6 +20,8 @@ export function injectEditorModel(): EditorModel {
     return inject(injectorKey, (): EditorModel => ({
         editorState: ref(EditorState.view),
         selectedElements: ref({ids: [], classes: []}),
-        isGroupSelection: ref(false)
+        isGroupSelection: ref(false),
+        highlightSelection: ref(false),
+        loadTemplate: (): void => {},
     }), true);
 }

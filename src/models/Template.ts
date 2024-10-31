@@ -2,7 +2,7 @@ import { ResumeModel } from "@/models/resume/Resume";
 import { Theme } from "@/models/style/Theme";
 import { Font } from "@/models/style/Font";
 import { Filters } from "@/models/style/Filters";
-import { StyleOverride } from "@/models/style/StyleOverrides";
+import { StyleOverride } from "@/models/style/Overrides";
 import { UniqueId } from "@/models/UniqueId";
 
 export interface TemplateModel extends UniqueId {

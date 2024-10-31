@@ -1,7 +1,10 @@
 import { isProxy, isReactive, isRef, toRaw } from "vue";
 
-// reactive proxies contain functions, which sometimes cause problems at serialization, so the object must be recursively converted
-// https://github.com/vuejs/core/issues/5303#issuecomment-1543596383
+/**
+ * Convert a reactive proxy to a raw object recursively. This can help in avoiding problems with functions at serialization.
+ * @param sourceObj The object to convert.
+ * @copyright https://github.com/vuejs/core/issues/5303#issuecomment-1543596383
+ */
 export function deepToRaw<T extends Record<string, any>>(sourceObj: T): T {
     const objectIterator = (input: any): any => {
         if (Array.isArray(input)) {

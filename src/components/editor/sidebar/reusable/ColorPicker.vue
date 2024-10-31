@@ -3,6 +3,7 @@
     import { isDarkContrast } from "@/functions/Themes";
     import { useNotifications } from "@/composables/useNotifications";
     import { Color } from "@/models/style/Color";
+    import { RGB } from "@/models/style/RGB";
     import IconCopy from "@/components/shared/icons/IconCopy.vue";
     import IconRenew from "@/components/shared/icons/IconRenew.vue";
 
@@ -43,21 +44,16 @@
         (event.target as HTMLElement).blur();
     }
 
-    function hex2rgb(hex: string): string {
+    function hex2rgb(hex: string): RGB {
         const r = parseInt(hex.substring(1, 3), 16);
         const g = parseInt(hex.substring(3, 5), 16);
         const b = parseInt(hex.substring(5, 7), 16);
 
-        return `${r} ${g} ${b}`;
+        return {r, g, b};
     }
 
-    function rgb2hex(rgb: string): string {
-        const rgbValues = rgb.split(' ');
-        const r = parseInt(rgbValues[0]);
-        const g = parseInt(rgbValues[1]);
-        const b = parseInt(rgbValues[2]);
-
-        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    function rgb2hex(value: RGB): string {
+        return `#${value.r.toString(16).padStart(2, '0')}${value.g.toString(16).padStart(2, '0')}${value.b.toString(16).padStart(2, '0')}`;
     }
 
     function reset() {
@@ -66,7 +62,7 @@
 </script>
 
 <template>
-    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': isDarkContrast(color)}" :style="{background: hexColor}">
+    <label class="color-picker inline-flex justify-between w-full" :class="{'dark-text': isDarkContrast(color.value)}" :style="{background: hexColor}">
         <input
             type="color"
             class="invisible w-0 absolute"

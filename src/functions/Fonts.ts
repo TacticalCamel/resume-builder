@@ -1,12 +1,13 @@
 import { getVariable } from "@/functions/Css";
 import { Font } from "@/models/style/Font";
 
-const HTML_SELECTOR: string = 'html';
-const FONT_VARIABLE_NAME: string = '--font-family';
+export const defaultFont: string = getDefaultFont();
 
-// get the initial font value from CSS
+/**
+ * Get the initial font value from CSS.
+ */
 function getDefaultFont(): string {
-    const value: string | undefined = getVariable(HTML_SELECTOR, FONT_VARIABLE_NAME);
+    const value: string | undefined = getVariable('html', '--font-family');
 
     if (!value) {
         return 'sans-serif';
@@ -15,8 +16,12 @@ function getDefaultFont(): string {
     return value.replace(/"/g, '');
 }
 
+/**
+ * Create a FontFace object from a font.
+ * @param font
+ */
 function createFontFace(font: Font): FontFace | undefined {
-    // font data is from other sources, can not proceed
+    // font data is from other sources
     if (!font.data) {
         return undefined;
     }
@@ -25,6 +30,10 @@ function createFontFace(font: Font): FontFace | undefined {
     return new FontFace(font.name, font.data);
 }
 
+/**
+ * Retrieves all available system fonts.
+ * TODO: Relies to the experimental feature 'queryLocalFonts', currently not supported by most browsers
+ */
 export async function getSystemFonts(): Promise<string[]> {
     if (!('queryLocalFonts' in window) || typeof window.queryLocalFonts !== 'function') {
         return [];
@@ -37,7 +46,11 @@ export async function getSystemFonts(): Promise<string[]> {
         .map(font => font.fullName);
 }
 
-export function applyFont(font: Font): void {
+/**
+ * Adds a font to the current document.
+ * @param font The font to add.
+ */
+export function loadFont(font: Font): void {
     // create a font face
     const fontFace: FontFace | undefined = createFontFace(font);
 
@@ -47,6 +60,10 @@ export function applyFont(font: Font): void {
     }
 }
 
+/**
+ * Removes a font from the current document.
+ * @param font The font to remove.
+ */
 export function unloadFont(font: Font): void {
     const fontFace: FontFace | undefined = createFontFace(font);
 
@@ -54,5 +71,3 @@ export function unloadFont(font: Font): void {
         document.fonts.delete(fontFace);
     }
 }
-
-export const defaultFont: string = getDefaultFont();

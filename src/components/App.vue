@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { onMounted } from "vue";
     import { useNavigation } from "@/composables/useNavigation";
-    import { defaultDarkTheme, applyTheme } from "@/functions/Themes";
+    import { defaultThemes, applyTheme } from "@/functions/Themes";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/templates/Templates.vue";
@@ -19,7 +19,7 @@
     };
 
     onMounted(() => {
-        applyTheme(document.body, defaultDarkTheme);
+        applyTheme(document.body, defaultThemes.dark);
     });
 </script>
 

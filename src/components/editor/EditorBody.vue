@@ -1,6 +1,6 @@
 <script setup async lang="ts">
     import { onMounted, onUnmounted, ref } from "vue";
-    import { applyFont, unloadFont } from "@/functions/Fonts";
+    import { loadFont, unloadFont } from "@/functions/Fonts";
     import { useTemplates } from "@/composables/useTemplates";
     import { useAutoSave } from "@/composables/useAutoSave";
     import { usePersistentRef } from "@/composables/usePersistentRef";
@@ -11,12 +11,9 @@
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
     import Resume from "@/components/editor/resume/Resume.vue";
 
-    const {templateId} = defineProps<{
+    const {templateId, setId} = defineProps<{
         templateId: string
-    }>();
-
-    const emits = defineEmits<{
-        change: [id: string | undefined]
+        setId: (id: string | undefined) => void
     }>();
 
     const {getTemplate, setTemplate, getEmptyTemplate, fallbackId} = useTemplates();
@@ -30,7 +27,7 @@
         if (templateId === fallbackId) {
             const emptyTemplate: TemplateModel = await getEmptyTemplate();
 
-            emits('change', emptyTemplate.id);
+            setId(emptyTemplate.id);
 
             return emptyTemplate;
         }
@@ -39,7 +36,7 @@
 
         // loading failed, unset the id
         if (!loadedTemplate) {
-            emits('change', undefined);
+            setId(undefined);
         }
 
         // value should never be undefined
@@ -60,7 +57,7 @@
 
     onMounted(() => {
         for (const font of template.value.fonts) {
-            applyFont(font);
+            loadFont(font);
         }
     });
 
@@ -82,7 +79,9 @@
             ids: [],
             classes: []
         }),
-        isGroupSelection: ref(false)
+        isGroupSelection: ref(false),
+        highlightSelection: ref(true),
+        loadTemplate: setId
     });
 </script>
 

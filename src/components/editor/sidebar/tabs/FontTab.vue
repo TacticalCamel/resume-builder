@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { applyFont, defaultFont, getSystemFonts, unloadFont } from "@/functions/Fonts";
+    import { loadFont, defaultFont, getSystemFonts, unloadFont } from "@/functions/Fonts";
     import { TemplateModel } from "@/models/Template";
     import { Font } from "@/models/style/Font";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
@@ -42,7 +42,7 @@
 
         if (template.value.fonts.some(f => f.name === font.name)) {
             template.value.fonts.push(font);
-            applyFont(font);
+            loadFont(font);
         }
     }
 

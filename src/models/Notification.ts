@@ -11,7 +11,7 @@ export interface Notification extends UniqueId {
 export interface NotificationAction {
     type?: NotificationType
     text: string
-    onClick: () => void
+    onClick: (notification: Notification) => void
 }
 
 export type NotificationType = 'error' | 'warning' | 'success' | 'info'

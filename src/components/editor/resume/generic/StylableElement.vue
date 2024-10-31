@@ -11,7 +11,7 @@
 
     const {displayNotification} = useNotifications();
 
-    const {editorState, selectedElements, isGroupSelection} = injectEditorModel();
+    const {editorState, selectedElements, isGroupSelection, highlightSelection} = injectEditorModel();
 
     const enabled = computed(() => editorState.value === EditorState.select);
 
@@ -49,8 +49,10 @@
             return;
         }
 
-        // select the class
-        selectedElements.value.classes.push(classSelector);
+        // if the element is not selected, select it by class
+        if(!selectedElements.value.ids.some(element => element.id === idSelector)) {
+            selectedElements.value.classes.push(classSelector);
+        }
 
         // remove all ids with the same class
         selectedElements.value.ids = selectedElements.value.ids.filter(element => element.class !== classSelector);
@@ -92,7 +94,7 @@
 </script>
 
 <template>
-    <div class="stylable-element" :class="[classSelector, {enabled, selected}]" :id="idSelector" @click="onSelect">
+    <div class="stylable-element" :class="[classSelector, {enabled, selected, 'highlight': highlightSelection}]" :id="idSelector" @click="onSelect">
         <slot/>
     </div>
 </template>
@@ -100,13 +102,17 @@
 <!--suppress CssUnusedSymbol -->
 <style scoped lang="postcss">
     .stylable-element {
-        @apply outline-transparent transition-[outline_color];
+        @apply outline-transparent transition-[outline_color] -outline-offset-1;
 
         &.enabled {
-            @apply select-none outline-foreground/30 rounded outline outline-1;
+            @apply select-none rounded outline-1;
+
+            &.highlight {
+                @apply outline-foreground/30 outline-dashed;
+            }
 
             &.selected {
-                @apply outline-info;
+                @apply outline-info outline;
             }
         }
     }

@@ -1,15 +1,16 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { defaultLightTheme, defaultDarkTheme, getTheme } from "@/functions/Themes";
+    import { defaultThemes, findThemeById } from "@/functions/Themes";
     import { TemplateModel } from "@/models/Template";
     import { Theme } from "@/models/style/Theme";
     import { Color } from "@/models/style/Color";
     import ThemeCard from "@/components/editor/sidebar/reusable/ThemeCard.vue";
-    import ColorPicker from "@/components/editor/sidebar/reusable/ColorPicker.vue";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
     import TemplateFilters from "@/components/editor/sidebar/items/TemplateFilters.vue";
+    import InputButton from "@/components/shared/form/InputButton.vue";
+    import ThemeColors from "@/components/editor/sidebar/items/ThemeColors.vue";
     import IconDelete from "@/components/shared/icons/IconDelete.vue";
     import IconSwapVert from "@/components/shared/icons/IconSwapVert.vue";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
@@ -24,57 +25,16 @@
     const themeCreateForm = ref<{ name: string, base: string | undefined } | undefined>(undefined);
 
     const hasDefaultThemeSelected = computed<boolean>(() => {
-        return defaultLightTheme.id === template.value.currentTheme || defaultDarkTheme.id === template.value.currentTheme;
+        return defaultThemes.light.id === template.value.currentTheme || defaultThemes.dark.id === template.value.currentTheme;
     });
 
     const availableThemes = computed<Theme[]>(() => {
-        return [defaultLightTheme, defaultDarkTheme, ...template.value.themes];
+        return [defaultThemes.light, defaultThemes.dark, ...template.value.themes];
     });
 
     const currentTheme = computed(() => {
-        return getTheme(template.value.currentTheme, template.value.themes);
+        return findThemeById(template.value.currentTheme, template.value.themes);
     });
-
-    function isColorModified(color: Color): boolean {
-        // get the default color value
-        const defaultValue: string | undefined = getDefaultColorValue(color);
-
-        // if there is no default value, return false
-        if (!defaultValue) {
-            return false;
-        }
-
-        // compare the value to the default
-        return getDefaultColorValue(color) !== color.value;
-    }
-
-    function getDefaultColorValue(color: Color): string | undefined {
-        const id: string | undefined = currentTheme.value.base;
-
-        if(!id) {
-            return undefined;
-        }
-
-        let baseTheme: Theme | undefined = getTheme(id, template.value.themes);
-
-        if (!baseTheme) {
-            return undefined;
-        }
-
-        const baseColor: Color | undefined = baseTheme.colors.find(c => c.name === color.name);
-
-        return baseColor?.value;
-    }
-
-    function resetColor(color: Color): void {
-        // get the default color value
-        const defaultValue: string | undefined = getDefaultColorValue(color);
-
-        // if there is a one, change it and apply the color
-        if (defaultValue) {
-            color.value = defaultValue;
-        }
-    }
 
     function createTheme(apply: boolean) {
         if (!themeCreateForm.value) {
@@ -96,7 +56,7 @@
     }
 
     function addTheme(name: string, baseThemeId: string | undefined): Theme {
-        const baseTheme: Theme = (baseThemeId ? getTheme(baseThemeId, template.value.themes) : undefined) ?? defaultLightTheme;
+        const baseTheme: Theme = (baseThemeId ? findThemeById(baseThemeId, template.value.themes) : undefined) ?? defaultThemes.light;
         const colors: Color[] = baseTheme.colors.map(color => ({name: color.name, value: color.value}));
 
         const theme: Theme = {
@@ -158,30 +118,26 @@
 
         <editor-tab-item title="theme">
             <div class="grid grid-cols-2 gap-2 text-foreground relative">
-                <button
-                    @click="openThemeSelect"
-                    class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors">
+                <input-button @click="openThemeSelect" class="flex justify-center items-center gap-2">
                     <icon-swap-vert class="size-5"/>
                     <span>Change theme</span>
-                </button>
+                </input-button>
 
-                <button
-                    @click="deleteDialogOpen = true"
-                    :disabled="hasDefaultThemeSelected || themeSelectOpen"
-                    class="flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors"
-                >
+                <input-button @click="deleteDialogOpen = true" :disabled="hasDefaultThemeSelected || themeSelectOpen" class="flex justify-center items-center gap-2">
                     <icon-delete class="size-5"/>
                     <span>Delete theme</span>
-                </button>
+                </input-button>
 
                 <div v-if="deleteDialogOpen" class="absolute inset-0 flex items-center gap-2 bg-background pe-1">
                     <div class="me-auto">Delete theme?</div>
-                    <button @click="deleteCurrentTheme" class="px-4 bg-secondary/10 hover:bg-secondary/20 transition-colors text-secondary rounded h-full">
+
+                    <input-button @click="deleteCurrentTheme" class="px-4 bg-secondary/10 hover:!bg-secondary/20 text-secondary">
                         <icon-check class="size-5"/>
-                    </button>
-                    <button @click="deleteDialogOpen = false" class="px-4 bg-primary/10 hover:bg-primary/20 transition-colors text-primary rounded h-full">
+                    </input-button>
+
+                    <input-button @click="deleteDialogOpen = false" class="px-4 bg-primary/10 hover:!bg-error/20 text-error">
                         <icon-close class="size-5"/>
-                    </button>
+                    </input-button>
                 </div>
             </div>
         </editor-tab-item>
@@ -259,20 +215,11 @@
                     </div>
                 </editor-tab-item>
 
-                <editor-tab-item>
-                    <div class="grid grid-cols-2 gap-2">
-                        <label class="col-span-2">Colors</label>
-                        <color-picker
-                            v-for="(color, index) in currentTheme.colors"
-                            v-model="currentTheme.colors[index]"
-                            class="px-2 py-0.5 rounded border-2 border-foreground/30"
-                            :key="color.name"
-                            :disabled="hasDefaultThemeSelected"
-                            :modified="isColorModified(color)"
-                            @reset="resetColor(color)"
-                        />
-                    </div>
-                </editor-tab-item>
+                <theme-colors
+                    v-model="currentTheme"
+                    :theme-list="template.themes"
+                    :disabled="hasDefaultThemeSelected"
+                />
             </div>
         </fade-transition>
     </editor-tab>

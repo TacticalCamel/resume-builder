@@ -92,8 +92,8 @@
                     <suspense>
                         <editor-body
                             :template-id="activeTemplateId"
+                            :set-id="setTemplateId"
                             :key="activeTemplateId"
-                            @change="setTemplateId"
                         />
 
                         <template #fallback>

@@ -1,3 +1,10 @@
+export const cssColorKeys = {
+    foreground: '--foreground',
+    background: '--background',
+    primary: '--primary',
+    secondary: '--secondary',
+}
+
 // check all stylesheets for a variable inside a selector and return its value
 export function getVariable(selectorText: string, variableName: string): string | undefined {
     // iterate over all the style sheets

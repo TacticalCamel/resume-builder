@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { isDarkContrast, defaultLightTheme, defaultDarkTheme } from "@/functions/Themes";
+    import { isDarkContrast, defaultThemes } from "@/functions/Themes";
+    import { cssColorKeys } from "@/functions/Css";
     import { Theme } from "@/models/style/Theme";
     import { Color } from "@/models/style/Color";
     import InputText from "@/components/shared/form/InputText.vue";
@@ -11,20 +12,20 @@
     }>();
 
     const themeColors = ref({
-        background: getColorInformation('--background'),
-        foreground: getColorInformation('--foreground'),
-        primary: getColorInformation('--primary'),
-        secondary: getColorInformation('--secondary')
+        background: getColorInformation(cssColorKeys.background),
+        foreground: getColorInformation(cssColorKeys.foreground),
+        primary: getColorInformation(cssColorKeys.primary),
+        secondary: getColorInformation(cssColorKeys.secondary)
     });
 
-    const isDefault = computed(() => defaultLightTheme.id === theme.id || defaultDarkTheme.id === theme.id);
+    const isDefault = computed(() => defaultThemes.light.id === theme.id || defaultThemes.dark.id === theme.id);
 
     function getColorInformation(name: string) {
         const color: Color | undefined = theme.colors.find(c => c.name === name);
 
         return {
-            value: color ? `rgb(${color.value})` : 'black',
-            darkText: color ? isDarkContrast(color) : false
+            value: color ? `rgb(${color.value.r} ${color.value.g} ${color.value.b})` : 'black',
+            darkText: color ? isDarkContrast(color.value) : false
         };
     }
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, onMounted, useTemplateRef } from "vue";
-    import { applyTheme, getTheme } from "@/functions/Themes";
+    import { applyTheme, findThemeById } from "@/functions/Themes";
     import { TemplateModel } from "@/models/Template";
     import Resume from "@/components/editor/resume/Resume.vue";
 
@@ -27,7 +27,7 @@
     const card = useTemplateRef('card');
 
     onMounted(() => {
-        applyTheme(card.value as HTMLElement, getTheme(template.currentTheme, template.themes));
+        applyTheme(card.value as HTMLElement, findThemeById(template.currentTheme, template.themes));
     });
 </script>
 

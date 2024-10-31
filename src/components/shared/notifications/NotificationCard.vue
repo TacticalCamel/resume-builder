@@ -49,7 +49,7 @@
             <div v-if="notification.actions.length" class="px-6 pt-2 pb-3 flex gap-6 text-sm">
                 <button
                     v-for="action in notification.actions"
-                    @click="action.onClick()"
+                    @click="action.onClick(notification)"
                     :style="getColorStyle(action.type)"
                     class="text-primary border border-primary px-2 py-0.5 rounded min-w-28 hover:bg-primary/20 transition-colors"
                 >

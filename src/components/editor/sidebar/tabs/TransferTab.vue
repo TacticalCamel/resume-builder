@@ -8,6 +8,8 @@
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import TemplateImport from "@/components/editor/sidebar/items/TemplateImport.vue";
     import TemplateExport from "@/components/editor/sidebar/items/TemplateExport.vue";
+    import TemplateDelete from "@/components/editor/sidebar/items/TemplateDelete.vue";
+    import InputButton from "@/components/shared/form/InputButton.vue";
 
     const {setTemplate} = useTemplates();
     const {displayNotification} = useNotifications();
@@ -23,14 +25,6 @@
 
         displayNotification('success', {
             message: 'Copied template',
-        });
-    }
-
-    async function importTemplate(uploadedTemplate: TemplateModel) {
-        await setTemplate(uploadedTemplate, true);
-
-        displayNotification('success', {
-            message: 'Imported template'
         });
     }
 
@@ -58,7 +52,7 @@
 <template>
     <editor-tab>
         <editor-tab-item title="save options">
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-2 gap-2 items-center">
                 <div class="text-foreground/70">Autosave</div>
                 <select v-model="frequency" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 focus:outline-foreground">
                     <option v-for="value in [-1, 0, 1, 2, 5, 10, 30]" :value="getAutosaveValue(value)">
@@ -67,21 +61,17 @@
                 </select>
 
                 <div class="text-foreground/70">Save template</div>
-                <button
-                    class="text-center p-0.5 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors disabled:text-foreground/50 disabled:cursor-not-allowed focus:outline-foreground"
-                    @click="save"
-                    :disabled="state !== SaveState.waiting"
-                >
-                    Save
-                </button>
+                <input-button class="!py-0.5" @click="save" :disabled="state !== SaveState.waiting">Save</input-button>
 
                 <div class="text-foreground/70">Create copy</div>
-                <button class="text-center p-0.5 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors" @click="saveCopy()">Copy</button>
+                <input-button class="!py-0.5" @click="saveCopy()">Copy</input-button>
             </div>
         </editor-tab-item>
 
-        <template-import @import="importTemplate"/>
+        <template-import/>
 
         <template-export :template="template"/>
+
+        <template-delete :template="template"/>
     </editor-tab>
 </template>

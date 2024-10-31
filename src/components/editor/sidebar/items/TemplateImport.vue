@@ -1,12 +1,16 @@
 <script setup lang="ts">
     import { reactive } from "vue";
     import { unpack } from "msgpackr";
-    import { TemplateModel } from "@/models/Template";
+    import { useTemplates } from "@/composables/useTemplates";
+    import { useNotifications } from "@/composables/useNotifications";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconClose from "@/components/shared/icons/IconClose.vue";
     import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
+
+    const {setTemplate} = useTemplates();
+    const {displayNotification} = useNotifications();
 
     interface ImportModel {
         template?: any
@@ -22,10 +26,6 @@
     const form = reactive<ImportModel>({
         validationSteps: []
     });
-
-    const emit = defineEmits<{
-        import: [template: TemplateModel]
-    }>()
 
     function validateFile(contents: string | ArrayBuffer, fileName: string): void {
         if (typeof contents === 'string') {
@@ -57,8 +57,13 @@
         });
     }
 
-    function importFile(): void {
-        emit('import', form.template);
+    async function importTemplate() {
+        await setTemplate(form.template, true);
+
+        displayNotification('success', {
+            message: 'Imported template',
+            duration: 6000
+        });
 
         clearForm();
     }
@@ -91,7 +96,7 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div class="px-1">
-                        <button @click="importFile()" :disabled="!form.template" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors">
+                        <button @click="importTemplate()" :disabled="!form.template" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors">
                             <span v-if="form.validationSteps.some(x => x.valid === false)">Import with errors</span>
                             <span v-else>Import</span>
                         </button>

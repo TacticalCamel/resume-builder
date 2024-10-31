@@ -4,6 +4,7 @@
     import { TemplateModel } from "@/models/Template";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputCheckbox from "@/components/shared/form/InputCheckbox.vue";
+    import InputButton from "@/components/shared/form/InputButton.vue";
 
     interface TransferCategory {
         name: string
@@ -96,7 +97,7 @@
                 <input-checkbox
                     v-for="category in categories"
                     v-model="category.included"
-                    class="rounded px-2 py-1 transition-colors border-2 border-foreground/30 hover:border-foreground focus:border-foreground"
+                    class="rounded px-2 py-1 transition-colors border-2 border-foreground/30 hover:bg-foreground/10 focus:border-foreground"
                     :class="{'text-foreground/70': !category.included}"
                 >
                     Include {{ category.name }}
@@ -104,7 +105,7 @@
             </div>
 
             <div class="grid grid-cols-2 gap-2 items-center">
-                <button @click="exportTemplate" class="text-center p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-foreground">Export</button>
+                <input-button @click="exportTemplate" class="">Export</input-button>
                 <span class="text-end me-1 text-foreground/70">File size: {{ sizeToString(buffer.length) }}</span>
             </div>
         </div>

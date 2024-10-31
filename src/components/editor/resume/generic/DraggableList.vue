@@ -11,7 +11,7 @@
 
     defineOptions({
         inheritAttrs: false
-    })
+    });
 
     const elements = defineModel<T[]>({
         required: true

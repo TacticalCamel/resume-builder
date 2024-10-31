@@ -1,6 +1,6 @@
 import { useDatabase } from "@/composables/useDatabase";
 import { deepToRaw } from "@/functions/Reactivity";
-import { defaultLightTheme } from "@/functions/Themes";
+import { defaultThemes } from "@/functions/Themes";
 import { defaultFont } from "@/functions/Fonts";
 import { TemplateModel } from "@/models/Template";
 
@@ -32,6 +32,10 @@ export function useTemplates() {
         return table.get(id);
     }
 
+    async function removeTemplate(id: string): Promise<void> {
+        return table.delete(id);
+    }
+
     async function getEmptyTemplate(): Promise<TemplateModel> {
         // get the empty preset template
         const emptyTemplate: TemplateModel = presetTemplates[0];
@@ -55,6 +59,7 @@ export function useTemplates() {
         fallbackId,
         setTemplate,
         getTemplate,
+        removeTemplate,
         getEmptyTemplate,
         getPresetTemplates,
         getCustomTemplates
@@ -64,7 +69,7 @@ export function useTemplates() {
 const presetTemplates: TemplateModel[] = [
     {
         id: 'empty',
-        currentTheme: defaultLightTheme.id,
+        currentTheme: defaultThemes.light.id,
         currentFont: defaultFont,
         resume: {
             id: crypto.randomUUID(),
@@ -89,11 +94,6 @@ const presetTemplates: TemplateModel[] = [
             contrast: 100,
             brightness: 100
         },
-        styles: [
-            {
-                selectors: [],
-                styles: {'background': 'red'}
-            }
-        ]
+        styles: []
     }
 ];

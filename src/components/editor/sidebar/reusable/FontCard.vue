@@ -12,7 +12,7 @@
 </script>
 
 <template>
-    <div class="flex items-center ps-2 py-0.5 rounded border-2 border-foreground/30 hover:border-foreground text-foreground/70 hover:text-foreground transition-colors cursor-pointer">
+    <div class="flex items-center ps-2 py-0.5 rounded border-2 border-foreground/30 text-foreground/80 hover:bg-foreground/10 transition-colors cursor-pointer">
         <span :style="{fontFamily: font}">{{ font }}</span>
         <button v-if="allowDelete" class="ms-auto px-2 opacity-0 transition-opacity" @click.prevent.stop="$emit('delete')">
             <icon-close class="size-5"/>

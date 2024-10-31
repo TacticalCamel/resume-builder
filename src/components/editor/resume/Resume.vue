@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { getTheme } from "@/functions/Themes";
+    import { findThemeById } from "@/functions/Themes";
     import { TemplateModel } from "@/models/Template";
     import ResumeBody from "@/components/editor/resume/ResumeBody.vue";
 
@@ -12,7 +12,7 @@
         filter: `grayscale(${template.value.filters.grayscale}%) contrast(${template.value.filters.contrast}%) brightness(${template.value.filters.brightness}%)`,
         backdropFilter: `grayscale(${template.value.filters.grayscale}%)`,
         fontFamily: template.value.currentFont,
-        ...getTheme(template.value.currentTheme, template.value.themes).colors.reduce((previous, color) => ({...previous, [color.name]: color.value}), {})
+        ...findThemeById(template.value.currentTheme, template.value.themes).colors.reduce((previous, color) => ({...previous, [color.name]: `${color.value.r} ${color.value.g} ${color.value.b}`}), {})
     }));
 
     const styleSheet = computed<CSSStyleSheet>(() => {

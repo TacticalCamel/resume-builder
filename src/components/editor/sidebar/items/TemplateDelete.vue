@@ -1,0 +1,83 @@
+<script setup lang="ts">
+    import { ref } from "vue";
+    import { useTemplates } from "@/composables/useTemplates";
+    import { useNotifications } from "@/composables/useNotifications";
+    import { injectEditorModel } from "@/functions/Editor";
+    import { TemplateModel } from "@/models/Template";
+    import { Notification } from "@/models/Notification";
+    import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
+    import InputButton from "@/components/shared/form/InputButton.vue";
+    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
+
+    const {template} = defineProps<{
+        template: TemplateModel
+    }>();
+
+    const {removeTemplate, setTemplate} = useTemplates();
+    const {loadTemplate} = injectEditorModel();
+    const {displayNotification, removeNotification} = useNotifications();
+
+    const confirm = ref<boolean>(false);
+
+    async function deleteTemplate() {
+        if (!confirm.value) {
+            confirm.value = true;
+            return;
+        }
+
+        const backup: TemplateModel = template;
+
+        await removeTemplate(template.id);
+
+        loadTemplate(undefined);
+
+        displayNotification('info', {
+            duration: 8000,
+            message: 'Template deleted',
+            actions: [{
+                text: 'Undo',
+                onClick: async (notification) => await restoreTemplate(notification, backup)
+            }]
+        });
+    }
+
+    async function restoreTemplate(notification: Notification, backup: TemplateModel) {
+        // add the template again
+        const id: string = await setTemplate(backup);
+
+        // load the template
+        loadTemplate(id);
+
+        // remove the delete notification
+        removeNotification(notification.id);
+
+        // display the restore notification
+        displayNotification('success', {
+            duration: 4000,
+            message: 'Template restored'
+        });
+    }
+</script>
+
+<template>
+    <editor-tab-item title="Delete template">
+        <div class="flex justify-between">
+            <fade-transition>
+                <div v-if="!confirm" class="text-foreground/70 p-1">Permanently delete template</div>
+                <div v-else class="text-error p-1 font-medium">This action cannot be undone (or can it?)</div>
+            </fade-transition>
+
+            <div class="basis-1/3 grid gap-2">
+                <input-button class="outline outline-error !transition-all" :class="{'text-error bg-error/10 hover:!bg-error/20': confirm}" @click="deleteTemplate()">
+                    Delete
+                </input-button>
+
+                <fade-transition>
+                    <input-button v-if="confirm" @click="confirm = false">
+                        Cancel
+                    </input-button>
+                </fade-transition>
+            </div>
+        </div>
+    </editor-tab-item>
+</template>

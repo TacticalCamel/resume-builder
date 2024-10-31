@@ -9,31 +9,25 @@
 
 <template>
     <label class="inline-flex items-center cursor-pointer">
-        <input v-if="disabled" type="checkbox" class="sr-only peer" :checked="checked" disabled/>
-        <input v-else type="checkbox" class="sr-only peer" v-model="model">
+        <input type="checkbox" class="sr-only peer" v-if="disabled" :checked="checked" disabled/>
+        <input type="checkbox" class="sr-only peer" v-else v-model="model">
 
-        <span class="peer peer-checked:after:translate-x-full bg-foreground peer-checked:bg-primary bg-opacity-30 peer-checked:bg-opacity-100 peer-disabled:bg-opacity-20 peer-disabled:peer-checked:bg-opacity-65"/>
+        <span class="input-toggle peer-checked:after:translate-x-full bg-foreground/30 peer-checked:bg-primary peer-disabled:bg-foreground/20 peer-disabled:peer-checked:bg-primary/65"/>
     </label>
 </template>
 
 <style lang="postcss" scoped>
-    span {
-        position: relative;
+    .input-toggle {
+        @apply relative rounded-full transition-colors;
+
         height: 1lh;
         width: calc(2lh - 0.25rem);
-        border-radius: 9999px;
-        transition: background-color 150ms ease-in-out;
-    }
 
-    span::after {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        height: calc(1lh - 0.25rem);
-        width: calc(1lh - 0.25rem);
-        border-radius: 9999px;
-        background-color: white;
-        transition: transform 150ms ease-in-out;
+        &::after {
+            @apply content-[''] absolute top-0.5 left-0.5 rounded-full bg-white transition-transform;
+
+            height: calc(1lh - 0.25rem);
+            width: calc(1lh - 0.25rem);
+        }
     }
 </style>
