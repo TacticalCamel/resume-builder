@@ -1,32 +1,32 @@
 <script setup lang="ts">
     import { computed, reactive } from "vue";
     import { pack } from 'msgpackr';
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputCheckbox from "@/components/shared/form/InputCheckbox.vue";
 
     interface TransferCategory {
         name: string
         included: boolean
-        copy: (source: ResumeTemplate, destination: Partial<ResumeTemplate>) => void
+        copy: (source: TemplateModel, destination: Partial<TemplateModel>) => void
     }
 
     const {template} = defineProps<{
-        template: ResumeTemplate
+        template: TemplateModel
     }>();
 
     const categories = reactive<TransferCategory[]>([
         {
             name: 'resume',
             included: true,
-            copy: (source: ResumeTemplate, destination: Partial<ResumeTemplate>) => {
+            copy: (source: TemplateModel, destination: Partial<TemplateModel>) => {
                 destination.resume = source.resume;
             }
         },
         {
             name: 'themes',
             included: true,
-            copy: (source: ResumeTemplate, destination: Partial<ResumeTemplate>) => {
+            copy: (source: TemplateModel, destination: Partial<TemplateModel>) => {
                 destination.themes = source.themes;
                 destination.currentTheme = source.currentTheme;
                 destination.filters = source.filters;
@@ -35,7 +35,7 @@
         {
             name: 'fonts',
             included: true,
-            copy: (source: ResumeTemplate, destination: Partial<ResumeTemplate>) => {
+            copy: (source: TemplateModel, destination: Partial<TemplateModel>) => {
                 destination.fonts = source.fonts;
                 destination.currentFont = source.currentFont;
             }
@@ -43,7 +43,7 @@
     ]);
 
     const buffer = computed<Uint8Array>(() => {
-        const exported: Partial<ResumeTemplate> = {
+        const exported: Partial<TemplateModel> = {
             id: template.id
         };
 

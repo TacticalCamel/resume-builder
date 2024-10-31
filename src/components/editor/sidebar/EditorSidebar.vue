@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { computed } from "vue";
     import { usePersistentRef } from "@/composables/usePersistentRef";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
-    import { SaveState } from "@/models/SaveState";
+    import { injectSaveModel } from "@/functions/AutoSave";
+    import { TemplateModel } from "@/models/Template";
     import { EditorTabInfo } from "@/models/bindings/EditorTabInfo";
     import SaveStatus from "@/components/editor/sidebar/reusable/SaveStatus.vue";
     import LayoutTab from "@/components/editor/sidebar/tabs/LayoutTab.vue";
@@ -17,13 +17,11 @@
     import IconCode from "@/components/shared/icons/IconCode.vue";
     import IconSwapHorizontal from "@/components/shared/icons/IconSwapHorizontal.vue";
 
-    const template = defineModel<ResumeTemplate>({
+    const template = defineModel<TemplateModel>({
         required: true
     });
 
-    const {saveState} = defineProps<{
-        saveState: SaveState
-    }>();
+    const {state} = injectSaveModel();
 
     const activeTab = usePersistentRef<number>('active-tab', 0);
 
@@ -67,7 +65,7 @@
 </script>
 
 <template>
-    <div class="flex h-full">
+    <div class="flex">
         <div class="relative flex flex-col overflow-clip bg-black/40">
             <button
                 v-for="(tab, index) in tabs" @click="activeTab = index"
@@ -93,7 +91,7 @@
                 </fade-transition>
             </div>
             <div class="px-2 py-0.5 bg-foreground/5">
-                <save-status :state="saveState" :id="template.id"/>
+                <save-status :state="state" :id="template.id"/>
             </div>
         </div>
     </div>

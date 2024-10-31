@@ -1,19 +1,12 @@
 <script setup lang="ts">
-    import { computed, provide } from "vue";
-    import { editableInjectorKey } from "@/keys";
+    import { computed } from "vue";
     import { getTheme } from "@/functions/Themes";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
     import ResumeBody from "@/components/editor/resume/ResumeBody.vue";
 
-    const template = defineModel<ResumeTemplate>({
+    const template = defineModel<TemplateModel>({
         required: true
     });
-
-    const {editable = false} = defineProps<{
-        editable?: boolean
-    }>();
-
-    provide(editableInjectorKey, editable);
 
     const styles = computed(() => ({
         filter: `grayscale(${template.value.filters.grayscale}%) contrast(${template.value.filters.contrast}%) brightness(${template.value.filters.brightness}%)`,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
 
     const {template, active = false} = defineProps<{
-        template: ResumeTemplate
+        template: TemplateModel
         active?: boolean
     }>();
 </script>

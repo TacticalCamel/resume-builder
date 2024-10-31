@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { reactive } from "vue";
     import { unpack } from "msgpackr";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconClose from "@/components/shared/icons/IconClose.vue";
@@ -24,7 +24,7 @@
     });
 
     const emit = defineEmits<{
-        import: [template: ResumeTemplate]
+        import: [template: TemplateModel]
     }>()
 
     function validateFile(contents: string | ArrayBuffer, fileName: string): void {
@@ -91,8 +91,7 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div class="px-1">
-                        <button @click="importFile()" :disabled="!form.template"
-                                class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors">
+                        <button @click="importFile()" :disabled="!form.template" class="text-center w-full p-1 rounded bg-foreground/10 hover:bg-foreground/20 disabled:bg-foreground/10 disabled:text-foreground/50 disabled:cursor-not-allowed transition-colors">
                             <span v-if="form.validationSteps.some(x => x.valid === false)">Import with errors</span>
                             <span v-else>Import</span>
                         </button>

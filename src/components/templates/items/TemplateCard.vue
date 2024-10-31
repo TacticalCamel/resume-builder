@@ -1,11 +1,11 @@
 <script setup lang="ts">
     import { computed, onMounted, useTemplateRef } from "vue";
     import { applyTheme, getTheme } from "@/functions/Themes";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
     import Resume from "@/components/editor/resume/Resume.vue";
 
     const {template, scale} = defineProps<{
-        template: ResumeTemplate
+        template: TemplateModel
         scale: number
     }>();
 

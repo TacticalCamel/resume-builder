@@ -1,15 +1,15 @@
 <script setup async lang="ts">
-    import { onMounted, onUnmounted, provide, ref } from "vue";
-    import { autosaveInjectorKey } from "@/keys";
+    import { onMounted, onUnmounted, ref } from "vue";
     import { applyFont, unloadFont } from "@/functions/Fonts";
     import { useTemplates } from "@/composables/useTemplates";
     import { useAutoSave } from "@/composables/useAutoSave";
     import { usePersistentRef } from "@/composables/usePersistentRef";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { provideSaveModel } from "@/functions/AutoSave";
+    import { provideEditorModel } from "@/functions/Editor";
+    import { TemplateModel } from "@/models/Template";
+    import { EditorState } from "@/models/EditorState";
     import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
     import Resume from "@/components/editor/resume/Resume.vue";
-
-    const {getTemplate, setTemplate, getEmptyTemplate, fallbackId} = useTemplates();
 
     const {templateId} = defineProps<{
         templateId: string
@@ -19,22 +19,23 @@
         change: [id: string | undefined]
     }>();
 
-    const frequency = usePersistentRef<number>('autosave-period', 0);
-    const template = ref<ResumeTemplate>(await loadTemplate());
+    const {getTemplate, setTemplate, getEmptyTemplate, fallbackId} = useTemplates();
+    const template = ref<TemplateModel>(await loadTemplate());
 
-    const {state, save} = useAutoSave<ResumeTemplate | undefined>(template, frequency, saveTemplate);
+    const frequency = usePersistentRef<number>('autosave-frequency', 0);
+    const {state, save} = useAutoSave<TemplateModel | undefined>(template, frequency, saveTemplate);
 
-    async function loadTemplate(): Promise<ResumeTemplate> {
+    async function loadTemplate(): Promise<TemplateModel> {
         // loading an empty template
-        if(templateId === fallbackId) {
-            const emptyTemplate: ResumeTemplate = await getEmptyTemplate();
+        if (templateId === fallbackId) {
+            const emptyTemplate: TemplateModel = await getEmptyTemplate();
 
             emits('change', emptyTemplate.id);
 
             return emptyTemplate;
         }
 
-        const loadedTemplate: ResumeTemplate | undefined = await getTemplate(templateId);
+        const loadedTemplate: TemplateModel | undefined = await getTemplate(templateId);
 
         // loading failed, unset the id
         if (!loadedTemplate) {
@@ -46,7 +47,7 @@
         return loadedTemplate ?? await getEmptyTemplate();
     }
 
-    async function saveTemplate(template: ResumeTemplate | undefined) {
+    async function saveTemplate(template: TemplateModel | undefined) {
         if (!template) {
             return;
         }
@@ -56,12 +57,6 @@
 
         await setTemplate(template);
     }
-
-    provide(autosaveInjectorKey, {
-        save,
-        frequency,
-        state
-    });
 
     onMounted(() => {
         for (const font of template.value.fonts) {
@@ -74,21 +69,36 @@
             unloadFont(font);
         }
     });
+
+    provideSaveModel({
+        frequency,
+        state,
+        save
+    });
+
+    provideEditorModel({
+        editorState: ref(EditorState.edit),
+        selectedElements: ref({
+            ids: [],
+            classes: []
+        }),
+        isGroupSelection: ref(false)
+    });
 </script>
 
 <template>
     <div class="flex grow">
-        <div class="relative w-[440px] grid print:hidden">
-            <div class="absolute inset-0">
-                <editor-sidebar v-model="template" :save-state="state"/>
-            </div>
+        <div class="relative w-[440px] print:hidden">
+            <editor-sidebar
+                v-model="template"
+                class="absolute inset-0 h-full"
+            />
         </div>
 
         <div class="relative grow">
             <resume
                 v-model="template"
                 class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip print:relative print:h-full"
-                editable
             />
         </div>
     </div>

@@ -31,6 +31,12 @@ export function usePersistentRef<T>(key: string, defaultValue: T): Ref<T> {
 
     // save the value to localstorage
     function save(value: T): void {
+        if (value === undefined) {
+            localStorage.removeItem(key);
+
+            return;
+        }
+
         try {
             const serializedValue: string = JSON.stringify(value);
 

@@ -1,5 +1,5 @@
 import Dexie, { EntityTable } from "dexie";
-import { ResumeTemplate } from "@/models/ResumeTemplate";
+import { TemplateModel } from "@/models/Template";
 
 // use a single database instance
 let db: Database | undefined;
@@ -20,5 +20,5 @@ export function useDatabase(): Database {
 }
 
 type Database = Dexie & {
-    templates: EntityTable<ResumeTemplate, 'id'>
+    templates: EntityTable<TemplateModel, 'id'>
 }

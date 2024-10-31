@@ -1,7 +1,8 @@
 <script setup lang="ts" generic="T">
-    import { inject } from "vue";
-    import { editableInjectorKey } from "@/keys";
+    import { computed } from "vue";
     import draggable from "vuedraggable";
+    import { injectEditorModel } from "@/functions/Editor";
+    import { EditorState } from "@/models/EditorState";
 
     defineProps<{
         group: string
@@ -16,7 +17,9 @@
         required: true
     });
 
-    const editable: boolean = inject(editableInjectorKey, false);
+    const {editorState} = injectEditorModel();
+
+    const editable = computed(() => editorState.value === EditorState.edit);
 
     // Check if the dragged element can be moved between 2 sortables.
     // The target group must match the source group or the group of the element.

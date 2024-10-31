@@ -1,10 +1,13 @@
 <script setup lang="ts">
-    import { inject } from "vue";
-    import { editableInjectorKey } from "@/keys";
+    import { computed } from "vue";
+    import { injectEditorModel } from "@/functions/Editor";
+    import { EditorState } from "@/models/EditorState";
 
     const model = defineModel<string>();
 
-    const editable: boolean = inject(editableInjectorKey, false);
+    const {editorState} = injectEditorModel();
+
+    const editable = computed(() => editorState.value === EditorState.edit);
 
     defineOptions({
         inheritAttrs: false
@@ -55,7 +58,7 @@
     .editable {
         @apply grid rounded transition-colors grid-cols-[1fr];
 
-        &:hover {
+        &:hover:not(:focus-within) {
             @apply bg-foreground/15;
         }
     }

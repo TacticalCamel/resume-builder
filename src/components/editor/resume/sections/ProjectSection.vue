@@ -1,17 +1,22 @@
 <script setup lang="ts">
-    import { inject } from "vue";
-    import { editableInjectorKey } from "@/keys";
+    import { computed } from "vue";
     import { Project, ProjectList } from "@/models/resume/Projects";
     import InputText from "@/components/shared/form/InputText.vue";
     import IconLink from "@/components/shared/icons/IconLink.vue";
     import ResumeSection from "@/components/editor/resume/generic/ResumeSection.vue";
     import TechnologyList from "@/components/editor/resume/reusable/TechnologyList.vue";
+    import { injectEditorModel } from "@/functions/Editor";
+    import { EditorState } from "@/models/EditorState";
 
     const projects = defineModel<ProjectList>({
         required: true
     });
 
-    const editable: boolean = inject(editableInjectorKey, false);
+    const {editorState} = injectEditorModel();
+
+    const editable = computed(() => editorState.value === EditorState.edit);
+
+    const clickable = computed(() => editorState.value === EditorState.view);
 </script>
 
 <template>
@@ -30,9 +35,9 @@
         <template #item="{element: project}: {element: Project}">
             <div>
                 <div class="flex items-center flex-wrap">
-                    <a class="flex items-center gap-1 mb-1 me-2" :class="{'hover:text-info hover:transition-colors': !editable}" :href="editable ? undefined : project.url" target="_blank">
+                    <a class="flex items-center gap-1 mb-1 me-2" :class="{'hover:text-info hover:transition-colors': clickable}" :href="clickable ? project.url : undefined" target="_blank">
                         <icon-link class="size-5"/>
-                        <input-text :class="{'underline': !editable}" v-model="project.url" placeholder="Project URL"/>
+                        <input-text :class="{'underline': clickable}" v-model="project.url" placeholder="Project URL"/>
                     </a>
 
                     <technology-list v-model="project.technologies" class="mb-1"/>

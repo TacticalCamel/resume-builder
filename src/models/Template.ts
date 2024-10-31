@@ -5,7 +5,7 @@ import { Filters } from "@/models/style/Filters";
 import { StyleOverride } from "@/models/style/StyleOverrides";
 import { UniqueId } from "@/models/UniqueId";
 
-export interface ResumeTemplate extends UniqueId {
+export interface TemplateModel extends UniqueId {
     currentTheme: string
     currentFont: string
     resume: ResumeModel

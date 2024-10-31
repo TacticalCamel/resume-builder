@@ -33,11 +33,11 @@
 </script>
 
 <template>
-    <div class="border-2 border-primary bg-background rounded-lg overflow-clip w-96" :style="getColorStyle(notification.type)">
+    <div class="relative border-2 border-primary bg-background rounded-lg overflow-clip w-96" :style="getColorStyle(notification.type)">
         <div class="bg-foreground/5">
             <!-- content -->
             <div class="flex gap-6 items-center px-4 py-2">
-                <component :is="icon" class="size-6 text-primary"/>
+                <component :is="icon" class="size-8 text-primary"/>
 
                 <div class="grow grid gap-1">
                     <span class="font-semibold uppercase">{{ notification.title ?? notification.type }}</span>
@@ -46,7 +46,7 @@
             </div>
 
             <!-- actions -->
-            <div v-if="notification.actions.length" class="px-6 pt-2 pb-3 grid grid-cols-2 gap-6 text-sm">
+            <div v-if="notification.actions.length" class="px-6 pt-2 pb-3 flex gap-6 text-sm">
                 <button
                     v-for="action in notification.actions"
                     @click="action.onClick()"

@@ -2,7 +2,7 @@ import { useDatabase } from "@/composables/useDatabase";
 import { deepToRaw } from "@/functions/Reactivity";
 import { defaultLightTheme } from "@/functions/Themes";
 import { defaultFont } from "@/functions/Fonts";
-import { ResumeTemplate } from "@/models/ResumeTemplate";
+import { TemplateModel } from "@/models/Template";
 
 /**
  * This composable allows to query and modify locally saved templates.
@@ -12,9 +12,9 @@ export function useTemplates() {
     const table= db.templates;
     const fallbackId: string = 'fallback-template';
 
-    async function setTemplate(template: ResumeTemplate, copy: boolean = false): Promise<string> {
-        // convert to a raw object without function
-        const raw: ResumeTemplate = deepToRaw(template);
+    async function setTemplate(template: TemplateModel, copy: boolean = false): Promise<string> {
+        // convert to a raw object to remove functions
+        const raw: TemplateModel = deepToRaw(template);
 
         // generate a new id when copied
         if(copy) {
@@ -28,22 +28,26 @@ export function useTemplates() {
         return raw.id;
     }
 
-    async function getTemplate(id: string): Promise<ResumeTemplate | undefined> {
+    async function getTemplate(id: string): Promise<TemplateModel | undefined> {
         return table.get(id);
     }
 
-    async function getEmptyTemplate(): Promise<ResumeTemplate> {
-        const template: ResumeTemplate = presetTemplates[0];
-        const id: string = await setTemplate(presetTemplates[0], true);
+    async function getEmptyTemplate(): Promise<TemplateModel> {
+        // get the empty preset template
+        const emptyTemplate: TemplateModel = presetTemplates[0];
 
-        return await getTemplate(id) ?? template;
+        // store a copy of it in the database
+        const id: string = await setTemplate(emptyTemplate, true);
+
+        // return the copy
+        return await getTemplate(id) ?? emptyTemplate;
     }
 
-    async function getPresetTemplates(): Promise<ResumeTemplate[]> {
+    async function getPresetTemplates(): Promise<TemplateModel[]> {
         return presetTemplates;
     }
 
-    async function getCustomTemplates(): Promise<ResumeTemplate[]> {
+    async function getCustomTemplates(): Promise<TemplateModel[]> {
         return table.toArray();
     }
 
@@ -57,7 +61,7 @@ export function useTemplates() {
     };
 }
 
-const presetTemplates: ResumeTemplate[] = [
+const presetTemplates: TemplateModel[] = [
     {
         id: 'empty',
         currentTheme: defaultLightTheme.id,

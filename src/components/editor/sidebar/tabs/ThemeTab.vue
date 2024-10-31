@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
     import { defaultLightTheme, defaultDarkTheme, getTheme } from "@/functions/Themes";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
     import { Theme } from "@/models/style/Theme";
     import { Color } from "@/models/style/Color";
     import ThemeCard from "@/components/editor/sidebar/reusable/ThemeCard.vue";
@@ -15,7 +15,7 @@
     import IconCheck from "@/components/shared/icons/IconCheck.vue";
     import IconClose from "@/components/shared/icons/IconClose.vue";
 
-    const template = defineModel<ResumeTemplate>({
+    const template = defineModel<TemplateModel>({
         required: true
     });
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
     import { applyFont, defaultFont, getSystemFonts, unloadFont } from "@/functions/Fonts";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
     import { Font } from "@/models/style/Font";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
@@ -10,7 +10,7 @@
     import IconSearch from "@/components/shared/icons/IconSearch.vue";
     import FontCard from "@/components/editor/sidebar/reusable/FontCard.vue";
 
-    const template = defineModel<ResumeTemplate>({
+    const template = defineModel<TemplateModel>({
         required: true
     });
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-    import { inject } from "vue";
-    import { editableInjectorKey } from "@/keys";
+    import { computed } from "vue";
+    import { injectEditorModel } from "@/functions/Editor";
+    import { EditorState } from "@/models/EditorState";
     import { Skill } from "@/models/resume/Skills";
     import IconDecrease from "@/components/shared/icons/IconDecrease.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
@@ -16,7 +17,9 @@
         maxLevel: number
     }>();
 
-    const editable: boolean = inject(editableInjectorKey, false);
+    const {editorState} = injectEditorModel();
+
+    const editable = computed(() => editorState.value === EditorState.edit);
 
     function decreaseSkillLevel(skill: Skill) {
         skill.level = Math.min(maxLevel, Math.max(0, skill.level - 1));

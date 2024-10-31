@@ -1,27 +1,22 @@
 <script setup lang="ts">
-    import { inject, Ref } from "vue";
-    import { autosaveInjectorKey } from "@/keys";
     import { useTemplates } from "@/composables/useTemplates";
     import { useNotifications } from "@/composables/useNotifications";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { injectSaveModel } from "@/functions/AutoSave";
+    import { TemplateModel } from "@/models/Template";
+    import { SaveState } from "@/models/SaveState";
     import EditorTab from "@/components/editor/sidebar/generic/EditorTab.vue";
     import EditorTabItem from "@/components/editor/sidebar/generic/EditorTabItem.vue";
     import TemplateImport from "@/components/editor/sidebar/items/TemplateImport.vue";
     import TemplateExport from "@/components/editor/sidebar/items/TemplateExport.vue";
-    import { SaveState } from "@/models/SaveState";
 
     const {setTemplate} = useTemplates();
     const {displayNotification} = useNotifications();
 
-    const template = defineModel<ResumeTemplate>({
+    const template = defineModel<TemplateModel>({
         required: true
     });
 
-    const {state, frequency, save} = inject<{
-        state?: Ref<SaveState>
-        frequency?: Ref<number>
-        save?: () => Promise<void>
-    }>(autosaveInjectorKey, {});
+    const {state, frequency, save} = injectSaveModel();
 
     async function saveCopy() {
         await setTemplate(template.value, true);
@@ -31,7 +26,7 @@
         });
     }
 
-    async function importTemplate(uploadedTemplate: ResumeTemplate) {
+    async function importTemplate(uploadedTemplate: TemplateModel) {
         await setTemplate(uploadedTemplate, true);
 
         displayNotification('success', {

@@ -25,7 +25,15 @@
     }
 
     .list-enter-from, .list-leave-to {
-        @apply opacity-0 translate-x-4;
+        @apply opacity-0;
+    }
+
+    .list-enter-from {
+        @apply -translate-x-4;
+    }
+
+    .list-leave-to {
+        @apply translate-x-4;
     }
 
     .list-leave-active {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { useNavigation } from "@/composables/useNavigation";
     import { useTemplates } from "@/composables/useTemplates";
-    import { ResumeTemplate } from "@/models/ResumeTemplate";
+    import { TemplateModel } from "@/models/Template";
     import TemplateCard from "@/components/templates/items/TemplateCard.vue";
     import TemplateLink from "@/components/templates/items/TemplateLink.vue";
 
@@ -13,7 +13,7 @@
         'Preset templates': await getPresetTemplates()
     };
 
-    async function loadToEditor(template: ResumeTemplate, isPreset: boolean) {
+    async function loadToEditor(template: TemplateModel, isPreset: boolean) {
         let id: string = template.id;
 
         // when selecting a preset, copy it and load the copy instead
