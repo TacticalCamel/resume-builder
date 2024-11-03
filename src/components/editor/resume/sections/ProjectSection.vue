@@ -22,12 +22,12 @@
 <template>
     <resume-section
         v-model="projects"
-        group="Project"
+        group="project"
         grid-columns="1fr"
         :gap-y="1.5"
     >
         <template #header>
-            <div class="italic text-foreground/60 font-light mb-4 text-sm flex" v-if="editable || (projects.disclaimer.length && projects.elements.length)">
+            <div class="italic text-foreground/70 font-light mb-4 text-sm flex" v-if="editable || (projects.disclaimer.length && projects.elements.length)">
                 <input-text v-model="projects.disclaimer" placeholder="Disclaimer about the projects"/>
             </div>
         </template>
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="flex">
-                    <input-text class="font-light text-foreground/60" v-model="project.description" placeholder="Short description of the project"/>
+                    <input-text class="font-light text-foreground/70" v-model="project.description" placeholder="Short description of the project"/>
                 </div>
             </div>
         </template>

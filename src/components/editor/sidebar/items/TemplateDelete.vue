@@ -61,14 +61,19 @@
 
 <template>
     <editor-tab-item title="Delete template">
-        <div class="flex justify-between">
-            <fade-transition>
-                <div v-if="!confirm" class="text-foreground/70 p-1">Permanently delete template</div>
-                <div v-else class="text-error p-1 font-medium">This action cannot be undone (or can it?)</div>
-            </fade-transition>
+        <div class="grid grid-cols-3 gap-2 items-start">
+            <div class="col-span-2 pt-1">
+                <fade-transition>
+                    <div v-if="!confirm" class="text-foreground/70">Permanently delete template</div>
+                    <div v-else class="flex flex-col gap-1">
+                        <span class="text-error">Are you sure?</span>
+                        <span class="text-foreground/70">The current template will be deleted</span>
+                    </div>
+                </fade-transition>
+            </div>
 
-            <div class="basis-1/3 grid gap-2">
-                <input-button class="outline outline-error !transition-all" :class="{'text-error bg-error/10 hover:!bg-error/20': confirm}" @click="deleteTemplate()">
+            <div class="grid gap-2">
+                <input-button class="outline outline-error transition-all" :class="{'text-error bg-error/10 hover:!bg-error/20': confirm}" @click="deleteTemplate()">
                     Delete
                 </input-button>
 

@@ -9,33 +9,57 @@ import { TemplateModel } from "@/models/Template";
  */
 export function useTemplates() {
     const db = useDatabase();
-    const table= db.templates;
+    const table = db.templates;
+
+    /**
+     * Arbitrary id designating the empty template.
+     */
     const fallbackId: string = 'fallback-template';
 
+    /**
+     * Save a template to the database.
+     * @param template The template to save.
+     * @param copy Set to true to save a copy of the template.
+     * @returns The id of the template. Use this id for further operations on the template.
+     */
     async function setTemplate(template: TemplateModel, copy: boolean = false): Promise<string> {
         // convert to a raw object to remove functions
         const raw: TemplateModel = deepToRaw(template);
 
         // generate a new id when copied
-        if(copy) {
+        if (copy || !raw.id) {
             raw.id = crypto.randomUUID();
         }
 
         // update in database
+        // this will modify an existing entity when the id already exists and insert a new one otherwise
         await table.put(raw, raw.id);
 
-        // return the id
+        // return the actual id
         return raw.id;
     }
 
+    /**
+     * Find a template in the database by id.
+     * @param id The id to find.
+     * @returns The template with the provided id if one exists, otherwise undefined.
+     */
     async function getTemplate(id: string): Promise<TemplateModel | undefined> {
         return table.get(id);
     }
 
+    /**
+     * Remove a template from the database by id.
+     * @param id The id of the template to remove.
+     */
     async function removeTemplate(id: string): Promise<void> {
         return table.delete(id);
     }
 
+    /**
+     * Create then return a new template with minimal information.
+     * @returns The empty template.
+     */
     async function getEmptyTemplate(): Promise<TemplateModel> {
         // get the empty preset template
         const emptyTemplate: TemplateModel = presetTemplates[0];
@@ -47,10 +71,18 @@ export function useTemplates() {
         return await getTemplate(id) ?? emptyTemplate;
     }
 
+    /**
+     * Get all preset templates.
+     * @returns A list containing all preset templates.
+     */
     async function getPresetTemplates(): Promise<TemplateModel[]> {
         return presetTemplates;
     }
 
+    /**
+     * Get all templates from the database.
+     * @returns A list containing all custom templates.
+     */
     async function getCustomTemplates(): Promise<TemplateModel[]> {
         return table.toArray();
     }

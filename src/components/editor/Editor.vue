@@ -88,22 +88,20 @@
 
         <div v-else-if="activeTemplateId" class="flex grow">
             <fade-transition>
-                <keep-alive>
-                    <suspense>
-                        <editor-body
-                            :template-id="activeTemplateId"
-                            :set-id="setTemplateId"
-                            :key="activeTemplateId"
-                        />
+                <suspense>
+                    <editor-body
+                        :template-id="activeTemplateId"
+                        :set-id="setTemplateId"
+                        :key="activeTemplateId"
+                    />
 
-                        <template #fallback>
-                            <div class="flex flex-col gap-4 grow justify-center items-center">
-                                <loading-spinner class="text-secondary"/>
-                                <span class="text-lg font-medium ps-2">Loading...</span>
-                            </div>
-                        </template>
-                    </suspense>
-                </keep-alive>
+                    <template #fallback>
+                        <div class="flex flex-col gap-4 grow justify-center items-center">
+                            <loading-spinner class="text-secondary"/>
+                            <span class="text-lg font-medium ps-2">Loading...</span>
+                        </div>
+                    </template>
+                </suspense>
             </fade-transition>
         </div>
 

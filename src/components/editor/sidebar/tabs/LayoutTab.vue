@@ -20,7 +20,7 @@
     function createContact(type: ContactType, name: string): LayoutItem {
         return {
             name: name,
-            group: 'Contact',
+            group: 'contact',
             clone: (): Contact => ({
                 id: crypto.randomUUID(),
                 type: type,
@@ -32,7 +32,7 @@
     function createSection(type: SectionType, name: string): LayoutItem {
         return {
             name: name,
-            group: 'Section',
+            group: 'section',
             clone: (): Section => ({
                 id: crypto.randomUUID(),
                 type: type,
@@ -72,7 +72,7 @@
         items: [
             {
                 name: 'Education',
-                group: 'Education',
+                group: 'education',
                 clone: (): Education => ({
                     id: crypto.randomUUID(),
                     school: '',
@@ -83,7 +83,7 @@
             },
             {
                 name: 'Experience',
-                group: 'Experience',
+                group: 'experience',
                 clone: (): Experience => ({
                     id: crypto.randomUUID(),
                     company: '',
@@ -96,7 +96,7 @@
             },
             {
                 name: 'Skill',
-                group: 'Skill',
+                group: 'skill',
                 clone: (): Skill => ({
                     id: crypto.randomUUID(),
                     name: '',
@@ -105,7 +105,7 @@
             },
             {
                 name: 'Skill category',
-                group: 'SkillCategory',
+                group: 'skill-category',
                 clone: (): SkillCategory => ({
                     id: crypto.randomUUID(),
                     title: '',
@@ -115,7 +115,7 @@
             },
             {
                 name: 'Language',
-                group: 'Language',
+                group: 'language',
                 clone: (): Language => ({
                     id: crypto.randomUUID(),
                     name: '',
@@ -124,7 +124,7 @@
             },
             {
                 name: 'Project',
-                group: 'Project',
+                group: 'project',
                 clone: (): Project => ({
                     id: crypto.randomUUID(),
                     description: '',
@@ -134,7 +134,7 @@
             },
             {
                 name: 'Technology',
-                group: 'Technology',
+                group: 'technology',
                 clone: (): Technology => ({
                     id: crypto.randomUUID(),
                     name: ''

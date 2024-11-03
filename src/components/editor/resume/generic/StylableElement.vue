@@ -4,8 +4,8 @@
     import { useNotifications } from "@/composables/useNotifications";
     import { EditorState } from "@/models/EditorState";
 
-    const {idSelector, classSelector} = defineProps<{
-        idSelector: string
+    const {id, classSelector} = defineProps<{
+        id: string
         classSelector: string
     }>();
 
@@ -20,7 +20,7 @@
             return true;
         }
 
-        return selectedElements.value.ids.some(element => element.id === idSelector);
+        return selectedElements.value.ids.some(element => element.id === id);
     });
 
     function onSelect(e: Event): void {
@@ -50,7 +50,7 @@
         }
 
         // if the element is not selected, select it by class
-        if(!selectedElements.value.ids.some(element => element.id === idSelector)) {
+        if(!selectedElements.value.ids.some(element => element.id === id)) {
             selectedElements.value.classes.push(classSelector);
         }
 
@@ -78,7 +78,7 @@
         }
 
         // search by id
-        const index: number = selectedElements.value.ids.findIndex(element => element.id === idSelector);
+        const index: number = selectedElements.value.ids.findIndex(element => element.id === id);
 
         // flip selection status
         if (index >= 0) {
@@ -87,14 +87,14 @@
         }
 
         selectedElements.value.ids.push({
-            id: idSelector,
+            id: id,
             class: classSelector
         });
     }
 </script>
 
 <template>
-    <div class="stylable-element" :class="[classSelector, {enabled, selected, 'highlight': highlightSelection}]" :id="idSelector" @click="onSelect">
+    <div class="stylable-element" :class="[classSelector, {enabled, selected, 'highlight': highlightSelection}]" :id="id" @click="onSelect">
         <slot/>
     </div>
 </template>
@@ -112,7 +112,7 @@
             }
 
             &.selected {
-                @apply outline-info outline;
+                @apply outline-info outline bg-info/5;
             }
         }
     }

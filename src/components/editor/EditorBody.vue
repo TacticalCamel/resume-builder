@@ -20,7 +20,7 @@
     const template = ref<TemplateModel>(await loadTemplate());
 
     const frequency = usePersistentRef<number>('autosave-frequency', 0);
-    const {state, save} = useAutoSave<TemplateModel | undefined>(template, frequency, saveTemplate);
+    const {state, save} = useAutoSave<TemplateModel>(template, frequency, saveTemplate);
 
     async function loadTemplate(): Promise<TemplateModel> {
         // loading an empty template
@@ -40,17 +40,12 @@
         }
 
         // value should never be undefined
-        // the event emitted above should cause the parent not to render this component
         return loadedTemplate ?? await getEmptyTemplate();
     }
 
-    async function saveTemplate(template: TemplateModel | undefined) {
-        if (!template) {
-            return;
-        }
-
+    async function saveTemplate(template: TemplateModel) {
         // TODO: intentional delay to see loading state, remove later
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 250));
 
         await setTemplate(template);
     }

@@ -2,6 +2,7 @@
     import { Contact } from "@/models/resume/Header";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
     import ContactCard from "@/components/editor/resume/reusable/ContactCard.vue";
+    import StylableElement from "@/components/editor/resume/generic/StylableElement.vue";
 
     const contacts = defineModel<Contact[]>({
         required: true
@@ -11,11 +12,13 @@
 <template>
     <draggable-list
         v-model="contacts"
-        group="Contact"
+        group="contact"
         class="text-sm grid gap-1.5"
     >
-        <template #item="{index}: {index: number}">
-            <contact-card v-model="contacts[index]" :key="contacts[index].id"/>
+        <template #item="{element: contact, index}: {element: Contact, index: number}">
+            <stylable-element :id="contact.id" class-selector="contact">
+                <contact-card v-model="contacts[index]" :key="contacts[index].id"/>
+            </stylable-element>
         </template>
 
         <template #empty>

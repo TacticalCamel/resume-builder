@@ -13,12 +13,13 @@ function getDefaultFont(): string {
         return 'sans-serif';
     }
 
+    // remove quotes from the string
     return value.replace(/"/g, '');
 }
 
 /**
  * Create a FontFace object from a font.
- * @param font
+ * @param font The font to use.
  */
 function createFontFace(font: Font): FontFace | undefined {
     // font data is from other sources
@@ -67,7 +68,7 @@ export function loadFont(font: Font): void {
 export function unloadFont(font: Font): void {
     const fontFace: FontFace | undefined = createFontFace(font);
 
-    if(fontFace) {
+    if (fontFace) {
         document.fonts.delete(fontFace);
     }
 }

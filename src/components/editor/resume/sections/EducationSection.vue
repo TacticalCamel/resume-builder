@@ -11,7 +11,7 @@
 <template>
     <resume-section
         v-model="educations"
-        group="Education"
+        group="education"
         :gap-x="2"
         :gap-y="1"
         :sub-grid-columns="2"
@@ -25,7 +25,7 @@
 
             <div class="flex flex-col items-start font-light">
                 <input-text v-model="education.school" placeholder="School name"/>
-                <input-text v-model="education.major" placeholder="Major" class="text-foreground/60"/>
+                <input-text v-model="education.major" placeholder="Major" class="text-foreground/70"/>
             </div>
         </template>
     </resume-section>

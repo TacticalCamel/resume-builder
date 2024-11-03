@@ -37,7 +37,7 @@
 </script>
 
 <template>
-    <stylable-element v-if="editable || section.elements.length" class="print:break-inside-avoid" class-selector="section" :id-selector="section.id">
+    <stylable-element v-if="editable || section.elements.length" class="print:break-inside-avoid" class-selector="section" :id="section.id">
         <div class="max-w-[720px] mx-auto">
             <div class="flex flex-col items-start">
                 <input-text v-model="section.title" placeholder="Section title" class="uppercase text-2xl"/>
@@ -53,7 +53,7 @@
                 :item-style="innerGridStyle"
             >
                 <template #item="{element, index}: {element: T, index: number}">
-                    <stylable-element :class-selector="group" :id-selector="element.id" :style="innerGridStyle">
+                    <stylable-element :class-selector="group" :id="element.id" :style="innerGridStyle">
                         <slot name="item" :element="element" :index="index"/>
                     </stylable-element>
                 </template>

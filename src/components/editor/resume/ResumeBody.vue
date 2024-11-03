@@ -31,7 +31,7 @@
 <template>
     <draggable-list
         v-model="resume.sections"
-        group="Section"
+        group="section"
         class="grid max-w-[960px] mx-auto gap-12"
     >
         <template #header>

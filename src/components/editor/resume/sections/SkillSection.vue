@@ -12,7 +12,7 @@
 <template>
     <resume-section
         v-model="skills"
-        group="SkillCategory"
+        group="skill-category"
         grid-columns="1fr 1fr"
         :gap-x="2"
         :gap-y="1"

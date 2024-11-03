@@ -2,6 +2,7 @@
     import { Technology } from "@/models/resume/Technologies";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/editor/resume/generic/DraggableList.vue";
+    import StylableElement from "@/components/editor/resume/generic/StylableElement.vue";
 
     const technologies = defineModel<Technology[]>({
         required: true
@@ -11,13 +12,15 @@
 <template>
     <draggable-list
         v-model="technologies"
-        group="Technology"
+        group="technology"
         class="flex flex-wrap gap-2 text-sm items-start"
     >
         <template #item="{element: technology}">
-            <div class="px-2 rounded bg-primary font-semibold transition-all text-nowrap">
-                <input-text v-model="technology.name" placeholder="Technology"/>
-            </div>
+            <stylable-element :id="technology.id" class-selector="technology">
+                <div class="px-2 rounded bg-primary font-semibold text-nowrap">
+                    <input-text v-model="technology.name" placeholder="Technology"/>
+                </div>
+            </stylable-element>
         </template>
 
         <template #empty>

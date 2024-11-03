@@ -12,7 +12,7 @@ export const defaultThemes = {
 }
 
 /**
- *
+ * Find the inherited value of a color.
  * @param color The color to check.
  * @param theme The current theme.
  * @param themes The list of themes to search.

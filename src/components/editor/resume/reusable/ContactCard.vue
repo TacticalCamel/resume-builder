@@ -47,7 +47,7 @@
     });
 
     const url = computed<string | undefined>(() => {
-        if(editorState.value !== EditorState.view) {
+        if (editorState.value !== EditorState.view) {
             return undefined;
         }
 
@@ -63,10 +63,8 @@
 </script>
 
 <template>
-    <div class="p-0.5">
-        <a class="flex items-center hover:transition-colors gap-2 [&:not[href='']]:hover:text-info" :href="url">
-            <component :is="icon" class="size-5"/>
-            <input-text v-model="contact.value" :placeholder="placeholder"/>
-        </a>
-    </div>
+    <a class="flex items-center hover:transition-colors gap-2 [&:not[href='']]:hover:text-info p-0.5" :href="url">
+        <component :is="icon" class="size-5"/>
+        <input-text v-model="contact.value" :placeholder="placeholder"/>
+    </a>
 </template>
