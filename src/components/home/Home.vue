@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import HeroSection from "@/components/home/sections/HeroSection.vue";
-    import VisualSection from "@/components/home/sections/VisualSection.vue";
-    import FooterSection from "@/components/home/sections/FooterSection.vue";
-    import FeatureCard from "@/components/home/reusable/FeatureCard.vue";
+    import HeroSection from "@/components/home/SectionHero.vue";
+    import VisualSection from "@/components/home/SectionVisual.vue";
+    import FooterSection from "@/components/home/SectionFooter.vue";
+    import FeatureCard from "@/components/home/FeatureCard.vue";
 </script>
 
 <template>

@@ -27,9 +27,6 @@
 
     html {
         --font-family: "Inter";
-        --page-size: A4;
-        --page-orientation: portrait;
-        --content-scale: 1;
 
         font-family: var(--font-family), sans-serif;
     }
@@ -44,7 +41,7 @@ body {
 }
 
 .scrollbar::-webkit-scrollbar {
-    @apply w-3.5;
+    @apply w-3.5 print:hidden;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {

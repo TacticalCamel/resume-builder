@@ -2,8 +2,8 @@
     import { useNavigation } from "@/composables/useNavigation";
     import { useTemplates } from "@/composables/useTemplates";
     import { TemplateModel } from "@/models/Template";
-    import TemplateCard from "@/components/templates/items/TemplateCard.vue";
-    import TemplateLink from "@/components/templates/items/TemplateLink.vue";
+    import TemplateCard from "@/components/templates/TemplateCard.vue";
+    import TemplateLink from "@/components/templates/TemplateLink.vue";
 
     const {navigateTo} = useNavigation();
     const {getPresetTemplates, getCustomTemplates, setTemplate} = useTemplates();
@@ -45,7 +45,10 @@
         <div class="flex flex-col gap-6 pt-4 sticky top-0">
             <div v-for="(group, name) in groups">
                 <div class="font-semibold uppercase">{{ name }}</div>
-                <template-link v-for="template in group" :template/>
+                <template-link
+                    v-for="template in group"
+                    :template="template"
+                />
             </div>
         </div>
     </div>

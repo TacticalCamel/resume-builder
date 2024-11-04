@@ -8,8 +8,8 @@
     import { provideEditorModel } from "@/functions/Editor";
     import { TemplateModel } from "@/models/Template";
     import { EditorState } from "@/models/EditorState";
-    import EditorSidebar from "@/components/editor/sidebar/EditorSidebar.vue";
-    import Resume from "@/components/editor/resume/Resume.vue";
+    import EditorSidebar from "@/components/editor/EditorSidebar.vue";
+    import Resume from "@/components/editor/Resume.vue";
 
     const {templateId, setId} = defineProps<{
         templateId: string
@@ -70,7 +70,7 @@
 
     provideEditorModel({
         editorState: ref(EditorState.edit),
-        selectedElements: ref({
+        selection: ref({
             ids: [],
             classes: []
         }),
@@ -92,7 +92,7 @@
         <div class="relative grow">
             <resume
                 v-model="template"
-                class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip print:relative print:h-full"
+                class="absolute inset-0 scrollbar overflow-y-scroll overflow-x-clip print:relative"
             />
         </div>
     </div>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import { ref, onBeforeMount } from "vue";
+    import { onBeforeMount, ref } from "vue";
     import { useNavigation } from "@/composables/useNavigation";
     import { usePersistentRef } from "@/composables/usePersistentRef";
     import { useTemplates } from "@/composables/useTemplates";
-    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
+    import TransitionFade from "@/components/shared/TransitionFade.vue";
     import EditorBody from "@/components/editor/EditorBody.vue";
     import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 
@@ -72,7 +72,7 @@
 </script>
 
 <template>
-    <fade-transition>
+    <transition-fade>
         <div v-if="loadingTemplateId" class="flex grow bg-background/60 z-10 flex-col justify-center items-center">
             <div class="bg-background px-12 py-8 rounded-lg border-2 border-foreground/30 font-medium">
                 <div class="text-center mb-6">
@@ -87,7 +87,7 @@
         </div>
 
         <div v-else-if="activeTemplateId" class="flex grow">
-            <fade-transition>
+            <transition-fade>
                 <suspense>
                     <editor-body
                         :template-id="activeTemplateId"
@@ -102,7 +102,7 @@
                         </div>
                     </template>
                 </suspense>
-            </fade-transition>
+            </transition-fade>
         </div>
 
         <div v-else class="absolute inset-0 flex flex-col justify-center items-center">
@@ -119,5 +119,5 @@
                 </div>
             </div>
         </div>
-    </fade-transition>
+    </transition-fade>
 </template>

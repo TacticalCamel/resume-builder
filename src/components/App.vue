@@ -5,10 +5,10 @@
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/templates/Templates.vue";
-    import NotFound from "@/components/shared/NotFound.vue";
-    import Navigation from "@/components/shared/navigation/Navigation.vue";
-    import FadeTransition from "@/components/shared/transition/FadeTransition.vue";
-    import NotificationArea from "@/components/shared/notifications/NotificationArea.vue";
+    import RouteNotFound from "@/components/shared/RouteNotFound.vue";
+    import Navigation from "@/components/shared/Navigation.vue";
+    import TransitionFade from "@/components/shared/TransitionFade.vue";
+    import NotificationArea from "@/components/shared/NotificationArea.vue";
 
     const {getActiveView, parameters} = useNavigation();
 
@@ -27,9 +27,9 @@
     <main class="relative min-h-full flex flex-col">
         <navigation/>
 
-        <fade-transition>
-            <component :is="getActiveView(routes) ?? NotFound" :route-parameters="parameters"/>
-        </fade-transition>
+        <transition-fade>
+            <component :is="getActiveView(routes) ?? RouteNotFound" :route-parameters="parameters"/>
+        </transition-fade>
 
         <notification-area/>
     </main>
