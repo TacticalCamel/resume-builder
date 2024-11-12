@@ -2,7 +2,7 @@
     import { unpack } from "msgpackr";
     import { useTemplates } from "@/composables/useTemplates";
     import { useNotifications } from "@/composables/useNotifications";
-    import { injectEditorModel } from "@/functions/Editor";
+    import { useEditor } from "@/composables/useEditor";
     import { TemplateModel } from "@/models/Template";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
@@ -10,7 +10,7 @@
 
     const {setTemplate} = useTemplates();
     const {displayNotification, removeNotification} = useNotifications();
-    const {loadTemplate} = injectEditorModel();
+    const {loadTemplate} = useEditor();
 
     async function uploadFile(fileContents: string | ArrayBuffer) {
         if (typeof fileContents === 'string') {

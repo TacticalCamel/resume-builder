@@ -1,24 +1,36 @@
 import Dexie, { EntityTable } from "dexie";
 import { TemplateModel } from "@/models/Template";
 
-// use a single database instance
-let db: Database | undefined;
+/**
+ * The database instance used by the app.
+ */
+let database: Database | undefined;
 
 /**
- * This composable provides access to the indexed db instance used by the app.
+ * This composable provides access to indexedDB tables.
  */
-export function useDatabase(): Database {
-    if (!db) {
-        db = new Dexie('resume-builder-db') as Database;
+export function useDatabase(): DatabaseSchema {
+    // initialize when accessed the first time
+    database ??= initializeDb();
+
+    function initializeDb(): Database {
+        const db: Database = new Dexie('resume-builder-db') as Database;
 
         db.version(2).stores({
             templates: 'id'
         });
+
+        return db;
     }
 
-    return db;
+    // expose all tables
+    return {
+        templates: database.templates
+    };
 }
 
-type Database = Dexie & {
+type DatabaseSchema = {
     templates: EntityTable<TemplateModel, 'id'>
 }
+
+type Database = Dexie & DatabaseSchema;

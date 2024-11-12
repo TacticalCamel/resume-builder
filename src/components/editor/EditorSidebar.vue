@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { usePersistentRef } from "@/composables/usePersistentRef";
-    import { injectSaveModel } from "@/functions/AutoSave";
+    import { useLocalstorageRef } from "@/composables/useLocalstorageRef";
+    import { useEditor } from "@/composables/useEditor";
     import { TemplateModel } from "@/models/Template";
     import { EditorTabInfo } from "@/models/bindings/EditorTabInfo";
     import EditorSidebarStatus from "@/components/editor/EditorSidebarStatus.vue";
@@ -21,9 +21,9 @@
         required: true
     });
 
-    const {state} = injectSaveModel();
+    const {autosaveState} = useEditor();
 
-    const activeTab = usePersistentRef<number>('active-tab', 0);
+    const activeTab = useLocalstorageRef<number>('active-tab', 0);
 
     const activeTabComponent = computed(() => {
         const index = activeTab.value;
@@ -91,7 +91,7 @@
                 </transition-fade>
             </div>
             <div class="px-2 py-0.5 bg-foreground/5">
-                <editor-sidebar-status :state="state" :id="template.id"/>
+                <editor-sidebar-status :state="autosaveState" :id="template.id"/>
             </div>
         </div>
     </div>

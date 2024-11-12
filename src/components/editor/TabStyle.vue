@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { injectEditorModel } from "@/functions/Editor";
-    import { EditorState } from "@/models/EditorState";
+    import { useEditor } from "@/composables/useEditor";
+    import { EditorMode } from "@/models/editor/EditorMode";
     import { TemplateModel } from "@/models/Template";
     import EditorSidebarTab from "@/components/editor/EditorSidebarTab.vue";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
@@ -9,38 +9,30 @@
     import InputButton from "@/components/shared/form/InputButton.vue";
     import InputToggle from "@/components/shared/form/InputToggle.vue";
 
-    const {editorState, selection, isGroupSelection, highlightSelection} = injectEditorModel();
+    const {selectable, groupSelection, highlightSelection, activeSelector, clearSelection, setMode} = useEditor();
 
     const template = defineModel<TemplateModel>({
         required: true
     });
 
-    const hasSelectedElements = computed(() => selection.value.classes.length || selection.value.ids.length);
+    const hasSelectedElements = computed(() => activeSelector.value.types.length || activeSelector.value.ids.length);
 
     const name = ref<string>('');
 
-    function startSelection(): void {
-        editorState.value = EditorState.select;
-    }
-
     function stopSelection(cancel: boolean): void {
-        selection.value.ids = [];
-        selection.value.classes = [];
+        clearSelection();
 
         if (cancel) {
-            editorState.value = EditorState.edit;
+            setMode(EditorMode.edit);
         }
     }
 
     function confirmSelection(): void {
-        const classes: string[] = selection.value.classes;
-        const ids: string[] = selection.value.ids.map(element => element.id);
-
         template.value.styles.push({
             name: name.value.length ? name.value : undefined,
             selector: {
-                classes,
-                ids
+                types: activeSelector.value.types,
+                ids: activeSelector.value.ids
             },
             styles: {}
         });
@@ -53,20 +45,15 @@
     <editor-sidebar-tab>
         <editor-sidebar-tab-item title="Create style">
             <transition-fade>
-                <div v-if="editorState !== EditorState.select" class="flex gap-2 items-center">
-                    <div class="text-foreground/70">Select elements your custom style will be applied to</div>
-                    <input-button class="outline-transparent" @click="startSelection()">Start selection</input-button>
-                </div>
-
-                <div v-else class="grid gap-4">
+                <div v-if="selectable" class="grid gap-4">
                     <div class="grid gap-2">
                         <div class="flex items-center">
                             <div class="text-foreground/70 me-auto">Selection mode</div>
                             <div class="rounded bg-foreground/10 grid grid-cols-2 relative text-foreground">
-                                <button @click="isGroupSelection = false" class="px-2 py-1 z-10">Individual</button>
-                                <button @click="isGroupSelection = true" class="px-2 py-1 z-10">Group</button>
+                                <button @click="groupSelection = false" class="px-2 py-1 z-10">Individual</button>
+                                <button @click="groupSelection = true" class="px-2 py-1 z-10">Group</button>
 
-                                <div class="absolute inset-y-0 w-1/2 rounded bg-primary transition-all" :class="isGroupSelection ? 'left-1/2' : 'left-0'"/>
+                                <div class="absolute inset-y-0 w-1/2 rounded bg-primary transition-all" :class="groupSelection ? 'left-1/2' : 'left-0'"/>
                             </div>
                         </div>
 
@@ -82,11 +69,11 @@
                         <div class="text-foreground/70 py-1 border-y border-transparent">Selection</div>
                         <div class="flex flex-wrap gap-1 bg-foreground/5 border border-foreground/10 p-1 rounded items-center">
                             <template v-if="hasSelectedElements">
-                                <span v-if="selection.ids.length" class="text-xs rounded px-1 py-px border border-info border-dashed font-medium">
-                                    {{ selection.ids.length }} unique element{{ selection.ids.length > 1 ? 's' : '' }}
+                                <span v-if="activeSelector.ids.length" class="text-xs rounded px-1 py-px border border-info border-dashed font-medium">
+                                    {{ activeSelector.ids.length }} unique element{{ activeSelector.ids.length > 1 ? 's' : '' }}
                                 </span>
-                                <span v-for="element in selection.classes" class="text-xs rounded px-1 py-px border border-info font-medium">
-                                    {{ element }}
+                                <span v-for="type in activeSelector.types" class="text-xs rounded px-1 py-px border border-info font-medium">
+                                    {{ type }}
                                 </span>
                             </template>
                             <span class="text-xs text-foreground/60 p-0.5" v-else>
@@ -109,6 +96,11 @@
                         <input-button class="outline outline-error" @click="stopSelection(true)">Cancel</input-button>
                     </div>
                 </div>
+
+                <div v-else class="flex gap-2 items-center">
+                    <div class="text-foreground/70">Select elements your custom style will be applied to</div>
+                    <input-button class="outline-transparent" @click="setMode(EditorMode.select)">Start selection</input-button>
+                </div>
             </transition-fade>
         </editor-sidebar-tab-item>
 
@@ -117,7 +109,7 @@
                 <div v-for="style in template.styles" class="rounded border border-foreground/30 grid gap-2 p-1">
                     <div class="flex flex-wrap gap-2">
                         <div v-for="id in style.selector.ids">#{{ id.slice(0, 8) }}</div>
-                        <div v-for="clas in style.selector.classes">.{{ clas }}</div>
+                        <div v-for="type in style.selector.types">.{{ type }}</div>
                     </div>
 
                     <div class="text-foreground/70">

@@ -1,100 +1,52 @@
 <script setup lang="ts">
-    import { computed } from "vue";
-    import { injectEditorModel } from "@/functions/Editor";
-    import { useNotifications } from "@/composables/useNotifications";
-    import { EditorState } from "@/models/EditorState";
+    import { computed, onUnmounted } from "vue";
+    import { useEditor } from "@/composables/useEditor";
 
-    const {id, classSelector} = defineProps<{
-        id: string
-        classSelector: string
+    const {id, type} = defineProps<{
+        id?: string
+        type: string
     }>();
 
-    const {displayNotification} = useNotifications();
+    const {selectable, registerElement, unregisterElement, toggleSelection, highlightSelection, activeSelector} = useEditor();
 
-    const {editorState, selection, isGroupSelection, highlightSelection} = injectEditorModel();
+    const {element, selected} = createElement();
 
-    const enabled = computed(() => editorState.value === EditorState.select);
+    function createElement() {
+        const element = computed(() => ({
+            type: type,
+            id: id ?? type
+        }));
 
-    const selected = computed(() => {
-        if (selection.value.classes.includes(classSelector)) {
-            return true;
-        }
+        registerElement(element.value);
 
-        return selection.value.ids.some(element => element.id === id);
-    });
+        const selected = computed(() => {
+            return activeSelector.value.ids.includes(element.value.id) || activeSelector.value.types.includes(element.value.type);
+        });
 
-    function onSelect(e: Event): void {
-        if (!enabled.value) {
+        return {
+            element,
+            selected
+        };
+    }
+
+    function onClick(e: Event): void {
+        if (!selectable.value) {
             return;
         }
 
         e.preventDefault();
         e.stopPropagation();
 
-        if (isGroupSelection.value) {
-            insertByClass();
-        }
-        else {
-            insertById();
-        }
+        toggleSelection(element.value);
     }
 
-    function insertByClass(): void {
-        // check whether the class is in the selection
-        const index: number = selection.value.classes.indexOf(classSelector);
-
-        // already selected, remove it
-        if (index >= 0) {
-            selection.value.classes.splice(index, 1);
-            return;
-        }
-
-        // if the element is not selected, select it by class
-        if(!selection.value.ids.some(element => element.id === id)) {
-            selection.value.classes.push(classSelector);
-        }
-
-        // remove all ids with the same class
-        selection.value.ids = selection.value.ids.filter(element => element.class !== classSelector);
-    }
-
-    function insertById(): void {
-        // when the element has its class selected, it cannot be selected or unselected by id
-        if (selection.value.classes.includes(classSelector)) {
-            displayNotification('info', {
-                message: 'Unselecting grouped elements individually are not yet supported',
-                duration: 8000,
-                actions: [
-                    {
-                        text: 'Switch to group mode',
-                        onClick: () => {
-                            isGroupSelection.value = true;
-                        }
-                    }
-                ]
-            });
-
-            return;
-        }
-
-        // search by id
-        const index: number = selection.value.ids.findIndex(element => element.id === id);
-
-        // flip selection status
-        if (index >= 0) {
-            selection.value.ids.splice(index, 1);
-            return;
-        }
-
-        selection.value.ids.push({
-            id: id,
-            class: classSelector
-        });
-    }
+    onUnmounted(() => {
+        unregisterElement(element.value);
+    });
 </script>
 
 <template>
-    <div class="stylable-element" :class="[classSelector, {enabled, selected, 'highlight': highlightSelection}]" :id="id" @click="onSelect">
+    <div class="stylable-element" :class="[element.type, {selectable, selected, 'highlight': highlightSelection}]" :id="element.id" @click="onClick">
         <slot/>
     </div>
 </template>
@@ -104,7 +56,7 @@
     .stylable-element {
         @apply outline-transparent transition-[outline-color] -outline-offset-1;
 
-        &.enabled {
+        &.selectable {
             @apply select-none rounded outline-1;
 
             &.highlight {

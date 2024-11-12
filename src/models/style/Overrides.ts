@@ -5,6 +5,6 @@ export interface StyleOverride {
 }
 
 export interface StyleSelector {
-    classes: string[]
+    types: string[]
     ids: string[]
 }

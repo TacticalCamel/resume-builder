@@ -2,7 +2,7 @@
     import { ref } from "vue";
     import { useTemplates } from "@/composables/useTemplates";
     import { useNotifications } from "@/composables/useNotifications";
-    import { injectEditorModel } from "@/functions/Editor";
+    import { useEditor } from "@/composables/useEditor";
     import { TemplateModel } from "@/models/Template";
     import { Notification } from "@/models/Notification";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
@@ -14,7 +14,7 @@
     }>();
 
     const {removeTemplate, setTemplate} = useTemplates();
-    const {loadTemplate} = injectEditorModel();
+    const {loadTemplate} = useEditor();
     const {displayNotification, removeNotification} = useNotifications();
 
     const confirm = ref<boolean>(false);

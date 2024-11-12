@@ -1,8 +1,7 @@
 <script setup lang="ts" generic="T extends UniqueId">
     import { computed } from "vue";
-    import { injectEditorModel } from "@/functions/Editor";
+    import { useEditor } from "@/composables/useEditor";
     import { Section } from "@/models/resume/Resume";
-    import { EditorState } from "@/models/EditorState";
     import { UniqueId } from "@/models/UniqueId";
     import InputText from "@/components/shared/form/InputText.vue";
     import DraggableList from "@/components/shared/DraggableList.vue";
@@ -20,6 +19,8 @@
         required: true
     });
 
+    const {editable} = useEditor();
+
     const outerGridStyle = computed(() => ({
         gridTemplateColumns: section.value.elements.length ? gridColumns : '1fr',
         gap: `${gapY}rem ${gapX}rem`
@@ -30,14 +31,10 @@
         gridTemplateColumns: 'subgrid',
         gridColumn: `span ${subGridColumns} / span ${subGridColumns}`,
     }));
-
-    const {editorState} = injectEditorModel();
-
-    const editable = computed(() => editorState.value === EditorState.edit);
 </script>
 
 <template>
-    <stylable-element v-if="editable || section.elements.length" class="print:break-inside-avoid" class-selector="section" :id="section.id">
+    <stylable-element v-if="editable || section.elements.length" class="print:break-inside-avoid" type="section" :id="section.id">
         <div class="max-w-[720px] mx-auto">
             <div class="flex flex-col items-start">
                 <input-text v-model="section.title" placeholder="Section title" class="uppercase text-2xl"/>
@@ -53,7 +50,7 @@
                 :item-style="innerGridStyle"
             >
                 <template #item="{element, index}: {element: T, index: number}">
-                    <stylable-element :class-selector="group" :id="element.id" :style="innerGridStyle">
+                    <stylable-element :type="group" :id="element.id" :style="innerGridStyle">
                         <slot name="item" :element="element" :index="index"/>
                     </stylable-element>
                 </template>

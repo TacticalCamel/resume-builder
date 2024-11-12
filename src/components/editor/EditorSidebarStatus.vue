@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { SaveState } from "@/models/SaveState";
+    import { SaveState } from "@/models/editor/SaveState";
     import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
     import IconWarning from "@/components/shared/icons/IconWarning.vue";
     import IconCheck from "@/components/shared/icons/IconCheck.vue";

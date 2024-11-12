@@ -8,8 +8,7 @@ import { TemplateModel } from "@/models/Template";
  * This composable allows to query and modify locally saved templates.
  */
 export function useTemplates() {
-    const db = useDatabase();
-    const table = db.templates;
+    const {templates} = useDatabase();
 
     /**
      * Arbitrary id designating the empty template.
@@ -33,7 +32,7 @@ export function useTemplates() {
 
         // update in database
         // this will modify an existing entity when the id already exists and insert a new one otherwise
-        await table.put(raw, raw.id);
+        await templates.put(raw, raw.id);
 
         // return the actual id
         return raw.id;
@@ -45,7 +44,7 @@ export function useTemplates() {
      * @returns The template with the provided id if one exists, otherwise undefined.
      */
     async function getTemplate(id: string): Promise<TemplateModel | undefined> {
-        return table.get(id);
+        return templates.get(id);
     }
 
     /**
@@ -53,7 +52,7 @@ export function useTemplates() {
      * @param id The id of the template to remove.
      */
     async function removeTemplate(id: string): Promise<void> {
-        return table.delete(id);
+        return templates.delete(id);
     }
 
     /**
@@ -84,7 +83,7 @@ export function useTemplates() {
      * @returns A list containing all custom templates.
      */
     async function getCustomTemplates(): Promise<TemplateModel[]> {
-        return table.toArray();
+        return templates.toArray();
     }
 
     return {

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-    import { computed } from "vue";
-    import { injectEditorModel } from "@/functions/Editor";
-    import { EditorState } from "@/models/EditorState";
+    import { useEditor } from "@/composables/useEditor";
     import { Skill } from "@/models/resume/Skills";
     import IconDecrease from "@/components/shared/icons/IconDecrease.vue";
     import DraggableList from "@/components/shared/DraggableList.vue";
@@ -18,9 +16,7 @@
         maxLevel: number
     }>();
 
-    const {editorState} = injectEditorModel();
-
-    const editable = computed(() => editorState.value === EditorState.edit);
+    const {editable} = useEditor();
 
     function decreaseSkillLevel(skill: Skill) {
         skill.level = Math.min(maxLevel, Math.max(0, skill.level - 1));
@@ -38,7 +34,7 @@
         class="grid gap-1"
     >
         <template #item="{element: skill}: {element: Skill}">
-            <stylable-element class="flex gap-3 text-nowrap px-0.5 items-center skill-row" class-selector="skill" :id="skill.id">
+            <stylable-element class="flex gap-3 text-nowrap px-0.5 items-center skill-row" type="skill" :id="skill.id">
                 <resume-section-skills-rating :value="skill.level" :max="maxLevel"/>
 
                 <input-text v-model="skill.name" class="font-light skill-text" placeholder="Skill name"/>

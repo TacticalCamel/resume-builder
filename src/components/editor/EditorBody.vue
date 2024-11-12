@@ -1,54 +1,80 @@
 <script setup async lang="ts">
     import { onMounted, onUnmounted, ref } from "vue";
     import { loadFont, unloadFont } from "@/functions/Fonts";
+    import { initializeEditor } from "@/composables/useEditor";
     import { useTemplates } from "@/composables/useTemplates";
-    import { useAutoSave } from "@/composables/useAutoSave";
-    import { usePersistentRef } from "@/composables/usePersistentRef";
-    import { provideSaveModel } from "@/functions/AutoSave";
-    import { provideEditorModel } from "@/functions/Editor";
+    import { useAutosave } from "@/composables/useAutosave";
+    import { useLocalstorageRef } from "@/composables/useLocalstorageRef";
     import { TemplateModel } from "@/models/Template";
-    import { EditorState } from "@/models/EditorState";
+    import { EditorMode } from "@/models/editor/EditorMode";
     import EditorSidebar from "@/components/editor/EditorSidebar.vue";
     import Resume from "@/components/editor/Resume.vue";
 
     const {templateId, setId} = defineProps<{
+        // The id of the currently displayed template.
         templateId: string
+
+        // Callback to modify templateId.
         setId: (id: string | undefined) => void
     }>();
 
     const {getTemplate, setTemplate, getEmptyTemplate, fallbackId} = useTemplates();
+
+    /**
+     * The currently displayed template as a reactive object.
+     */
     const template = ref<TemplateModel>(await loadTemplate());
 
-    const frequency = usePersistentRef<number>('autosave-frequency', 0);
-    const {state, save} = useAutoSave<TemplateModel>(template, frequency, saveTemplate);
+    /**
+     * The frequency of template autosave in milliseconds.
+     * This preference is not part of the template, but remembered by storing it in localstorage.
+     */
+    const frequency = useLocalstorageRef<number>('autosave-frequency', 0);
 
+    /**
+     * Set up template autosave.
+     */
+    const {state, save} = useAutosave(template, frequency, setTemplate);
+
+    /**
+     * Load a template from the database by id.
+     * Has the side effect of calling setId in cases when the given id can not be loaded.
+     */
     async function loadTemplate(): Promise<TemplateModel> {
-        // loading an empty template
+        // special case: id matches the fallback id, need to load the empty preset
         if (templateId === fallbackId) {
+            // initialize an empty template
             const emptyTemplate: TemplateModel = await getEmptyTemplate();
 
+            // when loading a preset, it gets copied as a custom template, which now has a different id
+            // calling setId informs the parent component that the displayed content id changed
             setId(emptyTemplate.id);
 
             return emptyTemplate;
         }
 
+        // general case: load normally
         const loadedTemplate: TemplateModel | undefined = await getTemplate(templateId);
 
-        // loading failed, unset the id
+        // template does not exist, unset the id
         if (!loadedTemplate) {
             setId(undefined);
+
+            // this value should never be used
+            // unsetting the id should cause this component to not render
+            return await getEmptyTemplate();
         }
 
-        // value should never be undefined
-        return loadedTemplate ?? await getEmptyTemplate();
+        return loadedTemplate;
     }
 
-    async function saveTemplate(template: TemplateModel) {
-        // TODO: intentional delay to see loading state, remove later
-        await new Promise(resolve => setTimeout(resolve, 250));
-
-        await setTemplate(template);
-    }
+    initializeEditor({
+        mode: EditorMode.edit,
+        load: setId,
+        save: save,
+        frequency,
+        state,
+    });
 
     onMounted(() => {
         for (const font of template.value.fonts) {
@@ -60,23 +86,6 @@
         for (const font of template.value.fonts) {
             unloadFont(font);
         }
-    });
-
-    provideSaveModel({
-        frequency,
-        state,
-        save
-    });
-
-    provideEditorModel({
-        editorState: ref(EditorState.edit),
-        selection: ref({
-            ids: [],
-            classes: []
-        }),
-        isGroupSelection: ref(false),
-        highlightSelection: ref(true),
-        loadTemplate: setId
     });
 </script>
 

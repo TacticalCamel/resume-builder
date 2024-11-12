@@ -1,13 +1,9 @@
 <script setup lang="ts">
-    import { computed } from "vue";
-    import { injectEditorModel } from "@/functions/Editor";
-    import { EditorState } from "@/models/EditorState";
+    import { useEditor } from "@/composables/useEditor";
 
     const model = defineModel<string>();
 
-    const {editorState} = injectEditorModel();
-
-    const editable = computed(() => editorState.value === EditorState.edit);
+    const {editable} = useEditor();
 
     defineOptions({
         inheritAttrs: false

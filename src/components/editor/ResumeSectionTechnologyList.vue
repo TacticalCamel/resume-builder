@@ -16,7 +16,7 @@
         class="flex flex-wrap gap-2 text-sm items-start"
     >
         <template #item="{element: technology}">
-            <stylable-element :id="technology.id" class-selector="technology">
+            <stylable-element :id="technology.id" type="technology">
                 <div class="px-2 rounded bg-primary font-semibold text-nowrap">
                     <input-text v-model="technology.name" placeholder="Technology"/>
                 </div>

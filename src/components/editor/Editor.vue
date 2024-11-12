@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { onBeforeMount, ref } from "vue";
     import { useNavigation } from "@/composables/useNavigation";
-    import { usePersistentRef } from "@/composables/usePersistentRef";
+    import { useLocalstorageRef } from "@/composables/useLocalstorageRef";
     import { useTemplates } from "@/composables/useTemplates";
     import TransitionFade from "@/components/shared/TransitionFade.vue";
     import EditorBody from "@/components/editor/EditorBody.vue";
@@ -16,7 +16,7 @@
 
     // the id of the currently displayed template in the editor, undefined if empty
     // persist between page reloads and sessions
-    const activeTemplateId = usePersistentRef<string | undefined>('active-template', undefined);
+    const activeTemplateId = useLocalstorageRef<string | undefined>('active-template', undefined);
 
     // the id of the template that is attempting to load, undefined if there is no loading action
     // need to declare this separately from the current id, since we need a dialog to confirm or cancel overriding the current template
@@ -113,9 +113,7 @@
                 <div class="flex items-center gap-4 text-sm text-nowrap">
                     <button @click="initializeEmpty()" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Create a new one</button>
                     <span>or</span>
-                    <button @click="navigateTo('/templates')" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Browse
-                        templates
-                    </button>
+                    <button @click="navigateTo('/templates')" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Browse templates</button>
                 </div>
             </div>
         </div>

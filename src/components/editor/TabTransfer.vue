@@ -1,9 +1,9 @@
 <script setup lang="ts">
+    import { useEditor } from "@/composables/useEditor";
     import { useTemplates } from "@/composables/useTemplates";
     import { useNotifications } from "@/composables/useNotifications";
-    import { injectSaveModel } from "@/functions/AutoSave";
     import { TemplateModel } from "@/models/Template";
-    import { SaveState } from "@/models/SaveState";
+    import { SaveState } from "@/models/editor/SaveState";
     import EditorSidebarTab from "@/components/editor/EditorSidebarTab.vue";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
     import TabTransferImport from "@/components/editor/TabTransferImport.vue";
@@ -13,12 +13,11 @@
 
     const {setTemplate} = useTemplates();
     const {displayNotification} = useNotifications();
+    const {autosaveFrequency, autosaveState, saveTemplate} = useEditor();
 
     const template = defineModel<TemplateModel>({
         required: true
     });
-
-    const {state, frequency, save} = injectSaveModel();
 
     async function saveCopy() {
         await setTemplate(template.value, true);
@@ -54,14 +53,14 @@
         <editor-sidebar-tab-item title="save options">
             <div class="grid grid-cols-2 gap-2 items-center">
                 <div class="text-foreground/70">Autosave</div>
-                <select v-model="frequency" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 focus:outline-foreground">
+                <select v-model="autosaveFrequency" class="bg-background rounded outline outline-1 outline-foreground/30 py-0.5 px-1 h-6 focus:outline-foreground">
                     <option v-for="value in [-1, 0, 1, 2, 5, 10, 30]" :value="getAutosaveValue(value)">
                         {{ getAutosaveText(value) }}
                     </option>
                 </select>
 
                 <div class="text-foreground/70">Save template</div>
-                <input-button class="!py-0.5" @click="save" :disabled="state !== SaveState.waiting">Save</input-button>
+                <input-button class="!py-0.5" @click="saveTemplate" :disabled="autosaveState !== SaveState.waiting">Save</input-button>
 
                 <div class="text-foreground/70">Create copy</div>
                 <input-button class="!py-0.5" @click="saveCopy()">Copy</input-button>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-    import { computed } from "vue";
-    import { injectEditorModel } from "@/functions/Editor";
-    import { EditorState } from "@/models/EditorState";
+    import { useEditor } from "@/composables/useEditor";
     import IconProfile from "@/components/shared/icons/IconProfile.vue";
     import InputFile from "@/components/shared/form/InputFile.vue";
     import IconDelete from "@/components/shared/icons/IconDelete.vue";
@@ -11,9 +9,7 @@
         required: true
     });
 
-    const {editorState} = injectEditorModel();
-
-    const editable = computed(() => editorState.value === EditorState.edit);
+    const {editable} = useEditor();
 
     function setProfilePicture(contents: string | ArrayBuffer) {
         if(typeof contents !== 'string') {

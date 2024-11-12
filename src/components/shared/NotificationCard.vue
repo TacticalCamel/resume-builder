@@ -33,7 +33,7 @@
 </script>
 
 <template>
-    <div class="relative border-2 border-primary bg-background rounded-lg overflow-clip w-96" :style="getColorStyle(notification.type)">
+    <div class="relative border border-primary bg-background rounded-lg overflow-clip w-96" :style="getColorStyle(notification.type)">
         <div class="bg-foreground/5">
             <!-- content -->
             <div class="flex gap-6 items-center px-4 py-2">

@@ -16,7 +16,7 @@
         class="text-sm grid gap-1.5"
     >
         <template #item="{element: contact, index}: {element: Contact, index: number}">
-            <stylable-element :id="contact.id" class-selector="contact">
+            <stylable-element :id="contact.id" type="contact">
                 <resume-header-contact-list-item
                     v-model="contacts[index]"
                     :key="contacts[index].id"
