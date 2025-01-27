@@ -1,8 +1,8 @@
 <script setup async lang="ts">
     import { onMounted, onUnmounted, ref } from "vue";
+    import { getEmptyTemplate, getTemplate, isFallbackTemplate, setTemplate } from "@/functions/Templates";
     import { loadFont, unloadFont } from "@/functions/Fonts";
     import { initializeEditor } from "@/composables/useEditor";
-    import { useTemplates } from "@/composables/useTemplates";
     import { useAutosave } from "@/composables/useAutosave";
     import { useLocalstorageRef } from "@/composables/useLocalstorageRef";
     import { TemplateModel } from "@/models/Template";
@@ -17,8 +17,6 @@
         // Callback to modify templateId.
         setId: (id: string | undefined) => void
     }>();
-
-    const {getTemplate, setTemplate, getEmptyTemplate, fallbackId} = useTemplates();
 
     /**
      * The currently displayed template as a reactive object.
@@ -42,7 +40,7 @@
      */
     async function loadTemplate(): Promise<TemplateModel> {
         // special case: id matches the fallback id, need to load the empty preset
-        if (templateId === fallbackId) {
+        if (isFallbackTemplate(templateId)) {
             // initialize an empty template
             const emptyTemplate: TemplateModel = await getEmptyTemplate();
 

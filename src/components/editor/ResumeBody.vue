@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { ResumeModel, Section, SectionType } from "@/models/resume/Resume";
-    import DraggableList from "@/components/shared/DraggableList.vue";
+    import DraggableList from "@/components/editor/DraggableList.vue";
     import ResumeHeader from "@/components/editor/ResumeHeader.vue";
     import ResumeSectionEducations from "@/components/editor/ResumeSectionEducations.vue";
     import ResumeSectionExperiences from "@/components/editor/ResumeSectionExperiences.vue";

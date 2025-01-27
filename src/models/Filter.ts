@@ -1,4 +1,7 @@
-export interface Filters {
+/**
+ *
+ */
+export interface Filter {
     grayscale: number
     contrast: number
     brightness: number

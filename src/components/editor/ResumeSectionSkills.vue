@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { SkillCategory, SkillList as SkillListModel } from "@/models/resume/Skills";
-    import InputText from "@/components/shared/form/InputText.vue";
+    import InputText from "@/components/shared/InputText.vue";
     import ResumeSection from "@/components/editor/ResumeSection.vue";
     import ResumeSectionSkillsList from "@/components/editor/ResumeSectionSkillsList.vue";
 

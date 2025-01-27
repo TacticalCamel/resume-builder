@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import { Filters } from "@/models/style/Filters";
-    import InputRange from "@/components/shared/form/InputRange.vue";
+    import { Filter } from "@/models/Filter";
+    import InputRange from "@/components/shared/InputRange.vue";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
 
-    const filters = defineModel<Filters>({
+    const filters = defineModel<Filter>({
         required: true
     });
 </script>

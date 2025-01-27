@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ResumeHeader } from "@/models/resume/Header";
-    import InputText from "@/components/shared/form/InputText.vue";
-    import StylableElement from "@/components/shared/StylableElement.vue";
+    import InputText from "@/components/shared/InputText.vue";
+    import StylableElement from "@/components/editor/StylableElement.vue";
     import ResumeHeaderContactList from "@/components/editor/ResumeHeaderContactList.vue";
     import ResumeHeaderPicture from "@/components/editor/ResumeHeaderPicture.vue";
 

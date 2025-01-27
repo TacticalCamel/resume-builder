@@ -5,11 +5,11 @@
     import { useEditor } from "@/composables/useEditor";
     import { TemplateModel } from "@/models/Template";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
-    import InputFile from "@/components/shared/form/InputFile.vue";
-    import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
+    import InputFile from "@/components/shared/InputFile.vue";
+    import IconUploadFile from "@/components/shared/IconUploadFile.vue";
 
     const {setTemplate} = useTemplates();
-    const {displayNotification, removeNotification} = useNotifications();
+    const {createNotification, removeNotification} = useNotifications();
     const {loadTemplate} = useEditor();
 
     async function uploadFile(fileContents: string | ArrayBuffer) {
@@ -23,7 +23,7 @@
             await importTemplate(template);
         }
         catch (error) {
-            displayNotification('error', {
+            createNotification('error', {
                 message: 'Could not import template'
             });
         }
@@ -32,7 +32,7 @@
     async function importTemplate(template: TemplateModel) {
         const id: string = await setTemplate(template, true);
 
-        displayNotification('success', {
+        createNotification('success', {
             message: 'Imported template',
             duration: 8000,
             actions: [{

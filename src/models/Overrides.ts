@@ -1,7 +1,7 @@
 export interface StyleOverride {
     name: string | undefined
     selector: StyleSelector
-    styles: Record<string, string>
+    properties: Record<string, string>
 }
 
 export interface StyleSelector {

@@ -2,7 +2,7 @@
     import { ref } from "vue";
     import draggable from "vuedraggable";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
-    import IconDelete from "@/components/shared/icons/IconDelete.vue";
+    import IconDelete from "@/components/shared/IconDelete.vue";
 
     const sink = ref<unknown[]>([]);
 </script>
@@ -15,7 +15,6 @@
                 item-key="id"
                 :group="{name: 'delete', pull: false, put: true}"
                 class="delete-area"
-                ghost-class="delete-item"
                 @add="sink.pop()"
             >
                 <template #item="{element}">
@@ -24,8 +23,8 @@
             </draggable>
 
             <div class="absolute inset-0 flex gap-4 items-center justify-center text-error select-none">
-                <icon-delete class="size-8"/>
-                <span>Drag elements here to delete</span>
+                <icon-delete class="size-6"/>
+                <span class="font-medium">Drag elements here to delete</span>
             </div>
         </div>
     </editor-sidebar-tab-item>
@@ -33,10 +32,10 @@
 
 <style lang="postcss" scoped>
     .delete-area {
-        @apply flex justify-center items-center rounded bg-error/15 border-2 border-dashed border-error/90 p-2 h-20 transition-colors;
+        @apply flex justify-center items-center rounded bg-error/10 border border-dashed border-error p-2 h-20 transition-colors;
 
         &:empty {
-            @apply border-error/70 bg-error/5;
+            @apply bg-transparent;
         }
 
         & > * {

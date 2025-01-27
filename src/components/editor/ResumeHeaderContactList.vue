@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { Contact } from "@/models/resume/Header";
-    import DraggableList from "@/components/shared/DraggableList.vue";
-    import StylableElement from "@/components/shared/StylableElement.vue";
+    import DraggableList from "@/components/editor/DraggableList.vue";
+    import StylableElement from "@/components/editor/StylableElement.vue";
     import ResumeHeaderContactListItem from "@/components/editor/ResumeHeaderContactListItem.vue";
 
     const contacts = defineModel<Contact[]>({

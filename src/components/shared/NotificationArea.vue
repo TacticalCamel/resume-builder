@@ -2,7 +2,9 @@
     import { useNotifications } from "@/composables/useNotifications";
     import NotificationCard from "@/components/shared/NotificationCard.vue";
 
-    const {notifications} = useNotifications();
+    const {getNotifications} = useNotifications();
+
+    const notifications = getNotifications();
 </script>
 
 <template>

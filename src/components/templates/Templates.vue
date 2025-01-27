@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import TransitionFade from "@/components/shared/TransitionFade.vue";
-    import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+    import IconLoading from "@/components/shared/IconLoading.vue";
     import TemplateList from "@/components/templates/TemplateList.vue";
 </script>
 
@@ -13,7 +13,7 @@
 
                     <template #fallback>
                         <div class="flex flex-col gap-4 grow justify-center items-center">
-                            <loading-spinner class="text-secondary"/>
+                            <icon-loading class="text-secondary"/>
                             <span class="text-lg font-medium ps-2">Loading...</span>
                         </div>
                     </template>

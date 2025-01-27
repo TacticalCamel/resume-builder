@@ -1,11 +1,11 @@
 <script setup lang="ts">
     import { useEditor } from "@/composables/useEditor";
     import { Skill } from "@/models/resume/Skills";
-    import IconDecrease from "@/components/shared/icons/IconDecrease.vue";
-    import DraggableList from "@/components/shared/DraggableList.vue";
-    import IconIncrease from "@/components/shared/icons/IconIncrease.vue";
-    import InputText from "@/components/shared/form/InputText.vue";
-    import StylableElement from "@/components/shared/StylableElement.vue";
+    import IconDecrease from "@/components/shared/IconDecrease.vue";
+    import DraggableList from "@/components/editor/DraggableList.vue";
+    import IconIncrease from "@/components/shared/IconIncrease.vue";
+    import InputText from "@/components/shared/InputText.vue";
+    import StylableElement from "@/components/editor/StylableElement.vue";
     import ResumeSectionSkillsRating from "@/components/editor/ResumeSectionSkillsRating.vue";
 
     const skills = defineModel<Skill[]>({

@@ -5,7 +5,11 @@ export const cssColorKeys = {
     secondary: '--secondary',
 }
 
-// check all stylesheets for a variable inside a selector and return its value
+/**
+ * Check all stylesheets for a variable inside a selector and return its value.
+ * @param selectorText The CSS selector to search.
+ * @param variableName The name of the variable, including the '--' prefix.
+ */
 export function getVariable(selectorText: string, variableName: string): string | undefined {
     // iterate over all the style sheets
     for (let i = 0; i < document.styleSheets.length; i++) {
@@ -48,7 +52,10 @@ export function getVariable(selectorText: string, variableName: string): string 
     return undefined;
 }
 
-// check all stylesheets for a selector and return all variables inside it
+/**
+ * Check all stylesheets for a selector and return all variables inside it.
+ * @param selectorText The CSS selector to search.
+ */
 export function getVariables(selectorText: string): Record<string, string> {
     // create a map to store the results
     const results: Record<string, string> = {};
@@ -88,7 +95,7 @@ export function getVariables(selectorText: string): Record<string, string> {
                 }
 
                 // get the property value
-                results[name] = rule.style.getPropertyValue(name);
+                results[name.slice(2)] = rule.style.getPropertyValue(name);
             }
         }
     }

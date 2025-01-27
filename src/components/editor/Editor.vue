@@ -2,120 +2,142 @@
     import { onBeforeMount, ref } from "vue";
     import { useNavigation } from "@/composables/useNavigation";
     import { useLocalstorageRef } from "@/composables/useLocalstorageRef";
-    import { useTemplates } from "@/composables/useTemplates";
-    import TransitionFade from "@/components/shared/TransitionFade.vue";
+    import { getFallbackId } from "@/functions/Templates";
     import EditorBody from "@/components/editor/EditorBody.vue";
-    import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+    import TransitionFade from "@/components/shared/TransitionFade.vue";
+    import IconLoading from "@/components/shared/IconLoading.vue";
+    import InputButton from "@/components/shared/InputButton.vue";
 
-    const {navigateTo} = useNavigation();
-    const {fallbackId} = useTemplates();
+    const {navigateTo, routeParameters} = useNavigation();
 
-    const {routeParameters} = defineProps<{
-        routeParameters: any
-    }>();
-
-    // the id of the currently displayed template in the editor, undefined if empty
-    // persist between page reloads and sessions
+    /**
+     * The id of the currently displayed template in the editor.
+     * Undefined when no template is displayed.
+     */
     const activeTemplateId = useLocalstorageRef<string | undefined>('active-template', undefined);
 
-    // the id of the template that is attempting to load, undefined if there is no loading action
-    // need to declare this separately from the current id, since we need a dialog to confirm or cancel overriding the current template
+    /**
+     * The id of the template that is attempting to load.
+     * Undefined if there is no loading action.
+     * Needed for the dialog to confirm or cancel overriding the active id.
+     */
     const loadingTemplateId = ref<string | undefined>(undefined);
 
+    /**
+     * Resolve which template to display and load.
+     */
     onBeforeMount(() => {
-        // attempt to load a new template with this id
-        const load: string | undefined = typeof routeParameters.load === 'string' ? routeParameters.load : undefined;
+        // defined when loading a new template
+        const load: string | undefined = typeof routeParameters.value.load === 'string' ? routeParameters.value.load : undefined;
 
-        // initialize a default template when there is none loaded
-        const init: boolean | undefined = typeof routeParameters.init === 'boolean' ? routeParameters.init : undefined;
+        // defined when initializing a default template
+        const init: boolean | undefined = typeof routeParameters.value.init === 'boolean' ? routeParameters.value.init : undefined;
 
         if (load) {
-            // current id matches the loaded one, nothing to do
+            // already loaded, do nothing
             if (activeTemplateId.value === load) {
                 return;
             }
 
             loadingTemplateId.value = load;
 
-            // skip confirmation dialog if no template was present previously
+            // no template will be overridden, confirm load dialog
             if (!activeTemplateId.value) {
-                confirmLoad();
+                confirmLoading();
             }
         }
 
-        // initialize only when load is not specified
+        // initialize when empty
         else if (init && !activeTemplateId.value) {
-            initializeEmpty();
+            setIdToFallback();
         }
     });
 
-    function initializeEmpty(): void {
-        activeTemplateId.value = fallbackId;
-    }
-
-    function confirmLoad(): void {
+    /**
+     * Set the active id to the one attempting to load.
+     */
+    function confirmLoading(): void {
         if (!loadingTemplateId.value) {
             return;
         }
 
-        activeTemplateId.value = loadingTemplateId.value;
+        setTemplateId(loadingTemplateId.value);
+        clearLoading();
+    }
+
+    /**
+     * Cancel template loading.
+     */
+    function clearLoading(): void {
         loadingTemplateId.value = undefined;
     }
 
-    function cancelLoad(): void {
-        loadingTemplateId.value = undefined;
-    }
-
+    /**
+     * Set the active template id.
+     * @param id The id of the template.
+     */
     function setTemplateId(id: string | undefined): void {
         activeTemplateId.value = id;
+    }
+
+    /**
+     * Set the active template id to the fallback value.
+     */
+    function setIdToFallback(): void {
+        setTemplateId(getFallbackId());
     }
 </script>
 
 <template>
-    <transition-fade>
-        <div v-if="loadingTemplateId" class="flex grow bg-background/60 z-10 flex-col justify-center items-center">
-            <div class="bg-background px-12 py-8 rounded-lg border-2 border-foreground/30 font-medium">
-                <div class="text-center mb-6">
-                    <div>There is already a template loaded.</div>
-                    <div>Do you want to replace it?</div>
-                </div>
-                <div class="flex justify-center gap-8 text-sm">
-                    <button @click="confirmLoad()" class="w-28 flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Replace</button>
-                    <button @click="cancelLoad()" class="w-28 flex justify-center items-center gap-2 p-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-error">Cancel</button>
+    <div v-if="activeTemplateId" class="flex grow">
+        <!-- loading dialog -->
+        <transition-fade>
+            <div v-if="loadingTemplateId" @click="clearLoading()" class="absolute inset-0 flex justify-center items-center bg-black/50 z-20">
+                <div @click.stop class="bg-background px-12 py-8 rounded-lg shadow-lg shadow-black">
+                    <div class="text-center mb-6 font-medium">
+                        <div>There is already a template loaded.</div>
+                        <div>Do you want to replace it?</div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-8 text-sm">
+                        <input-button @click="confirmLoading()" class="text-secondary">Replace</input-button>
+                        <input-button @click="clearLoading()" class="text-error">Cancel</input-button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </transition-fade>
 
-        <div v-else-if="activeTemplateId" class="flex grow">
-            <transition-fade>
-                <suspense>
-                    <editor-body
-                        :template-id="activeTemplateId"
-                        :set-id="setTemplateId"
-                        :key="activeTemplateId"
-                    />
+        <!-- editor body -->
+        <transition-fade>
+            <suspense>
+                <editor-body
+                    :template-id="activeTemplateId"
+                    :set-id="setTemplateId"
+                    :key="activeTemplateId"
+                />
 
-                    <template #fallback>
-                        <div class="flex flex-col gap-4 grow justify-center items-center">
-                            <loading-spinner class="text-secondary"/>
-                            <span class="text-lg font-medium ps-2">Loading...</span>
-                        </div>
-                    </template>
-                </suspense>
-            </transition-fade>
-        </div>
+                <template #fallback>
+                    <div class="flex flex-col gap-4 grow justify-center items-center">
+                        <icon-loading class="size-16 text-secondary"/>
+                        <span class="text-lg font-medium ps-2">Loading...</span>
+                    </div>
+                </template>
+            </suspense>
+        </transition-fade>
+    </div>
 
-        <div v-else class="absolute inset-0 flex flex-col justify-center items-center">
-            <div class="bg-background px-12 py-8 rounded-lg border-2 border-foreground/30 font-medium">
-                <div class="text-center mb-6">
-                    <div>There is no template loaded.</div>
-                </div>
-                <div class="flex items-center gap-4 text-sm text-nowrap">
-                    <button @click="initializeEmpty()" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Create a new one</button>
-                    <span>or</span>
-                    <button @click="navigateTo('/templates')" class="flex justify-center items-center gap-2 px-2 py-1 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors text-secondary">Browse templates</button>
-                </div>
+    <!-- empty dialog -->
+    <div v-else class="flex grow justify-center items-center">
+        <div class="bg-background px-12 py-8 rounded-lg border-2 border-foreground/30">
+            <div class="text-center mb-6 font-medium">
+                <div>There is no template loaded.</div>
+            </div>
+
+            <div class="flex items-center gap-4 text-sm">
+                <input-button @click="setIdToFallback()" class="text-secondary">Create a new one</input-button>
+                <span>or</span>
+                <input-button @click="navigateTo('/templates')" class="text-secondary">Browse templates</input-button>
             </div>
         </div>
-    </transition-fade>
+    </div>
 </template>

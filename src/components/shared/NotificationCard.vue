@@ -2,11 +2,11 @@
     import { computed } from "vue";
     import { useNotifications } from "@/composables/useNotifications";
     import { Notification, NotificationType } from "@/models/Notification";
-    import IconCheck from "@/components/shared/icons/IconCheck.vue";
-    import IconWarning from "@/components/shared/icons/IconWarning.vue";
-    import IconError from "@/components/shared/icons/IconError.vue";
-    import IconInfo from "@/components/shared/icons/IconInfo.vue";
-    import IconClose from "@/components/shared/icons/IconClose.vue";
+    import IconCheck from "@/components/shared/IconCheck.vue";
+    import IconWarning from "@/components/shared/IconWarning.vue";
+    import IconError from "@/components/shared/IconError.vue";
+    import IconInfo from "@/components/shared/IconInfo.vue";
+    import IconClose from "@/components/shared/IconClose.vue";
 
     const {notification} = defineProps<{
         notification: Notification
@@ -28,7 +28,9 @@
     });
 
     function getColorStyle(type?: NotificationType) {
-        return {'--primary': `var(--${type ?? 'foreground'})`};
+        return {
+            '--primary': `var(--${type ?? 'foreground'})`
+        };
     }
 </script>
 

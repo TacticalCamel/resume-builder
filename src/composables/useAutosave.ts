@@ -1,5 +1,4 @@
-import { ref, watch, readonly, onMounted, onUnmounted, Ref, ComputedRef } from "vue";
-import { SaveState } from "@/models/editor/SaveState";
+import { Ref, ComputedRef, onMounted, onUnmounted, readonly, ref, watch } from "vue";
 
 /**
  * This composable is used to save a value automatically at a given frequency.
@@ -7,7 +6,7 @@ import { SaveState } from "@/models/editor/SaveState";
  * @param frequency The frequency of saving. Negative values = never save, 0 = save after every change, positive values = save every n milliseconds.
  * @param callback The function to execute every time a save occurs.
  */
-export function useAutosave<T, TReturn = any>(reference: Ref<T> | ComputedRef<T>, frequency: Ref<number>, callback: (value: T) => TReturn | Promise<TReturn>) {
+export function useAutosave<T, TReturn = any>(reference: Ref<T> | ComputedRef<T>, frequency: Ref<number>, callback: (value: T) => TReturn | Promise<TReturn>): AutoSave<TReturn> {
     /**
      * The status of the saving process.
      */
@@ -83,7 +82,7 @@ export function useAutosave<T, TReturn = any>(reference: Ref<T> | ComputedRef<T>
         // no changes made
         // resolve immediately since there is nothing to save
         if (state.value !== SaveState.waiting) {
-            return;
+            return undefined;
         }
 
         // update the state to pending while the callback executes
@@ -103,4 +102,23 @@ export function useAutosave<T, TReturn = any>(reference: Ref<T> | ComputedRef<T>
         state: readonly(state),
         save
     };
+}
+
+export enum SaveState {
+    // has changes, saving in progress
+    pending = 0,
+
+    // no changes, saved
+    resolved = 1,
+
+    // has changes, not saved
+    waiting = 2
+}
+
+export interface AutoSave<TReturn> {
+    // expose state as read only
+    state: Readonly<Ref<SaveState>>
+
+    // expose function for manual saving
+    save: () => Promise<TReturn | undefined>
 }

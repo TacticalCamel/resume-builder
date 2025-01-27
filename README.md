@@ -43,14 +43,6 @@ Packages used in this project and their purpose. The project has minimal depende
 - **[Dexie.js](https://github.com/dexie/Dexie.js) :: Indexed DB wrapper.** Simplifies working with indexedDB with querying and promises instead of callbacks.
 - **[msgpackr](https://github.com/kriszyp/msgpackr) :: Binary serializer.** Faster and smaller size compared to JSON. Can also handle binary data, like font files.
 
-## Application architecture
-
-This is a monolithic application that follows a layered architecture, which is perfect for its current level of complexity.
-
-- **Data access** - Completely client-side, using a combination of localStorage and indexedDB. I could use Firebase for storing it server-side, but none of the current features of the app require it.
-- **Business logic** - Services are encapsulated in [composables](https://vuejs.org/guide/reusability/composables.html#what-is-a-composable) that components can import and use. 
-- **Views** - Components use Vue's [composition API](https://vuejs.org/guide/introduction.html#api-styles) due to better logic reuse and more flexibility. Dependence on stateful logic is limited to composables.
-
 ## Development status
 
 - [x] Prototype <br/>

@@ -4,18 +4,18 @@ import { Notification, NotificationType } from "@/models/Notification";
 /**
  * The list of currently active notifications.
  */
-const notificationList: Ref<Notification[]> = ref<Notification[]>([]);
+const notifications: Ref<Notification[]> = ref<Notification[]>([]);
 
 /**
  * This composable handles interactions with notifications.
  */
 export function useNotifications() {
     /**
-     * Display a notification.
+     * Create and display a new notification.
      * @param type The type of the notification.
      * @param content The content of the notification.
      */
-    function displayNotification(type: NotificationType, content: Partial<Omit<Notification, 'id' & 'type'>>): void {
+    function createNotification(type: NotificationType, content: Partial<Omit<Notification, 'id' & 'type'>>): void {
         // create a new notification with a random id
         const notification: Notification = {
             id: crypto.randomUUID(),
@@ -27,10 +27,10 @@ export function useNotifications() {
         };
 
         // show notification
-        notificationList.value.push(notification);
+        notifications.value.push(notification);
 
         // remove automatically after the provided duration
-        setTimeout(() => removeNotification(notification.id), notification.duration);
+        setTimeout(removeNotification, notification.duration, notification.id);
     }
 
     /**
@@ -39,17 +39,24 @@ export function useNotifications() {
      */
     function removeNotification(id: string): void {
         // find notification by id
-        const index: number = notificationList.value.findIndex(n => n.id === id);
+        const index: number = notifications.value.findIndex(n => n.id === id);
 
         // remove if present in the list, do nothing otherwise
         if (index >= 0) {
-            notificationList.value.splice(index, 1);
+            notifications.value.splice(index, 1);
         }
     }
 
+    /**
+     * Get all notifications as a readonly list.
+     */
+    function getNotifications(): Readonly<Ref<Notification[]>> {
+        return shallowReadonly(notifications);
+    }
+
     return {
-        notifications: shallowReadonly(notificationList),
-        displayNotification,
+        getNotifications,
+        createNotification,
         removeNotification
     }
 }

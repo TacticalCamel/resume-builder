@@ -3,8 +3,8 @@
     import { Project, ProjectList } from "@/models/resume/Projects";
     import ResumeSection from "@/components/editor/ResumeSection.vue";
     import ResumeSectionTechnologyList from "@/components/editor/ResumeSectionTechnologyList.vue";
-    import InputText from "@/components/shared/form/InputText.vue";
-    import IconLink from "@/components/shared/icons/IconLink.vue";
+    import InputText from "@/components/shared/InputText.vue";
+    import IconLink from "@/components/shared/IconLink.vue";
 
     const projects = defineModel<ProjectList>({
         required: true

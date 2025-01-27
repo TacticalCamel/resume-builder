@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import IconClose from "@/components/shared/icons/IconClose.vue";
+    import IconClose from "@/components/shared/IconClose.vue";
 
     const {font, allowDelete = false} = defineProps<{
         font: string

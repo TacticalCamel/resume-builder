@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Language, LanguageList } from "@/models/resume/Languages";
-    import InputText from "@/components/shared/form/InputText.vue";
+    import InputText from "@/components/shared/InputText.vue";
     import ResumeSection from "@/components/editor/ResumeSection.vue";
 
     const languages = defineModel<LanguageList>({

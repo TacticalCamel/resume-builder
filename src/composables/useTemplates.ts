@@ -1,7 +1,5 @@
 import { useDatabase } from "@/composables/useDatabase";
 import { deepToRaw } from "@/functions/Reactivity";
-import { defaultThemes } from "@/functions/Themes";
-import { defaultFont } from "@/functions/Fonts";
 import { TemplateModel } from "@/models/Template";
 
 /**
@@ -9,11 +7,6 @@ import { TemplateModel } from "@/models/Template";
  */
 export function useTemplates() {
     const {templates} = useDatabase();
-
-    /**
-     * Arbitrary id designating the empty template.
-     */
-    const fallbackId: string = 'fallback-template';
 
     /**
      * Save a template to the database.
@@ -56,75 +49,17 @@ export function useTemplates() {
     }
 
     /**
-     * Create then return a new template with minimal information.
-     * @returns The empty template.
-     */
-    async function getEmptyTemplate(): Promise<TemplateModel> {
-        // get the empty preset template
-        const emptyTemplate: TemplateModel = presetTemplates[0];
-
-        // store a copy of it in the database
-        const id: string = await setTemplate(emptyTemplate, true);
-
-        // return the copy
-        return await getTemplate(id) ?? emptyTemplate;
-    }
-
-    /**
-     * Get all preset templates.
-     * @returns A list containing all preset templates.
-     */
-    async function getPresetTemplates(): Promise<TemplateModel[]> {
-        return presetTemplates;
-    }
-
-    /**
      * Get all templates from the database.
      * @returns A list containing all custom templates.
      */
-    async function getCustomTemplates(): Promise<TemplateModel[]> {
+    async function getTemplates(): Promise<TemplateModel[]> {
         return templates.toArray();
     }
 
     return {
-        fallbackId,
         setTemplate,
         getTemplate,
         removeTemplate,
-        getEmptyTemplate,
-        getPresetTemplates,
-        getCustomTemplates
+        getTemplates
     };
 }
-
-const presetTemplates: TemplateModel[] = [
-    {
-        id: 'empty',
-        currentTheme: defaultThemes.light.id,
-        currentFont: defaultFont,
-        resume: {
-            id: crypto.randomUUID(),
-            header: {
-                id: crypto.randomUUID(),
-                picture: undefined,
-                name: '',
-                profession: '',
-                description: '',
-                contacts: []
-            },
-            sections: []
-        },
-        themes: [],
-        fonts: [
-            {
-                name: defaultFont,
-            }
-        ],
-        filters: {
-            grayscale: 0,
-            contrast: 100,
-            brightness: 100
-        },
-        styles: []
-    }
-];

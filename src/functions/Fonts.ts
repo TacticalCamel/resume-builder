@@ -1,5 +1,5 @@
 import { getVariable } from "@/functions/Css";
-import { Font } from "@/models/style/Font";
+import { Font } from "@/models/Font";
 
 export const defaultFont: string = getDefaultFont();
 

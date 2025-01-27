@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { computed, onUnmounted } from "vue";
     import { useEditor } from "@/composables/useEditor";
+    import { SelectableElement } from "@/composables/useElementSelection";
 
     const {id, type} = defineProps<{
         id?: string
@@ -12,14 +13,14 @@
     const {element, selected} = createElement();
 
     function createElement() {
-        const element = computed(() => ({
+        const element = computed<SelectableElement>(() => ({
             type: type,
             id: id ?? type
         }));
 
         registerElement(element.value);
 
-        const selected = computed(() => {
+        const selected = computed<boolean>(() => {
             return activeSelector.value.ids.includes(element.value.id) || activeSelector.value.types.includes(element.value.type);
         });
 

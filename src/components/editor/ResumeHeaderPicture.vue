@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { useEditor } from "@/composables/useEditor";
-    import IconProfile from "@/components/shared/icons/IconProfile.vue";
-    import InputFile from "@/components/shared/form/InputFile.vue";
-    import IconDelete from "@/components/shared/icons/IconDelete.vue";
-    import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
+    import IconProfile from "@/components/shared/IconProfile.vue";
+    import InputFile from "@/components/shared/InputFile.vue";
+    import IconDelete from "@/components/shared/IconDelete.vue";
+    import IconUploadFile from "@/components/shared/IconUploadFile.vue";
 
     const picture = defineModel<string | undefined>({
         required: true

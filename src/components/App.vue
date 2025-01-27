@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { onMounted } from "vue";
     import { useNavigation } from "@/composables/useNavigation";
-    import { defaultThemes, applyTheme } from "@/functions/Themes";
+    import { defaultThemes, applyTheme } from "@/functions/ThemeUtilities";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/templates/Templates.vue";
@@ -10,7 +10,7 @@
     import TransitionFade from "@/components/shared/TransitionFade.vue";
     import NotificationArea from "@/components/shared/NotificationArea.vue";
 
-    const {getActiveView, parameters} = useNavigation();
+    const {getActiveView} = useNavigation();
 
     const routes = {
         '/': Home,
@@ -28,7 +28,7 @@
         <navigation/>
 
         <transition-fade>
-            <component :is="getActiveView(routes) ?? RouteNotFound" :route-parameters="parameters"/>
+            <component :is="getActiveView(routes) ?? RouteNotFound"/>
         </transition-fade>
 
         <notification-area/>

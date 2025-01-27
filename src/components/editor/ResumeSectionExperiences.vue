@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Experience, ExperienceList } from "@/models/resume/Experiences";
-    import InputText from "@/components/shared/form/InputText.vue";
+    import InputText from "@/components/shared/InputText.vue";
     import ResumeSection from "@/components/editor/ResumeSection.vue";
     import ResumeSectionTechnologyList from "@/components/editor/ResumeSectionTechnologyList.vue";
 

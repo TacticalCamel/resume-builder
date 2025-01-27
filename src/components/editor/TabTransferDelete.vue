@@ -6,7 +6,7 @@
     import { TemplateModel } from "@/models/Template";
     import { Notification } from "@/models/Notification";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
-    import InputButton from "@/components/shared/form/InputButton.vue";
+    import InputButton from "@/components/shared/InputButton.vue";
     import TransitionFade from "@/components/shared/TransitionFade.vue";
 
     const {template} = defineProps<{
@@ -15,7 +15,7 @@
 
     const {removeTemplate, setTemplate} = useTemplates();
     const {loadTemplate} = useEditor();
-    const {displayNotification, removeNotification} = useNotifications();
+    const {createNotification, removeNotification} = useNotifications();
 
     const confirm = ref<boolean>(false);
 
@@ -31,7 +31,7 @@
 
         loadTemplate(undefined);
 
-        displayNotification('info', {
+        createNotification('info', {
             duration: 8000,
             message: 'Template deleted',
             actions: [{
@@ -52,7 +52,7 @@
         removeNotification(notification.id);
 
         // display the restore notification
-        displayNotification('success', {
+        createNotification('success', {
             duration: 4000,
             message: 'Template restored'
         });

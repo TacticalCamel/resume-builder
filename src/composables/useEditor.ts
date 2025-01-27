@@ -1,10 +1,9 @@
 import { inject, provide, ref, Ref } from "vue";
-import { useElementSelection } from "@/composables/useElementSelection";
+import { SelectableElement, useElementSelection } from "@/composables/useElementSelection";
 import { useElementRegistration } from "@/composables/useElementRegistration";
 import { useEditorMode } from "@/composables/useEditorMode";
 import { EditorMode } from "@/models/editor/EditorMode";
-import { SaveState } from "@/models/editor/SaveState";
-import { SelectableElement } from "@/models/editor/SelectableElement";
+import { SaveState } from "@/composables/useAutosave";
 
 const injectorKey = Symbol();
 

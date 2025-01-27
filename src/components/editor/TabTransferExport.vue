@@ -3,8 +3,8 @@
     import { pack } from 'msgpackr';
     import { TemplateModel } from "@/models/Template";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
-    import InputCheckbox from "@/components/shared/form/InputCheckbox.vue";
-    import InputButton from "@/components/shared/form/InputButton.vue";
+    import InputCheckbox from "@/components/shared/InputCheckbox.vue";
+    import InputButton from "@/components/shared/InputButton.vue";
 
     interface TransferCategory {
         name: string

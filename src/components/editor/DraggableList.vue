@@ -15,10 +15,16 @@
         required: true
     });
 
-    const {editable} = useEditor();
+    const {editable: enabled} = useEditor();
 
-    // Check if the dragged element can be moved between 2 sortables.
-    // The target group must match the source group or the group of the element.
+    /**
+     * Check if the dragged element can be moved between 2 sortables.
+     * The target group must match the source group or the group of the element.
+     * @param targetSortable The sortable the element is moved to.
+     * @param sourceSortable The sortable the element is moved from.
+     * @param element The element.
+     * @returns True if the element can be moved, false otherwise.
+     */
     function canAcceptElement(targetSortable: any, sourceSortable: any, element: HTMLElement): boolean {
         const elementGroup: string | undefined = element.dataset.group;
         const sourceGroup: string | undefined = sourceSortable?.options?.group?.name;
@@ -32,29 +38,30 @@
     <transition-group>
         <draggable
             v-model="elements"
+            v-bind="$attrs"
             tag="ul"
             key="draggable"
             item-key="id"
             drag-class="dragging"
             ghost-class="ghost"
             animation="200"
-            :disabled="!editable"
+            :class="{'draggable-list': enabled}"
+            :disabled="!enabled"
             :group="{name: group, pull: true, put: canAcceptElement}"
-            v-bind="$attrs"
         >
             <template #header>
                 <slot name="header"/>
             </template>
 
             <template #item="{element, index}: {element: T, index: number}">
-                <li :style="itemStyle" class="empty:hidden" :class="{'moveable': editable}">
+                <li :style="itemStyle" class="empty:hidden" :class="{'moveable': enabled}">
                     <slot name="item" :element="element" :index="index"/>
                 </li>
             </template>
 
             <template #footer>
                 <slot name="footer"/>
-                <div v-if="editable && !elements.length" class="empty">
+                <div v-if="enabled && !elements.length" class="empty">
                     <slot name="empty"/>
                 </div>
             </template>

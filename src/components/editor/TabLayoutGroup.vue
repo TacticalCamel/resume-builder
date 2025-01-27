@@ -29,7 +29,7 @@
             >
                 <template #item="{element: item}: {element: LayoutItem}">
                     <div :data-group="item.group">
-                        <div class="building-block flex items-center justify-center px-1 text-foreground/70 hover:text-foreground transition-colors cursor-move min-w-20">
+                        <div class="building-block">
                             {{ item.name }}
                         </div>
                     </div>
@@ -42,6 +42,10 @@
 <style lang="postcss" scoped>
     /* Only apply styles if the element is inside the container, so these styles are not applied when dragged elsewhere */
     .element-group .building-block {
-        @apply h-12 grid rounded border-2 border-foreground/30 hover:border-foreground font-light;
+        @apply px-0.5 py-2 text-center text-foreground/70 rounded font-medium bg-foreground/10 transition-colors cursor-move min-w-20;
+
+        &:hover {
+            @apply text-foreground;
+        }
     }
 </style>

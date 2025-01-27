@@ -1,5 +1,4 @@
 import { ref, readonly, Ref } from "vue";
-import { SelectableElement } from "@/models/editor/SelectableElement";
 
 export function useElementRegistration() {
     const elements: Ref<SelectableElement[]> = ref([]);
@@ -33,4 +32,9 @@ export function useElementRegistration() {
         registerElement,
         unregisterElement
     };
+}
+
+interface SelectableElement {
+    id: string
+    type: string
 }

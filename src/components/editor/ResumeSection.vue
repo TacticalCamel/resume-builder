@@ -3,9 +3,9 @@
     import { useEditor } from "@/composables/useEditor";
     import { Section } from "@/models/resume/Resume";
     import { UniqueId } from "@/models/UniqueId";
-    import InputText from "@/components/shared/form/InputText.vue";
-    import DraggableList from "@/components/shared/DraggableList.vue";
-    import StylableElement from "@/components/shared/StylableElement.vue";
+    import InputText from "@/components/shared/InputText.vue";
+    import DraggableList from "@/components/editor/DraggableList.vue";
+    import StylableElement from "@/components/editor/StylableElement.vue";
 
     const {group, gridColumns = 'min-content', subGridColumns = 1, gapX = 0, gapY = 0} = defineProps<{
         group: string,

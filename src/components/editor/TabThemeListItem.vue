@@ -1,31 +1,28 @@
 <script setup lang="ts">
-    import { computed, ref } from "vue";
-    import { defaultThemes, isDarkContrast } from "@/functions/Themes";
-    import { cssColorKeys } from "@/functions/Css";
-    import { Theme } from "@/models/style/Theme";
-    import { Color } from "@/models/style/Color";
-    import InputText from "@/components/shared/form/InputText.vue";
+    import { computed } from "vue";
+    import { defaultThemes, isDarkContrast } from "@/functions/ThemeUtilities";
+    import { Theme } from "@/models/Theme";
+    import { Color } from "@/models/Color";
+    import InputText from "@/components/shared/InputText.vue";
 
     const {theme, active} = defineProps<{
         theme: Theme,
         active: boolean
     }>();
 
-    const themeColors = ref({
-        background: getColorInformation(cssColorKeys.background),
-        foreground: getColorInformation(cssColorKeys.foreground),
-        primary: getColorInformation(cssColorKeys.primary),
-        secondary: getColorInformation(cssColorKeys.secondary)
-    });
+    const colors = computed(() => ({
+        background: getColorInformation(theme.colors.background),
+        foreground: getColorInformation(theme.colors.foreground),
+        primary: getColorInformation(theme.colors.primary),
+        secondary: getColorInformation(theme.colors.secondary)
+    }));
 
     const isDefault = computed(() => defaultThemes.light.id === theme.id || defaultThemes.dark.id === theme.id);
 
-    function getColorInformation(name: string) {
-        const color: Color | undefined = theme.colors.find(c => c.name === name);
-
+    function getColorInformation(color: Color) {
         return {
-            value: color ? `rgb(${color.value.r} ${color.value.g} ${color.value.b})` : 'black',
-            darkText: color ? isDarkContrast(color.value) : false
+            value: color ? `rgb(${color.r} ${color.g} ${color.b})` : 'black',
+            darkText: color ? isDarkContrast(color) : false
         };
     }
 </script>
@@ -35,14 +32,14 @@
         <div class="theme-card" :class="{'active': active}">
             <div class="grow flex items-center justify-between gap-2 text-sm px-2 pb-2">
                 <input-text v-if="active" v-model="theme.name" placeholder="Theme name"/>
-                <span v-else-if="theme.name.length">{{ theme.name }}</span>
+                <span v-else-if="theme.name && theme.name.length">{{ theme.name }}</span>
                 <span v-else class="italic opacity-70">Unnamed</span>
 
                 <span v-if="isDefault" class="font-mono font-semibold italic text-foreground/70">DEFAULT</span>
             </div>
 
             <div class="theme-colors">
-                <div v-for="(color, name) in themeColors" :style="{background: color.value}" class="grow text-center flex justify-center items-center">
+                <div v-for="(color, name) in colors" :style="{background: color.value}" class="grow text-center flex justify-center items-center">
                     <span class="text-xs font-semibold" :style="{color: color.darkText ? 'black' : 'white'}">{{ name }}</span>
                 </div>
             </div>

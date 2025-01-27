@@ -2,12 +2,12 @@
     import { computed, ref } from "vue";
     import { defaultFont, getSystemFonts, loadFont, unloadFont } from "@/functions/Fonts";
     import { TemplateModel } from "@/models/Template";
-    import { Font } from "@/models/style/Font";
+    import { Font } from "@/models/Font";
     import EditorSidebarTab from "@/components/editor/EditorSidebarTab.vue";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
-    import InputFile from "@/components/shared/form/InputFile.vue";
-    import IconUploadFile from "@/components/shared/icons/IconUploadFile.vue";
-    import IconSearch from "@/components/shared/icons/IconSearch.vue";
+    import InputFile from "@/components/shared/InputFile.vue";
+    import IconUploadFile from "@/components/shared/IconUploadFile.vue";
+    import IconSearch from "@/components/shared/IconSearch.vue";
     import FontCard from "@/components/editor/TabFontCard.vue";
 
     const template = defineModel<TemplateModel>({

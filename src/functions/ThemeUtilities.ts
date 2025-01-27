@@ -1,7 +1,7 @@
-import { cssColorKeys, getVariables } from "@/functions/Css";
-import { Theme } from "@/models/style/Theme";
-import { Color } from "@/models/style/Color";
-import { RGB } from "@/models/style/RGB";
+import { getVariables } from "@/functions/Css";
+import { Theme } from "@/models/Theme";
+import { Color } from "@/models/Color";
+import { ColorPalette } from "@/models/ColorPalette";
 
 /**
  * Pre-created light and dark theme.
@@ -11,15 +11,19 @@ export const defaultThemes = {
     dark: createDefaultDarkTheme()
 }
 
+export function isDefaultTheme(themeId: string): boolean {
+    return themeId === defaultThemes.light.id || themeId === defaultThemes.dark.id;
+}
+
 /**
  * Find the inherited value of a color.
- * @param color The color to check.
+ * @param name The color to check.
  * @param theme The current theme.
  * @param themes The list of themes to search.
  */
-function findBaseColorValue(color: Color, theme: Theme, themes: Theme[]): RGB | undefined {
+function findBaseColorValue(name: keyof ColorPalette, theme: Theme, themes: Theme[]): Color | undefined {
     // no value when there is no base theme
-    if(!theme.base) {
+    if (!theme.base) {
         return undefined;
     }
 
@@ -27,32 +31,31 @@ function findBaseColorValue(color: Color, theme: Theme, themes: Theme[]): RGB | 
     const baseTheme: Theme | undefined = findThemeById(theme.base, themes);
 
     // find the color by name
-    return baseTheme?.colors.find(c => c.name === color.name)?.value;
+    return baseTheme?.colors[name];
 }
 
 /**
  * Get the default color palette from CSS.
  */
-function getColorsFromCss(): Color[] {
+function getPaletteFromCss(): ColorPalette {
     // get all variable in the root selector and assume they're all colors
     const variables: Record<string, string> = getVariables(':root');
 
-    // map key-value pairs to colors
-    return Object.keys(variables).map((key: string): Color => {
-        const rgb: RGB = parseRgbString(variables[key]);
+    const palette: ColorPalette = {} as ColorPalette;
 
-        return {
-            name: key,
-            value: rgb
-        };
+    // map key-value pairs to colors
+    Object.entries(variables).forEach(([key, value]) => {
+        palette[key] = parseRgbString(value);
     });
+
+    return palette;
 }
 
 /**
  * Parse a space separated RGB color string into numbers.
  * @param value The string to parse.
  */
-function parseRgbString(value: string): RGB {
+function parseRgbString(value: string): Color {
     try {
         // split by spaces
         const colors: string[] = value.split(' ');
@@ -77,13 +80,13 @@ function parseRgbString(value: string): RGB {
  * Create a theme from the initial CSS color values.
  */
 function createDefaultLightTheme(): Theme {
-    const colors: Color[] = getColorsFromCss();
+    const palette: ColorPalette = getPaletteFromCss();
 
     return {
         id: 'default-light',
         name: 'Light',
         base: undefined,
-        colors: colors
+        colors: palette
     };
 }
 
@@ -91,21 +94,16 @@ function createDefaultLightTheme(): Theme {
  * Create a theme from the initial CSS color values, then swap the background and foreground colors.
  */
 function createDefaultDarkTheme(): Theme {
-    const colors: Color[] = getColorsFromCss();
-
-    const foregroundColor: Color | undefined = colors.find(color => color.name === cssColorKeys.foreground);
-    const backgroundColor: Color | undefined = colors.find(color => color.name === cssColorKeys.background);
+    const palette: ColorPalette = getPaletteFromCss();
 
     // swap the background and foreground color
-    if (foregroundColor && backgroundColor) {
-        [foregroundColor.value, backgroundColor.value] = [backgroundColor.value, foregroundColor.value];
-    }
+    [palette.background, palette.foreground] = [palette.foreground, palette.background];
 
     return {
         id: 'default-dark',
         name: 'Dark',
         base: undefined,
-        colors: colors
+        colors: palette
     };
 }
 
@@ -114,12 +112,12 @@ function createDefaultDarkTheme(): Theme {
  * @param id The id to find.
  * @param themes The list of themes to search.
  */
-export function findThemeById(id: string, themes: Theme[]): Theme {
+export function findThemeById(id: string | undefined, themes: Theme[]): Theme {
     // find in the list
     const theme: Theme | undefined = themes.find(theme => theme.id === id);
 
     // if found, return the result
-    if(theme) {
+    if (theme) {
         return theme;
     }
 
@@ -134,8 +132,8 @@ export function findThemeById(id: string, themes: Theme[]): Theme {
  * @param theme The theme to apply.
  */
 export function applyTheme(element: HTMLElement, theme: Theme): void {
-    theme.colors.forEach((color: Color): void => {
-        element.style.setProperty(color.name, `${color.value.r} ${color.value.g} ${color.value.b}`)
+    Object.entries(theme.colors).forEach(([name, color]): void => {
+        element.style.setProperty(`--${name}`, `${color.r} ${color.g} ${color.b}`)
     });
 }
 
@@ -144,35 +142,35 @@ export function applyTheme(element: HTMLElement, theme: Theme): void {
  * @param value The color value to check.
  * @returns True if the color with better contrast is black, false if it's white.
  */
-export function isDarkContrast(value: RGB): boolean {
+export function isDarkContrast(value: Color): boolean {
     return value.r * 0.299 + value.g * 0.587 + value.b * 0.114 > 150;
 }
 
 /**
  * Check if a color value differs from the corresponding value in its base theme.
  * This information can be used to signal that the color can be reset.
- * @param color The color to check.
+ * @param name The color to check.
  * @param theme The current theme.
  * @param themes The list of themes to search.
  */
-export function isColorModified(color: Color, theme: Theme, themes: Theme[]): boolean {
-    const defaultValue: RGB | undefined = findBaseColorValue(color, theme, themes);
+export function isColorModified(name: keyof ColorPalette, theme: Theme, themes: Theme[]): boolean {
+    const defaultValue: Color | undefined = findBaseColorValue(name, theme, themes);
 
     // the value is not considered modified when there is no default value
-    return defaultValue !== undefined && defaultValue !== color.value;
+    return defaultValue !== undefined && defaultValue !== theme.colors[name];
 }
 
 /**
  * Change a color back to its default value.
- * @param color The color to reset.
+ * @param name The color to reset.
  * @param theme The current theme.
  * @param themes The list of themes to search.
  */
-export function resetColor(color: Color, theme: Theme, themes: Theme[]): void {
-    const defaultValue: RGB | undefined = findBaseColorValue(color, theme, themes);
+export function resetColor(name: keyof ColorPalette, theme: Theme, themes: Theme[]): void {
+    const defaultColor: Color | undefined = findBaseColorValue(name, theme, themes);
 
     // only reset if there is a default value
-    if (defaultValue) {
-        color.value = defaultValue;
+    if (defaultColor) {
+        theme.colors[name] = defaultColor;
     }
 }

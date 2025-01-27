@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import { SaveState } from "@/models/editor/SaveState";
-    import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
-    import IconWarning from "@/components/shared/icons/IconWarning.vue";
-    import IconCheck from "@/components/shared/icons/IconCheck.vue";
+    import IconLoading from "@/components/shared/IconLoading.vue";
+    import IconWarning from "@/components/shared/IconWarning.vue";
+    import IconCheck from "@/components/shared/IconCheck.vue";
+    import { SaveState } from "@/composables/useAutosave";
 
     const {state, id} = defineProps<{
         state: SaveState,
@@ -18,7 +18,7 @@
         </template>
 
         <template v-else-if="state === SaveState.pending">
-            <loading-spinner class="size-5 text-foreground/70"/>
+            <icon-loading class="size-5 text-foreground/70"/>
             <span class="text-foreground/70">Saving changes...</span>
         </template>
 
