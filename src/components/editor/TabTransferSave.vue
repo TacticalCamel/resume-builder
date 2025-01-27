@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { useTemplates } from "@/composables/useTemplates";
+    import { setTemplate } from "@/functions/Templates.ts";
     import { useNotifications } from "@/composables/useNotifications";
     import { useEditor } from "@/composables/useEditor";
     import { TemplateModel } from "@/models/Template";
@@ -8,7 +8,6 @@
     import InputButton from "@/components/shared/InputButton.vue";
     import { SaveState } from "@/composables/useAutosave";
 
-    const {setTemplate} = useTemplates();
     const {createNotification, removeNotification} = useNotifications();
     const {autosaveFrequency, autosaveState, saveTemplate, loadTemplate} = useEditor();
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { onMounted } from "vue";
     import { useNavigation } from "@/composables/useNavigation";
-    import { defaultThemes, applyTheme } from "@/functions/ThemeUtilities";
+    import { defaultThemes, applyTheme } from "@/functions/ThemeUtils.ts";
     import Home from "@/components/home/Home.vue";
     import Editor from "@/components/editor/Editor.vue";
     import Templates from "@/components/templates/Templates.vue";

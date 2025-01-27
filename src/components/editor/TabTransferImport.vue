@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { unpack } from "msgpackr";
-    import { useTemplates } from "@/composables/useTemplates";
+    import { setTemplate } from "@/functions/Templates.ts";
     import { useNotifications } from "@/composables/useNotifications";
     import { useEditor } from "@/composables/useEditor";
     import { TemplateModel } from "@/models/Template";
@@ -8,7 +8,6 @@
     import InputFile from "@/components/shared/InputFile.vue";
     import IconUploadFile from "@/components/shared/IconUploadFile.vue";
 
-    const {setTemplate} = useTemplates();
     const {createNotification, removeNotification} = useNotifications();
     const {loadTemplate} = useEditor();
 

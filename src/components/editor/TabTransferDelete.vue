@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { ref } from "vue";
-    import { useTemplates } from "@/composables/useTemplates";
+    import { removeTemplate, setTemplate } from "@/functions/Templates.ts";
     import { useNotifications } from "@/composables/useNotifications";
     import { useEditor } from "@/composables/useEditor";
     import { TemplateModel } from "@/models/Template";
@@ -13,7 +13,6 @@
         template: TemplateModel
     }>();
 
-    const {removeTemplate, setTemplate} = useTemplates();
     const {loadTemplate} = useEditor();
     const {createNotification, removeNotification} = useNotifications();
 

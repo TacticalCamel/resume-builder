@@ -1,13 +1,11 @@
 <script setup lang="ts">
     import { useNavigation } from "@/composables/useNavigation";
-    import { useTemplates } from "@/composables/useTemplates";
-    import { getPresetTemplates } from "@/functions/Templates";
+    import { getPresetTemplates, getTemplates, setTemplate } from "@/functions/Templates";
     import { TemplateModel } from "@/models/Template";
     import TemplateCard from "@/components/templates/TemplateCard.vue";
     import TemplateLink from "@/components/templates/TemplateLink.vue";
 
     const {navigateTo} = useNavigation();
-    const {getTemplates, setTemplate} = useTemplates();
 
     const groups = {
         'Your templates': await getTemplates(),

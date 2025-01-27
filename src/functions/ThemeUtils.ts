@@ -1,4 +1,4 @@
-import { getVariables } from "@/functions/Css";
+import { getVariables } from "@/functions/CssUtils.ts";
 import { Theme } from "@/models/Theme";
 import { Color } from "@/models/Color";
 import { ColorPalette } from "@/models/ColorPalette";

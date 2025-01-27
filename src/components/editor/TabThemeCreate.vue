@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, reactive } from "vue";
-    import { defaultThemes, findThemeById } from "@/functions/ThemeUtilities";
+    import { defaultThemes, findThemeById } from "@/functions/ThemeUtils.ts";
     import { TemplateModel } from "@/models/Template";
     import { Theme } from "@/models/Theme";
     import { ColorPalette } from "@/models/ColorPalette";

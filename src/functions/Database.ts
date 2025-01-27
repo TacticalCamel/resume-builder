@@ -1,5 +1,5 @@
 import Dexie, { EntityTable } from "dexie";
-import { TemplateModel } from "@/models/Template";
+import { TemplateModel } from "@/models/Template.ts";
 
 /**
  * This composable provides access to indexedDB tables.

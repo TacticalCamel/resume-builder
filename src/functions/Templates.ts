@@ -1,19 +1,8 @@
-import { useTemplates } from "@/composables/useTemplates";
 import { TemplateModel } from "@/models/Template";
-import { defaultThemes } from "@/functions/ThemeUtilities";
+import { defaultThemes } from "@/functions/ThemeUtils.ts";
 import { defaultFont } from "@/functions/Fonts";
-
-const {getTemplate, setTemplate} = useTemplates();
-
-export {
-    getTemplate,
-    setTemplate
-};
-
-/**
- * Arbitrary id designating the empty template.
- */
-const fallbackId: string = 'fallback-template';
+import { deepToRaw } from "@/functions/ReactivityUtils.ts";
+import { useDatabase } from "@/functions/Database.ts";
 
 const presetTemplates: TemplateModel[] = [
     {
@@ -47,13 +36,62 @@ const presetTemplates: TemplateModel[] = [
     }
 ];
 
+const {templates} = useDatabase();
 
-export function getFallbackId(): string {
-    return fallbackId;
+/**
+ * Save a template to the database.
+ * @param template The template to save.
+ * @param copy Set to true to save a copy of the template.
+ * @returns The id of the template. Use this id for further operations on the template.
+ */
+export async function setTemplate(template: TemplateModel, copy: boolean = false): Promise<string> {
+    // convert to a raw object to remove functions
+    const raw: TemplateModel = deepToRaw(template);
+
+    // generate a new id when copied
+    if (copy || !raw.id) {
+        raw.id = crypto.randomUUID();
+    }
+
+    // update in database
+    // this will modify an existing entity when the id already exists and insert a new one otherwise
+    await templates.put(raw, raw.id);
+
+    // return the actual id
+    return raw.id;
 }
 
-export function isFallbackTemplate(id: string): boolean {
-    return id === fallbackId;
+/**
+ * Find a template in the database by id.
+ * @param id The id to find.
+ * @returns The template with the provided id if one exists, otherwise undefined.
+ */
+export async function getTemplate(id: string): Promise<TemplateModel | undefined> {
+    return templates.get(id);
+}
+
+/**
+ * Remove a template from the database by id.
+ * @param id The id of the template to remove.
+ */
+export async function removeTemplate(id: string): Promise<void> {
+    return templates.delete(id);
+}
+
+/**
+ * Get all templates from the database.
+ * @returns A list containing all custom templates.
+ */
+export async function getTemplates(): Promise<TemplateModel[]> {
+    return templates.toArray();
+}
+
+/**
+ * Get the arbitrary id designating the empty template.
+ * @returns The template id.
+ */
+export function getFallbackId(): string {
+    return 'fallback-template';
 }
 
 /**
@@ -63,7 +101,6 @@ export function isFallbackTemplate(id: string): boolean {
 export async function getPresetTemplates(): Promise<TemplateModel[]> {
     return presetTemplates;
 }
-
 
 /**
  * Create then return a new template with minimal information.

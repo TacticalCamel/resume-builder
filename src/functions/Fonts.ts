@@ -1,4 +1,4 @@
-import { getVariable } from "@/functions/Css";
+import { getVariable } from "@/functions/CssUtils.ts";
 import { Font } from "@/models/Font";
 
 export const defaultFont: string = getDefaultFont();

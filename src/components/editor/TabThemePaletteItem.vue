@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { isDarkContrast } from "@/functions/ThemeUtilities";
+    import { isDarkContrast } from "@/functions/ThemeUtils.ts";
     import { useNotifications } from "@/composables/useNotifications";
     import { Color } from "@/models/Color";
     import IconCopy from "@/components/shared/IconCopy.vue";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { defaultThemes, findThemeById, isDefaultTheme } from "@/functions/ThemeUtilities";
+    import { defaultThemes, findThemeById, isDefaultTheme } from "@/functions/ThemeUtils.ts";
     import { TemplateModel } from "@/models/Template";
     import { Theme } from "@/models/Theme";
     import EditorSidebarTab from "@/components/editor/EditorSidebarTab.vue";

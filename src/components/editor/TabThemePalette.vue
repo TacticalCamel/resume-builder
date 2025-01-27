@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { isColorModified, resetColor } from "@/functions/ThemeUtilities";
+    import { isColorModified, resetColor } from "@/functions/ThemeUtils.ts";
     import { Theme } from "@/models/Theme";
     import EditorSidebarTabItem from "@/components/editor/EditorSidebarTabItem.vue";
     import TabThemePaletteItem from "@/components/editor/TabThemePaletteItem.vue";

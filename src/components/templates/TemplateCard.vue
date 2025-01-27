@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, onMounted, useTemplateRef } from "vue";
-    import { applyTheme, findThemeById } from "@/functions/ThemeUtilities";
+    import { applyTheme, findThemeById } from "@/functions/ThemeUtils.ts";
     import { TemplateModel } from "@/models/Template";
     import { Theme } from "@/models/Theme";
     import Resume from "@/components/editor/Resume.vue";

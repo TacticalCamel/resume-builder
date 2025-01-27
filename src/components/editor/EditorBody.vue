@@ -1,6 +1,6 @@
 <script setup async lang="ts">
     import { onMounted, onUnmounted, ref } from "vue";
-    import { getEmptyTemplate, getTemplate, isFallbackTemplate, setTemplate } from "@/functions/Templates";
+    import { getEmptyTemplate, getFallbackId, getTemplate, setTemplate } from "@/functions/Templates";
     import { loadFont, unloadFont } from "@/functions/Fonts";
     import { initializeEditor } from "@/composables/useEditor";
     import { useAutosave } from "@/composables/useAutosave";
@@ -40,7 +40,7 @@
      */
     async function loadTemplate(): Promise<TemplateModel> {
         // special case: id matches the fallback id, need to load the empty preset
-        if (isFallbackTemplate(templateId)) {
+        if (templateId === getFallbackId()) {
             // initialize an empty template
             const emptyTemplate: TemplateModel = await getEmptyTemplate();
 

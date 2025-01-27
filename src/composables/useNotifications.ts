@@ -1,5 +1,5 @@
 import { shallowReadonly, ref, Ref } from "vue";
-import { Notification, NotificationType } from "@/models/Notification";
+import { Notification, NotificationManager, NotificationType } from "@/models/Notification";
 
 /**
  * The list of currently active notifications.
@@ -9,7 +9,7 @@ const notifications: Ref<Notification[]> = ref<Notification[]>([]);
 /**
  * This composable handles interactions with notifications.
  */
-export function useNotifications() {
+export function useNotifications(): NotificationManager {
     /**
      * Create and display a new notification.
      * @param type The type of the notification.

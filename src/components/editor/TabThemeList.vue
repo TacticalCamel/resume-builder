@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { defaultThemes } from "@/functions/ThemeUtilities";
+    import { defaultThemes } from "@/functions/ThemeUtils.ts";
     import { TemplateModel } from "@/models/Template";
     import { Theme } from "@/models/Theme";
     import TabThemeListItem from "@/components/editor/TabThemeListItem.vue";

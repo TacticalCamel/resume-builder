@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed } from "vue";
-    import { defaultThemes, isDarkContrast } from "@/functions/ThemeUtilities";
+    import { defaultThemes, isDarkContrast } from "@/functions/ThemeUtils.ts";
     import { Theme } from "@/models/Theme";
     import { Color } from "@/models/Color";
     import InputText from "@/components/shared/InputText.vue";

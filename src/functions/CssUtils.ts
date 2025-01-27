@@ -1,10 +1,3 @@
-export const cssColorKeys = {
-    foreground: '--foreground',
-    background: '--background',
-    primary: '--primary',
-    secondary: '--secondary',
-}
-
 /**
  * Check all stylesheets for a variable inside a selector and return its value.
  * @param selectorText The CSS selector to search.

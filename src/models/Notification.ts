@@ -1,3 +1,4 @@
+import { Ref } from "vue";
 import { UniqueId } from "@/models/UniqueId";
 
 export interface Notification extends UniqueId {
@@ -14,4 +15,12 @@ export interface NotificationAction {
     onClick: (notification: Notification) => void
 }
 
-export type NotificationType = 'error' | 'warning' | 'success' | 'info'
+export type NotificationType = 'error' | 'warning' | 'success' | 'info';
+
+export type NotificationContent = Partial<Omit<Notification, 'id' & 'type'>>;
+
+export interface NotificationManager {
+    createNotification: (type: NotificationType, content: NotificationContent) => void,
+    removeNotification: (id: string) => void,
+    getNotifications: () => Readonly<Ref<Notification[]>>
+}
