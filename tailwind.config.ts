@@ -1,8 +1,11 @@
 import { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme';
 
-function defineColor(name: string): string {
-    return `rgb(var(${name}))`
+function definePalette(colors: string[]) {
+    return colors.reduce((palette: object, color: string) => {
+        palette[color] = `rgb(var(--${color}))`;
+        return palette;
+    }, {});
 }
 
 const config: Config = {
@@ -12,17 +15,16 @@ const config: Config = {
     ],
     theme: {
         extend: {
-            colors: {
-                foreground: defineColor('--foreground'),
-                background: defineColor('--background'),
-                primary: defineColor('--primary'),
-                secondary: defineColor('--secondary'),
-
-                success: defineColor('--success'),
-                warning: defineColor('--warning'),
-                error: defineColor('--error'),
-                info: defineColor('--info'),
-            }
+            colors: definePalette([
+                'foreground',
+                'background',
+                'primary',
+                'secondary',
+                'success',
+                'warning',
+                'error',
+                'info'
+            ])
         },
         screens: {
             'mobile': '480px',
